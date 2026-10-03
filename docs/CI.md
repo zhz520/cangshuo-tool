@@ -80,13 +80,25 @@ actionlint 从官方固定 Release 下载并核对归档校验值后，在仓库
 - Server 在临时源码副本通过 Maven `package -Dmaven.test.skip=true`，13 个 Java 源文件编译并生成可运行 JAR；现有 API 预览持续运行。
 - Admin 在临时源码副本使用 Linux Node `22.23.3` 完成 `npm ci`、TypeScript 检查及 Vite 正式构建。产物使用 `/admin/` 资源路径与 `https://toolapi.zhzgo.cn/api/v1`。
 - 两套 Compose 使用 CI 占位环境变量及 `.env.example` 校验通过，没有启动 CI 容器环境或读取部署凭据。
-- 没有执行自动化测试或 GitHub 托管工作流。本机 Windows JDK/Android 构建、Linux Alpine 后台构建与 `ubuntu-24.04` 托管环境存在差异，首次远程运行仍需确认。
+- 该次本地验证没有执行自动化测试或 GitHub 托管工作流。本机 Windows JDK/Android 构建、Linux Alpine 后台构建与 `ubuntu-24.04` 托管环境存在差异，托管环境验证记录见下节。
 
 ## GitHub 首次运行
 
-用户于 2026-10-03 指定 [zhz520/cangshuo-tool](https://github.com/zhz520/cangshuo-tool) 为项目仓库，`origin` 已关联其 HTTPS 地址，默认分支为 `main`。首次托管 CI 运行待推送后确认；完成本地门禁不表示远程 CI 已绿色。
+用户于 2026-10-03 指定 [zhz520/cangshuo-tool](https://github.com/zhz520/cangshuo-tool) 为项目仓库，`origin` 已关联其 HTTPS 地址，默认分支为 `main`。初始提交 `08e7dd34b0fb6d1d6f01de4f85d90e84949bf690` 已推送并触发 [首次托管 CI 运行 #37128607920](https://github.com/zhz520/cangshuo-tool/actions/runs/37128607920)。运行于北京时间 2026-10-03 22:08:43 开始，22:11:45 完成，总结论为 `success`。
 
-关联用户确定的 GitHub 仓库并推送项目源码后，在 Actions 中查看 `CI` 的四个任务与总门禁。首次绿色后，再将分支保护的必需检查设为 `CI`；工作流不能代替仓库分支保护设置。手动触发要求工作流已位于默认分支。
+| 任务 | 托管结果 |
+| --- | --- |
+| Android build and lint | success；Debug 构建与 Lint 完成 |
+| Server package | success；显式跳过测试并完成打包 |
+| Admin typecheck and build | success；TypeScript 检查及正式构建完成 |
+| Workflow and deployment configuration | success；工作流、Shell 语法及 Compose 配置检查完成 |
+| CI | success；四项前置任务全部成功 |
+
+已核对 `android-debug`、`android-lint`、`server-jar`、`admin-dist` 四个产物均上传成功且未过期，按工作流保留 7 天。Android 日志确认 `BUILD SUCCESSFUL`。
+
+Phase 0 的 CI 绿色退出条件已满足。该次运行没有执行自动化测试、设备运行或公网部署；后续发布门禁仍按路线图实现。
+
+可在仓库分支保护设置中将 `CI` 设为必需检查；此次未修改分支保护。手动触发要求工作流已位于默认分支。
 
 ## 实现依据
 

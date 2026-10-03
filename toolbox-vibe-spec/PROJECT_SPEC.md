@@ -2273,7 +2273,7 @@ Docker 与 Windows 构建、启动、认证应用连接及健康接口已核对�
 
 工作流使用 `ubuntu-24.04`、JDK 21、现有 Gradle/Maven Wrapper 和 Node `22.23.3`。Android 构建 Debug APK 并执行 Lint，Server 打包，Admin 按锁文件安装并构建正式地址与 `/admin/` 路径，部署任务执行 actionlint、Shell 语法及两套 Compose 配置校验。Action 固定完整提交 SHA，Wrapper 和 actionlint 下载校验 SHA-256，构建产物保留 7 天。
 
-工作流只申请只读仓库权限，不保留 checkout 凭据；配置校验使用公开占位值，当前不需要部署 Secret，也不执行部署。此阶段覆盖构建与静态检查，Server 显式跳过测试；测试及发布门禁随对应任务补充。本地门禁已通过，用户于 2026-10-03 指定 `zhz520/cangshuo-tool` 为远程仓库并已关联 origin；首次托管运行及 Phase 0 的 CI 绿色退出条件仍待确认。详细配置和记录见 [CI 说明](../docs/CI.md)。
+工作流只申请只读仓库权限，不保留 checkout 凭据；配置校验使用公开占位值，当前不需要部署 Secret，也不执行部署。此阶段覆盖构建与静态检查，Server 显式跳过测试；测试及发布门禁随对应任务补充。本地门禁已通过，用户于 2026-10-03 指定 `zhz520/cangshuo-tool` 为远程仓库，初始提交 `08e7dd3` 已推送到 `main`；[首次托管运行 #37128607920](https://github.com/zhz520/cangshuo-tool/actions/runs/37128607920) 五项全部成功，四个构建产物上传成功，Phase 0 的 CI 绿色退出条件已满足。详细配置和记录见 [CI 说明](../docs/CI.md)。
 
 ---
 

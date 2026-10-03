@@ -27,7 +27,7 @@ MySQL/Flyway 已接入服务端，创建工具分类和目录两张基础表，�
 
 Redis 客户端已接入，配置认证、连接/命令超时及整体健康检查；Docker 和 Windows 本地启动及认证连接已核对，API 直连和后台代理均正常。缓存 Key、TTL 及业务接入约定见 [Redis 说明](docs/REDIS.md)。
 
-GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项检查及汇总门禁，并配置构建产物保存。本地构建、Lint、工作流和配置检查已通过；已关联用户指定的 [GitHub 仓库](https://github.com/zhz520/cangshuo-tool)，首次托管运行待确认。完整范围与操作见 [CI 说明](docs/CI.md)。
+GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项检查及汇总门禁。项目已推送到 [GitHub 仓库](https://github.com/zhz520/cangshuo-tool) 的 `main`，2026-10-03 [首次托管运行](https://github.com/zhz520/cangshuo-tool/actions/runs/37128607920) 五项全部通过，Debug APK、Lint 报告、服务端 JAR 和后台构建产物保留 7 天。当前门禁覆盖构建与静态检查；完整范围与操作见 [CI 说明](docs/CI.md)。
 
 ## 规范入口
 
