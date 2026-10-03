@@ -15,7 +15,7 @@ Phase 0 CI exit criterion was verified by the successful hosted run on 2026-10-0
 
 ## Phase 1 — Walking Skeleton
 - [ ] Home
-- [ ] ToolDefinition
+- [x] ToolDefinition (Android unified metadata, 13 stable categories, modes/statuses and local executable contract; assembleDebug/lintDebug passed; registry, catalog DTOs and feature integration follow their own tasks)
 - [ ] ToolRegistry
 - [ ] GET /tools
 - [ ] Local calculator

@@ -127,6 +127,8 @@ Admin 概览通过集中 API 模块消费该接口，校验响应封装和 `data
 
 数据库中的 `tool_code` 映射为 API 的 `code`，`keywords_json` 映射为 `keywords`；分类关联映射为 `categoryCode`。目录列表只返回 `ENABLED` 工具。详情接口可用 `30002` 或 `30003` 告知客户端工具已关闭或维护中。客户端仅把图标名映射到内置资源，不把服务端字符串当作代码或资源路径执行。
 
+Android 已建立对应的 `ToolMetadata` 领域模型与 `ToolDefinition` 本地执行契约，字段映射见 [工具模型说明](TOOL_MODEL.md)。所需 Android 权限、设备支持检查和 Compose 页面由客户端实现声明，不属于服务端目录响应。目录接口及 JSON DTO/解析器仍待对应任务实现。
+
 ## 工具目录接口
 
 | 方法与路径 | 认证 | 用途 |

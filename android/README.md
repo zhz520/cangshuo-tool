@@ -1,6 +1,12 @@
 # Android 客户端
 
-当前包含一个 Kotlin + Jetpack Compose 启动壳。后续功能遵循 Compose + ViewModel + UseCase + Repository 分层；UI 文案放在 Android resources 中。
+当前包含 Kotlin + Jetpack Compose 启动壳及工具模型基础契约。后续功能遵循 Compose + ViewModel + UseCase + Repository 分层；UI 文案放在 Android resources 中。
+
+## 工具模型
+
+`core/model` 提供 `ToolMetadata`、13 个稳定分类及运行模式、目录状态；`core/tool/ToolDefinition` 统一元数据、Android 权限声明、设备能力检查和 Compose 页面入口。模型与目录字段、数据库基础约定对齐，详细边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
+
+当前尚无注册工具，首页仍为启动壳。注册中心、目录 API、计算器及搜索按 Phase 1 各任务接入。
 
 ## SDK 基线
 

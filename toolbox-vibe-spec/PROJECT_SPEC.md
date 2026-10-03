@@ -204,13 +204,13 @@ OCR、文件处理、批量图片、PDF、云端工具、AI 增强等。
 ```text
 code              唯一工具编码
 name              工具名称
-shortDescription  简短说明
+description       简短说明
 categoryCode      分类
 icon              图标资源名
 keywords          搜索关键词
 mode              LOCAL / SERVER / HYBRID
 requiresLogin     是否登录后才能使用
-permissions       所需 Android 权限
+requiredPermissions 所需 Android 权限（客户端声明，不由目录 API 下发）
 status            ENABLED / DISABLED / MAINTENANCE
 version           工具版本
 sortOrder         排序
@@ -221,14 +221,15 @@ isFeatured        是否推荐
 
 ```kotlin
 interface ToolDefinition {
-    val code: String
-    val name: String
-    val description: String
-    val category: ToolCategory
-    val keywords: List<String>
-    val mode: ToolMode
+    val metadata: ToolMetadata
+    val code: String get() = metadata.code
+    val name: String get() = metadata.name
+    val description: String get() = metadata.description
+    val category: ToolCategory get() = metadata.category
+    val keywords: List<String> get() = metadata.keywords
+    val mode: ToolMode get() = metadata.mode
     val requiredPermissions: List<String>
-    val requiresLogin: Boolean
+    val requiresLogin: Boolean get() = metadata.requiresLogin
 
     fun isAvailable(context: Context): Boolean
 
@@ -236,6 +237,8 @@ interface ToolDefinition {
     fun Screen()
 }
 ```
+
+完整接口还从同一份 `metadata` 暴露图标、状态、版本、排序和推荐标记。`isAvailable` 检查设备能力；目录状态、登录及权限检查由工具打开流程分别处理。当前领域模型、字段映射和客户端执行边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
 
 ## 5.2 ToolRegistry
 
