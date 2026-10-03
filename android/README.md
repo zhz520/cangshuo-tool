@@ -1,12 +1,12 @@
 # Android 客户端
 
-当前包含 Kotlin + Jetpack Compose 启动壳、工具模型基础契约及注册中心。后续功能遵循 Compose + ViewModel + UseCase + Repository 分层；UI 文案放在 Android resources 中。
+当前包含 Kotlin + Jetpack Compose 首页、工具模型基础契约及注册中心。首页遵循 Compose + ViewModel + UseCase + Repository 分层，提供分类筛选、工具/推荐列表、页面状态与底部入口；UI 文案放在 Android resources 中。布局和数据范围见 [首页说明](../docs/ANDROID_HOME.md)。
 
 ## 工具模型
 
 `core/model` 提供 `ToolMetadata`、13 个稳定分类及运行模式、目录状态；`core/tool/ToolDefinition` 统一元数据、Android 权限声明、设备能力检查和 Compose 页面入口。模型与目录字段、数据库基础约定对齐，详细边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
 
-`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口和具体工具列表将在首页及工具任务中接入；当前首页仍为启动壳。目录 API、计算器及搜索按 Phase 1 各任务实现。
+`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前集合为空，首页显示真实空目录；目录 API、计算器、搜索、收藏与最近使用按 Phase 1 各任务实现。
 
 ## SDK 基线
 
@@ -30,9 +30,9 @@ Wrapper 分发包已配置官方 SHA-256 校验。GitHub Actions 构建 Debug AP
 
 ## 构建验证
 
-2026-10-03 使用本机 Android Studio 自带的 JDK 21.0.9 验证：
+2026-10-03 至 2026-10-04 使用本机 Android Studio 自带的 JDK 21.0.9 完成首页构建门禁：
 
 - `:app:assembleDebug`：成功，生成 `app/build/outputs/apk/debug/app-debug.apk`。
-- `:app:lintDebug`：成功，0 错误、6 警告。其中 5 条为 SDK 或依赖的新版本提示，1 条为尚未设置应用图标。
+- `:app:lintDebug`：成功，0 错误、10 警告。其中 9 条为 SDK、构建工具或依赖的新版本提示，1 条为尚未设置应用图标。
 
-当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`。设备运行尚待在模拟器或真机上确认。
+当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`。未新增或执行自动化测试，设备运行尚待在模拟器或真机上确认；本次范围与验证记录见 [首页说明](../docs/ANDROID_HOME.md)。

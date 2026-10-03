@@ -1,6 +1,6 @@
 # 工具模型、注册中心与客户端执行契约
 
-Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使用 `core/model` 与 `core/tool` 包，沿用现有 app 模块及依赖。当前没有具体工具实现，应用入口尚未接入注册中心；首页、工具页面和目录请求按各自任务接入。
+Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使用 `core/model` 与 `core/tool` 包；注册中心已通过 Repository/UseCase 接入首页。当前没有具体工具实现，目录请求按对应任务接入；页面数据与状态见 [Android 首页说明](ANDROID_HOME.md)。
 
 ## ToolMetadata
 
@@ -48,7 +48,7 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 
 ## ToolRegistry
 
-`ToolRegistry` 使用构造参数接收客户端已经实现的 `ToolDefinition` 集合，后续由 Repository/UseCase 接入上层功能。它不依赖全局可变单例，方便按应用当前配置建立注册中心。
+`ToolRegistry` 使用构造参数接收客户端已经实现的 `ToolDefinition` 集合，由 Repository/UseCase 接入首页。它不依赖全局可变单例，方便按应用当前配置建立注册中心。
 
 构造时按 `metadata.code` 建立索引，拒绝重复编码，包括已关闭和维护中的定义；同一个定义重复传入也会报错。`ToolDefinition.code` 必须与元数据编码一致。错误为固定消息的 `IllegalArgumentException`，构造失败时不返回部分注册结果。
 
@@ -74,7 +74,7 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 
 `Available` 表示通过注册中心的状态和设备检查，打开流程仍需校验登录、权限和云端工具所需的网络条件。注册中心不申请权限、不保存 Context、不自动打开页面、不读写文件、不发起目录或工具执行请求。
 
-空集合是合法输入：列表为空、`find` 返回 `null`、`resolve` 返回 `NotFound`。后续首页据此显示空状态，具体工具完成后加入由应用统一提供的定义列表。当前 App 尚未建立该列表或接入查询结果。
+空集合是合法输入：列表为空、`find` 返回 `null`、`resolve` 返回 `NotFound`。首页据此显示空状态，具体工具完成后加入 `ToolboxAppContainer` 中的定义列表。当前该列表为空，查询结果已接入首页。
 
 ## 本次验证
 
@@ -94,4 +94,4 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 - Lint 成功，0 错误、6 个既有警告，仍为 SDK/依赖版本提示及应用图标待完善项。
 - 没有新增或执行自动化测试；重复编码、排序、分类筛选与设备支持分支尚未经过运行时验证。
 
-当前页面仍为启动壳；注册中心在首页及具体工具任务中接入应用。
+该次验证时页面仍为启动壳；后续首页任务已接入注册中心，验证记录见 [Android 首页说明](ANDROID_HOME.md)。

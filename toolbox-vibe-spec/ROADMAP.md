@@ -14,9 +14,9 @@
 Phase 0 CI exit criterion was verified by the successful hosted run on 2026-10-03 for commit `08e7dd3`. Automated tests, device execution and release/deployment validation remain separate tasks. See `docs/CI.md`.
 
 ## Phase 1 — Walking Skeleton
-- [ ] Home
-- [x] ToolDefinition (Android unified metadata, 13 stable categories, modes/statuses and local executable contract; assembleDebug/lintDebug passed; registry, catalog DTOs and feature integration follow their own tasks)
-- [x] ToolRegistry (Android fixed definition collection, duplicate-code validation, deterministic ordering, code/category/featured queries and status/device lookup results; assembleDebug/lintDebug passed; app wiring, concrete tools and runtime checks pending)
+- [x] Home (Compose → ViewModel → UseCase → Repository, local catalog/category/featured lists, four tabs, empty/error states and registered tool host; assembleDebug/lintDebug passed with 0 errors and 10 warnings; device/runtime validation and search/favorites/recent/concrete tools pending; see docs/ANDROID_HOME.md)
+- [x] ToolDefinition (Android unified metadata, 13 stable categories, modes/statuses and local executable contract; registry and home integration completed; assembleDebug/lintDebug passed; catalog DTOs and concrete tools follow their own tasks)
+- [x] ToolRegistry (Android fixed definition collection, duplicate-code validation, deterministic ordering, code/category/featured queries and status/device lookup results; wired into home through ToolboxAppContainer; assembleDebug/lintDebug passed; concrete tools and runtime checks pending)
 - [ ] GET /tools
 - [ ] Local calculator
 - [ ] Local search

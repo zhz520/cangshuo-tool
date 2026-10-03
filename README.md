@@ -17,7 +17,7 @@
 
 Phase 0 基础设施门禁已通过，开始 Phase 1 的工具平台骨架。Monorepo 和 API 接口契约已建立；Android Compose 启动壳和 Gradle Wrapper 已落地，采用 AGP 9.1.0、Gradle 9.3.1、API 36 的兼容基线，Debug APK 构建与 Android Lint 已通过。
 
-Android 的 `ToolMetadata`、`ToolDefinition` 与 `ToolRegistry` 已建立，统一 13 个分类、目录字段、运行模式及客户端执行入口，并提供编码去重、稳定排序、分类/推荐查询及状态/设备支持结果；Debug 构建和 Lint 已通过。注册中心尚未接入应用入口，首页和实际工具按 Phase 1 各任务实现，字段及执行边界见 [工具模型与注册中心说明](docs/TOOL_MODEL.md)。
+Android 的 `ToolMetadata`、`ToolDefinition` 与 `ToolRegistry` 已建立，统一 13 个分类、目录字段、运行模式及客户端执行入口，并提供编码去重、稳定排序、分类/推荐查询及状态/设备支持结果。注册中心已按 Compose → ViewModel → UseCase → Repository 接入首页，提供分类、工具列表、推荐与四个底部入口；当前具体工具集合为空，搜索、收藏与最近使用仍按各自任务开发。页面与验证范围见 [首页说明](docs/ANDROID_HOME.md)，字段及执行边界见 [工具模型与注册中心说明](docs/TOOL_MODEL.md)。
 
 Spring Boot API 启动壳已完成，提供健康检查、统一响应与异常处理、traceId 和本地 Swagger / OpenAPI；Maven 打包和本机启动已通过。启动方法见 [服务端说明](server/README.md)。
 
@@ -38,6 +38,7 @@ GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项�
 - [AI 编码规则](toolbox-vibe-spec/AGENTS.md)
 - [API 接口契约](docs/API.md)
 - [工具模型、注册中心与客户端执行契约](docs/TOOL_MODEL.md)
+- [Android 首页与本地目录接入](docs/ANDROID_HOME.md)
 - [数据库结构与迁移](docs/DATABASE.md)
 - [Redis 连接与缓存约定](docs/REDIS.md)
 - [CI 工作流与构建门禁](docs/CI.md)
