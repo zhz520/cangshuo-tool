@@ -243,28 +243,13 @@ interface ToolDefinition {
 ## 5.2 ToolRegistry
 
 ```kotlin
-object ToolRegistry {
-    val tools: List<ToolDefinition> = listOf(
-        CalculatorTool,
-        ScientificCalculatorTool,
-        UnitConverterTool,
-        TimestampTool,
-        JsonFormatterTool,
-        Base64Tool,
-        UrlCodecTool,
-        HashTool,
-        UuidTool,
-        TextTool,
-        QrScannerTool,
-        QrGeneratorTool,
-        ImageCompressTool,
-        DeviceInfoTool,
-        CompassTool,
-        TimerTool,
-        PingTool
-    )
-}
+// 由应用统一提供已实现的工具定义；当前具体工具仍待开发。
+val registry = ToolRegistry(definitions = emptyList())
+val tools = registry.enabledTools()
+val calculator = registry.find("calculator") // 当前未注册，返回 null。
 ```
+
+注册中心使用可注入的固定集合实例，构造时检查编码唯一性，按 `sortOrder`、`code` 稳定排序，提供全部工具、按编码查找、启用/分类列表与推荐列表。`resolve(code, context)` 返回可用、未注册、关闭、维护或设备不支持结果；登录、权限及页面打开由上层流程处理。具体实现和当前验证范围见 [工具模型与注册中心说明](../docs/TOOL_MODEL.md#toolregistry)。
 
 ## 5.3 后端 ToolDefinition
 
