@@ -1,0 +1,7 @@
+server {
+    listen 80 default_server;
+    server_name ${WEB_DOMAIN} localhost 127.0.0.1;
+    absolute_redirect off;
+    include /etc/nginx/toolbox/site-locations.conf;
+    include /etc/nginx/toolbox/api-locations.conf;
+}

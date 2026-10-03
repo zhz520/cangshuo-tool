@@ -1,0 +1,25 @@
+services:
+  mysql:
+    networks: [backend, local-access]
+    ports:
+      - "127.0.0.1:${LOCAL_MYSQL_PORT:-3307}:3306"
+  redis:
+    networks: [backend, local-access]
+    ports:
+      - "127.0.0.1:${LOCAL_REDIS_PORT:-6380}:6379"
+  server:
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    ports:
+      - "127.0.0.1:${LOCAL_API_PORT:-8081}:8080"
+  admin:
+    ports:
+      - "127.0.0.1:${LOCAL_WEB_PORT:-8088}:80"
+  minio:
+    networks: [backend, local-access]
+    ports:
+      - "127.0.0.1:${LOCAL_MINIO_PORT:-9000}:9000"
+      - "127.0.0.1:${LOCAL_MINIO_CONSOLE_PORT:-9001}:9001"
+
+networks:
+  local-access:

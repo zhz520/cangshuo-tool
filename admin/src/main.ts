@@ -1,0 +1,15 @@
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import 'element-plus/es/components/button/style/css'
+import 'element-plus/es/components/icon/style/css'
+import 'element-plus/es/components/tag/style/css'
+import 'element-plus/es/components/alert/style/css'
+import 'element-plus/es/components/empty/style/css'
+import 'element-plus/es/components/drawer/style/css'
+import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/result/style/css'
+import App from './App.vue'
+import router from './router'
+import './styles/main.css'
+
+createApp(App).use(createPinia()).use(router).mount('#app')

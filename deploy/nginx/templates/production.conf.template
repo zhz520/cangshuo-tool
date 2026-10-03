@@ -1,0 +1,44 @@
+server {
+    listen 80 default_server;
+    server_name _;
+    return 444;
+}
+
+server {
+    listen 80;
+    server_name ${WEB_DOMAIN};
+    return 308 https://${WEB_DOMAIN}$request_uri;
+}
+
+server {
+    listen 80;
+    server_name ${API_DOMAIN};
+    return 308 https://${API_DOMAIN}$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    server_name _;
+    ssl_reject_handshake on;
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${WEB_DOMAIN};
+    ssl_certificate /etc/nginx/certs/${WEB_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/${WEB_DOMAIN}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    include /etc/nginx/toolbox/site-locations.conf;
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${API_DOMAIN};
+    ssl_certificate /etc/nginx/certs/${API_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/${API_DOMAIN}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    include /etc/nginx/toolbox/api-locations.conf;
+    location / { return 404; }
+}

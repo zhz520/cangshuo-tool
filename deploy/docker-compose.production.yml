@@ -1,0 +1,26 @@
+services:
+  server:
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      SERVER_FORWARD_HEADERS_STRATEGY: framework
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:?Set the production website origin}
+  admin:
+    build:
+      args:
+        VITE_API_BASE_URL: https://${API_DOMAIN:-toolapi.zhzgo.cn}/api/v1
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - type: bind
+        source: ./nginx/templates/production.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./certs
+        target: /etc/nginx/certs
+        read_only: true
+        bind:
+          create_host_path: false

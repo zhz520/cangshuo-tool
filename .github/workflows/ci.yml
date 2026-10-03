@@ -1,0 +1,185 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  android:
+    name: Android build and lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Java 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle and validate wrappers
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-provider: basic
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+          validate-wrappers: true
+      - name: Ensure Android SDK packages
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"'
+      - name: Build debug APK and run Android Lint
+        run: sh gradlew --no-daemon --console=plain :app:assembleDebug :app:lintDebug
+      - name: Upload debug APK
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload Android Lint reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-lint
+          path: |
+            android/app/build/reports/lint-results-debug.html
+            android/app/build/reports/lint-results-debug.xml
+          if-no-files-found: ignore
+          retention-days: 7
+
+  server:
+    name: Server package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Java 21 and Maven cache
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: server/pom.xml
+      - name: Package API
+        run: sh mvnw -B -ntp -Dmaven.test.skip=true package
+      - name: Upload API JAR
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: server-jar
+          path: server/target/toolbox-api-0.1.0-SNAPSHOT.jar
+          if-no-files-found: error
+          retention-days: 7
+
+  admin:
+    name: Admin typecheck and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: admin
+    env:
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/admin/.npm-cache
+      VITE_APP_BASE_PATH: /admin/
+      VITE_API_BASE_URL: https://toolapi.zhzgo.cn/api/v1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js and npm cache
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.23.3'
+          cache: npm
+          cache-dependency-path: admin/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Typecheck and build production Admin
+        run: npm run build
+      - name: Upload Admin build
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: admin-dist
+          path: admin/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  deployment:
+    name: Workflow and deployment configuration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: deploy
+    env:
+      COMPOSE_PROJECT_NAME: cangshuo-toolbox-ci
+      MYSQL_ROOT_PASSWORD: ci-configuration-only
+      MYSQL_PASSWORD: ci-configuration-only
+      REDIS_PASSWORD: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
+      MINIO_ROOT_PASSWORD: ci-configuration-only
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate workflow with pinned actionlint
+        run: |
+          archive="$RUNNER_TEMP/actionlint_1.7.12_linux_amd64.tar.gz"
+          curl --fail --silent --show-error --location \
+            https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz \
+            --output "$archive"
+          printf '%s  %s\n' '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8' "$archive" | sha256sum --check --status
+          tar --extract --gzip --file "$archive" --directory "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -color ../.github/workflows/ci.yml
+      - name: Validate shell syntax
+        run: |
+          sh -n redis/start.sh
+          sh -n scripts/initialize-env.sh
+          sh -n ../server/mvnw
+          sh -n ../android/gradlew
+      - name: Validate local Compose including optional storage
+        run: docker compose --env-file ../.env.example -f docker-compose.yml -f docker-compose.local.yml --profile storage config --quiet
+      - name: Validate production Compose
+        run: docker compose -p cangshuo-toolbox-ci-production --env-file ../.env.example -f docker-compose.yml -f docker-compose.production.yml config --quiet
+
+  ci:
+    name: CI
+    if: ${{ always() }}
+    needs: [android, server, admin, deployment]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      ANDROID_RESULT: ${{ needs.android.result }}
+      SERVER_RESULT: ${{ needs.server.result }}
+      ADMIN_RESULT: ${{ needs.admin.result }}
+      DEPLOYMENT_RESULT: ${{ needs.deployment.result }}
+    steps:
+      - name: Require every build and configuration job to succeed
+        run: |
+          printf '%s\n' "Android=$ANDROID_RESULT" "Server=$SERVER_RESULT" "Admin=$ADMIN_RESULT" "Deployment=$DEPLOYMENT_RESULT"
+          for result in "$ANDROID_RESULT" "$SERVER_RESULT" "$ADMIN_RESULT" "$DEPLOYMENT_RESULT"; do
+            if [ "$result" != success ]; then
+              exit 1
+            fi
+          done

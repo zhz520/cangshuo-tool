@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: cangshuo-toolbox-api
+  data:
+    redis:
+      client-type: lettuce
+      client-name: cangshuo-toolbox-api
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:${LOCAL_REDIS_PORT:6379}}
+      username: ${REDIS_USERNAME:default}
+      password: ${REDIS_PASSWORD}
+      database: ${REDIS_DATABASE:0}
+      connect-timeout: 2s
+      timeout: 2s
+      ssl:
+        enabled: ${REDIS_SSL_ENABLED:false}
+      lettuce:
+        shutdown-timeout: 100ms
+        pool:
+          enabled: false
+      repositories:
+        enabled: false
+  datasource:
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:${LOCAL_MYSQL_PORT:3306}}/${DB_NAME:${MYSQL_DATABASE:toolbox}}?characterEncoding=UTF-8&connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&sslMode=${DB_SSL_MODE:REQUIRED}&connectTimeout=3000&socketTimeout=5000
+    username: ${DB_USERNAME:${MYSQL_USER:toolbox}}
+    password: ${DB_PASSWORD:${MYSQL_PASSWORD}}
+    hikari:
+      pool-name: toolbox-db
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 3000
+      validation-timeout: 1000
+      initialization-fail-timeout: 10000
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    clean-disabled: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    validate-migration-naming: true
+    out-of-order: false
+  sql:
+    init:
+      mode: never
+  jackson:
+    default-property-inclusion: always
+    time-zone: UTC
+  mvc:
+    problemdetails:
+      enabled: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+    include-exception: false
+
+management:
+  health:
+    redis:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+
+springdoc:
+  api-docs:
+    enabled: false
+    version: OPENAPI_3_1
+  swagger-ui:
+    enabled: false
+
+logging:
+  structured:
+    format:
+      console: ecs
+
+toolbox:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:}

@@ -1,0 +1,40 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+deploy/certs/
+
+# Android / Gradle
+.gradle/
+**/build/
+local.properties
+*.iml
+.idea/
+
+# Java / Maven
+target/
+.maven-cache/
+*.class
+
+# Node / Vue
+node_modules/
+.npm-cache/
+dist/
+.vite/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# IDE and operating system
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
+*.log
+tmp/
+temp/

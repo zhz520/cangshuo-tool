@@ -1,0 +1,42 @@
+# 沧烁工具箱
+
+一个以搜索为入口、优先在本地运行工具，并通过可选云端能力扩展的工具平台。项目采用单仓库管理 Android 客户端、Spring Boot API、Vue 管理后台和部署配置。
+
+## 仓库结构
+
+| 路径 | 内容 |
+| --- | --- |
+| `android/` | Kotlin、Jetpack Compose Android 客户端 |
+| `server/` | Java 21、Spring Boot REST API |
+| `admin/` | Vue 3、TypeScript 管理后台 |
+| `deploy/` | Docker Compose 与部署配置 |
+| `docs/` | 项目文档索引 |
+| `toolbox-vibe-spec/` | 产品规格、路线图和编码规则（当前规范来源） |
+
+## 当前进度
+
+正在搭建 Phase 0 基础设施。Monorepo 和 API 接口契约已建立；Android Compose 启动壳和 Gradle Wrapper 已落地，采用 AGP 9.1.0、Gradle 9.3.1、API 36 的兼容基线，Debug APK 构建与 Android Lint 已通过。
+
+Spring Boot API 启动壳已完成，提供健康检查、统一响应与异常处理、traceId 和本地 Swagger / OpenAPI；Maven 打包和本机启动已通过。启动方法见 [服务端说明](server/README.md)。
+
+Admin 启动壳已完成，提供后台布局、路由导航、健康概览和集中 API 客户端；TypeScript 检查、生产构建及本地健康接口联调已通过。启动方法见 [后台说明](admin/README.md)。管理员认证和业务管理功能按 Phase 5 开发。
+
+Docker Compose 本地/正式配置、Dockerfile、官网基础入口、Nginx 域名路由与后台 `/admin/` 路径已落地，API 支持跨域白名单。Linux 镜像构建和本地编排启动已通过，MySQL、Redis、API、Nginx/后台及可选 MinIO 均健康；浏览器已确认后台连接正常。本地后台为 [localhost:8088/admin/](http://localhost:8088/admin/)，详见 [部署说明](deploy/README.md)。正式域名尚未部署。
+
+MySQL/Flyway 已接入服务端，创建工具分类和目录两张基础表，初始化 13 个分类，数据库连接参与健康检查。Docker 和 Windows 本地构建、启动及迁移校验均通过，重启没有重复执行迁移；结构及迁移规则见 [数据库说明](docs/DATABASE.md)。
+
+Redis 客户端已接入，配置认证、连接/命令超时及整体健康检查；Docker 和 Windows 本地启动及认证连接已核对，API 直连和后台代理均正常。缓存 Key、TTL 及业务接入约定见 [Redis 说明](docs/REDIS.md)。
+
+GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项检查及汇总门禁，并配置构建产物保存。本地构建、Lint、工作流和配置检查已通过；已关联用户指定的 [GitHub 仓库](https://github.com/zhz520/cangshuo-tool)，首次托管运行待确认。完整范围与操作见 [CI 说明](docs/CI.md)。
+
+## 规范入口
+
+- [完整项目规格](toolbox-vibe-spec/PROJECT_SPEC.md)
+- [开发路线图](toolbox-vibe-spec/ROADMAP.md)
+- [AI 编码规则](toolbox-vibe-spec/AGENTS.md)
+- [API 接口契约](docs/API.md)
+- [数据库结构与迁移](docs/DATABASE.md)
+- [Redis 连接与缓存约定](docs/REDIS.md)
+- [CI 工作流与构建门禁](docs/CI.md)
+
+开始任何实现前，请先阅读根目录 [AGENTS.md](AGENTS.md)。
