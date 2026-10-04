@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ToolboxTheme {
-                HomeRoute(factory = container.homeViewModelFactory)
+                HomeRoute(factory = container.homeViewModelFactory, searchFactory = container.searchViewModelFactory)
             }
         }
     }

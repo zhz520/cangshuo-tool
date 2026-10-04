@@ -1,0 +1,42 @@
+<resources>
+    <!-- Search aliases remain bilingual regardless of the current display language. -->
+    <string-array name="search_category_calc" translatable="false">
+        <item>计算</item><item>Calculation</item><item>Math</item>
+    </string-array>
+    <string-array name="search_category_convert" translatable="false">
+        <item>转换</item><item>Conversion</item><item>Convert</item>
+    </string-array>
+    <string-array name="search_category_text" translatable="false">
+        <item>文本</item><item>Text</item>
+    </string-array>
+    <string-array name="search_category_dev" translatable="false">
+        <item>开发者</item><item>Developer</item>
+    </string-array>
+    <string-array name="search_category_qr" translatable="false">
+        <item>二维码</item><item>条码</item><item>QR codes</item><item>Barcode</item>
+    </string-array>
+    <string-array name="search_category_image" translatable="false">
+        <item>图片</item><item>Image</item><item>Images</item>
+    </string-array>
+    <string-array name="search_category_pdf" translatable="false">
+        <item>文档</item><item>PDF</item><item>Documents</item>
+    </string-array>
+    <string-array name="search_category_device" translatable="false">
+        <item>设备</item><item>Device</item>
+    </string-array>
+    <string-array name="search_category_sensor" translatable="false">
+        <item>传感器</item><item>Sensor</item><item>Sensors</item>
+    </string-array>
+    <string-array name="search_category_network" translatable="false">
+        <item>网络</item><item>Network</item>
+    </string-array>
+    <string-array name="search_category_life" translatable="false">
+        <item>生活</item><item>Everyday</item><item>Life</item>
+    </string-array>
+    <string-array name="search_category_ai" translatable="false">
+        <item>AI</item><item>人工智能</item><item>Artificial intelligence</item>
+    </string-array>
+    <string-array name="search_category_other" translatable="false">
+        <item>其他</item><item>Other</item>
+    </string-array>
+</resources>

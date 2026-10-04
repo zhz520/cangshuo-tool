@@ -6,7 +6,7 @@
 
 `core/model` 提供 `ToolMetadata`、13 个稳定分类及运行模式、目录状态；`core/tool/ToolDefinition` 统一元数据、Android 权限声明、设备能力检查和 Compose 页面入口。模型与目录字段、数据库基础约定对齐，详细边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
 
-`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前已注册 [本地计算器](../docs/CALCULATOR.md)，支持四则运算、小数、括号、百分号、复制及继续计算；目录远程刷新、搜索、收藏与最近使用按后续任务实现。
+`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前已注册 [本地计算器](../docs/CALCULATOR.md)，支持四则运算、小数、括号、百分号、复制及继续计算；[本地搜索](../docs/LOCAL_SEARCH.md) 可从首页和工具页进入，支持中英文关键词、分类筛选与相关度排序。目录远程刷新、收藏与最近使用按后续任务实现。
 
 界面支持简体中文和英语，默认跟随系统语言，未匹配支持语言时回退中文。Android 13+ 的系统应用语言设置可单独选择中文、英语或系统默认；更早版本跟随系统。范围及扩展规则见 [多语言说明](../docs/ANDROID_LOCALIZATION.md)。
 
@@ -34,9 +34,9 @@ Wrapper 分发包已配置官方 SHA-256 校验。GitHub Actions 构建 Debug AP
 
 ## 构建验证
 
-2026-10-04 使用本机 Android Studio 自带的 JDK 21.0.9 完成计算器和语言配置构建门禁：
+2026-10-04 使用本机 Android Studio 自带的 JDK 21.0.9 完成本地搜索构建门禁：
 
 - `:app:assembleDebug`：成功，生成 `app/build/outputs/apk/debug/app-debug.apk`。
 - `:app:lintDebug`：成功，0 错误、11 警告。其中 9 条为 SDK、构建工具或依赖的新版本提示，1 条为尚未设置应用图标，1 条为 `localeConfig` 仅在 API 33+ 生效的提示。
 
-当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`。未新增或执行自动化测试，计算行为和设备运行尚待验证；本次范围与记录见 [计算器说明](../docs/CALCULATOR.md)。
+当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`。未新增或执行自动化测试，搜索、计算行为和设备运行尚待验证；本次范围与记录见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。

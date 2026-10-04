@@ -161,6 +161,8 @@ Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契
 
 ### `GET /api/v1/tools/search?q={query}`
 
+此端点尚未实现。当前 Android 的 [本地搜索](LOCAL_SEARCH.md) 使用内置注册中心，不调用此接口；本地匹配规则不改变服务端 API 契约。
+
 `q` 必须包含非空文本；可附带 `page`、`pageSize`。搜索名称、英文名称（若有）、编码、分类名称、关键词和说明。排序优先级：工具名完全匹配、工具名开头匹配、关键词、说明、分类；同级结果按 `sortOrder` 稳定排序。客户端可在结果评分中再结合最近使用和收藏权重。
 
 ### `GET /api/v1/tools/featured`

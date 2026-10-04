@@ -21,6 +21,7 @@ data class HomeUiState(
     val tab: HomeTab = HomeTab.HOME,
     val category: ToolCategory? = null,
     val catalog: HomeCatalogState = HomeCatalogState.Loading,
+    val isSearchOpen: Boolean = false,
     val openedTool: ToolDefinition? = null,
     val message: HomeMessage? = null,
 )

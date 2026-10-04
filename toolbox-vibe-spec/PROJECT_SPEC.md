@@ -478,7 +478,7 @@ Room       Retrofit
 - 后端配置异步刷新。
 - 首次安装没有网络时仍可以使用基础工具。
 
-当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，搜索、收藏、最近使用、账号和远程刷新按各自任务实现；Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)和 [计算器说明](../docs/CALCULATOR.md)。
+当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，并接入本地搜索；收藏、最近使用、账号和远程刷新按各自任务实现。Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)、[计算器说明](../docs/CALCULATOR.md)和 [本地搜索](../docs/LOCAL_SEARCH.md)。
 
 ---
 
@@ -508,6 +508,8 @@ Room       Retrofit
 7. 收藏权重
 
 MVP 不引入远程向量搜索；基础工具数量低于 500 时，本地字符串/模糊匹配足够。
+
+当前本地搜索已按独立 ViewModel → UseCase → Repository 接入内置启用目录。支持名称、编码、关键词、说明及中英文分类别名，查询最多 80 个 UTF-16 字符；统一全角字符、大小写与空白，多个词需全部命中。名称包含匹配位于名称开头与关键词等级之间，同级按 sortOrder、code 稳定排序；收藏与最近使用权重按对应任务接入。查询与分类使用 SavedStateHandle 保存，语言变化时重新搜索。构建及设备验证范围见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。
 
 ---
 

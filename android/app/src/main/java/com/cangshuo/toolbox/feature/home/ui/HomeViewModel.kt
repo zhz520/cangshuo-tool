@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.update
 
 private const val TAB_KEY = "home.tab"
 private const val CATEGORY_KEY = "home.category"
+private const val SEARCH_OPEN_KEY = "home.searchOpen"
 
 class HomeViewModel(
     private val getHome: GetHomeUseCase,
@@ -28,6 +29,7 @@ class HomeViewModel(
             tab = HomeTab.entries.firstOrNull { it.name == savedStateHandle.get<String>(TAB_KEY) }
                 ?: HomeTab.HOME,
             category = savedStateHandle.get<String>(CATEGORY_KEY)?.let(ToolCategory::fromCode),
+            isSearchOpen = savedStateHandle[SEARCH_OPEN_KEY] ?: false,
         ),
     )
     val uiState = mutableState.asStateFlow()
@@ -92,6 +94,16 @@ class HomeViewModel(
 
     fun closeTool() {
         mutableState.update { it.copy(openedTool = null) }
+    }
+
+    fun openSearch() {
+        savedStateHandle[SEARCH_OPEN_KEY] = true
+        mutableState.update { it.copy(isSearchOpen = true, message = null) }
+    }
+
+    fun closeSearch() {
+        savedStateHandle[SEARCH_OPEN_KEY] = false
+        mutableState.update { it.copy(isSearchOpen = false, message = null) }
     }
 
     fun dismissMessage() {

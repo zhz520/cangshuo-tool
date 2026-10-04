@@ -29,9 +29,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.feature.search.ui.SearchRoute
 
 @Composable
-fun HomeRoute(factory: ViewModelProvider.Factory) {
+fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvider.Factory) {
     val model: HomeViewModel = viewModel(factory = factory)
     val state by model.uiState.collectAsStateWithLifecycle()
     val applicationContext = LocalContext.current.applicationContext
@@ -39,17 +40,28 @@ fun HomeRoute(factory: ViewModelProvider.Factory) {
     val languageTags = LocalConfiguration.current.locales.toLanguageTags()
     LaunchedEffect(languageTags) { model.refresh() }
 
-    BackHandler(enabled = openedTool != null || state.tab != HomeTab.HOME) {
-        if (openedTool != null) model.closeTool() else model.selectTab(HomeTab.HOME)
+    BackHandler(enabled = openedTool != null || state.isSearchOpen || state.tab != HomeTab.HOME) {
+        when {
+            openedTool != null -> model.closeTool()
+            state.isSearchOpen -> model.closeSearch()
+            else -> model.selectTab(HomeTab.HOME)
+        }
     }
 
-    if (openedTool == null) {
+    if (openedTool == null && state.isSearchOpen) {
+        SearchRoute(
+            factory = searchFactory,
+            onClose = model::closeSearch,
+            onToolSelected = { model.selectTool(it, applicationContext) },
+        )
+    } else if (openedTool == null) {
         HomeScreen(
             state = state,
             onTabSelected = model::selectTab,
             onCategorySelected = model::selectCategory,
             onToolSelected = { model.selectTool(it, applicationContext) },
             onRetry = model::refresh,
+            onSearch = model::openSearch,
         )
     } else {
         Scaffold(

@@ -5,6 +5,23 @@
     <string name="home_greeting">What would you like to do?</string>
     <string name="home_hero_description">Useful tools for everyday tasks, with more time left for you.</string>
     <string name="home_search_hint">Search tools, tasks or keywords</string>
+    <string name="search_title">Search tools</string>
+    <string name="search_local_hint">Search names, keywords and categories offline. A blank query shows all tools.</string>
+    <string name="search_clear_query">Clear</string>
+    <string name="search_clear_filters">Clear search and category</string>
+    <plurals name="search_query_too_long">
+        <item quantity="one">Use up to %d character. Shorten your query and try again.</item>
+        <item quantity="other">Use up to %d characters. Shorten your query and try again.</item>
+    </plurals>
+    <string name="search_loading">Searching…</string>
+    <string name="search_empty_title">No tools found</string>
+    <string name="search_empty_description">Try a shorter keyword or another category. More tools will be added.</string>
+    <string name="search_error_title">Unable to search</string>
+    <string name="search_error_description">Try again, or reopen search later.</string>
+    <plurals name="search_result_count">
+        <item quantity="one">Found %d tool</item>
+        <item quantity="other">Found %d tools</item>
+    </plurals>
     <string name="feature_coming_soon">Coming soon</string>
     <string name="home_categories">Explore by category</string>
     <string name="home_common">Quick access</string>

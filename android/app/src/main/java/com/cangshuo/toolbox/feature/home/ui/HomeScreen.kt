@@ -57,6 +57,7 @@ fun HomeScreen(
     onCategorySelected: (ToolCategory?) -> Unit,
     onToolSelected: (String) -> Unit,
     onRetry: () -> Unit,
+    onSearch: () -> Unit,
 ) {
     Scaffold(
         bottomBar = {
@@ -96,6 +97,7 @@ fun HomeScreen(
                 onCategorySelected = onCategorySelected,
                 onToolSelected = onToolSelected,
                 onRetry = onRetry,
+                onSearch = onSearch,
             )
         }
     }
@@ -108,6 +110,7 @@ private fun CatalogPage(
     onCategorySelected: (ToolCategory?) -> Unit,
     onToolSelected: (String) -> Unit,
     onRetry: () -> Unit,
+    onSearch: () -> Unit,
 ) {
     val content = when (val catalog = state.catalog) {
         is HomeCatalogState.Content -> catalog.value
@@ -129,9 +132,9 @@ private fun CatalogPage(
                 item(key = "hero", span = { GridItemSpan(maxLineSpan) }) {
                     HeroBanner(onBrowse = { onCategorySelected(null) })
                 }
-                item(key = "search", span = { GridItemSpan(maxLineSpan) }) {
-                    SearchComingSoon()
-                }
+            }
+            item(key = "search", span = { GridItemSpan(maxLineSpan) }) {
+                SearchEntry(onSearch)
             }
             if (content != null) {
                 item(key = "categories", span = { GridItemSpan(maxLineSpan) }) {
@@ -298,8 +301,8 @@ private fun HeroBanner(onBrowse: () -> Unit) {
 }
 
 @Composable
-private fun SearchComingSoon() {
-    Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
+private fun SearchEntry(onClick: () -> Unit) {
+    Surface(onClick = onClick, shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
         Row(
             Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -310,11 +313,6 @@ private fun SearchComingSoon() {
                 stringResource(R.string.home_search_hint),
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyMedium,
-            )
-            Text(
-                stringResource(R.string.feature_coming_soon),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -329,7 +327,7 @@ private fun SectionHeader(title: String, trailing: @Composable () -> Unit = {}) 
 }
 
 @Composable
-private fun ToolCard(tool: ToolMetadata, onClick: () -> Unit) {
+internal fun ToolCard(tool: ToolMetadata, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
@@ -478,6 +476,7 @@ private fun EmptyHomePreview() {
             onCategorySelected = {},
             onToolSelected = {},
             onRetry = {},
+            onSearch = {},
         )
     }
 }

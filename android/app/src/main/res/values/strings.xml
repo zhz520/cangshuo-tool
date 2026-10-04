@@ -5,6 +5,21 @@
     <string name="home_greeting">今天，想完成什么？</string>
     <string name="home_hero_description">把日常小事交给工具，留更多时间给自己。</string>
     <string name="home_search_hint">搜索工具、功能或关键词</string>
+    <string name="search_title">搜索工具</string>
+    <string name="search_local_hint">离线搜索名称、关键词和分类；空白查询显示全部工具。</string>
+    <string name="search_clear_query">清除</string>
+    <string name="search_clear_filters">清除搜索和分类</string>
+    <plurals name="search_query_too_long">
+        <item quantity="other">最多输入 %d 个字符，请缩短后重试。</item>
+    </plurals>
+    <string name="search_loading">正在搜索…</string>
+    <string name="search_empty_title">没有找到工具</string>
+    <string name="search_empty_description">试试更短的关键词或其他分类，已实现的工具会陆续加入。</string>
+    <string name="search_error_title">暂时无法搜索</string>
+    <string name="search_error_description">请重试一次，或稍后重新打开。</string>
+    <plurals name="search_result_count">
+        <item quantity="other">找到 %d 个工具</item>
+    </plurals>
     <string name="feature_coming_soon">即将开放</string>
     <string name="home_categories">按分类找工具</string>
     <string name="home_common">常用工具</string>
