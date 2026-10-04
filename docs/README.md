@@ -12,6 +12,7 @@
 - [Android 首页与本地目录接入](ANDROID_HOME.md)
 - [本地计算器](CALCULATOR.md)
 - [本地搜索](LOCAL_SEARCH.md)
+- [本地收藏与 Room 数据库](LOCAL_FAVORITES.md)
 - [Android 多语言](ANDROID_LOCALIZATION.md)
 - [数据库结构与 Flyway 迁移](DATABASE.md)
 - [Redis 连接与缓存约定](REDIS.md)

@@ -30,15 +30,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.feature.search.ui.SearchRoute
+import com.cangshuo.toolbox.feature.favorites.ui.FavoriteButton
+import com.cangshuo.toolbox.feature.favorites.ui.FavoriteMessage
+import com.cangshuo.toolbox.feature.favorites.ui.FavoritesViewModel
 
 @Composable
-fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvider.Factory) {
+fun HomeRoute(
+    factory: ViewModelProvider.Factory,
+    searchFactory: ViewModelProvider.Factory,
+    favoritesFactory: ViewModelProvider.Factory,
+) {
     val model: HomeViewModel = viewModel(factory = factory)
+    val favorites: FavoritesViewModel = viewModel(key = "local.favorites", factory = favoritesFactory)
     val state by model.uiState.collectAsStateWithLifecycle()
+    val favoriteState by favorites.uiState.collectAsStateWithLifecycle()
     val applicationContext = LocalContext.current.applicationContext
     val openedTool = state.openedTool
     val languageTags = LocalConfiguration.current.locales.toLanguageTags()
-    LaunchedEffect(languageTags) { model.refresh() }
+    LaunchedEffect(languageTags) {
+        model.refresh()
+        favorites.refresh()
+    }
 
     BackHandler(enabled = openedTool != null || state.isSearchOpen || state.tab != HomeTab.HOME) {
         when {
@@ -51,6 +63,8 @@ fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvid
     if (openedTool == null && state.isSearchOpen) {
         SearchRoute(
             factory = searchFactory,
+            favoriteState = favoriteState,
+            onSetFavorite = favorites::changeFavorite,
             onClose = model::closeSearch,
             onToolSelected = { model.selectTool(it, applicationContext) },
         )
@@ -62,6 +76,9 @@ fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvid
             onToolSelected = { model.selectTool(it, applicationContext) },
             onRetry = model::refresh,
             onSearch = model::openSearch,
+            favoriteState = favoriteState,
+            onSetFavorite = favorites::changeFavorite,
+            onFavoritesRetry = favorites::refresh,
         )
     } else {
         Scaffold(
@@ -80,6 +97,12 @@ fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvid
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
+                    FavoriteButton(
+                        selected = openedTool.code in favoriteState.codes,
+                        enabled = favoriteState.ready && openedTool.code !in favoriteState.pendingCodes,
+                        toolName = openedTool.metadata.name,
+                        onChange = { favorites.changeFavorite(openedTool.code, it) },
+                    )
                 }
             },
         ) { padding ->
@@ -96,6 +119,18 @@ fun HomeRoute(factory: ViewModelProvider.Factory, searchFactory: ViewModelProvid
                 TextButton(onClick = model::dismissMessage) {
                     Text(stringResource(R.string.action_understood))
                 }
+            },
+        )
+    }
+    if (state.message == null) favoriteState.message?.let { message ->
+        AlertDialog(
+            onDismissRequest = favorites::dismissMessage,
+            title = { Text(stringResource(R.string.favorite_action_failed_title)) },
+            text = {
+                Text(stringResource(if (message == FavoriteMessage.LOAD_FAILED) R.string.favorite_load_failed else R.string.favorite_save_failed))
+            },
+            confirmButton = {
+                TextButton(onClick = favorites::dismissMessage) { Text(stringResource(R.string.action_understood)) }
             },
         )
     }

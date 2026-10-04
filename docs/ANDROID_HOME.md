@@ -1,11 +1,11 @@
 # Android 首页
 
-本次实现 Phase 1 的首页基础任务，替换旧 Compose 启动壳，并将 `ToolRegistry` 接入应用。首页、工具、收藏、我的四个底部入口可以切换；后续已接入本地计算器和 [本地搜索](LOCAL_SEARCH.md)，更多工具、收藏、最近使用、账号及远程目录按各自路线图任务继续开发。
+本次实现 Phase 1 的首页基础任务，替换旧 Compose 启动壳，并将 `ToolRegistry` 接入应用。首页、工具、收藏、我的四个底部入口可以切换；后续已接入本地计算器、[本地搜索](LOCAL_SEARCH.md)和 [本地收藏](LOCAL_FAVORITES.md)，更多工具、最近使用、账号及远程目录按各自路线图任务继续开发。
 
 ## 数据与状态
 
 ```text
-MainActivity / ToolboxAppContainer
+ToolboxApplication / ToolboxAppContainer / MainActivity
   → HomeRoute / HomeScreen
   → HomeViewModel
   → GetHomeUseCase / OpenHomeToolUseCase
@@ -13,7 +13,7 @@ MainActivity / ToolboxAppContainer
   → ToolRegistry
 ```
 
-`ToolboxAppContainer` 是当前手动依赖注入入口，创建固定定义集合、Repository、UseCase 与 ViewModel factory。完成具体工具后，将其定义加入这里的集合；当前已注册首个 [本地计算器](CALCULATOR.md)，没有注册占位工具。
+`ToolboxApplication` 持有当前手动依赖注入入口 `ToolboxAppContainer`，创建固定定义集合、应用级 Room 实例、Repository、UseCase 与 ViewModel factory。完成具体工具后，将其定义加入这里的集合；当前已注册首个 [本地计算器](CALCULATOR.md)，没有注册占位工具。
 
 Repository 同步读取内置启用目录并复制关键词列表；此接口只用于本地、无阻塞 I/O 的读取。首页首屏不请求 API、不等待网络。后续远程刷新需通过独立异步链路合并目录，不能在当前同步接口中加入阻塞网络或数据库调用。
 
@@ -30,14 +30,14 @@ ViewModel 公开 `StateFlow<HomeUiState>`，UI 使用 `collectAsStateWithLifecyc
 | 常用工具 | 取目录排序后的前 6 个，当前不依据用户历史排序 |
 | 推荐工具 | 仅显示目录中 `isFeatured=true` 的启用条目；没有推荐时隐藏此区 |
 | 分类 | 显示真实启用工具数量，点击进入对应的工具列表 |
-| 收藏 | 明确标注即将开放，提供返回全部工具的入口；没有读取或写入收藏数据 |
+| 收藏 | 显示本机 Room 书签、数量、加载/空/错误状态，支持取消、重试与打开工具 |
 | 我的 | 展示当前访客模式、本地处理说明及账号/云同步开放状态 |
 | 搜索 | 进入本地搜索页，支持查询、分类、相关度排序与打开已注册工具，见搜索说明 |
 | 最近使用 | 展示开放状态，尚未记录或读取使用记录 |
 
 工具卡片采用 2–5 列网格，随窗口宽度调整；内容可滚动，浅色/深色沿用系统主题。界面文案提供简体中文和英语，默认跟随系统，数量使用 plurals；语言配置变化时重新读取目录显示数据，具体规则见 [多语言说明](ANDROID_LOCALIZATION.md)。图标名只映射到内置资源，当前支持 `tools`、`toolbox`、`calculator`；其余名字使用通用图标，不作为资源路径执行。
 
-空注册集合显示“工具正在准备中”和 0 个工具；空分类显示说明及查看全部分类按钮。浏览全部工具的按钮会清除分类筛选。当前实际集合中有 1 个计算器，因此首页和计算分类从真实定义显示计算器，推荐区也使用该定义；收藏和最近使用仍按对应任务实现。
+空注册集合显示“工具正在准备中”和 0 个工具；空分类显示说明及查看全部分类按钮。浏览全部工具的按钮会清除分类筛选。当前实际集合中有 1 个计算器，因此首页和计算分类从真实定义显示计算器，推荐区也使用该定义。工具卡片和标题栏已接入统一收藏星标，收藏状态与搜索页共享；最近使用按对应任务实现。收藏的持久化与验证范围见收藏说明。
 
 ## 工具打开入口
 

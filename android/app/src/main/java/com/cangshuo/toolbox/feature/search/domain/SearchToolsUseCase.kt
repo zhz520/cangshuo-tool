@@ -11,7 +11,11 @@ private val whitespace = Regex("[\\s\\p{Z}]+")
 
 /** Literal local matching; query text is never interpreted as a regex or executable code. */
 class SearchToolsUseCase(private val repository: ToolSearchRepository) {
-    operator fun invoke(query: String, category: ToolCategory? = null): List<ToolMetadata> {
+    operator fun invoke(
+        query: String,
+        category: ToolCategory? = null,
+        favoriteCodes: Set<String> = emptySet(),
+    ): List<ToolMetadata> {
         require(query.length <= MAX_SEARCH_QUERY_LENGTH) { "Search query is too long" }
         val normalizedQuery = normalize(query)
         val terms = normalizedQuery.split(' ').filter { it.isNotEmpty() }.distinct()
@@ -22,7 +26,10 @@ class SearchToolsUseCase(private val repository: ToolSearchRepository) {
             }
             val rank = if (terms.isEmpty()) 0 else rank(document, normalizedQuery, terms) ?: return@mapNotNull null
             RankedTool(tool, rank)
-        }.sortedWith(compareBy<RankedTool> { it.rank }.thenBy { it.tool.sortOrder }.thenBy { it.tool.code })
+        }.sortedWith(
+            compareBy<RankedTool> { it.rank }.thenByDescending { it.tool.code in favoriteCodes }
+                .thenBy { it.tool.sortOrder }.thenBy { it.tool.code },
+        )
             .map { it.tool }
     }
 

@@ -44,10 +44,13 @@ import com.cangshuo.toolbox.feature.home.ui.ToolCard
 import com.cangshuo.toolbox.feature.home.ui.labelResource
 import com.cangshuo.toolbox.feature.search.domain.MAX_SEARCH_QUERY_LENGTH
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
+import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
 
 @Composable
 fun SearchScreen(
     state: SearchUiState,
+    favoriteState: FavoritesUiState,
+    onSetFavorite: (String, Boolean) -> Unit,
     onQueryChanged: (String) -> Unit,
     onCategorySelected: (ToolCategory?) -> Unit,
     onClearFilters: () -> Unit,
@@ -133,7 +136,12 @@ fun SearchScreen(
                         )
                     }
                     items(results.tools, key = { "result:" + it.code }) { tool ->
-                        ToolCard(tool, onClick = { onToolSelected(tool.code) })
+                        ToolCard(
+                            tool, onClick = { onToolSelected(tool.code) },
+                            isFavorite = tool.code in favoriteState.codes,
+                            favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            onFavoriteChanged = { onSetFavorite(tool.code, it) },
+                        )
                     }
                 } else {
                     item(key = "status", span = { GridItemSpan(maxLineSpan) }) {
@@ -180,6 +188,8 @@ private fun EmptySearchPreview() {
     ToolboxTheme {
         SearchScreen(
             state = SearchUiState(query = "UUID", results = SearchResultsState.Empty),
+            favoriteState = FavoritesUiState(),
+            onSetFavorite = { _, _ -> },
             onQueryChanged = {}, onCategorySelected = {}, onClearFilters = {}, onRetry = {},
             onSubmit = {}, onClose = {}, onToolSelected = {},
         )

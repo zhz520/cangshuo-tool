@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -49,6 +50,9 @@ import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.feature.home.domain.HomeCategory
 import com.cangshuo.toolbox.feature.home.domain.HomeContent
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
+import com.cangshuo.toolbox.feature.favorites.ui.FavoriteButton
+import com.cangshuo.toolbox.feature.favorites.ui.FavoritesScreen
+import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
 
 @Composable
 fun HomeScreen(
@@ -58,6 +62,9 @@ fun HomeScreen(
     onToolSelected: (String) -> Unit,
     onRetry: () -> Unit,
     onSearch: () -> Unit,
+    favoriteState: FavoritesUiState,
+    onSetFavorite: (String, Boolean) -> Unit,
+    onFavoritesRetry: () -> Unit,
 ) {
     Scaffold(
         bottomBar = {
@@ -74,12 +81,12 @@ fun HomeScreen(
         },
     ) { padding ->
         when (state.tab) {
-            HomeTab.FAVORITES -> InformationPage(
+            HomeTab.FAVORITES -> FavoritesScreen(
                 modifier = Modifier.padding(padding),
-                title = stringResource(R.string.nav_favorites),
-                icon = R.drawable.ic_star,
-                heading = stringResource(R.string.favorites_soon_title),
-                description = stringResource(R.string.favorites_soon_description),
+                state = favoriteState,
+                onSetFavorite = onSetFavorite,
+                onToolSelected = onToolSelected,
+                onRetry = onFavoritesRetry,
                 onBrowse = { onCategorySelected(null) },
             )
             HomeTab.PROFILE -> InformationPage(
@@ -98,6 +105,8 @@ fun HomeScreen(
                 onToolSelected = onToolSelected,
                 onRetry = onRetry,
                 onSearch = onSearch,
+                favoriteState = favoriteState,
+                onSetFavorite = onSetFavorite,
             )
         }
     }
@@ -111,6 +120,8 @@ private fun CatalogPage(
     onToolSelected: (String) -> Unit,
     onRetry: () -> Unit,
     onSearch: () -> Unit,
+    favoriteState: FavoritesUiState,
+    onSetFavorite: (String, Boolean) -> Unit,
 ) {
     val content = when (val catalog = state.catalog) {
         is HomeCatalogState.Content -> catalog.value
@@ -202,7 +213,12 @@ private fun CatalogPage(
                 } else {
                     val tools = if (state.tab == HomeTab.HOME) content.commonTools else content.tools
                     items(tools, key = { "tool:" + it.code }) { tool ->
-                        ToolCard(tool, onClick = { onToolSelected(tool.code) })
+                        ToolCard(
+                            tool, onClick = { onToolSelected(tool.code) },
+                            isFavorite = tool.code in favoriteState.codes,
+                            favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            onFavoriteChanged = { onSetFavorite(tool.code, it) },
+                        )
                     }
                     if (state.tab == HomeTab.HOME && content.tools.size > content.commonTools.size) {
                         item(key = "browse", span = { GridItemSpan(maxLineSpan) }) {
@@ -217,7 +233,12 @@ private fun CatalogPage(
                         SectionHeader(stringResource(R.string.home_featured))
                     }
                     items(content.featuredTools, key = { "featured:" + it.code }) { tool ->
-                        ToolCard(tool, onClick = { onToolSelected(tool.code) })
+                        ToolCard(
+                            tool, onClick = { onToolSelected(tool.code) },
+                            isFavorite = tool.code in favoriteState.codes,
+                            favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            onFavoriteChanged = { onSetFavorite(tool.code, it) },
+                        )
                     }
                 }
                 if (state.tab == HomeTab.HOME) {
@@ -327,7 +348,13 @@ private fun SectionHeader(title: String, trailing: @Composable () -> Unit = {}) 
 }
 
 @Composable
-internal fun ToolCard(tool: ToolMetadata, onClick: () -> Unit) {
+internal fun ToolCard(
+    tool: ToolMetadata,
+    onClick: () -> Unit,
+    isFavorite: Boolean,
+    favoriteEnabled: Boolean,
+    onFavoriteChanged: (Boolean) -> Unit,
+) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
@@ -335,12 +362,16 @@ internal fun ToolCard(tool: ToolMetadata, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Icon(
-                painterResource(toolIconResource(tool.icon)),
-                contentDescription = null,
-                modifier = Modifier.size(32.dp),
-                tint = MaterialTheme.colorScheme.primary,
-            )
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painterResource(toolIconResource(tool.icon)),
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.weight(1f))
+                FavoriteButton(isFavorite, favoriteEnabled, tool.name, onFavoriteChanged)
+            }
             Text(tool.name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(
                 tool.description,
@@ -477,6 +508,9 @@ private fun EmptyHomePreview() {
             onToolSelected = {},
             onRetry = {},
             onSearch = {},
+            favoriteState = FavoritesUiState(),
+            onSetFavorite = { _, _ -> },
+            onFavoritesRetry = {},
         )
     }
 }

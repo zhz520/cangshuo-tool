@@ -478,7 +478,7 @@ Room       Retrofit
 - 后端配置异步刷新。
 - 首次安装没有网络时仍可以使用基础工具。
 
-当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，并接入本地搜索；收藏、最近使用、账号和远程刷新按各自任务实现。Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)、[计算器说明](../docs/CALCULATOR.md)和 [本地搜索](../docs/LOCAL_SEARCH.md)。
+当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，并接入本地搜索与收藏；最近使用、账号和远程刷新按各自任务实现。Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)、[计算器说明](../docs/CALCULATOR.md)、[本地搜索](../docs/LOCAL_SEARCH.md)和 [本地收藏](../docs/LOCAL_FAVORITES.md)。
 
 ---
 
@@ -509,7 +509,7 @@ Room       Retrofit
 
 MVP 不引入远程向量搜索；基础工具数量低于 500 时，本地字符串/模糊匹配足够。
 
-当前本地搜索已按独立 ViewModel → UseCase → Repository 接入内置启用目录。支持名称、编码、关键词、说明及中英文分类别名，查询最多 80 个 UTF-16 字符；统一全角字符、大小写与空白，多个词需全部命中。名称包含匹配位于名称开头与关键词等级之间，同级按 sortOrder、code 稳定排序；收藏与最近使用权重按对应任务接入。查询与分类使用 SavedStateHandle 保存，语言变化时重新搜索。构建及设备验证范围见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。
+当前本地搜索已按独立 ViewModel → UseCase → Repository 接入内置启用目录。支持名称、编码、关键词、说明及中英文分类别名，查询最多 80 个 UTF-16 字符；统一全角字符、大小写与空白，多个词需全部命中。名称包含匹配位于名称开头与关键词等级之间，同级已收藏工具优先，再按 sortOrder、code 稳定排序；最近使用权重按对应任务接入。查询与分类使用 SavedStateHandle 保存，语言变化时重新搜索。构建及设备验证范围见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。
 
 ---
 
@@ -1370,6 +1370,8 @@ status
 ```
 
 同步必须幂等。
+
+当前初始 Room 数据库为应用私有 `toolbox.db`、版本 1，仅建立 favorite_tool（稳定工具编码主键、added_at UTC 毫秒）。应用级容器提供单进程共享实例，Flow/suspend DAO 经过 Repository 和 UseCase 使用，schema 导出并纳入 Git。后续结构变更新增版本与保留数据的 Migration。最近使用、历史、缓存及同步队列随对应任务接入；字段、依赖版本及验证范围见 [本地收藏](../docs/LOCAL_FAVORITES.md)。
 
 ---
 
@@ -2277,6 +2279,13 @@ Docker 与 Windows 构建、启动、认证应用连接及健康接口已核对�
 **Android 默认跟随系统语言，以简体中文为主要和最终回退语言，同时支持英语。**
 
 用户于 2026-10-04 确定语言要求。使用中文默认资源、英语资源、手动 LocaleConfig 和 AGP 9.1 的 localeFilters 声明支持范围。Android 13+ 的应用语言覆盖由系统管理；API 26–32 按系统资源选择。内置计算器的名称、说明和界面按本机资源本地化，服务端目录当前主语言仍为中文。界面切换及设备行为待验证，范围见 [多语言说明](../docs/ANDROID_LOCALIZATION.md)。
+
+---
+
+### Decision 017
+**Phase 1 使用 Room 保存匿名工具收藏，应用级容器提供单进程共享数据库实例。**
+
+数据库初始版本为 1，仅保存工具编码和收藏时间，显示数据从当前注册中心解析。Room runtime/compiler/plugin 固定 2.8.5，KSP 固定 2.3.6；导出 schema 纳入 Git，后续结构变化增加保留数据的 Migration。收藏状态在首页、搜索、收藏页和工具标题栏共享，同级搜索优先显示已收藏工具。构建与生成代码已通过，持久化及设备行为待运行验证，见 [本地收藏](../docs/LOCAL_FAVORITES.md)。
 
 ---
 

@@ -117,6 +117,10 @@ Redis 接入后也参与整体健康状态，连接配置及运行记录见 [Red
 - 本机 `8080`、容器直连 `8081` 和 Nginx 代理 `8088` 的健康接口均返回 `200/0/UP`，traceId 与响应头一致。Actuator 只返回整体状态；本地 OpenAPI 包含数据库健康检查说明。
 - 未建立或运行自动化测试，未模拟数据库中断或迁移失败；上述失败路径的响应约定不等于已完成故障演练。
 
+## Android 本地数据库
+
+Android 的本地收藏使用独立 SQLite/Room 初始数据库版本 1，表为 `favorite_tool`，schema 纳入版本控制；客户端后续结构变更使用 Room Migration。本文中的 MySQL 表、V1–V3 和 Flyway 规则继续针对服务端。字段及实现范围见 [本地收藏说明](LOCAL_FAVORITES.md#sqlite-结构)。
+
 ## 实现依据
 
 - [Spring Boot 3.5 数据库初始化与 Flyway](https://docs.spring.io/spring-boot/3.5/how-to/data-initialization.html)

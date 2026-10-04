@@ -8,14 +8,18 @@ import com.cangshuo.toolbox.feature.home.ui.HomeRoute
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
-    private val container by lazy { ToolboxAppContainer(applicationContext.resources) }
+    private val container get() = (application as ToolboxApplication).container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ToolboxTheme {
-                HomeRoute(factory = container.homeViewModelFactory, searchFactory = container.searchViewModelFactory)
+                HomeRoute(
+                    factory = container.homeViewModelFactory,
+                    searchFactory = container.searchViewModelFactory,
+                    favoritesFactory = container.favoritesViewModelFactory,
+                )
             }
         }
     }
