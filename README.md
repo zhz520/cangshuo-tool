@@ -12,12 +12,15 @@
 | `deploy/` | Docker Compose 与部署配置 |
 | `docs/` | 项目文档索引 |
 | `toolbox-vibe-spec/` | 产品规格、路线图和编码规则（当前规范来源） |
+| `stitch_cangshuo_tool_android_ui_redesign/` | Android UI 参考页面、截图和设计 token |
 
 ## 当前进度
 
 Phase 0 基础设施门禁已通过，开始 Phase 1 的工具平台骨架。Monorepo 和 API 接口契约已建立；Android Compose 启动壳和 Gradle Wrapper 已落地，采用 AGP 9.1.0、Gradle 9.3.1、API 36 的兼容基线，Debug APK 构建与 Android Lint 已通过。
 
 Android 的 `ToolMetadata`、`ToolDefinition` 与 `ToolRegistry` 已建立，统一 13 个分类、目录字段、运行模式及客户端执行入口，并提供编码去重、稳定排序、分类/推荐查询及状态/设备支持结果。注册中心已按 Compose → ViewModel → UseCase → Repository 接入首页，提供分类、工具列表、推荐与四个底部入口；当前已注册 [本地计算器](docs/CALCULATOR.md)，[本地搜索](docs/LOCAL_SEARCH.md) 支持中英文关键词、分类筛选和结果打开，[本地收藏](docs/LOCAL_FAVORITES.md) 使用 Room 保存匿名书签并提供共享星标，最近使用按后续任务开发。界面提供简体中文与英语，默认跟随系统、以中文为最终回退，语言规则见 [多语言说明](docs/ANDROID_LOCALIZATION.md)。页面与验证范围见 [首页说明](docs/ANDROID_HOME.md)，字段及执行边界见 [工具模型与注册中心说明](docs/TOOL_MODEL.md)。
+
+Android 后续 UI 以用户提供的 Stitch 页面为参考，已有 [UI 规范](docs/ANDROID_UI_SPEC.md) 确定统一颜色、字体、组件和加载状态。共享主题、页面加载卡片与收藏保存进度已接入并通过构建/Lint；完整页面布局迁移和设备视觉验收随对应任务完成。
 
 Spring Boot API 已提供健康检查、统一响应与异常处理、traceId、本地 Swagger / OpenAPI，以及 `GET /api/v1/tools` 目录列表实现。目录复用已有 MySQL 表，支持匿名分页和分类筛选，仅返回启用且未删除的工具与分类；接口范围与验证记录见 [目录接口说明](docs/TOOL_CATALOG.md)。启动方法见 [服务端说明](server/README.md)。
 
@@ -40,6 +43,7 @@ GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项�
 - [工具目录列表接口](docs/TOOL_CATALOG.md)
 - [工具模型、注册中心与客户端执行契约](docs/TOOL_MODEL.md)
 - [Android 首页与本地目录接入](docs/ANDROID_HOME.md)
+- [Android UI 规范与统一加载效果](docs/ANDROID_UI_SPEC.md)
 - [本地计算器](docs/CALCULATOR.md)
 - [本地搜索](docs/LOCAL_SEARCH.md)
 - [本地收藏与 Room 数据库](docs/LOCAL_FAVORITES.md)

@@ -3,6 +3,7 @@
 ## 开始修改前
 
 - 阅读 `toolbox-vibe-spec/PROJECT_SPEC.md`、`toolbox-vibe-spec/ROADMAP.md` 和 `toolbox-vibe-spec/AGENTS.md`。
+- 涉及 Android UI 时，阅读 `docs/ANDROID_UI_SPEC.md`，以 `stitch_cangshuo_tool_android_ui_redesign/` 为视觉参考，并复用共享主题与加载组件。
 - 先检查仓库现状和可复用代码，再说明本次最小计划及文件范围。
 - 每次只实现一个路线图任务；避免无关重构和无计划的依赖升级。
 

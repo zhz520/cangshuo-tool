@@ -1379,6 +1379,8 @@ status
 
 Material 3。
 
+用户于 2026-10-04 指定 `stitch_cangshuo_tool_android_ui_redesign/` 的部分页面为后续 Android UI 参考。正式实现规范见 [Android UI 规范](../docs/ANDROID_UI_SPEC.md)，其中统一参考稿差异、颜色、字体、尺寸、组件、状态、多语言和可访问性要求。使用原生 Compose 共享主题与 `core/ui/ToolboxLoading.kt`，页面不各自创建加载效果；示例工具数量、版本和操作不能当作已实现功能。
+
 主题：
 - System
 - Light
@@ -2286,6 +2288,11 @@ Docker 与 Windows 构建、启动、认证应用连接及健康接口已核对�
 **Phase 1 使用 Room 保存匿名工具收藏，应用级容器提供单进程共享数据库实例。**
 
 数据库初始版本为 1，仅保存工具编码和收藏时间，显示数据从当前注册中心解析。Room runtime/compiler/plugin 固定 2.8.5，KSP 固定 2.3.6；导出 schema 纳入 Git，后续结构变化增加保留数据的 Migration。收藏状态在首页、搜索、收藏页和工具标题栏共享，同级搜索优先显示已收藏工具。构建与生成代码已通过，持久化及设备行为待运行验证，见 [本地收藏](../docs/LOCAL_FAVORITES.md)。
+
+### Decision 018
+**Android 后续 UI 以用户提供的 Stitch 页面和统一 UI 规范为基准，加载状态使用共享原生组件。**
+
+浅色主题采用目录、计算器、收藏和设置稿共用的 `#FAF8FF` 画布及 `#003FB1` 主色，补充跟随系统的深色主题。页面加载用统一圆角卡片与 40dp 原生进度环，局部操作用 20dp 进度环；文案保留中文/英语资源，状态仍由 ViewModel 管理，不人为延迟离线结果。参考稿与实际落地范围见 [Android UI 规范](../docs/ANDROID_UI_SPEC.md)，完整页面迁移和设备验收按对应任务进行。
 
 ---
 

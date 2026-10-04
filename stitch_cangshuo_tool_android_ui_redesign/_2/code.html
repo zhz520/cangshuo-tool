@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-fixed-dim": "#b5c4ff", "surface-container": "#eaedff", "on-secondary": "#ffffff", "surface": "#F8F9FA", "secondary-container": "#d5e3fc", "error": "#ba1a1a", "on-primary": "#ffffff", "on-surface-variant": "#434654", "surface-container-high": "#e2e7ff", "on-tertiary-fixed": "#00201d", "on-secondary-fixed-variant": "#3a485b", "on-error": "#ffffff", "primary": "#1A73E8", "background": "#F8F9FA", "on-secondary-container": "#1d4ed8", "primary-container": "#1a56db", "error-container": "#ffdad6", "surface-dim": "#d2d9f4", "tertiary-fixed": "#89f5e7", "primary-fixed": "#dbe1ff", "on-primary-container": "#d4dcff", "on-error-container": "#93000a", "on-primary-fixed": "#00174d", "secondary-fixed-dim": "#b9c7df", "surface-tint": "#1353d8", "tertiary-container": "#006e65", "secondary": "#515f74", "surface-variant": "#dae2fd", "surface-container-lowest": "#ffffff", "surface-bright": "#faf8ff", "tertiary-fixed-dim": "#6bd8cb", "inverse-surface": "#283044", "secondary-fixed": "#d5e3fc", "outline": "#737686", "on-surface": "#1F2937", "inverse-on-surface": "#eef0ff", "on-tertiary": "#ffffff", "surface-container-low": "#f2f3ff", "on-tertiary-container": "#84f0e2", "surface-container-highest": "#dae2fd", "tertiary": "#00544c", "on-tertiary-fixed-variant": "#005049", "on-secondary-fixed": "#0d1c2e", "inverse-primary": "#b5c4ff", "outline-variant": "#e5e7eb", "on-primary-fixed-variant": "#003dab", "on-background": "#1F2937" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" }, spacing: { "margin": "1rem", "space-sm": "0.5rem", "space-xs": "0.25rem", "space-xl": "2rem", "gutter": "1rem", "space-md": "1rem", "space-lg": "1.25rem", "gutter-sm": "0.5rem", "margin-tablet": "1.5rem" }, fontFamily: { "headline-md": ["Plus Jakarta Sans", "system-ui", "sans-serif"], "headline-sm": ["Plus Jakarta Sans", "system-ui", "sans-serif"], "headline-lg": ["Plus Jakarta Sans", "system-ui", "sans-serif"], "label-mono": ["JetBrains Mono", "monospace"], "display-lg": ["Plus Jakarta Sans", "system-ui", "sans-serif"], "data-metric": ["JetBrains Mono", "monospace"], "label-lg": ["Inter", "sans-serif"], "body-lg": ["Inter", "sans-serif"], "body-md": ["Inter", "sans-serif"], "label-md": ["Inter", "sans-serif"], "body-sm": ["Inter", "sans-serif"] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#F8F9FA;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-[#F8F9FA] font-body-md text-on-surface antialiased flex flex-col min-h-screen selection:bg-secondary-container">
+<!-- 1. TopBar (Material 3 Native) -->
+<header class="fixed top-0 w-full z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-black/[0.04]">
+<div class="pt-safe px-4">
+<!-- Status Bar Row -->
+<div class="h-6 flex items-center justify-between font-label-mono text-[12px] text-gray-500 select-none">
+<span class="font-medium text-gray-700">09:41</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]">wifi</span>
+<span class="material-symbols-outlined text-[15px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[15px]">battery_full</span>
+</div>
+</div>
+<!-- App Bar Row -->
+<div class="h-14 flex items-center justify-between">
+<h1 class="text-[20px] font-bold tracking-tight text-gray-900">沧烁工具箱</h1>
+<div class="flex items-center gap-1">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-gray-700 hover:bg-black/[0.05] active:bg-black/[0.1] transition-colors" title="搜索">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-gray-700 hover:bg-black/[0.05] active:bg-black/[0.1] transition-colors" title="更多设置">
+<span class="material-symbols-outlined text-[22px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Scroll Container -->
+<main class="flex flex-col relative w-full pt-[88px] pb-28 px-4 bg-[#F8F9FA]">
+<div class="flex flex-col w-full gap-4">
+<!-- 2. Search Bar Capsule -->
+<div class="relative flex items-center w-full h-11 bg-white rounded-full border border-black/[0.08] shadow-[0_1px_2px_rgba(0,0,0,0.03)] px-3.5">
+<span class="material-symbols-outlined text-gray-400 text-[20px] shrink-0">search</span>
+<input class="w-full h-full pl-2.5 pr-2 bg-transparent text-[13px] text-gray-800 placeholder:text-gray-400 focus:outline-none" id="toolSearchInput" placeholder="搜索全部工具 (计算、换算、编码、网络...)" type="text"/>
+<div class="flex items-center gap-1 text-gray-400 shrink-0">
+<button class="p-1 rounded-full hover:text-gray-700 hidden transition-colors" id="clearSearchBtn">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button class="p-1 rounded-full hover:text-gray-700 transition-colors" title="扫码/功能">
+<span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+</button>
+</div>
+</div>
+<!-- 3. High-Frequency Grid (4x2 Native Compact App Grid) -->
+<div class="bg-white rounded-2xl p-4 border border-black/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+<div class="flex items-center justify-between mb-3 px-0.5">
+<span class="text-[14px] font-semibold text-gray-900">快捷工具</span>
+<button class="text-[12px] text-blue-600 font-medium hover:underline flex items-center gap-0.5">
+          自定义
+          <span class="material-symbols-outlined text-[14px]">tune</span>
+</button>
+</div>
+<div class="grid grid-cols-4 gap-y-3.5 gap-x-2">
+<!-- 1. 计算器 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(37,99,235,0.08)] group-hover:bg-blue-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">calculate</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">计算器</span>
+</a>
+<!-- 2. 单位换算 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(13,148,136,0.08)] group-hover:bg-teal-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">straighten</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">单位换算</span>
+</a>
+<!-- 3. 时间戳 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(217,119,6,0.08)] group-hover:bg-amber-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">schedule</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">时间戳</span>
+</a>
+<!-- 4. 编码转换 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(79,70,229,0.08)] group-hover:bg-indigo-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">swap_horiz</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">编码转换</span>
+</a>
+<!-- 5. 正则调试 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(124,58,237,0.08)] group-hover:bg-violet-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">regular_expression</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">正则调试</span>
+</a>
+<!-- 6. 调色板 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(225,29,72,0.08)] group-hover:bg-rose-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">palette</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">调色板</span>
+</a>
+<!-- 7. 网络测速 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(5,150,105,0.08)] group-hover:bg-emerald-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">speed</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">网络测速</span>
+</a>
+<!-- 8. 文本对比 -->
+<a class="flex flex-col items-center group active:scale-95 transition-transform text-center" href="#">
+<div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center mb-1.5 shadow-[0_1px_2px_rgba(14,116,144,0.08)] group-hover:bg-cyan-100 transition-colors">
+<span class="material-symbols-outlined text-[24px]">difference</span>
+</div>
+<span class="text-[12px] font-medium text-gray-800 tracking-tight leading-tight">文本对比</span>
+</a>
+</div>
+</div>
+<!-- 4. Category Matrix (Scrollable Chips with item counts) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between px-0.5">
+<span class="text-[14px] font-semibold text-gray-900">分类索引</span>
+<span class="text-[12px] text-gray-500 font-normal">全库 40+ 工具</span>
+</div>
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 -mx-4 px-4">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-600 text-white font-medium text-[13px] shrink-0 shadow-sm active:scale-95 transition-transform">
+<span>全部</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white/20 text-[11px] font-mono">40</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-black/[0.08] text-gray-700 text-[13px] shrink-0 active:scale-95 transition-all">
+<span>计算与测量</span>
+<span class="text-gray-400 font-mono text-[11px]">6</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-black/[0.08] text-gray-700 text-[13px] shrink-0 active:scale-95 transition-all">
+<span>开发者助手</span>
+<span class="text-gray-400 font-mono text-[11px]">12</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-black/[0.08] text-gray-700 text-[13px] shrink-0 active:scale-95 transition-all">
+<span>图像与多媒体</span>
+<span class="text-gray-400 font-mono text-[11px]">8</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-black/[0.08] text-gray-700 text-[13px] shrink-0 active:scale-95 transition-all">
+<span>系统与硬件</span>
+<span class="text-gray-400 font-mono text-[11px]">5</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-black/[0.08] text-gray-700 text-[13px] shrink-0 active:scale-95 transition-all">
+<span>文本与排版</span>
+<span class="text-gray-400 font-mono text-[11px]">9</span>
+</button>
+</div>
+</div>
+<!-- 5. Recent Used List (Compact dual-item / feed) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between px-0.5">
+<span class="text-[14px] font-semibold text-gray-900">最近使用</span>
+<button class="text-[12px] text-gray-500 hover:text-gray-800">清空历史</button>
+</div>
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Item 1 -->
+<a class="flex items-center gap-2.5 p-2.5 rounded-xl bg-white border border-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.02)] active:bg-gray-50 transition-colors" href="#">
+<div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">calculate</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[13px] font-medium text-gray-900 truncate">科学计算器</span>
+<span class="text-[11px] text-gray-400">10分钟前</span>
+</div>
+</a>
+<!-- Item 2 -->
+<a class="flex items-center gap-2.5 p-2.5 rounded-xl bg-white border border-black/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.02)] active:bg-gray-50 transition-colors" href="#">
+<div class="w-9 h-9 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">straighten</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-[13px] font-medium text-gray-900 truncate">单位换算</span>
+<span class="text-[11px] text-gray-400">昨天</span>
+</div>
+</a>
+</div>
+</div>
+<!-- 6. Featured & Popular Tools (Material 3 Compact List Items) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between px-0.5">
+<span class="text-[14px] font-semibold text-gray-900">热门推荐</span>
+<span class="text-[12px] text-gray-500">高评分本地工具</span>
+</div>
+<div class="bg-white rounded-2xl border border-black/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.02)] divide-y divide-black/[0.04] overflow-hidden">
+<!-- Tool 1 -->
+<div class="flex items-center justify-between p-3.5 hover:bg-gray-50 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">calculate</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="text-[14px] font-medium text-gray-900 truncate">科学与日常计算器</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-blue-50 text-blue-700 font-medium">离线</span>
+</div>
+<span class="text-[12px] text-gray-500 truncate mt-0.5">四则运算、高精度函数、即时历史回溯</span>
+</div>
+</div>
+<a class="ml-3 shrink-0 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-[12px] font-medium active:scale-95 transition-all" href="#">
+            打开
+          </a>
+</div>
+<!-- Tool 2 -->
+<div class="flex items-center justify-between p-3.5 hover:bg-gray-50 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">data_object</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="text-[14px] font-medium text-gray-900 truncate">JSON 格式化与校验</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-indigo-50 text-indigo-700 font-medium">开发</span>
+</div>
+<span class="text-[12px] text-gray-500 truncate mt-0.5">结构树折叠、语法高亮、快速排错</span>
+</div>
+</div>
+<a class="ml-3 shrink-0 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-[12px] font-medium active:scale-95 transition-all" href="#">
+            打开
+          </a>
+</div>
+<!-- Tool 3 -->
+<div class="flex items-center justify-between p-3.5 hover:bg-gray-50 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">straighten</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="text-[14px] font-medium text-gray-900 truncate">多维单位换算器</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-teal-50 text-teal-700 font-medium">实用</span>
+</div>
+<span class="text-[12px] text-gray-500 truncate mt-0.5">长度、面积、质量、温度、数据存储换算</span>
+</div>
+</div>
+<a class="ml-3 shrink-0 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-[12px] font-medium active:scale-95 transition-all" href="#">
+            打开
+          </a>
+</div>
+<!-- Tool 4 -->
+<div class="flex items-center justify-between p-3.5 hover:bg-gray-50 transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">pin</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="text-[14px] font-medium text-gray-900 truncate">Base 进制转换器</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-50 text-amber-700 font-medium">系统</span>
+</div>
+<span class="text-[12px] text-gray-500 truncate mt-0.5">HEX / DEC / OCT / BIN 实时同步</span>
+</div>
+</div>
+<a class="ml-3 shrink-0 px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 text-[12px] font-medium active:scale-95 transition-all" href="#">
+            打开
+          </a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Standard Material 3 Navigation Bar) -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-white/95 backdrop-blur-md border-t border-black/[0.06]">
+<div class="flex justify-around items-center h-16 px-4">
+<!-- Home (Active) -->
+<a aria-current="page" class="flex flex-col items-center justify-center flex-1 h-full select-none text-blue-600 group" href="#">
+<div class="w-14 h-8 rounded-full bg-blue-100/70 flex items-center justify-center mb-0.5 transition-colors">
+<span class="material-symbols-outlined text-[22px] font-semibold text-blue-700">grid_view</span>
+</div>
+<span class="text-[11px] font-semibold tracking-tight text-blue-700">首页</span>
+</a>
+<!-- Tools -->
+<a class="flex flex-col items-center justify-center flex-1 h-full select-none text-gray-500 hover:text-gray-900 group" href="#">
+<div class="w-14 h-8 rounded-full flex items-center justify-center mb-0.5 group-active:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-[22px]">home_repair_service</span>
+</div>
+<span class="text-[11px] font-normal tracking-tight">全部工具</span>
+</a>
+<!-- Favorites -->
+<a class="flex flex-col items-center justify-center flex-1 h-full select-none text-gray-500 hover:text-gray-900 group" href="#">
+<div class="w-14 h-8 rounded-full flex items-center justify-center mb-0.5 group-active:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-[22px]">star</span>
+</div>
+<span class="text-[11px] font-normal tracking-tight">收藏</span>
+</a>
+<!-- Profile / Settings -->
+<a class="flex flex-col items-center justify-center flex-1 h-full select-none text-gray-500 hover:text-gray-900 group" href="#">
+<div class="w-14 h-8 rounded-full flex items-center justify-center mb-0.5 group-active:bg-gray-100 transition-colors">
+<span class="material-symbols-outlined text-[22px]">tune</span>
+</div>
+<span class="text-[11px] font-normal tracking-tight">设置</span>
+</a>
+</div>
+<div class="w-full flex justify-center pb-1.5 select-none pointer-events-none">
+<div class="w-32 h-1 rounded-full bg-gray-300"></div>
+</div>
+</nav>
+<script>
+  (function() {
+    const searchInput = document.getElementById('toolSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+
+    if (searchInput && clearBtn) {
+      searchInput.addEventListener('input', (e) => {
+        if (e.target.value.trim().length > 0) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.classList.add('hidden');
+        searchInput.focus();
+      });
+    }
+  })();
+</script>
+</body></html>

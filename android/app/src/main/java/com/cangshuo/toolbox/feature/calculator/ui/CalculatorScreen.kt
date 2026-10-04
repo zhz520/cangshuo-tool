@@ -112,7 +112,7 @@ fun CalculatorScreen(
                 }
             }
             item(key = "result") {
-                Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.primaryContainer) {
+                Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLowest) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(stringResource(R.string.calculator_result), fontWeight = FontWeight.Bold)
                         if (state.result == null) {

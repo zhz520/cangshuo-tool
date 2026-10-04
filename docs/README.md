@@ -10,6 +10,7 @@
 - [工具目录列表接口](TOOL_CATALOG.md)
 - [工具模型、注册中心与客户端执行契约](TOOL_MODEL.md)
 - [Android 首页与本地目录接入](ANDROID_HOME.md)
+- [Android UI 规范与统一加载效果](ANDROID_UI_SPEC.md)
 - [本地计算器](CALCULATOR.md)
 - [本地搜索](LOCAL_SEARCH.md)
 - [本地收藏与 Room 数据库](LOCAL_FAVORITES.md)

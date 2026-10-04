@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.feature.home.ui.ToolCard
 import com.cangshuo.toolbox.feature.home.ui.labelResource
 import com.cangshuo.toolbox.feature.search.domain.MAX_SEARCH_QUERY_LENGTH
@@ -140,37 +140,39 @@ fun SearchScreen(
                             tool, onClick = { onToolSelected(tool.code) },
                             isFavorite = tool.code in favoriteState.codes,
                             favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            favoriteSaving = tool.code in favoriteState.pendingCodes,
                             onFavoriteChanged = { onSetFavorite(tool.code, it) },
                         )
                     }
                 } else {
                     item(key = "status", span = { GridItemSpan(maxLineSpan) }) {
-                        Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow) {
-                            Column(
-                                Modifier.fillMaxWidth().padding(24.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                when (results) {
-                                    SearchResultsState.Loading -> {
-                                        CircularProgressIndicator()
-                                        Text(stringResource(R.string.search_loading))
-                                    }
-                                    SearchResultsState.Error -> {
-                                        Text(stringResource(R.string.search_error_title), style = MaterialTheme.typography.titleMedium)
-                                        Text(stringResource(R.string.search_error_description))
-                                        Button(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
-                                    }
-                                    SearchResultsState.Empty -> {
-                                        Text(stringResource(R.string.search_empty_title), style = MaterialTheme.typography.titleMedium)
-                                        Text(stringResource(R.string.search_empty_description))
-                                        if (state.query.isNotEmpty() || state.category != null) {
-                                            TextButton(onClick = onClearFilters) {
-                                                Text(stringResource(R.string.search_clear_filters))
+                        if (results == SearchResultsState.Loading) {
+                            ToolboxLoadingState(stringResource(R.string.search_loading))
+                        } else {
+                            Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                                Column(
+                                    Modifier.fillMaxWidth().padding(24.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    when (results) {
+                                        SearchResultsState.Loading -> Unit
+                                        SearchResultsState.Error -> {
+                                            Text(stringResource(R.string.search_error_title), style = MaterialTheme.typography.titleMedium)
+                                            Text(stringResource(R.string.search_error_description))
+                                            Button(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
+                                        }
+                                        SearchResultsState.Empty -> {
+                                            Text(stringResource(R.string.search_empty_title), style = MaterialTheme.typography.titleMedium)
+                                            Text(stringResource(R.string.search_empty_description))
+                                            if (state.query.isNotEmpty() || state.category != null) {
+                                                TextButton(onClick = onClearFilters) {
+                                                    Text(stringResource(R.string.search_clear_filters))
+                                                }
                                             }
                                         }
+                                        is SearchResultsState.Content -> Unit
                                     }
-                                    is SearchResultsState.Content -> Unit
                                 }
                             }
                         }

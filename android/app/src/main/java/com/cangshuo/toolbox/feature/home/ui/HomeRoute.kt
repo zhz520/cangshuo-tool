@@ -100,6 +100,7 @@ fun HomeRoute(
                     FavoriteButton(
                         selected = openedTool.code in favoriteState.codes,
                         enabled = favoriteState.ready && openedTool.code !in favoriteState.pendingCodes,
+                        saving = openedTool.code in favoriteState.pendingCodes,
                         toolName = openedTool.metadata.name,
                         onChange = { favorites.changeFavorite(openedTool.code, it) },
                     )

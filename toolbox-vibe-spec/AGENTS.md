@@ -10,6 +10,8 @@ If present, also read:
 - DATABASE.md
 - API.md
 
+For Android UI changes, also read `../docs/ANDROID_UI_SPEC.md`. Use the Stitch references under `../stitch_cangshuo_tool_android_ui_redesign/` and reuse the shared theme/loading components.
+
 ## Workflow
 1. Inspect existing code first.
 2. State the smallest implementation plan.

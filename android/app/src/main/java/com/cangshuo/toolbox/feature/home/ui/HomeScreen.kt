@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +46,7 @@ import androidx.annotation.DrawableRes
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.core.model.ToolMetadata
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.feature.home.domain.HomeCategory
 import com.cangshuo.toolbox.feature.home.domain.HomeContent
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -217,6 +217,7 @@ private fun CatalogPage(
                             tool, onClick = { onToolSelected(tool.code) },
                             isFavorite = tool.code in favoriteState.codes,
                             favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            favoriteSaving = tool.code in favoriteState.pendingCodes,
                             onFavoriteChanged = { onSetFavorite(tool.code, it) },
                         )
                     }
@@ -237,6 +238,7 @@ private fun CatalogPage(
                             tool, onClick = { onToolSelected(tool.code) },
                             isFavorite = tool.code in favoriteState.codes,
                             favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
+                            favoriteSaving = tool.code in favoriteState.pendingCodes,
                             onFavoriteChanged = { onSetFavorite(tool.code, it) },
                         )
                     }
@@ -252,14 +254,7 @@ private fun CatalogPage(
             } else {
                 item(key = "status", span = { GridItemSpan(maxLineSpan) }) {
                     if (state.catalog == HomeCatalogState.Loading) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(32.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                        ) {
-                            CircularProgressIndicator()
-                            Text(stringResource(R.string.home_loading))
-                        }
+                        ToolboxLoadingState(stringResource(R.string.home_loading))
                     } else {
                         StatusCard(
                             title = stringResource(R.string.home_error_title),
@@ -354,6 +349,7 @@ internal fun ToolCard(
     isFavorite: Boolean,
     favoriteEnabled: Boolean,
     onFavoriteChanged: (Boolean) -> Unit,
+    favoriteSaving: Boolean = false,
 ) {
     Card(
         onClick = onClick,
@@ -370,7 +366,7 @@ internal fun ToolCard(
                     tint = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.weight(1f))
-                FavoriteButton(isFavorite, favoriteEnabled, tool.name, onFavoriteChanged)
+                FavoriteButton(isFavorite, favoriteEnabled, tool.name, onFavoriteChanged, saving = favoriteSaving)
             }
             Text(tool.name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(

@@ -4,15 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.feature.home.ui.ToolCard
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 
@@ -64,6 +67,7 @@ fun FavoritesScreen(
                             onClick = { onToolSelected(item.code) },
                             isFavorite = true,
                             favoriteEnabled = item.code !in state.pendingCodes,
+                            favoriteSaving = item.code in state.pendingCodes,
                             onFavoriteChanged = { onSetFavorite(item.code, it) },
                         )
                     } else {
@@ -74,35 +78,44 @@ fun FavoritesScreen(
                                 TextButton(
                                     onClick = { onSetFavorite(item.code, false) },
                                     enabled = item.code !in state.pendingCodes,
-                                ) { Text(stringResource(R.string.favorite_remove)) }
+                                ) {
+                                    if (item.code in state.pendingCodes) {
+                                        ToolboxLoadingIndicator(compact = true)
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(stringResource(R.string.favorite_saving))
+                                    } else {
+                                        Text(stringResource(R.string.favorite_remove))
+                                    }
+                                }
                             }
                         }
                     }
                 }
             } else {
                 item(key = "status", span = { GridItemSpan(maxLineSpan) }) {
-                    Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow) {
-                        Column(
-                            Modifier.fillMaxWidth().padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            when (list) {
-                                FavoritesListState.Loading -> {
-                                    CircularProgressIndicator()
-                                    Text(stringResource(R.string.favorites_loading))
+                    if (list == FavoritesListState.Loading) {
+                        ToolboxLoadingState(stringResource(R.string.favorites_loading))
+                    } else {
+                        Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                            Column(
+                                Modifier.fillMaxWidth().padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                            ) {
+                                when (list) {
+                                    FavoritesListState.Loading -> Unit
+                                    FavoritesListState.Empty -> {
+                                        Text(stringResource(R.string.favorites_empty_title), style = MaterialTheme.typography.titleMedium)
+                                        Text(stringResource(R.string.favorites_empty_description))
+                                        Button(onClick = onBrowse) { Text(stringResource(R.string.action_browse_tools)) }
+                                    }
+                                    FavoritesListState.Error -> {
+                                        Text(stringResource(R.string.favorites_error_title), style = MaterialTheme.typography.titleMedium)
+                                        Text(stringResource(R.string.favorites_error_description))
+                                        Button(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
+                                    }
+                                    is FavoritesListState.Content -> Unit
                                 }
-                                FavoritesListState.Empty -> {
-                                    Text(stringResource(R.string.favorites_empty_title), style = MaterialTheme.typography.titleMedium)
-                                    Text(stringResource(R.string.favorites_empty_description))
-                                    Button(onClick = onBrowse) { Text(stringResource(R.string.action_browse_tools)) }
-                                }
-                                FavoritesListState.Error -> {
-                                    Text(stringResource(R.string.favorites_error_title), style = MaterialTheme.typography.titleMedium)
-                                    Text(stringResource(R.string.favorites_error_description))
-                                    Button(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
-                                }
-                                is FavoritesListState.Content -> Unit
                             }
                         }
                     }

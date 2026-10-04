@@ -49,6 +49,7 @@
     <string name="favorite_add_label">Add %1$s to favorites</string>
     <string name="favorite_remove_label">Remove %1$s from favorites</string>
     <string name="favorite_remove">Remove favorite</string>
+    <string name="favorite_saving">Saving favorites…</string>
     <string name="favorites_local_hint">Favorites are saved on this device. No account needed. Tap a star to remove a favorite.</string>
     <string name="favorites_loading">Loading favorites…</string>
     <string name="favorites_empty_title">No favorites yet</string>

@@ -4,6 +4,8 @@
 
 ## 工具模型
 
+后续 UI 参考 `stitch_cangshuo_tool_android_ui_redesign/`，以 [Android UI 规范](../docs/ANDROID_UI_SPEC.md) 中确定的 token、组件及状态为准。当前已接入蓝色浅色/深色主题、共享页面加载卡片和收藏写入的紧凑进度环；五个参考页面的完整布局按各自任务迁移。
+
 `core/model` 提供 `ToolMetadata`、13 个稳定分类及运行模式、目录状态；`core/tool/ToolDefinition` 统一元数据、Android 权限声明、设备能力检查和 Compose 页面入口。模型与目录字段、数据库基础约定对齐，详细边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
 
 `ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前已注册 [本地计算器](../docs/CALCULATOR.md)，支持四则运算、小数、括号、百分号、复制及继续计算；[本地搜索](../docs/LOCAL_SEARCH.md) 可从首页和工具页进入，支持中英文关键词、分类筛选与相关度排序。[本地收藏](../docs/LOCAL_FAVORITES.md) 通过 Room 保存匿名书签，星标在目录、搜索和工具标题栏共享。目录远程刷新与最近使用按后续任务实现。
@@ -35,9 +37,9 @@ Wrapper 分发包已配置官方 SHA-256 校验。GitHub Actions 构建 Debug AP
 
 ## 构建验证
 
-2026-10-04 使用本机 Android Studio 自带的 JDK 21.0.9 完成本地收藏及 Room/KSP 构建门禁：
+2026-10-04 使用本机 Android Studio 自带的 JDK 21.0.9 完成统一 UI 主题与加载组件构建门禁（此前 Room/KSP 门禁也已通过）：
 
 - `:app:assembleDebug`：成功，生成 `app/build/outputs/apk/debug/app-debug.apk`。
 - `:app:lintDebug`：成功，0 错误、11 警告。其中 9 条为 SDK、构建工具或依赖的新版本提示，1 条为尚未设置应用图标，1 条为 `localeConfig` 仅在 API 33+ 生效的提示。
 
-当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`，KSP 数据库/DAO 与版本 1 schema 已生成。未新增或执行自动化测试，收藏持久化、搜索、计算行为和设备运行尚待验证；本次范围与记录见 [本地收藏说明](../docs/LOCAL_FAVORITES.md)。
+当前版本按 IDE 兼容范围固定，应用图标在后续视觉完善时补充。Lint 报告位于 `app/build/reports/lint-results-debug.html`，KSP 数据库/DAO 与版本 1 schema 已生成。本次最终构建成功，0 错误、11 条既有警告，无新增警告。未新增或执行自动化测试；实际动画、Preview 渲染、深色/语言/大字号与无障碍设备行为尚待验证，本次范围见 [Android UI 规范](../docs/ANDROID_UI_SPEC.md)。收藏持久化、搜索和计算运行范围仍见各自功能文档。
