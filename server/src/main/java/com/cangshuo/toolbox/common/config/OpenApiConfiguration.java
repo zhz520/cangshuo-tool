@@ -17,7 +17,7 @@ public class OpenApiConfiguration {
         return new OpenAPI().info(new Info()
                 .title("沧烁工具箱 API")
                 .version("0.1.0")
-                .description("当前提供服务健康检查；业务接口按路线图逐步实现。"));
+                .description("当前提供服务健康检查与分页工具目录；其他业务接口按路线图逐步实现。"));
     }
 
     @Bean

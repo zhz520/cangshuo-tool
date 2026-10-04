@@ -5,11 +5,15 @@ import com.cangshuo.toolbox.common.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.QueryTimeoutException;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -31,6 +35,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         responseHeaders.addAll(headers);
         responseHeaders.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(response, responseHeaders, status);
+    }
+
+    @ExceptionHandler({DataAccessResourceFailureException.class, TransientDataAccessResourceException.class,
+            QueryTimeoutException.class, CannotCreateTransactionException.class})
+    public ResponseEntity<ApiResponse<Void>> handleUnavailableDataSource(Exception exception,
+                                                                        HttpServletRequest request) {
+        LOG.warn("Request data source unavailable; exceptionType={}", exception.getClass().getName());
+        return ResponseEntity.status(ApiError.SERVICE_UNAVAILABLE.httpStatus())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure(ApiError.SERVICE_UNAVAILABLE, TraceIdFilter.traceId(request)));
     }
 
     @ExceptionHandler(Exception.class)

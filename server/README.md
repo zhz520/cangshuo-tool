@@ -5,6 +5,7 @@
 ## 当前能力
 
 - `GET /api/v1/health`：统一响应的健康检查，汇总 Actuator 状态。
+- `GET /api/v1/tools`：匿名分页目录，支持分类筛选，过滤关闭、维护或软删除的工具及关闭/删除的分类；页大小上限 100，按排序值与编码稳定排序。实现及验证范围见 [目录接口说明](../docs/TOOL_CATALOG.md)。
 - `GET /actuator/health`：基础设施健康检查，使用原生格式，只公开状态。
 - 统一 JSON 响应与异常处理，参数错误、认证错误和容器错误沿用 API 契约。
 - 每次请求生成 traceId，写入响应头、业务响应及 MDC；日志使用 ECS JSON 格式。
@@ -60,13 +61,18 @@ com.cangshuo.toolbox
 │   ├── logging      请求 traceId 与 MDC
 │   ├── response     统一响应模型
 │   └── security     访问控制及 JSON 认证错误
-└── health
+├── health
+│   ├── controller
+│   ├── model
+│   └── service
+└── tool
     ├── controller
     ├── model
+    ├── repository
     └── service
 ```
 
-健康检查使用 Controller → Service 分层；后续持久化业务通过 Mapper/Repository 访问数据。
+健康检查使用 Controller → Service 分层；目录使用 Controller → Service → Repository，通过参数化 JDBC 查询持久化数据，并在只读事务内读取分页数量和记录。列表 DTO 不暴露配置 JSON 或数据库主键，Android 对应传输模型已同步；详情、搜索、推荐、分类专用接口、客户端 JSON/网络接入和缓存按后续任务实现。
 
 GitHub Actions 的 Server 任务使用 Maven Wrapper 打包并保存 JAR，当前显式跳过测试。工作流及验证范围见 [CI 说明](../docs/CI.md)。
 
@@ -93,6 +99,8 @@ if ($apiProcess -and $apiProcess.CommandLine.Contains($apiJar)) {
     Stop-Process -Id $apiProcessId
 }
 ```
+
+2026-10-04 目录列表任务重新执行 Windows Maven 打包，编译和生成 JAR 成功，显式跳过测试。本机 local 预览已更新并启动，现有两份 Flyway 迁移校验通过，数据库版本仍为 2。Docker server 镜像也已重建并通过启动健康门禁；目录接口的分页、筛选、JSON 与错误分支尚未运行验证，完整记录见 [目录接口说明](../docs/TOOL_CATALOG.md#验证记录)。
 
 ## 版本依据
 

@@ -23,7 +23,7 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 
 模型在构造及 `copy` 时校验编码、文本、图标名、关键词和版本。校验异常使用固定提示，不包含传入内容。图标名称需要在 UI 中映射为已打包资源；名称格式合法也不意味着设备上存在该图标。
 
-简短说明统一使用现有 API 契约的 `description` 字段，规格中的 `shortDescription` 统一为该命名。此模型是客户端领域数据，尚未增加 JSON DTO、解析器或网络调用。远程响应需要先在 Repository 边界校验和映射，再交给领域模型。
+简短说明统一使用现有 API 契约的 `description` 字段，规格中的 `shortDescription` 统一为该命名。此模型是客户端领域数据；`core/network/model` 已增加 `ToolCatalogDto` 和 `ToolCatalogPageDto` 传输结构，保持接口字段名，未知分类、模式、状态或无效字段映射为 null。JSON 解析器、网络调用及缓存仍待接入；远程数据在 Repository 边界校验和映射后交给领域模型，详见 [目录接口说明](TOOL_CATALOG.md)。
 
 ## 分类
 

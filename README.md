@@ -19,7 +19,7 @@ Phase 0 基础设施门禁已通过，开始 Phase 1 的工具平台骨架。Mon
 
 Android 的 `ToolMetadata`、`ToolDefinition` 与 `ToolRegistry` 已建立，统一 13 个分类、目录字段、运行模式及客户端执行入口，并提供编码去重、稳定排序、分类/推荐查询及状态/设备支持结果。注册中心已按 Compose → ViewModel → UseCase → Repository 接入首页，提供分类、工具列表、推荐与四个底部入口；当前具体工具集合为空，搜索、收藏与最近使用仍按各自任务开发。页面与验证范围见 [首页说明](docs/ANDROID_HOME.md)，字段及执行边界见 [工具模型与注册中心说明](docs/TOOL_MODEL.md)。
 
-Spring Boot API 启动壳已完成，提供健康检查、统一响应与异常处理、traceId 和本地 Swagger / OpenAPI；Maven 打包和本机启动已通过。启动方法见 [服务端说明](server/README.md)。
+Spring Boot API 已提供健康检查、统一响应与异常处理、traceId、本地 Swagger / OpenAPI，以及 `GET /api/v1/tools` 目录列表实现。目录复用已有 MySQL 表，支持匿名分页和分类筛选，仅返回启用且未删除的工具与分类；接口范围与验证记录见 [目录接口说明](docs/TOOL_CATALOG.md)。启动方法见 [服务端说明](server/README.md)。
 
 Admin 启动壳已完成，提供后台布局、路由导航、健康概览和集中 API 客户端；TypeScript 检查、生产构建及本地健康接口联调已通过。启动方法见 [后台说明](admin/README.md)。管理员认证和业务管理功能按 Phase 5 开发。
 
@@ -37,6 +37,7 @@ GitHub Actions 工作流已配置 Android、Server、Admin、部署配置四项�
 - [开发路线图](toolbox-vibe-spec/ROADMAP.md)
 - [AI 编码规则](toolbox-vibe-spec/AGENTS.md)
 - [API 接口契约](docs/API.md)
+- [工具目录列表接口](docs/TOOL_CATALOG.md)
 - [工具模型、注册中心与客户端执行契约](docs/TOOL_MODEL.md)
 - [Android 首页与本地目录接入](docs/ANDROID_HOME.md)
 - [数据库结构与迁移](docs/DATABASE.md)

@@ -71,11 +71,11 @@ Admin 概览通过集中 API 模块消费该接口，校验响应封装和 `data
 
 显式启用 `local` profile 后，可访问 `/v3/api-docs` 获取生成的 OpenAPI，以及 `/swagger-ui/index.html` 浏览接口。默认、`staging`、`production` 环境关闭文档端点。OpenAPI 和 Swagger 静态资源使用原生格式。
 
-当前仅健康检查是已实现的业务 API；下面的工具目录和其他业务接口按对应阶段开发。Spring Security 默认保护其他路径，匿名请求返回 HTTP `401`、业务码 `10002`，不表示这些业务接口已实现。登录与 JWT 认证在 Auth & Sync 阶段接入。
+当前已实现健康检查与 `GET /api/v1/tools` 列表。Spring Security 仅为目录列表开放此精确路径的 GET；详情、搜索、推荐专用接口、分类接口及其他业务接口按对应阶段开发，当前仍默认要求认证，匿名请求返回 HTTP `401`、业务码 `10002`。登录与 JWT 认证在 Auth & Sync 阶段接入。目录实现及验证范围见 [目录接口说明](TOOL_CATALOG.md)。
 
 ## 分页
 
-分页列表统一接收 `page` 和 `pageSize`，默认值分别为 `1` 和 `20`。无效值返回 `10001`。列表内容放在统一响应的 `data` 中：
+分页列表统一接收 `page` 和 `pageSize`，默认值分别为 `1` 和 `20`。当前工具列表中，省略或传空的分页参数使用默认值；`page` 范围为 `1..2147483647`，`pageSize` 范围为 `1..100`，非整数或超出范围返回 HTTP `400`、业务码 `10001`。`total` 为非负 64 位整数。列表内容放在统一响应的 `data` 中：
 
 ```json
 {
@@ -125,19 +125,19 @@ Admin 概览通过集中 API 模块消费该接口，校验响应封装和 `data
 | `sortOrder` | integer | 升序展示顺序 |
 | `isFeatured` | boolean | 是否为推荐工具 |
 
-数据库中的 `tool_code` 映射为 API 的 `code`，`keywords_json` 映射为 `keywords`；分类关联映射为 `categoryCode`。目录列表只返回 `ENABLED` 工具。详情接口可用 `30002` 或 `30003` 告知客户端工具已关闭或维护中。客户端仅把图标名映射到内置资源，不把服务端字符串当作代码或资源路径执行。
+数据库中的 `tool_code` 映射为 API 的 `code`，`keywords_json` 映射为 `keywords`；分类关联映射为 `categoryCode`。目录列表只返回 `ENABLED` 且未软删除的工具，所属分类也必须启用且未软删除。详情接口规划用 `30002` 或 `30003` 告知客户端工具已关闭或维护中。客户端仅把图标名映射到内置资源，不把服务端字符串当作代码或资源路径执行。数据库主键、`config_json`、时间及删除标记不出现在目录响应中。
 
-Android 已建立对应的 `ToolMetadata` 领域模型与 `ToolDefinition` 本地执行契约，字段映射见 [工具模型说明](TOOL_MODEL.md)。所需 Android 权限、设备支持检查和 Compose 页面由客户端实现声明，不属于服务端目录响应。目录接口及 JSON DTO/解析器仍待对应任务实现。
+Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契约及 `ToolCatalogDto` / `ToolCatalogPageDto` 传输结构，字段映射见 [工具模型说明](TOOL_MODEL.md)。DTO 保留分类、模式和状态的字符串编码，映射时拒绝未知或无效元数据；`total` 使用 `Long`。所需 Android 权限、设备支持检查和 Compose 页面由客户端实现声明，不属于服务端目录响应。JSON 解析、网络请求、缓存和目录合并尚待客户端远程刷新任务接入，当前首页继续读取内置注册中心。
 
 ## 工具目录接口
 
-| 方法与路径 | 认证 | 用途 |
-| --- | --- | --- |
-| `GET /api/v1/tools` | 无 | 分页获取启用的工具，可按分类筛选 |
-| `GET /api/v1/tools/{code}` | 无 | 获取工具详情 |
-| `GET /api/v1/tools/search?q={query}` | 无 | 搜索名称、编码、分类、关键词和说明 |
-| `GET /api/v1/tools/featured` | 无 | 获取推荐工具 |
-| `GET /api/v1/categories` | 无 | 获取启用的工具分类 |
+| 方法与路径 | 规划认证 | 用途 | 当前状态 |
+| --- | --- | --- | --- |
+| `GET /api/v1/tools` | 无 | 分页获取启用的工具，可按分类筛选 | 已实现，验证范围见目录接口说明 |
+| `GET /api/v1/tools/{code}` | 无 | 获取工具详情 | 待实现 |
+| `GET /api/v1/tools/search?q={query}` | 无 | 搜索名称、编码、分类、关键词和说明 | 待实现 |
+| `GET /api/v1/tools/featured` | 无 | 获取推荐工具 | 待实现 |
+| `GET /api/v1/categories` | 无 | 获取启用的工具分类 | 待实现 |
 
 ### `GET /api/v1/tools`
 
@@ -145,11 +145,15 @@ Android 已建立对应的 `ToolMetadata` 领域模型与 `ToolDefinition` 本�
 
 | 参数 | 类型 | 必需 | 说明 |
 | --- | --- | --- | --- |
-| `page` | integer | 否 | 页码，默认 `1` |
-| `pageSize` | integer | 否 | 每页条数，默认 `20` |
-| `categoryCode` | string | 否 | 按稳定分类编码筛选 |
+| `page` | integer | 否 | 页码，默认 `1`，范围 `1..2147483647` |
+| `pageSize` | integer | 否 | 每页条数，默认 `20`，范围 `1..100` |
+| `categoryCode` | string | 否 | 精确分类编码，匹配 `^[A-Z][A-Z0-9_]{0,31}$`；省略表示全部分类 |
 
-按 `sortOrder` 升序返回启用工具；同序时顺序稳定。响应 `data` 使用分页结构，`records` 为工具目录模型数组。
+按 `sortOrder` 升序、同序时按 `code` 升序返回可见工具；与 Android 注册中心的顺序约定一致。响应 `data` 使用分页结构，`records` 为工具目录模型数组。数量和记录在同一 MySQL 可重复读的只读事务内查询，`total` 为当前筛选条件下的总条数。合法但不存在、关闭或已删除的分类返回空页；越界页返回空 `records` 并保留 `total`。数据库未初始化工具记录时返回 `records=[]`、`total=0`，不会返回示例中的虚构计算器。
+
+分类编码按大小写精确匹配，不自动修剪或转换；空白、空字符串、小写、超长或格式不合法时返回 `400/10001/data=null`。分页参数的空字符串使用默认值。
+
+数据库连接失败、资源不可用或查询超时返回 `503/10008/data=null`。关键词必须是字符串数组，每项包含非空白文本；目录数据不符合该约定或其他未预期错误返回 `500/10000/data=null`。这些错误均使用既有响应封装与 `X-Trace-Id`，不返回 SQL、数据库内容或原始异常。
 
 ### `GET /api/v1/tools/{code}`
 

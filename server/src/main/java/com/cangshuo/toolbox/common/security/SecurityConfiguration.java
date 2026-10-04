@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,6 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> {
                     requests.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
                     requests.requestMatchers("/api/v1/health", "/actuator/health").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/tools").permitAll();
                     if (localDocumentation) {
                         requests.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
                                 .permitAll();

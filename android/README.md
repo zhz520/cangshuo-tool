@@ -6,7 +6,9 @@
 
 `core/model` 提供 `ToolMetadata`、13 个稳定分类及运行模式、目录状态；`core/tool/ToolDefinition` 统一元数据、Android 权限声明、设备能力检查和 Compose 页面入口。模型与目录字段、数据库基础约定对齐，详细边界见 [工具模型说明](../docs/TOOL_MODEL.md)。
 
-`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前集合为空，首页显示真实空目录；目录 API、计算器、搜索、收藏与最近使用按 Phase 1 各任务实现。
+`ToolRegistry` 接收客户端定义集合，检查编码唯一性并提供查找、分类、推荐及状态/设备支持结果。应用入口通过 `ToolboxAppContainer` 将其接入首页，具体工具完成后加入定义集合。当前集合为空，首页显示真实空目录；目录远程刷新、计算器、搜索、收藏与最近使用按后续任务实现。
+
+服务端已提供 `GET /api/v1/tools` 列表实现，客户端 `core/network/model` 已同步 `ToolCatalogDto` 与 `ToolCatalogPageDto`，提供到领域元数据的安全映射。JSON 解析、网络请求、缓存和首页合并仍待远程刷新任务接入，当前首页不请求接口。目录与验证范围见 [目录接口说明](../docs/TOOL_CATALOG.md)。
 
 ## SDK 基线
 

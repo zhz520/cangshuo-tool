@@ -6,7 +6,7 @@ Boot 默认的 Flyway `11.7.2` 实际迁移成功，但对 MySQL `8.4` 输出版
 
 ## 当前范围
 
-本次 Phase 0 建立工具目录的持久化基础。用户、登录设备、收藏、最近使用、设置、历史及后台运营表，在对应业务任务中通过新增 migration 建立。当前业务 API 仍只有健康检查，目录查询在 Phase 1 实现。
+Phase 0 建立工具目录的持久化基础，Phase 1 已增加 `GET /api/v1/tools` 的只读分页查询，复用已有表和索引；列表只包含启用且未软删除的工具及分类。接口实现与验证范围见 [目录接口说明](TOOL_CATALOG.md)。用户、登录设备、收藏、最近使用、设置、历史及后台运营表，在对应业务任务中通过新增 migration 建立。
 
 | 迁移 | 内容 |
 | --- | --- |
@@ -56,7 +56,7 @@ Boot 默认的 Flyway `11.7.2` 实际迁移成功，但对 MySQL `8.4` 输出版
 | `mode` | VARCHAR(16)，LOCAL | LOCAL、SERVER、HYBRID |
 | `version` | INT，1 | 正整数元数据版本 |
 | `status` | VARCHAR(16)，ENABLED | ENABLED、DISABLED、MAINTENANCE |
-| `sort_order` | INT，0 | 升序排列，同序时按主键保持稳定 |
+| `sort_order` | INT，0 | 升序排列；列表接口同序时按稳定工具编码排序，现有索引仍保留主键后缀 |
 | `is_featured` | TINYINT，0 | 推荐标记，只允许 0/1 |
 | `requires_login` | TINYINT，0 | 登录要求，只允许 0/1 |
 | `config_json` | JSON，`{}` | 工具配置对象，禁止保存客户端可下载的秘密 |

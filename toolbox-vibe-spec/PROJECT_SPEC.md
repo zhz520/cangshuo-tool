@@ -995,6 +995,8 @@ GET /tools/featured
 GET /categories
 ```
 
+当前已实现 `GET /api/v1/tools` 的列表代码：默认 page=1/pageSize=20，每页最多 100，按可选的精确分类编码筛选；工具和所属分类必须启用且未软删除。同序按工具 code 排序，数量及分页在同一只读事务中查询。公开 DTO、Android 传输模型和错误约定见 [API 契约](../docs/API.md)；验证范围见 [目录接口说明](../docs/TOOL_CATALOG.md)。其他目录端点和客户端远程刷新仍按后续任务接入。
+
 ## 22.3 Favorite
 
 ```text

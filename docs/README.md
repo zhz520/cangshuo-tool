@@ -7,6 +7,7 @@
 - [编码规则](../toolbox-vibe-spec/AGENTS.md)
 - [规格包说明](../toolbox-vibe-spec/README.md)
 - [API 接口契约](API.md)
+- [工具目录列表接口](TOOL_CATALOG.md)
 - [工具模型、注册中心与客户端执行契约](TOOL_MODEL.md)
 - [Android 首页与本地目录接入](ANDROID_HOME.md)
 - [数据库结构与 Flyway 迁移](DATABASE.md)
