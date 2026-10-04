@@ -15,6 +15,7 @@ class SearchToolsUseCase(private val repository: ToolSearchRepository) {
         query: String,
         category: ToolCategory? = null,
         favoriteCodes: Set<String> = emptySet(),
+        recentCodes: Set<String> = emptySet(),
     ): List<ToolMetadata> {
         require(query.length <= MAX_SEARCH_QUERY_LENGTH) { "Search query is too long" }
         val normalizedQuery = normalize(query)
@@ -27,7 +28,9 @@ class SearchToolsUseCase(private val repository: ToolSearchRepository) {
             val rank = if (terms.isEmpty()) 0 else rank(document, normalizedQuery, terms) ?: return@mapNotNull null
             RankedTool(tool, rank)
         }.sortedWith(
-            compareBy<RankedTool> { it.rank }.thenByDescending { it.tool.code in favoriteCodes }
+            compareBy<RankedTool> { it.rank }
+                .thenByDescending { it.tool.code in recentCodes }
+                .thenByDescending { it.tool.code in favoriteCodes }
                 .thenBy { it.tool.sortOrder }.thenBy { it.tool.code },
         )
             .map { it.tool }

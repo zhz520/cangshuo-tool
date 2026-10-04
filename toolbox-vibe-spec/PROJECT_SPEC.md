@@ -478,7 +478,7 @@ Room       Retrofit
 - 后端配置异步刷新。
 - 首次安装没有网络时仍可以使用基础工具。
 
-当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，并接入本地搜索与收藏；最近使用、账号和远程刷新按各自任务实现。Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)、[计算器说明](../docs/CALCULATOR.md)、[本地搜索](../docs/LOCAL_SEARCH.md)和 [本地收藏](../docs/LOCAL_FAVORITES.md)。
+当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，并接入本地搜索、收藏与最近使用；账号和远程刷新按各自任务实现。Phase 1 的完整执行链路仍待设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)、[计算器说明](../docs/CALCULATOR.md)、[本地搜索](../docs/LOCAL_SEARCH.md)、[本地收藏](../docs/LOCAL_FAVORITES.md)和 [本地最近使用](../docs/LOCAL_RECENT.md)。
 
 ---
 
@@ -509,7 +509,7 @@ Room       Retrofit
 
 MVP 不引入远程向量搜索；基础工具数量低于 500 时，本地字符串/模糊匹配足够。
 
-当前本地搜索已按独立 ViewModel → UseCase → Repository 接入内置启用目录。支持名称、编码、关键词、说明及中英文分类别名，查询最多 80 个 UTF-16 字符；统一全角字符、大小写与空白，多个词需全部命中。名称包含匹配位于名称开头与关键词等级之间，同级已收藏工具优先，再按 sortOrder、code 稳定排序；最近使用权重按对应任务接入。查询与分类使用 SavedStateHandle 保存，语言变化时重新搜索。构建及设备验证范围见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。
+当前本地搜索已按独立 ViewModel → UseCase → Repository 接入内置启用目录。支持名称、编码、关键词、说明及中英文分类别名，查询最多 80 个 UTF-16 字符；统一全角字符、大小写与空白，多个词需全部命中。名称包含匹配位于名称开头与关键词等级之间，同级优先最近使用工具，其次是已收藏工具，再按 sortOrder、code 稳定排序；最近使用与收藏分别见对应说明。查询与分类使用 SavedStateHandle 保存，语言变化时重新搜索。构建及设备验证范围见 [本地搜索说明](../docs/LOCAL_SEARCH.md)。
 
 ---
 
@@ -1371,7 +1371,7 @@ status
 
 同步必须幂等。
 
-当前初始 Room 数据库为应用私有 `toolbox.db`、版本 1，仅建立 favorite_tool（稳定工具编码主键、added_at UTC 毫秒）。应用级容器提供单进程共享实例，Flow/suspend DAO 经过 Repository 和 UseCase 使用，schema 导出并纳入 Git。后续结构变更新增版本与保留数据的 Migration。最近使用、历史、缓存及同步队列随对应任务接入；字段、依赖版本及验证范围见 [本地收藏](../docs/LOCAL_FAVORITES.md)。
+当前 Room 数据库为应用私有 `toolbox.db`、版本 2：favorite_tool（稳定工具编码主键、added_at UTC 毫秒）与 recent_tool（稳定工具编码主键、last_used_at UTC 毫秒、use_count），版本 1 → 2 提供保留收藏数据的 Migration。应用级容器提供单进程共享实例，Flow/suspend DAO 经过 Repository 和 UseCase 使用，schema 导出并纳入 Git。后续结构变更新增版本与保留数据的 Migration。历史、缓存及同步队列随对应任务接入；字段、依赖版本及验证范围见 [本地收藏](../docs/LOCAL_FAVORITES.md)和 [本地最近使用](../docs/LOCAL_RECENT.md)。
 
 ---
 

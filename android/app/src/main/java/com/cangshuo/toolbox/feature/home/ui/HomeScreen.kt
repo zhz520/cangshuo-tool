@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,6 +33,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,12 +52,17 @@ import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
 import com.cangshuo.toolbox.feature.home.domain.HomeCategory
 import com.cangshuo.toolbox.feature.home.domain.HomeContent
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 import com.cangshuo.toolbox.feature.favorites.ui.FavoriteButton
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesScreen
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
+import com.cangshuo.toolbox.feature.recent.ui.RecentListState
+import com.cangshuo.toolbox.feature.recent.ui.RecentUiState
+
+private const val RECENT_PREVIEW_LIMIT = 6
 
 @Composable
 fun HomeScreen(
@@ -65,7 +75,11 @@ fun HomeScreen(
     favoriteState: FavoritesUiState,
     onSetFavorite: (String, Boolean) -> Unit,
     onFavoritesRetry: () -> Unit,
+    recentState: RecentUiState,
+    onRecentRetry: () -> Unit,
+    onClearRecent: () -> Unit,
 ) {
+    var confirmClearRecent by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -107,8 +121,28 @@ fun HomeScreen(
                 onSearch = onSearch,
                 favoriteState = favoriteState,
                 onSetFavorite = onSetFavorite,
+                recentState = recentState,
+                onRecentRetry = onRecentRetry,
+                onClearRecentRequest = { confirmClearRecent = true },
             )
         }
+    }
+    if (confirmClearRecent) {
+        AlertDialog(
+            onDismissRequest = { confirmClearRecent = false },
+            title = { Text(stringResource(R.string.home_recent_clear_title)) },
+            text = { Text(stringResource(R.string.home_recent_clear_message)) },
+            confirmButton = {
+                TextButton(onClick = { confirmClearRecent = false; onClearRecent() }) {
+                    Text(stringResource(R.string.home_recent_clear_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmClearRecent = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
     }
 }
 
@@ -122,6 +156,9 @@ private fun CatalogPage(
     onSearch: () -> Unit,
     favoriteState: FavoritesUiState,
     onSetFavorite: (String, Boolean) -> Unit,
+    recentState: RecentUiState,
+    onRecentRetry: () -> Unit,
+    onClearRecentRequest: () -> Unit,
 ) {
     val content = when (val catalog = state.catalog) {
         is HomeCatalogState.Content -> catalog.value
@@ -244,11 +281,54 @@ private fun CatalogPage(
                     }
                 }
                 if (state.tab == HomeTab.HOME) {
-                    item(key = "recent", span = { GridItemSpan(maxLineSpan) }) {
-                        ComingSoonSection(
-                            title = stringResource(R.string.home_recent),
-                            description = stringResource(R.string.home_recent_description),
-                        )
+                    item(key = "recent-heading", span = { GridItemSpan(maxLineSpan) }) {
+                        SectionHeader(stringResource(R.string.home_recent)) {
+                            if (recentState.list is RecentListState.Content) {
+                                TextButton(onClick = onClearRecentRequest) {
+                                    Text(stringResource(R.string.home_recent_clear))
+                                }
+                            }
+                        }
+                    }
+                    when (val recent = recentState.list) {
+                        RecentListState.Loading -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
+                            RecentStatusRow(stringResource(R.string.recent_loading), showIndicator = true)
+                        }
+                        RecentListState.Empty -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
+                            Text(
+                                stringResource(R.string.home_recent_description),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        RecentListState.Error -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
+                            RecentStatusRow(stringResource(R.string.recent_error), onRetry = onRecentRetry)
+                        }
+                        is RecentListState.Content -> {
+                            val visible = recent.items.take(RECENT_PREVIEW_LIMIT).filter { it.metadata != null }
+                            if (visible.isEmpty()) {
+                                item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
+                                    Text(
+                                        stringResource(R.string.home_recent_description),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            } else {
+                                items(visible, key = { "recent:" + it.code }) { entry ->
+                                    entry.metadata?.let { metadata ->
+                                        ToolCard(
+                                            tool = metadata,
+                                            onClick = { onToolSelected(entry.code) },
+                                            isFavorite = entry.code in favoriteState.codes,
+                                            favoriteEnabled = favoriteState.ready && entry.code !in favoriteState.pendingCodes,
+                                            favoriteSaving = entry.code in favoriteState.pendingCodes,
+                                            onFavoriteChanged = { onSetFavorite(entry.code, it) },
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             } else {
@@ -427,20 +507,22 @@ private fun StatusCard(title: String, description: String, action: @Composable (
 }
 
 @Composable
-private fun ComingSoonSection(title: String, description: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionHeader(title) {
-            Text(
-                stringResource(R.string.feature_coming_soon),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+private fun RecentStatusRow(
+    message: String,
+    onRetry: (() -> Unit)? = null,
+    showIndicator: Boolean = false,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (showIndicator) ToolboxLoadingIndicator(compact = true)
         Text(
-            description,
+            message,
+            modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (onRetry != null) {
+            TextButton(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
+        }
     }
 }
 
@@ -507,6 +589,9 @@ private fun EmptyHomePreview() {
             favoriteState = FavoritesUiState(),
             onSetFavorite = { _, _ -> },
             onFavoritesRetry = {},
+            recentState = RecentUiState(list = RecentListState.Empty),
+            onRecentRetry = {},
+            onClearRecent = {},
         )
     }
 }

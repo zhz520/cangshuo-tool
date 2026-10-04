@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
                     factory = container.homeViewModelFactory,
                     searchFactory = container.searchViewModelFactory,
                     favoritesFactory = container.favoritesViewModelFactory,
+                    recentFactory = container.recentViewModelFactory,
                 )
             }
         }

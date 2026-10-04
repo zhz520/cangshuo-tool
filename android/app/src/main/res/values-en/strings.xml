@@ -22,7 +22,6 @@
         <item quantity="one">Found %d tool</item>
         <item quantity="other">Found %d tools</item>
     </plurals>
-    <string name="feature_coming_soon">Coming soon</string>
     <string name="home_categories">Explore by category</string>
     <string name="home_common">Quick access</string>
     <string name="home_all_tools">All tools</string>
@@ -65,6 +64,15 @@
         <item quantity="one">%d favorite tool</item>
         <item quantity="other">%d favorite tools</item>
     </plurals>
+    <string name="home_recent_clear">Clear</string>
+    <string name="home_recent_clear_title">Clear recent tools?</string>
+    <string name="home_recent_clear_message">This only removes history on this device. Favorites and tools stay.</string>
+    <string name="home_recent_clear_confirm">Clear</string>
+    <string name="recent_loading">Loading recent tools…</string>
+    <string name="recent_error">Unable to load recent tools.</string>
+    <string name="recent_clear_failed_title">Clear incomplete</string>
+    <string name="recent_clear_failed">Unable to clear recent tools. Try again later.</string>
+    <string name="action_cancel">Cancel</string>
     <string name="profile_guest_title">Guest mode</string>
     <string name="profile_guest_description">Local tools work without an account.\nAccounts and cloud sync are coming soon.</string>
     <string name="profile_privacy_title">Keep processing local</string>

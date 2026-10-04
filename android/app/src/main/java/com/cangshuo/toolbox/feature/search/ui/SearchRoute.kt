@@ -15,6 +15,7 @@ import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
 fun SearchRoute(
     factory: ViewModelProvider.Factory,
     favoriteState: FavoritesUiState,
+    recentCodes: Set<String>,
     onSetFavorite: (String, Boolean) -> Unit,
     onClose: () -> Unit,
     onToolSelected: (String) -> Unit,
@@ -26,6 +27,7 @@ fun SearchRoute(
     val languageTags = LocalConfiguration.current.locales.toLanguageTags()
     LaunchedEffect(languageTags) { model.refresh() }
     LaunchedEffect(favoriteState.codes) { model.updateFavorites(favoriteState.codes) }
+    LaunchedEffect(recentCodes) { model.updateRecent(recentCodes) }
 
     SearchScreen(
         state = state,

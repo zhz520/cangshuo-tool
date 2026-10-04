@@ -2,6 +2,7 @@ package com.cangshuo.toolbox
 
 import android.content.Context
 import androidx.room.Room
+import com.cangshuo.toolbox.core.database.MIGRATION_1_2
 import com.cangshuo.toolbox.core.database.ToolboxDatabase
 import com.cangshuo.toolbox.core.tool.ToolRegistry
 import com.cangshuo.toolbox.feature.calculator.CalculatorToolDefinition
@@ -19,6 +20,11 @@ import com.cangshuo.toolbox.feature.favorites.data.RoomFavoriteRepository
 import com.cangshuo.toolbox.feature.favorites.domain.ObserveFavoritesUseCase
 import com.cangshuo.toolbox.feature.favorites.domain.SetFavoriteUseCase
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesViewModel
+import com.cangshuo.toolbox.feature.recent.data.RoomRecentRepository
+import com.cangshuo.toolbox.feature.recent.domain.ClearRecentUseCase
+import com.cangshuo.toolbox.feature.recent.domain.ObserveRecentUseCase
+import com.cangshuo.toolbox.feature.recent.domain.RecordToolUseUseCase
+import com.cangshuo.toolbox.feature.recent.ui.RecentViewModel
 
 /** Composition root. Add completed, trusted tool definitions to this collection. */
 class ToolboxAppContainer(context: Context) {
@@ -29,10 +35,18 @@ class ToolboxAppContainer(context: Context) {
     )
     private val registry = ToolRegistry(definitions = listOf(CalculatorToolDefinition(resources, calculatorFactory)))
     private val repository = RegistryHomeRepository(registry)
-    private val database = Room.databaseBuilder(applicationContext, ToolboxDatabase::class.java, "toolbox.db").build()
+    private val database = Room.databaseBuilder(applicationContext, ToolboxDatabase::class.java, "toolbox.db")
+        .addMigrations(MIGRATION_1_2)
+        .build()
     private val favorites = RoomFavoriteRepository(database.favoriteToolDao(), registry)
+    private val recent = RoomRecentRepository(database.recentToolDao(), registry)
 
     val favoritesViewModelFactory = FavoritesViewModel.factory(ObserveFavoritesUseCase(favorites), SetFavoriteUseCase(favorites))
+    val recentViewModelFactory = RecentViewModel.factory(
+        observe = ObserveRecentUseCase(recent),
+        record = RecordToolUseUseCase(recent),
+        clear = ClearRecentUseCase(recent),
+    )
 
     val searchViewModelFactory = SearchViewModel.factory(SearchToolsUseCase(RegistryToolSearchRepository(registry, resources)))
 

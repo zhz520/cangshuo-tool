@@ -28,6 +28,7 @@ class SearchViewModel(
     )
     val uiState = mutableState.asStateFlow()
     private var favoriteCodes: Set<String> = emptySet()
+    private var recentCodes: Set<String> = emptySet()
 
     init { refresh() }
 
@@ -60,11 +61,17 @@ class SearchViewModel(
         refresh()
     }
 
+    fun updateRecent(codes: Set<String>) {
+        if (recentCodes == codes) return
+        recentCodes = codes.toSet()
+        refresh()
+    }
+
     fun refresh() {
         mutableState.update { it.copy(results = SearchResultsState.Loading) }
         val state = mutableState.value
         val results = try {
-            val tools = searchTools(state.query, state.category, favoriteCodes)
+            val tools = searchTools(state.query, state.category, favoriteCodes, recentCodes)
             if (tools.isEmpty()) SearchResultsState.Empty else SearchResultsState.Content(tools)
         } catch (_: Exception) {
             SearchResultsState.Error

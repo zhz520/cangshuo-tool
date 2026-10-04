@@ -33,24 +33,30 @@ import com.cangshuo.toolbox.feature.search.ui.SearchRoute
 import com.cangshuo.toolbox.feature.favorites.ui.FavoriteButton
 import com.cangshuo.toolbox.feature.favorites.ui.FavoriteMessage
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesViewModel
+import com.cangshuo.toolbox.feature.recent.ui.RecentViewModel
 
 @Composable
 fun HomeRoute(
     factory: ViewModelProvider.Factory,
     searchFactory: ViewModelProvider.Factory,
     favoritesFactory: ViewModelProvider.Factory,
+    recentFactory: ViewModelProvider.Factory,
 ) {
     val model: HomeViewModel = viewModel(factory = factory)
     val favorites: FavoritesViewModel = viewModel(key = "local.favorites", factory = favoritesFactory)
+    val recent: RecentViewModel = viewModel(key = "local.recent", factory = recentFactory)
     val state by model.uiState.collectAsStateWithLifecycle()
     val favoriteState by favorites.uiState.collectAsStateWithLifecycle()
+    val recentState by recent.uiState.collectAsStateWithLifecycle()
     val applicationContext = LocalContext.current.applicationContext
     val openedTool = state.openedTool
     val languageTags = LocalConfiguration.current.locales.toLanguageTags()
     LaunchedEffect(languageTags) {
         model.refresh()
         favorites.refresh()
+        recent.refresh()
     }
+    LaunchedEffect(openedTool?.code) { openedTool?.let { recent.recordUse(it.code) } }
 
     BackHandler(enabled = openedTool != null || state.isSearchOpen || state.tab != HomeTab.HOME) {
         when {
@@ -64,6 +70,7 @@ fun HomeRoute(
         SearchRoute(
             factory = searchFactory,
             favoriteState = favoriteState,
+            recentCodes = recentState.codes,
             onSetFavorite = favorites::changeFavorite,
             onClose = model::closeSearch,
             onToolSelected = { model.selectTool(it, applicationContext) },
@@ -79,6 +86,9 @@ fun HomeRoute(
             favoriteState = favoriteState,
             onSetFavorite = favorites::changeFavorite,
             onFavoritesRetry = favorites::refresh,
+            recentState = recentState,
+            onRecentRetry = recent::refresh,
+            onClearRecent = recent::clear,
         )
     } else {
         Scaffold(
@@ -132,6 +142,16 @@ fun HomeRoute(
             },
             confirmButton = {
                 TextButton(onClick = favorites::dismissMessage) { Text(stringResource(R.string.action_understood)) }
+            },
+        )
+    }
+    if (state.message == null && favoriteState.message == null) recentState.message?.let { _ ->
+        AlertDialog(
+            onDismissRequest = recent::dismissMessage,
+            title = { Text(stringResource(R.string.recent_clear_failed_title)) },
+            text = { Text(stringResource(R.string.recent_clear_failed)) },
+            confirmButton = {
+                TextButton(onClick = recent::dismissMessage) { Text(stringResource(R.string.action_understood)) }
             },
         )
     }
