@@ -15,7 +15,7 @@
 - JDBC/HikariCP 连接 MySQL，启动时由 Flyway 校验并执行迁移；连接状态参与整体健康检查。
 - Spring Data Redis/Lettuce 连接 Redis，使用环境中的凭据和明确超时；Redis 状态参与整体健康检查。
 
-当前迁移创建工具分类与目录基础表，并初始化 13 个分类。用户及其他业务表随对应功能新增迁移。Redis 客户端已配置；目录缓存、登录会话及限流按对应业务任务实现。结构及连接参数见 [DATABASE.md](../docs/DATABASE.md)，缓存约定见 [REDIS.md](../docs/REDIS.md)。
+当前迁移创建工具分类与目录基础表，初始化 13 个分类，并通过 V3 登记已实现的本地计算器元数据；运算由 Android 执行。用户及其他业务表随对应功能新增迁移。Redis 客户端已配置；目录缓存、登录会话及限流按对应业务任务实现。结构及连接参数见 [DATABASE.md](../docs/DATABASE.md)，缓存约定见 [REDIS.md](../docs/REDIS.md)。
 
 ## 构建与启动
 
@@ -101,6 +101,8 @@ if ($apiProcess -and $apiProcess.CommandLine.Contains($apiJar)) {
 ```
 
 2026-10-04 目录列表任务重新执行 Windows Maven 打包，编译和生成 JAR 成功，显式跳过测试。本机 local 预览已更新并启动，现有两份 Flyway 迁移校验通过，数据库版本仍为 2。Docker server 镜像也已重建并通过启动健康门禁；目录接口的分页、筛选、JSON 与错误分支尚未运行验证，完整记录见 [目录接口说明](../docs/TOOL_CATALOG.md#验证记录)。
+
+同日计算器任务新增 V3 目录元数据迁移，Windows Maven 打包成功并显式跳过测试。本机 local 启动成功执行 V3；随后 Docker server 重建并通过启动健康门禁，日志确认三份迁移校验通过、数据库版本为 3。已有同编码记录的保留分支与目录响应尚未运行验证，详见 [计算器说明](../docs/CALCULATOR.md#验证记录)。
 
 ## 版本依据
 

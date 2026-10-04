@@ -60,6 +60,7 @@ fun HomeMessage.labelResource(): Int = when (this) {
 /** Symbolic names map only to compiled resources; unknown names use the shared fallback. */
 @DrawableRes
 fun toolIconResource(name: String?): Int = when (name) {
+    "calculator" -> R.drawable.ic_calculator
     "toolbox" -> R.drawable.ic_toolbox
     "tools" -> R.drawable.ic_tools
     else -> R.drawable.ic_tools

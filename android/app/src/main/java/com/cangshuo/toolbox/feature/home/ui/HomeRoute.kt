@@ -15,10 +15,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,6 +36,8 @@ fun HomeRoute(factory: ViewModelProvider.Factory) {
     val state by model.uiState.collectAsStateWithLifecycle()
     val applicationContext = LocalContext.current.applicationContext
     val openedTool = state.openedTool
+    val languageTags = LocalConfiguration.current.locales.toLanguageTags()
+    LaunchedEffect(languageTags) { model.refresh() }
 
     BackHandler(enabled = openedTool != null || state.tab != HomeTab.HOME) {
         if (openedTool != null) model.closeTool() else model.selectTab(HomeTab.HOME)

@@ -1,6 +1,6 @@
 # 工具目录列表接口
 
-本次对应 Phase 1 的 `GET /tools` 任务，实现 `GET /api/v1/tools` 的服务端列表与对应 Android 传输模型。未增加数据库迁移或工具种子；当前数据库初始化只创建分类，具体工具元数据随已完成的工具任务加入。
+本次对应 Phase 1 的 `GET /tools` 任务，实现 `GET /api/v1/tools` 的服务端列表与对应 Android 传输模型。该次未增加数据库迁移或工具种子；后续 [本地计算器任务](CALCULATOR.md) 通过 V3 登记已实现工具的元数据。
 
 ## 服务端分层
 
@@ -40,7 +40,7 @@ ToolCatalogController
 
 `core/network/model/ToolCatalogDto` 保持接口字段命名，分类、模式、状态保存为字符串，`toMetadataOrNull()` 校验并映射到 `ToolMetadata`。未知或不合法的条目返回 null，不误归类为其他、不注册执行实现。`ToolCatalogPageDto` 使用 `Long` 保存 total，并校验页码、每页条数和记录数量。
 
-这些是纯 Kotlin DTO，尚未加入 JSON 序列化、Retrofit、请求、缓存或首页远程刷新。当前内置工具集合为空，客户端显示仍与上一首页任务相同。Admin 当前只消费健康接口，本次没有改变其现有响应模型或业务页面。
+这些是纯 Kotlin DTO，尚未加入 JSON 序列化、Retrofit、请求、缓存或首页远程刷新。客户端当前已注册本地计算器，仍从内置注册中心启动。Admin 当前只消费健康接口，现有响应模型及业务页面沿用原任务。
 
 ## 本地使用
 

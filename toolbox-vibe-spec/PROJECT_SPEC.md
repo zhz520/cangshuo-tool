@@ -243,10 +243,10 @@ interface ToolDefinition {
 ## 5.2 ToolRegistry
 
 ```kotlin
-// 由应用统一提供已实现的工具定义；当前具体工具仍待开发。
-val registry = ToolRegistry(definitions = emptyList())
+// 由应用入口提供已实现的定义；当前首个工具为 CalculatorToolDefinition。
+val registry = ToolRegistry(definitions = listOf(calculatorDefinition))
 val tools = registry.enabledTools()
-val calculator = registry.find("calculator") // 当前未注册，返回 null。
+val calculator = registry.find("calculator")
 ```
 
 注册中心使用可注入的固定集合实例，构造时检查编码唯一性，按 `sortOrder`、`code` 稳定排序，提供全部工具、按编码查找、启用/分类列表与推荐列表。`resolve(code, context)` 返回可用、未注册、关闭、维护或设备不支持结果；登录、权限及页面打开由上层流程处理。具体实现和当前验证范围见 [工具模型与注册中心说明](../docs/TOOL_MODEL.md#toolregistry)。
@@ -478,7 +478,7 @@ Room       Retrofit
 - 后端配置异步刷新。
 - 首次安装没有网络时仍可以使用基础工具。
 
-当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。具体工具集合当前为空，搜索、收藏、最近使用、账号和远程刷新按各自任务实现；这一步不代表 Phase 1 的完整执行链路已经通过。当前实现及验证范围见 [Android 首页说明](../docs/ANDROID_HOME.md)。
+当前首页已按 Compose → ViewModel → UseCase → Repository 接入本地注册中心，实现分类筛选、目录/推荐列表、加载/空/错误状态、四个底部入口及工具承载容器。当前已注册本地计算器，搜索、收藏、最近使用、账号和远程刷新按各自任务实现；Phase 1 的完整执行链路仍待后续任务和设备联调验证。当前实现及范围见 [Android 首页说明](../docs/ANDROID_HOME.md)和 [计算器说明](../docs/CALCULATOR.md)。
 
 ---
 
@@ -1419,6 +1419,8 @@ MVP：
 
 统一使用 `strings.xml` / Compose stringResource。
 
+默认跟随系统语言，中文为主要语言及最终回退，英语提供完整界面资源。当前 Android 声明 `zh-Hans` 和 `en`；Android 13+ 可使用系统应用语言设置，更早版本跟随系统语言。启动时保留用户选择；内置工具显示元数据随当前语言资源刷新。实现及验证范围见 [多语言说明](../docs/ANDROID_LOCALIZATION.md)。
+
 数据库中的工具名称允许多语言字段或 JSON 国际化对象，第一版可用 `name_zh` + `name_en`，后续再演进为独立 i18n 表。
 
 ---
@@ -2266,6 +2268,13 @@ Docker 与 Windows 构建、启动、认证应用连接及健康接口已核对�
 工作流使用 `ubuntu-24.04`、JDK 21、现有 Gradle/Maven Wrapper 和 Node `22.23.3`。Android 构建 Debug APK 并执行 Lint，Server 打包，Admin 按锁文件安装并构建正式地址与 `/admin/` 路径，部署任务执行 actionlint、Shell 语法及两套 Compose 配置校验。Action 固定完整提交 SHA，Wrapper 和 actionlint 下载校验 SHA-256，构建产物保留 7 天。
 
 工作流只申请只读仓库权限，不保留 checkout 凭据；配置校验使用公开占位值，当前不需要部署 Secret，也不执行部署。此阶段覆盖构建与静态检查，Server 显式跳过测试；测试及发布门禁随对应任务补充。本地门禁已通过，用户于 2026-10-03 指定 `zhz520/cangshuo-tool` 为远程仓库，初始提交 `08e7dd3` 已推送到 `main`；[首次托管运行 #37128607920](https://github.com/zhz520/cangshuo-tool/actions/runs/37128607920) 五项全部成功，四个构建产物上传成功，Phase 0 的 CI 绿色退出条件已满足。详细配置和记录见 [CI 说明](../docs/CI.md)。
+
+---
+
+### Decision 016
+**Android 默认跟随系统语言，以简体中文为主要和最终回退语言，同时支持英语。**
+
+用户于 2026-10-04 确定语言要求。使用中文默认资源、英语资源、手动 LocaleConfig 和 AGP 9.1 的 localeFilters 声明支持范围。Android 13+ 的应用语言覆盖由系统管理；API 26–32 按系统资源选择。内置计算器的名称、说明和界面按本机资源本地化，服务端目录当前主语言仍为中文。界面切换及设备行为待验证，范围见 [多语言说明](../docs/ANDROID_LOCALIZATION.md)。
 
 ---
 

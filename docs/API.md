@@ -97,10 +97,10 @@ Admin 概览通过集中 API 模块消费该接口，校验响应封装和 `data
 {
   "code": "calculator",
   "name": "计算器",
-  "description": "日常四则运算",
+  "description": "四则运算、小数、括号和百分比，本地计算。",
   "categoryCode": "CALC",
   "icon": "calculator",
-  "keywords": ["计算", "加减乘除"],
+  "keywords": ["计算器", "计算", "四则运算", "calculator", "arithmetic"],
   "mode": "LOCAL",
   "requiresLogin": false,
   "status": "ENABLED",
@@ -149,7 +149,7 @@ Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契
 | `pageSize` | integer | 否 | 每页条数，默认 `20`，范围 `1..100` |
 | `categoryCode` | string | 否 | 精确分类编码，匹配 `^[A-Z][A-Z0-9_]{0,31}$`；省略表示全部分类 |
 
-按 `sortOrder` 升序、同序时按 `code` 升序返回可见工具；与 Android 注册中心的顺序约定一致。响应 `data` 使用分页结构，`records` 为工具目录模型数组。数量和记录在同一 MySQL 可重复读的只读事务内查询，`total` 为当前筛选条件下的总条数。合法但不存在、关闭或已删除的分类返回空页；越界页返回空 `records` 并保留 `total`。数据库未初始化工具记录时返回 `records=[]`、`total=0`，不会返回示例中的虚构计算器。
+按 `sortOrder` 升序、同序时按 `code` 升序返回可见工具；与 Android 注册中心的顺序约定一致。响应 `data` 使用分页结构，`records` 为工具目录模型数组。数量和记录在同一 MySQL 可重复读的只读事务内查询，`total` 为当前筛选条件下的总条数。合法但不存在、关闭或已删除的分类返回空页；越界页返回空 `records` 并保留 `total`。空目录返回 `records=[]`、`total=0`；V3 已登记实际计算器元数据，已有同编码记录的状态继续由原配置决定。计算在 Android 本地执行，不增加服务端计算接口。目录显示文本当前主语言为中文，客户端内置工具按本机资源本地化。
 
 分类编码按大小写精确匹配，不自动修剪或转换；空白、空字符串、小写、超长或格式不合法时返回 `400/10001/data=null`。分页参数的空字符串使用默认值。
 

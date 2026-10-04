@@ -60,6 +60,50 @@
     <string name="category_life">生活</string>
     <string name="category_ai">AI</string>
     <string name="category_other">其他</string>
+    <string name="calculator_name">计算器</string>
+    <string name="calculator_description">四则运算、小数、括号和百分比，本地计算。</string>
+    <string name="calculator_offline">本地计算 · 无需登录或联网</string>
+    <string name="calculator_expression">算式</string>
+    <string name="calculator_input_hint">例如 2 × (3 + 4)</string>
+    <string name="calculator_input_help" formatted="false">使用英文小数点，支持 + − × ÷、括号和 %。</string>
+    <string name="calculator_calculate">计算 =</string>
+    <string name="calculator_clear">清空</string>
+    <string name="calculator_delete">删除</string>
+    <string name="calculator_result">结果</string>
+    <string name="calculator_result_placeholder">输入算式后点击“计算”。</string>
+    <string name="calculator_copy">复制结果</string>
+    <string name="calculator_use_result">继续计算</string>
+    <string name="calculator_copied">结果已复制</string>
+    <string name="calculator_copy_failed">暂时无法复制，请选中结果手动复制。</string>
+    <string name="calculator_percent_help" formatted="false">百分号按数值 ÷ 100 计算：200 + 10% = 200.1。循环小数及过长小数会舍入。</string>
+    <string name="calculator_error_empty">请先输入算式。</string>
+    <string name="calculator_error_invalid">请检查数字、运算符和括号。暂不支持隐式乘法或科学函数。</string>
+    <string name="calculator_error_zero">除数不能为 0。</string>
+    <string name="calculator_error_length">算式最多 256 个字符，请缩短后重试。</string>
+    <string name="calculator_error_complex">括号嵌套过多，请简化算式。</string>
+    <string name="calculator_error_range">数值或结果过长，请使用较小的数值。</string>
+    <string name="calculator_error_failed">暂时无法计算，请检查算式后重试。</string>
+    <string name="calculator_key_zero" translatable="false">0</string>
+    <string name="calculator_key_one" translatable="false">1</string>
+    <string name="calculator_key_two" translatable="false">2</string>
+    <string name="calculator_key_three" translatable="false">3</string>
+    <string name="calculator_key_four" translatable="false">4</string>
+    <string name="calculator_key_five" translatable="false">5</string>
+    <string name="calculator_key_six" translatable="false">6</string>
+    <string name="calculator_key_seven" translatable="false">7</string>
+    <string name="calculator_key_eight" translatable="false">8</string>
+    <string name="calculator_key_nine" translatable="false">9</string>
+    <string name="calculator_key_add" translatable="false">+</string>
+    <string name="calculator_key_subtract" translatable="false">−</string>
+    <string name="calculator_key_multiply" translatable="false">×</string>
+    <string name="calculator_key_divide" translatable="false">÷</string>
+    <string name="calculator_key_left" translatable="false">(</string>
+    <string name="calculator_key_right" translatable="false">)</string>
+    <string name="calculator_key_decimal" translatable="false">.</string>
+    <string name="calculator_key_percent" translatable="false" formatted="false">%</string>
+    <string-array name="calculator_keywords" translatable="false">
+        <item>计算器</item><item>计算</item><item>四则运算</item><item>calculator</item><item>arithmetic</item>
+    </string-array>
     <plurals name="tool_count">
         <item quantity="other">%d 个工具</item>
     </plurals>

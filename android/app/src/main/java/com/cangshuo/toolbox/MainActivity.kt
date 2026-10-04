@@ -8,7 +8,7 @@ import com.cangshuo.toolbox.feature.home.ui.HomeRoute
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 
 class MainActivity : ComponentActivity() {
-    private val container = ToolboxAppContainer()
+    private val container by lazy { ToolboxAppContainer(applicationContext.resources) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

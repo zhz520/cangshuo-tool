@@ -7,7 +7,7 @@ import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.model.ToolMode
 import com.cangshuo.toolbox.core.model.ToolStatus
 
-/** An executable implementation shipped in the app, backed by one metadata value. */
+/** An executable implementation shipped in the app, backed by a single metadata source. */
 interface ToolDefinition {
     val metadata: ToolMetadata
 

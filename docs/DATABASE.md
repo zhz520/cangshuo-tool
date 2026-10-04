@@ -12,6 +12,7 @@ Phase 0 建立工具目录的持久化基础，Phase 1 已增加 `GET /api/v1/to
 | --- | --- |
 | `V1__create_tool_catalog.sql` | 创建 `tool_category` 和 `tool_definition`，包含唯一键、索引、外键和数据约束 |
 | `V2__seed_tool_categories.sql` | 初始化项目规格中的 13 个稳定分类 |
+| `V3__seed_calculator_tool.sql` | 登记已实现的本地计算器目录元数据，保留已有同编码记录 |
 
 迁移目录：`server/src/main/resources/db/migration/`。Flyway 使用 `flyway_schema_history` 记录版本、校验值、执行时间与结果。该表由 Flyway 管理。
 
@@ -65,7 +66,7 @@ Phase 0 建立工具目录的持久化基础，Phase 1 已增加 `GET /api/v1/to
 
 索引包含唯一 `tool_code`，以及分类/状态/排序、状态/排序、状态/推荐/排序组合。`mode`、`status`、版本、布尔值及 JSON 类型均有 CHECK 约束。
 
-当前未初始化工具记录，执行工具及其元数据按 ToolDefinition/ToolRegistry 任务建立。分类名称和 JSON 编码使用 UTF-8。
+V3 初始化已实现的计算器记录：编码 `calculator`、分类 `CALC`、模式 `LOCAL`、排序 10、默认启用和推荐、不要求登录。已有同编码记录保留，避免覆盖人工配置、状态或软删除。名称和说明当前使用中文，关键词包含中英文；Android 内置工具界面由本机语言资源决定。分类名称和 JSON 编码使用 UTF-8。客户端执行范围与验证见 [计算器说明](CALCULATOR.md)。
 
 ## 连接配置
 
@@ -86,7 +87,7 @@ HikariCP 使用最多 10 个连接、最少 2 个空闲连接；取连接超时 
 
 1. 使用部署初始化脚本生成私有凭据，并启动 MySQL。Compose 等待 MySQL 应用账号查询成功后启动 API。
 2. API 自动校验现有迁移，再执行新版本；不用单独安装 Flyway CLI。
-3. 修改结构或固定基础数据时新增 `V3__description.sql` 等递增文件。已执行的迁移保持原内容。
+3. 修改结构或固定基础数据时新增 `V4__description.sql` 等递增文件。已执行的迁移保持原内容。
 
 配置明确禁止 Flyway `clean`，关闭自动 baseline 和乱序迁移，开启迁移命名与校验值检查。没有并行的 `schema.sql/data.sql` 初始化。如果库中已有未知业务表而没有迁移记录，启动会失败；不要以开启自动 baseline 的方式绕过。
 

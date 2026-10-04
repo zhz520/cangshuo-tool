@@ -14,11 +14,11 @@
 Phase 0 CI exit criterion was verified by the successful hosted run on 2026-10-03 for commit `08e7dd3`. Automated tests, device execution and release/deployment validation remain separate tasks. See `docs/CI.md`.
 
 ## Phase 1 — Walking Skeleton
-- [x] Home (Compose → ViewModel → UseCase → Repository, local catalog/category/featured lists, four tabs, empty/error states and registered tool host; assembleDebug/lintDebug passed with 0 errors and 10 warnings; device/runtime validation and search/favorites/recent/concrete tools pending; see docs/ANDROID_HOME.md)
-- [x] ToolDefinition (Android unified metadata, 13 stable categories, modes/statuses and local executable contract; registry/home integration and catalog DTOs completed; assembleDebug/lintDebug passed; JSON/network integration and concrete tools pending)
-- [x] ToolRegistry (Android fixed definition collection, duplicate-code validation, deterministic ordering, code/category/featured queries and status/device lookup results; wired into home through ToolboxAppContainer; assembleDebug/lintDebug passed; concrete tools and runtime checks pending)
+- [x] Home (Compose → ViewModel → UseCase → Repository, local catalog/category/featured lists, four tabs, empty/error states and registered tool host; original home assembleDebug/lintDebug passed with 0 errors and 10 warnings; calculator now registered; device/runtime validation and search/favorites/recent pending; see docs/ANDROID_HOME.md)
+- [x] ToolDefinition (Android unified metadata, 13 stable categories, modes/statuses and local executable contract; registry/home integration and catalog DTOs completed; calculator now implemented through this contract; assembleDebug/lintDebug passed; JSON/network integration pending)
+- [x] ToolRegistry (Android fixed definition collection, duplicate-code validation, deterministic ordering, code/category/featured queries and status/device lookup results; wired into home through ToolboxAppContainer with calculator registered; assembleDebug/lintDebug passed; runtime checks pending)
 - [x] GET /tools (anonymous exact GET /api/v1/tools, validated pagination/category filter, parameterized JDBC, enabled/non-deleted tools and categories, stable sortOrder/code ordering and read-only repeatable-read count/page; Server package, Docker/native startup and Android assembleDebug/lintDebug passed; Android DTOs and API docs synchronized; directory runtime cases, tests and client JSON/network/cache integration pending; see docs/TOOL_CATALOG.md)
-- [ ] Local calculator
+- [x] Local calculator (registered calculator/CALC/LOCAL, Compose → ViewModel → UseCase → Repository, bounded decimal arithmetic with precedence/parentheses/percent, editing/copy/reuse and saved state; Chinese/English UI with system default and Chinese fallback; Android build/Lint passed with 0 errors and 11 warnings; V3 catalog metadata migration and native/Docker API startup passed; arithmetic/device/clipboard/locale runtime verification and tests pending; see docs/CALCULATOR.md)
 - [ ] Local search
 - [ ] Local favorite
 - [ ] Local recent

@@ -15,6 +15,10 @@ android {
         versionName = "0.1.0"
     }
 
+    androidResources {
+        localeFilters += listOf("zh", "en")
+    }
+
     buildFeatures {
         compose = true
     }

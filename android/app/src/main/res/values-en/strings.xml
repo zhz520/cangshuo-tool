@@ -60,6 +60,29 @@
     <string name="category_life">Everyday</string>
     <string name="category_ai">AI</string>
     <string name="category_other">Other</string>
+    <string name="calculator_name">Calculator</string>
+    <string name="calculator_description">Local arithmetic with decimals, parentheses and percentages.</string>
+    <string name="calculator_offline">On-device calculation · No account or network needed</string>
+    <string name="calculator_expression">Expression</string>
+    <string name="calculator_input_hint">For example, 2 × (3 + 4)</string>
+    <string name="calculator_input_help" formatted="false">Use a decimal point. Supports + − × ÷, parentheses and %.</string>
+    <string name="calculator_calculate">Calculate =</string>
+    <string name="calculator_clear">AC</string>
+    <string name="calculator_delete">Delete</string>
+    <string name="calculator_result">Result</string>
+    <string name="calculator_result_placeholder">Enter an expression, then tap Calculate.</string>
+    <string name="calculator_copy">Copy result</string>
+    <string name="calculator_use_result">Use result</string>
+    <string name="calculator_copied">Result copied</string>
+    <string name="calculator_copy_failed">Unable to copy. Select the result and copy it manually.</string>
+    <string name="calculator_percent_help" formatted="false">Percent divides a value by 100: 200 + 10% = 200.1. Repeating or long decimals are rounded.</string>
+    <string name="calculator_error_empty">Enter an expression first.</string>
+    <string name="calculator_error_invalid">Check the numbers, operators and parentheses. Implicit multiplication and scientific functions are not supported yet.</string>
+    <string name="calculator_error_zero">Cannot divide by zero.</string>
+    <string name="calculator_error_length">Expressions support up to 256 characters. Shorten the expression and try again.</string>
+    <string name="calculator_error_complex">Too many nested parentheses. Simplify the expression.</string>
+    <string name="calculator_error_range">The number or result is too long. Use smaller values.</string>
+    <string name="calculator_error_failed">Unable to calculate. Check the expression and try again.</string>
     <plurals name="tool_count">
         <item quantity="one">%d tool</item>
         <item quantity="other">%d tools</item>
