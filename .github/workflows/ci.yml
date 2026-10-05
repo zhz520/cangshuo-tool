@@ -188,6 +188,8 @@ jobs:
       - name: Validate shell syntax
         run: |
           sh -n redis/start.sh
+          sh -n backup/backup.sh
+          sh -n backup/restore.sh
           sh -n scripts/initialize-env.sh
           sh -n ../server/mvnw
           sh -n ../android/gradlew
