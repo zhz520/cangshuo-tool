@@ -105,6 +105,6 @@ Phase 3 functional scope is complete. Two HTTP clients verified account restorat
 - [ ] AAB
 - [ ] Privacy policy
 - [ ] Permission documentation
-- [ ] Data deletion
+- [x] Data deletion (2026-10-06: password/email-confirmed self deletion, user JWT only, transactional cloud cascades/session revocation, V36 deletion ledger and locked Android per-account sync cleanup. Server 134 tests/verify, Android 208 tests/build/lint, 20 real API/MySQL checks passed. Other-device/anonymous/exported-file cleanup and backup retention limits documented; device acceptance deferred. See docs/DATA_DELETION.md.)
 - [ ] Production backups
 - [ ] Staged release

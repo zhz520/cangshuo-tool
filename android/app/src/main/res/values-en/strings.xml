@@ -1103,4 +1103,9 @@
     <string name="ai_truncated">The result is incomplete because the output token limit was reached.</string>
     <string name="ai_unavailable">AI is unavailable. Refresh status or try later.</string>
     <string name="ai_usage">Attempts today: %1$d / %2$d</string>
+    <string name="auth_delete">Delete account</string>
+    <string name="auth_delete_warning">This cannot be undone. It deletes your account, all sessions, cloud favorites/recents/settings, feedback and AI usage, and clears this device’s sync data for the account. Anonymous favorites, scan history and exported files remain; copies on other devices must be cleared there. Backups expire with their retention period. Enter your account email and password to confirm.</string>
+    <string name="auth_delete_email">Enter full account email</string>
+    <string name="auth_delete_confirm">Delete permanently</string>
+    <string name="auth_deleted">Account and cloud data deleted. This device’s account sync data is cleared.</string>
 </resources>

@@ -41,7 +41,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain chain) throws ServletException, IOException {
         String identity = identity(request);
-        boolean authAttempt = AUTH_PATHS.contains(request.getRequestURI());
+        boolean authAttempt = AUTH_PATHS.contains(request.getRequestURI()) ||
+            ("DELETE".equals(request.getMethod()) && "/api/v1/auth/me".equals(request.getRequestURI()));
         int limit = authAttempt ? properties.maxAuthAttempts()
                 : identity.startsWith("u:") ? properties.maxAuthenticatedRequests()
                 : properties.maxAnonymousRequests();

@@ -21,6 +21,8 @@ data class SyncDeviceEntity(@PrimaryKey val singleton: Int = 1, @ColumnInfo(name
 
 @Dao
 interface SyncDao {
+    @Query("DELETE FROM sync_entry WHERE user_id=:user") suspend fun deleteRecords(user: Long)
+    @Query("DELETE FROM sync_preference WHERE user_id=:user") suspend fun deletePreference(user: Long)
     @Query("SELECT * FROM sync_preference WHERE user_id=:user") fun observePreference(user: Long): Flow<SyncPreferenceEntity?>
     @Query("SELECT * FROM sync_preference WHERE user_id=:user") suspend fun preference(user: Long): SyncPreferenceEntity?
     @Upsert suspend fun preference(preference: SyncPreferenceEntity)

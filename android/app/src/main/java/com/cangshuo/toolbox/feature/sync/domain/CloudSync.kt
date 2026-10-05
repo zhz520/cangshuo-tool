@@ -25,6 +25,7 @@ data class SyncProgress(val userId: Long? = null, val status: SyncStatus = SyncS
 data class SyncPage(val items: List<SyncRecord>, val nextCursor: String, val hasMore: Boolean)
 
 interface SyncStore {
+    suspend fun deleteAccount(user: Long)
     fun preference(user: Long): Flow<SyncPreference>
     fun records(user: Long, type: String): Flow<List<SyncRecord>>
     suspend fun configure(user: Long, enabled: Boolean, device: String, type: String = "FAVORITE")
@@ -66,6 +67,15 @@ class CloudSyncRepository(private val users: StateFlow<Long?>, private val store
         }
     }
     fun records(user: Long, type: String) = store.records(user,type)
+    suspend fun deleteAccount(user: Long, remoteDeletion: suspend () -> Unit) = network.withLock {
+        check(users.value == user)
+        writes.withLock {
+            check(users.value == user)
+            debounce?.cancel(); debounce=null
+            remoteDeletion()
+            withContext(NonCancellable) { store.deleteAccount(user) }
+        }
+    }
     suspend fun configure(enabled: Boolean,type: String = "FAVORITE") {
         val user = users.value ?: error("Authentication required")
         network.withLock {

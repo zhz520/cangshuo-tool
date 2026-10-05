@@ -78,4 +78,22 @@ class AuthServiceTest {
         when(users.findById(7)).thenReturn(Optional.of(new UserAccount(7, "a@b.com", "hash", "old", 1)));
         assertThrows(ApiException.class, () -> service.updateProfile("7", new ProfileRequest("new")));
     }
+    @Test void deletionRequiresMatchingEmailAndPasswordAndOnlyDeletesSubject() {
+        var user=new UserAccount(7,"a@b.com",passwords.encode("password12"),"u",1);
+        when(users.findById(7)).thenReturn(Optional.of(user)); when(users.delete(7,user.passwordHash())).thenReturn(true);
+        assertThrows(ApiException.class,()->service.deleteAccount("7",new DeleteAccountRequest("other@b.com","password12")));
+        assertThrows(ApiException.class,()->service.deleteAccount("7",new DeleteAccountRequest("a@b.com","wrongpass")));
+        verify(users,never()).delete(anyLong(),anyString());
+        service.deleteAccount("7",new DeleteAccountRequest(" A@B.COM ","password12"));
+        verify(users).delete(7,user.passwordHash()); verifyNoInteractions(tokens);
+    }
+    @Test void deletionFailsForMissingDisabledOrChangedAccount() {
+        assertThrows(ApiException.class,()->service.deleteAccount("7",new DeleteAccountRequest("a@b.com","password12")));
+        var user=new UserAccount(7,"a@b.com",passwords.encode("password12"),"u",0);
+        when(users.findById(7)).thenReturn(Optional.of(user));
+        assertThrows(ApiException.class,()->service.deleteAccount("7",new DeleteAccountRequest("a@b.com","password12")));
+        when(users.findById(7)).thenReturn(Optional.of(new UserAccount(7,"a@b.com",user.passwordHash(),"u",1)));
+        assertThrows(ApiException.class,()->service.deleteAccount("7",new DeleteAccountRequest("a@b.com","password12")));
+        assertEquals("DeleteAccountRequest[redacted]",new DeleteAccountRequest("a@b.com","secret12").toString());
+    }
 }

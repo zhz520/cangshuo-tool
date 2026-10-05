@@ -63,6 +63,7 @@ class CloudSyncTest {
         assertTrue(remote.data[1]!!.getValue("RECENT:calculator").deleted)
     }
     class MemoryStore : SyncStore {
+        override suspend fun deleteAccount(user: Long) { data.value=data.value-user; preferences.value=preferences.value-user }
         val preferences=MutableStateFlow<Map<Long,SyncPreference>>(emptyMap())
         val data=MutableStateFlow<Map<Long,Map<String,SyncRecord>>>(emptyMap())
         override fun preference(user: Long)=preferences.map { it[user] ?: SyncPreference() }
@@ -88,6 +89,17 @@ class CloudSyncTest {
             val pref=preferences.value[user] ?: SyncPreference()
             preferences.value=preferences.value+(user to pref.copy(cursor=page.nextCursor))
         }
+    }
+    @Test fun deletionClearsOnlyConfirmedAccountAndLeavesAnonymousAndOtherAccounts() = runTest {
+        val users=MutableStateFlow<Long?>(1); val store=MemoryStore(); val remote=Remote()
+        val repo=CloudSyncRepository(users,store,remote,backgroundScope,{1000}); runCurrent()
+        val record=SyncRecord("FAVORITE","calculator",1000,"a",false,dirty=true)
+        for(user in listOf(0L,1L,2L))store.put(user,record)
+        try { repo.deleteAccount(1){throw IOException()}; fail() } catch(_: IOException) {}
+        assertNotNull(store.find(1,"FAVORITE","calculator"))
+        repo.deleteAccount(1){ users.value=null }; runCurrent()
+        assertNull(store.find(1,"FAVORITE","calculator")); assertNotNull(store.find(0,"FAVORITE","calculator"))
+        assertNotNull(store.find(2,"FAVORITE","calculator")); repo.sync(); assertEquals(0,remote.pushes)
     }
     private class Remote : SyncTransport {
         var pushes=0; var offline=false

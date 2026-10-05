@@ -1153,4 +1153,9 @@
     <string name="ai_truncated">结果因输出令牌上限而未完成。</string>
     <string name="ai_unavailable">AI 服务暂不可用，请刷新状态或稍后重试。</string>
     <string name="ai_usage">今日已用 %1$d / %2$d 次</string>
+    <string name="auth_delete">删除账号</string>
+    <string name="auth_delete_warning">此操作不可撤销，将删除账号、全部登录会话、云端收藏/最近使用/设置、反馈和 AI 使用计数，并清理本机该账号的同步数据。匿名收藏、扫码历史以及已导出的文件保留；其他设备的本机副本需各自清理。备份副本随保留周期到期。请输入账号邮箱和密码确认。</string>
+    <string name="auth_delete_email">输入完整账号邮箱</string>
+    <string name="auth_delete_confirm">永久删除</string>
+    <string name="auth_deleted">账号和云端数据已删除。本机该账号同步数据已清理。</string>
 </resources>

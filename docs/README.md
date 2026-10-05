@@ -55,3 +55,4 @@
 - [AI 文本助手](AI_TEXT.md)
 - [Android 首页推荐与公告](ANDROID_HOME_EXTRAS.md)
 - [Android 反馈](ANDROID_FEEDBACK.md)
+- [账号及数据删除](DATA_DELETION.md)

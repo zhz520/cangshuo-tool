@@ -33,6 +33,7 @@ Phase 0 建立工具目录的持久化基础，Phase 1 已增加 `GET /api/v1/to
 - `created_at` 默认当前时间；`updated_at` 默认当前时间并在行变化时更新。
 - `deleted_at` 支持软删除；编码唯一性跨软删除记录保留，避免工具标识被重新分配。后续目录查询必须排除已删除记录。
 - JSON 字段使用 MySQL 原生 JSON；关键词必须为数组，配置必须为对象。
+- V36 新增 `deleted_account(user_id BIGINT PK, deleted_at DATETIME(3))`，保留无原文的删除台账用于备份恢复抑制；删除 sys_user 级联移除会话、同步、反馈和 AI 使用计数，见 [数据删除](DATA_DELETION.md)。
 
 ## tool_category
 

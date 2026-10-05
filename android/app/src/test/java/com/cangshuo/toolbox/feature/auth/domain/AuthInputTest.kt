@@ -50,6 +50,7 @@ class AuthInputTest {
         override suspend fun login(email: String, password: String) { calls++; this.email = email; this.password = password }
         override suspend fun logout() { account.value = null }
         override suspend fun updateProfile(nickname: String) {}
+        override suspend fun deleteAccount(user: Long,email: String,password: String) { calls++ }
         override suspend fun restore() {}
         override suspend fun authorization() = "Bearer test"
     }

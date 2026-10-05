@@ -13,6 +13,7 @@
 - 所有 `/api/v1` 响应带 `X-RateLimit-Limit` 与 `X-RateLimit-Remaining`；超限返回 HTTP 429、业务码 `10007` 与 `Retry-After`，`/api/v1/health`、`/actuator/**` 与 OPTIONS 预检不计数。见 [接口限流](RATE_LIMITS.md)。
 - 时间使用 ISO 8601，并以 UTC 表示；分页从 1 开始。
 - 服务端不得返回可执行代码、密钥或第三方 API Secret。
+- 账号删除：用户认证 `DELETE /auth/me`、body `{email,password}`、重新验证密码后返回 code=0/data=null；管理员不能代用。详见 [数据删除](DATA_DELETION.md)。
 - 服务端为每次请求生成 32 位小写十六进制 `traceId`，同时返回 `X-Trace-Id` 响应头；API 响应中的 `traceId` 与该响应头一致。客户端传入的 `X-Trace-Id` 不替代服务端生成的标识。
 
 ## 浏览器跨域访问

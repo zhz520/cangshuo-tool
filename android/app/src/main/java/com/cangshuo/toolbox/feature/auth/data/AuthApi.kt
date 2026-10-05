@@ -28,6 +28,9 @@ internal data class AuthEnvelope<T>(val code: Int, val message: String, val data
 }
 
 internal interface AuthApi {
+    @retrofit2.http.HTTP(method="DELETE", path="auth/me", hasBody=true)
+    suspend fun deleteAccount(@Header("Authorization") bearer: String,
+        @Body request: DeleteAccountDto): Response<AuthEnvelope<Unit>>
     @POST("auth/register") suspend fun register(@Body request: AuthRequestDto): Response<AuthEnvelope<AuthDataDto>>
     @POST("auth/login") suspend fun login(@Body request: AuthRequestDto): Response<AuthEnvelope<AuthDataDto>>
     @GET("auth/me") suspend fun me(@Header("Authorization") bearer: String): Response<AuthEnvelope<UserDto>>
@@ -35,6 +38,10 @@ internal interface AuthApi {
         @Body request: ProfileRequestDto): Response<AuthEnvelope<UserDto>>
     @POST("auth/refresh") suspend fun refresh(@Body request: RefreshRequestDto): Response<AuthEnvelope<AuthDataDto>>
     @POST("auth/logout") suspend fun logout(@Body request: RefreshRequestDto): Response<AuthEnvelope<Unit>>
+}
+
+internal data class DeleteAccountDto(val email: String, val password: String) {
+    override fun toString() = "DeleteAccountDto[redacted]"
 }
 
 internal data class ProfileRequestDto(val nickname: String) {

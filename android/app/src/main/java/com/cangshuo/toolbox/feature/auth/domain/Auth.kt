@@ -21,6 +21,7 @@ interface AuthRepository {
     suspend fun restore()
     suspend fun authorization(): String
     suspend fun updateProfile(nickname: String)
+    suspend fun deleteAccount(user: Long, email: String, password: String)
 }
 
 object AuthInput {
@@ -55,7 +56,8 @@ object AuthInput {
     private fun fail(failure: AuthFailure): Nothing = throw AuthException(failure)
 }
 
-class AuthUseCases(private val repository: AuthRepository) {
+class AuthUseCases(private val repository: AuthRepository,
+    private val deletion: suspend (Long, suspend () -> Unit) -> Unit = { _, action -> action() }) {
     val account get() = repository.account
     val status get() = repository.status
     suspend fun login(email: String, password: String) {
@@ -70,4 +72,11 @@ class AuthUseCases(private val repository: AuthRepository) {
     suspend fun logout() = repository.logout()
     suspend fun restore() = repository.restore()
     suspend fun updateProfile(nickname: String) = repository.updateProfile(AuthInput.nickname(nickname))
+    suspend fun deleteAccount(email: String, password: String) {
+        val current = account.value ?: throw AuthException(AuthFailure.EXPIRED)
+        AuthInput.password(password)
+        val confirmation = AuthInput.email(email)
+        if (confirmation != current.email) throw AuthException(AuthFailure.CREDENTIALS)
+        deletion(current.id) { repository.deleteAccount(current.id,confirmation,password) }
+    }
 }

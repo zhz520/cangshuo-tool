@@ -101,6 +101,7 @@ class RefreshSessionRepositoryTest {
         assertNull(repo.account.value)
     }
     private inner class FakeApi : AuthApi {
+        override suspend fun deleteAccount(bearer: String,request: DeleteAccountDto)=success(Unit)
         override suspend fun updateProfile(bearer: String, request: ProfileRequestDto) = success(UserDto(1,"a@b.com",request.nickname))
         var offline=false; var rejected=false; var meFailure=false
         var meRejected=false;var onMe: (() -> Unit)?=null
@@ -124,5 +125,10 @@ class RefreshSessionRepositoryTest {
             lastLogout=request.refreshToken
             return success(Unit)
         }
+    }
+    @Test fun confirmedDeletionClearsThePersistedSessionAndSignedInIdentity() = runTest {
+        val store=MemoryAuthSessionStore(); val repo=RemoteAuthRepository(FakeApi(),backgroundScope,store)
+        repo.login("a@b.com","password12"); repo.deleteAccount(1,"a@b.com","password12")
+        assertNull(repo.account.value); assertEquals("",store.read().refreshToken)
     }
 }

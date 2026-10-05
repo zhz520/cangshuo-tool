@@ -91,4 +91,17 @@ class AuthControllerTest {
                 .contentType("application/json").content("{\"nickname\":\"\"}"))
                 .andExpect(status().isBadRequest());
     }
+    @Test void accountDeletionRequiresBearerAndConfirmedBody() throws Exception {
+        mvc.perform(delete("/api/v1/auth/me").contentType("application/json").content("{}"))
+            .andExpect(status().isUnauthorized());
+        when(sessions.active(any(),any())).thenReturn(true);
+        var token=new AccessTokenService(encoder,clock).issue(new UserAccount(7,"a@b.com","hash","u",1),
+            "12".repeat(16),"12".repeat(16)+"."+"a".repeat(43),clock.instant().plusSeconds(2592000));
+        mvc.perform(delete("/api/v1/auth/me").header("Authorization","Bearer "+token.accessToken())
+            .contentType("application/json").content("{\"email\":\"a@b.com\",\"password\":\"password12\",\"id\":999}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.code").value(0)).andExpect(jsonPath("$.data").isEmpty());
+        verify(service).deleteAccount(eq("7"),any());
+        mvc.perform(delete("/api/v1/auth/me").header("Authorization","Bearer "+token.accessToken())
+            .contentType("application/json").content("{}")) .andExpect(status().isBadRequest());
+    }
 }

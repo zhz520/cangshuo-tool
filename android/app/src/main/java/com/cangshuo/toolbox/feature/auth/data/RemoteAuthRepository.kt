@@ -82,6 +82,29 @@ class RemoteAuthRepository internal constructor(private val api: AuthApi, privat
         }
     }
 
+    override suspend fun deleteAccount(user: Long, email: String, password: String) = lock.withLock {
+        protect {
+            AuthInput.password(password)
+            if (mutableAccount.value?.id != user || mutableAccount.value?.email != AuthInput.email(email)) fail(AuthFailure.EXPIRED)
+            var response = api.deleteAccount(bearer(),DeleteAccountDto(email,password))
+            if (response.code() == 401) {
+                // Re-authentication errors are also 401: refresh once only, never retry after an ambiguous IO failure.
+                response.errorBody()?.close(); refresh()
+                response = api.deleteAccount(bearer(),DeleteAccountDto(email,password))
+            }
+            if (!response.isSuccessful) {
+                response.errorBody()?.close()
+                fail(if(response.code()==401) AuthFailure.CREDENTIALS else AuthFailure.SERVICE)
+            }
+            if (response.body()?.code != 0) fail(AuthFailure.SERVICE)
+            withContext(NonCancellable) {
+                renew?.cancel(); renew=null
+                token=null; accessDeadline=0; mutableAccount.value=null; mutableStatus.value=AuthStatus.SIGNED_OUT
+                clear()
+            }
+        }
+    }
+
     override suspend fun logout() = lock.withLock {
         load()
         renew?.cancel(); renew = null

@@ -271,7 +271,7 @@ class ToolboxAppContainer(context: Context) {
     }.filterNotNull().stateIn(catalogScope,kotlinx.coroutines.flow.SharingStarted.Eagerly,
         com.cangshuo.toolbox.feature.sync.domain.AppSettings())
     val authViewModelFactory = com.cangshuo.toolbox.feature.auth.ui.AuthViewModel.factory(
-        com.cangshuo.toolbox.feature.auth.domain.AuthUseCases(authRepository),
+        com.cangshuo.toolbox.feature.auth.domain.AuthUseCases(authRepository) { user, action -> cloudSync.deleteAccount(user,action) },
     )
     private val catalogSync = RequestWebToolCatalogSyncUseCase(
         applicationScope = catalogScope,

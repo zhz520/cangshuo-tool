@@ -65,4 +65,11 @@ class RateLimitFilterTest {
         request.setRequestURI(uri);
         return request;
     }
+    @Test void passwordConfirmedDeletionUsesTheStricterAuthBucket() throws Exception {
+        var jwt=Jwt.withTokenValue("token").header("alg","none").subject("7").build();
+        SecurityContextHolder.getContext().setAuthentication(new JwtAuthenticationToken(jwt,List.of()));
+        when(limiter.check(anyString(),anyInt(),anyInt())).thenReturn(new RateLimitDecision(true,1,0,60));
+        filter.doFilterInternal(request("DELETE","/api/v1/auth/me"),new MockHttpServletResponse(),new MockFilterChain());
+        verify(limiter).check("toolbox:rate:auth:u:7",1,60);
+    }
 }

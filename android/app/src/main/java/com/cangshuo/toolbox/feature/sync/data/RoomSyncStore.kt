@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.map
 
 class RoomSyncStore(private val database: ToolboxDatabase) : SyncStore {
     private val dao=database.syncDao()
+    override suspend fun deleteAccount(user: Long) = database.withTransaction {
+        require(user > 0)
+        dao.deleteRecords(user); dao.deletePreference(user)
+    }
     override fun preference(user: Long) = dao.observePreference(user).map {
         it?.let { p -> SyncPreference(p.enabled,p.enrolled,p.cursor,p.recentEnabled,p.recentEnrolled,p.settingsEnabled,p.settingsEnrolled) } ?: SyncPreference()
     }

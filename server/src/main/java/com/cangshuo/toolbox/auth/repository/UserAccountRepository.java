@@ -45,4 +45,10 @@ public class UserAccountRepository {
         return jdbc.update("UPDATE sys_user SET nickname = :nickname, updated_at = UTC_TIMESTAMP(3) WHERE id = :id AND status = 1",
                 new MapSqlParameterSource("id", id).addValue("nickname", nickname)) == 1;
     }
+    public boolean delete(long id, String verifiedHash) {
+        var params = new MapSqlParameterSource("id", id).addValue("hash", verifiedHash);
+        if (jdbc.update("DELETE FROM sys_user WHERE id=:id AND status=1 AND password_hash=:hash", params) != 1) return false;
+        jdbc.update("INSERT INTO deleted_account(user_id) VALUES (:id)", params);
+        return true;
+    }
 }

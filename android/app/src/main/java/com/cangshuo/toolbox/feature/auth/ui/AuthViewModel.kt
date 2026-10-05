@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 data class AuthUiState(val account: AccountProfile? = null, val registering: Boolean = false,
     val email: String = "", val nickname: String = "", val password: String = "", val confirmation: String = "",
     val busy: Boolean = false, val failure: AuthFailure? = null, val status: AuthStatus = AuthStatus.SIGNED_OUT,
-    val profileNickname: String = "", val profileSaved: Boolean = false) {
+    val profileNickname: String = "", val profileSaved: Boolean = false, val deleting: Boolean = false,
+    val deleteEmail: String = "", val deletePassword: String = "", val deleted: Boolean = false) {
     override fun toString() = "AuthUiState[redacted]"
 }
 
@@ -27,7 +28,8 @@ class AuthViewModel(private val useCases: AuthUseCases) : ViewModel() {
     val uiState = mutableState.asStateFlow()
     init {
         viewModelScope.launch { useCases.account.collect { account ->
-            mutableState.update { it.copy(account = account, password = "", confirmation = "",
+            mutableState.update { it.copy(account = account, password = "", confirmation = "", deleting = if(account==null) false else it.deleting,
+                deleteEmail = "", deletePassword = "",
                 profileNickname = if (it.account != account) account?.nickname.orEmpty() else it.profileNickname,
                 profileSaved = if (account == null) false else it.profileSaved) }
         } }
@@ -43,7 +45,15 @@ class AuthViewModel(private val useCases: AuthUseCases) : ViewModel() {
     fun password(value: String) = edit { it.copy(password = value.take(73)) }
     fun confirmation(value: String) = edit { it.copy(confirmation = value.take(73)) }
     fun toggleMode() = edit { it.copy(registering = !it.registering, password = "", confirmation = "") }
-    fun clearCredentials() { mutableState.update { it.copy(password = "", confirmation = "") } }
+    fun clearCredentials() { mutableState.update { it.copy(password = "", confirmation = "", deletePassword = "", deleting = false) } }
+    fun showDeletion(value: Boolean) = edit { it.copy(deleting=value, deleteEmail="",deletePassword="", deleted=false) }
+    fun deleteEmail(value: String) = edit { it.copy(deleteEmail=value.take(129)) }
+    fun deletePassword(value: String) = edit { it.copy(deletePassword=value.take(73)) }
+    fun deleteAccount() {
+        val snapshot=uiState.value
+        perform { useCases.deleteAccount(snapshot.deleteEmail,snapshot.deletePassword)
+            mutableState.update { it.copy(deleting=false,deleted=true) } }
+    }
     private fun edit(change: (AuthUiState) -> AuthUiState) {
         if (!mutableState.value.busy) mutableState.update { change(it).copy(failure = null) }
     }

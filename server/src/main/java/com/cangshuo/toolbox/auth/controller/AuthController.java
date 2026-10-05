@@ -32,6 +32,16 @@ public class AuthController {
         this.service = service; this.sessions = sessions;
     }
 
+    @org.springframework.web.bind.annotation.DeleteMapping(value="/me", consumes=MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary="Permanently delete the current account after password and email confirmation")
+    public ApiResponse<Void> deleteAccount(@AuthenticationPrincipal Jwt jwt,
+        @Valid @RequestBody com.cangshuo.toolbox.auth.model.DeleteAccountRequest body, HttpServletRequest request) {
+        if (jwt == null || "admin".equals(jwt.getClaimAsString("kind")))
+            throw new com.cangshuo.toolbox.common.exception.ApiException(com.cangshuo.toolbox.common.exception.ApiError.UNAUTHENTICATED);
+        service.deleteAccount(jwt.getSubject(), body);
+        return ApiResponse.success(null, TraceIdFilter.traceId(request));
+    }
+
     @PostMapping(value = "/refresh", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Rotate a refresh token and issue a new access token")
     public ApiResponse<AuthResponse> refresh(@Valid @RequestBody com.cangshuo.toolbox.auth.model.RefreshRequest body,

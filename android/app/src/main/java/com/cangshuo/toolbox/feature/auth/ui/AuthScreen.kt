@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -57,6 +58,7 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
     Column(modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(stringResource(R.string.nav_profile), style = MaterialTheme.typography.headlineMedium)
+        if (state.deleted) Text(stringResource(R.string.auth_deleted), color=MaterialTheme.colorScheme.primary)
         if (state.status == AuthStatus.RESTORING) {
             com.cangshuo.toolbox.core.ui.ToolboxLoadingState(stringResource(R.string.auth_restoring))
         }
@@ -82,6 +84,9 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
                         Text(stringResource(R.string.auth_save_profile))
                     }
                     OutlinedButton(onClick = model::logout, enabled = !state.busy) { Text(stringResource(R.string.auth_logout)) }
+                    TextButton(onClick = {model.showDeletion(true)}, enabled = !state.busy) {
+                        Text(stringResource(R.string.auth_delete), color=MaterialTheme.colorScheme.error)
+                    }
                 } else {
                     Text(stringResource(if (state.registering) R.string.auth_register else R.string.auth_login),
                         style = MaterialTheme.typography.titleLarge)
@@ -118,6 +123,24 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
         Text(stringResource(R.string.auth_local_data_kept), style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+    if (state.deleting && state.account != null) AlertDialog(
+        onDismissRequest={if(!state.busy) model.showDeletion(false)},
+        title={Text(stringResource(R.string.auth_delete))},
+        text={Column(verticalArrangement=Arrangement.spacedBy(12.dp)){
+            Text(stringResource(R.string.auth_delete_warning))
+            OutlinedTextField(state.deleteEmail,model::deleteEmail,enabled=!state.busy,singleLine=true,
+                label={Text(stringResource(R.string.auth_delete_email))},modifier=Modifier.fillMaxWidth(),
+                keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Email))
+            OutlinedTextField(state.deletePassword,model::deletePassword,enabled=!state.busy,singleLine=true,
+                label={Text(stringResource(R.string.auth_password))},modifier=Modifier.fillMaxWidth(),
+                visualTransformation=PasswordVisualTransformation(),keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Password))
+            state.failure?.let { Text(stringResource(it.label()),color=MaterialTheme.colorScheme.error) }
+            if(state.busy)ToolboxLoadingIndicator(compact=true)
+        }},
+        confirmButton={TextButton(onClick=model::deleteAccount,enabled=!state.busy&&state.deleteEmail.trim().equals(state.account.email,ignoreCase=true)&&state.deletePassword.isNotEmpty()){
+            Text(stringResource(R.string.auth_delete_confirm),color=MaterialTheme.colorScheme.error)
+        }},dismissButton={TextButton(onClick={model.showDeletion(false)},enabled=!state.busy){Text(stringResource(R.string.action_cancel))}}
+    )
 }
 
 private fun AuthFailure.label(): Int = when (this) {

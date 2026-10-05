@@ -20,6 +20,17 @@ public class AuthService {
     private final String dummyHash;
 
     @Transactional
+    public void deleteAccount(String subject, com.cangshuo.toolbox.auth.model.DeleteAccountRequest request) {
+        var profile = currentUser(subject);
+        AuthInput.password(request.password());
+        var account = users.findById(profile.id()).filter(value -> value.status() == 1)
+            .orElseThrow(() -> new ApiException(ApiError.UNAUTHENTICATED));
+        if (!account.email().equals(AuthInput.email(request.email())) || !passwords.matches(request.password(), account.passwordHash()))
+            throw new ApiException(ApiError.INVALID_CREDENTIALS);
+        if (!users.delete(account.id(), account.passwordHash())) throw new ApiException(ApiError.UNAUTHENTICATED);
+    }
+
+    @Transactional
     public UserResponse updateProfile(String subject, com.cangshuo.toolbox.auth.model.ProfileRequest request) {
         var current = currentUser(subject);
         var nickname = AuthInput.nickname(request.nickname());
