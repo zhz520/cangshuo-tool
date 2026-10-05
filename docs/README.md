@@ -60,3 +60,4 @@
 - [隐私政策（运营主体及联系方式）](PRIVACY_POLICY.md)
 - [基础崩溃诊断](CRASH_DIAGNOSTICS.md)
 - [发布构建与上线准备](RELEASE.md)
+- [Android 发布候选包](AAB.md)
