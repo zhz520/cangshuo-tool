@@ -1,0 +1,91 @@
+name: Release artifacts
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: Positive store version code
+        default: '1'
+        required: true
+      version_name:
+        description: Semantic version
+        default: '0.1.0'
+        required: true
+      signed:
+        description: Sign with the configured upload key
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  artifacts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    environment: release
+    env:
+      VERSION_CODE: ${{ inputs.version_code || '1' }}
+      VERSION_NAME: ${{ inputs.version_name || '0.1.0' }}
+      SIGNED: ${{ inputs.signed || false }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Java 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-provider: basic
+          validate-wrappers: true
+      - name: Ensure Android SDK
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"'
+      - name: Build and inspect release artifacts
+        shell: bash
+        env:
+          UPLOAD_KEY_BASE64: ${{ secrets.TOOLBOX_UPLOAD_KEY_BASE64 }}
+          UPLOAD_STORE_PASSWORD: ${{ secrets.TOOLBOX_STORE_PASSWORD }}
+          UPLOAD_KEY_ALIAS: ${{ secrets.TOOLBOX_KEY_ALIAS }}
+          UPLOAD_KEY_PASSWORD: ${{ secrets.TOOLBOX_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          key="$RUNNER_TEMP/toolbox-upload.jks"
+          trap 'rm -f -- "$key"' EXIT
+          signature_args=()
+          if [ "$SIGNED" = true ]; then
+            test -n "$UPLOAD_KEY_BASE64" && test -n "$UPLOAD_STORE_PASSWORD" && test -n "$UPLOAD_KEY_ALIAS" && test -n "$UPLOAD_KEY_PASSWORD"
+            printf '%s' "$UPLOAD_KEY_BASE64" | base64 --decode > "$key"
+            export TOOLBOX_KEYSTORE="$key"
+            export TOOLBOX_STORE_PASSWORD="$UPLOAD_STORE_PASSWORD"
+            export TOOLBOX_KEY_ALIAS="$UPLOAD_KEY_ALIAS"
+            export TOOLBOX_KEY_PASSWORD="$UPLOAD_KEY_PASSWORD"
+            signature_args+=(--require-signed)
+          fi
+          unset UPLOAD_KEY_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
+          cd android
+          sh gradlew --no-daemon --console=plain "-PtoolboxVersionCode=$VERSION_CODE" "-PtoolboxVersionName=$VERSION_NAME" :app:testReleaseUnitTest :app:lintRelease :app:assembleRelease :app:bundleRelease
+          cd ..
+          python3 scripts/check_release_artifacts.py --sdk "$ANDROID_HOME" "${signature_args[@]}"
+      - name: Upload release artifacts and reports
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-release-${{ github.run_number }}
+          path: |
+            android/app/build/outputs/apk/release/*.apk
+            android/app/build/outputs/bundle/release/*.aab
+            android/app/build/outputs/release-readiness.json
+            android/app/build/reports/lint-results-release.*
+            android/app/build/test-results/testReleaseUnitTest/*.xml
+          if-no-files-found: error
+          retention-days: 14

@@ -4,10 +4,14 @@
 !.env.example
 *.key
 *.pem
+*.jks
+*.keystore
+*.p12
 deploy/certs/
 
 # Android / Gradle
 .gradle/
+.kotlin/
 **/build/
 local.properties
 *.iml

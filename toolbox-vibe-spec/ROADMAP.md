@@ -101,7 +101,7 @@ Phase 3 functional scope is complete. Two HTTP clients verified account restorat
 
 ## Phase 7 — Release
 - [x] Crash monitoring (2026-10-06: basic local Java/native/ANR diagnostics, timestamp/reason only, bounded OS history and a Java fallback; view/copy/confirmed clear, no automatic upload/remote aggregation. Five new regressions; Android 213/213 tests and build/lint passed in 1m58s. Device fault injection deferred. See docs/CRASH_DIAGNOSTICS.md.)
-- [ ] Release CI
+- [x] Release CI (2026-10-06: pinned main/manual release workflow, Release tests/lint/unsigned APK+AAB, optional explicit upload-key signing, endpoint/permission/backup/native alignment gate and SHA-256 artifact report. Local Release 213/213 tests, lint 0 errors/18 warnings, build 3m47s and artifact gate passed; actionlint 1.7.12 validated both workflows. Hosted run status recorded separately. See docs/RELEASE.md.)
 - [ ] AAB
 - [x] Privacy policy (2026-10-06: 湖北花海网络科技有限公司 / 14329140@qq.com; full offline Chinese/English App disclosure, public /privacy/ and independent /account/delete/ entry, explicit cloud/AI/local/retention/deletion scopes and backup exclusion rules. Android build/lint passed in 1m48s; 22 web deletion checks and four local page/module HTTP 200 checks passed. Production hosting/store declaration and browser/device acceptance remain release steps. See docs/PRIVACY_POLICY.md.)
 - [x] Permission documentation (2026-10-06: source/merged manifest reviewed; camera, network, AndroidX signature receiver protection and SAF exports documented in Chinese/English App dialog and /permissions/. Android build/lint passed in 1m14s; no new runtime permission. Release manifest and hosted pages checked by final release gate; device prompts deferred. See docs/PERMISSIONS.md.)

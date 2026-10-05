@@ -15,6 +15,10 @@ toolbox-vibe-spec
 **/build
 **/tmp
 **/temp
+**/.tmp
+**/*.jks
+**/*.keystore
+**/*.p12
 **/*.log
 **/*.pem
 **/*.key

@@ -10,6 +10,18 @@ plugins {
 val toolboxDebugApiBaseUrl = providers.gradleProperty("toolboxDebugApiBaseUrl")
     .getOrElse("http://10.0.2.2:8081/api/v1")
 val toolboxDebugApiUri = URI(toolboxDebugApiBaseUrl)
+val toolboxVersionCode = providers.gradleProperty("toolboxVersionCode").getOrElse("1").toInt()
+val toolboxVersionName = providers.gradleProperty("toolboxVersionName").getOrElse("0.1.0")
+require(toolboxVersionCode in 1..2_100_000_000) { "Version code must be positive and within the store range" }
+require(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?").matches(toolboxVersionName) && toolboxVersionName.length <= 40) {
+    "Version name must be a bounded semantic version"
+}
+val releaseSigning = listOf("TOOLBOX_KEYSTORE", "TOOLBOX_STORE_PASSWORD", "TOOLBOX_KEY_ALIAS", "TOOLBOX_KEY_PASSWORD")
+    .associateWith { providers.environmentVariable(it).orNull }
+require(releaseSigning.values.all { it.isNullOrBlank() } || releaseSigning.values.all { !it.isNullOrBlank() }) {
+    "Provide all four release signing environment variables, or none for an unsigned build"
+}
+val hasReleaseSigning = releaseSigning.values.all { !it.isNullOrBlank() }
 require(toolboxDebugApiUri.scheme == "http" && toolboxDebugApiUri.host in setOf("localhost", "127.0.0.1", "10.0.2.2") &&
     toolboxDebugApiUri.port in 1..65535 && toolboxDebugApiUri.path.trimEnd('/') == "/api/v1" &&
     toolboxDebugApiUri.userInfo == null && toolboxDebugApiUri.query == null && toolboxDebugApiUri.fragment == null) {
@@ -24,8 +36,8 @@ android {
         applicationId = "com.cangshuo.toolbox"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = toolboxVersionCode
+        versionName = toolboxVersionName
         // Decision 019: official-site base URL for WEB tools; debug overrides it below.
         buildConfigField("String", "WEB_TOOL_BASE_URL", "\"https://tool.zhzgo.cn\"")
         buildConfigField("String", "API_BASE_URL", "\"https://toolapi.zhzgo.cn/api/v1\"")
@@ -40,7 +52,24 @@ android {
         buildConfig = true
     }
 
+    // Both supported locales stay available after an in-app language switch.
+    bundle { language { enableSplit = false } }
+    if (hasReleaseSigning) signingConfigs {
+        create("upload") {
+            val keystore = file(releaseSigning.getValue("TOOLBOX_KEYSTORE")!!)
+            require(keystore.isFile) { "Release keystore file is unavailable" }
+            storeFile = keystore
+            storePassword = releaseSigning.getValue("TOOLBOX_STORE_PASSWORD")
+            keyAlias = releaseSigning.getValue("TOOLBOX_KEY_ALIAS")
+            keyPassword = releaseSigning.getValue("TOOLBOX_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
+        release {
+            isDebuggable = false
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("upload")
+        }
         debug {
             buildConfigField("String", "WEB_TOOL_BASE_URL", "\"http://localhost:8088\"")
             // Physical devices use -PtoolboxDebugApiBaseUrl=http://127.0.0.1:8081/api/v1 with adb reverse.
