@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   android:
-    name: Android build and lint
+    name: Android tests, build and lint
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     defaults:
@@ -42,8 +42,14 @@ jobs:
           validate-wrappers: true
       - name: Ensure Android SDK packages
         run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"'
-      - name: Build debug APK and run Android Lint
-        run: sh gradlew --no-daemon --console=plain :app:assembleDebug :app:lintDebug
+      - name: Test, build debug APK and run Android Lint
+        run: sh gradlew --no-daemon --console=plain :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
+      - name: Verify Android cache migrations with SQLite
+        run: python3 ../scripts/check_android_catalog_cache.py
+      - name: Verify QR scan history migration and bounds
+        run: python3 ../scripts/check_qr_history.py
+      - name: Verify sync migrations and conditional queue acknowledgements
+        run: python3 ../scripts/check_sync_sqlite.py
       - name: Upload debug APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -62,8 +68,19 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: Upload Android unit test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: android-unit-tests
+          path: |
+            android/app/build/reports/tests/testDebugUnitTest/
+            android/app/build/test-results/testDebugUnitTest/*.xml
+          if-no-files-found: ignore
+          retention-days: 7
+
   server:
-    name: Server package
+    name: Server tests and package
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     defaults:
@@ -81,14 +98,23 @@ jobs:
           java-version: '21'
           cache: maven
           cache-dependency-path: server/pom.xml
-      - name: Package API
-        run: sh mvnw -B -ntp -Dmaven.test.skip=true package
+      - name: Test and package API
+        run: sh mvnw -B -ntp package
       - name: Upload API JAR
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: server-jar
           path: server/target/toolbox-api-0.1.0-SNAPSHOT.jar
           if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload Server test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: server-unit-tests
+          path: server/target/surefire-reports/
+          if-no-files-found: ignore
           retention-days: 7
 
   admin:
@@ -117,6 +143,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Typecheck and build production Admin
         run: npm run build
+      - name: Verify web QR encoding and export bindings
+        run: node ../scripts/check_web_qr.cjs
       - name: Upload Admin build
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -138,6 +166,7 @@ jobs:
       MYSQL_PASSWORD: ci-configuration-only
       REDIS_PASSWORD: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
       MINIO_ROOT_PASSWORD: ci-configuration-only
+      JWT_SECRET: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

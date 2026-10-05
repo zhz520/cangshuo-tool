@@ -17,7 +17,7 @@ set -C
 {
     while IFS= read -r environment_line || [ -n "$environment_line" ]; do
         case "$environment_line" in
-            MYSQL_ROOT_PASSWORD=*|MYSQL_PASSWORD=*|REDIS_PASSWORD=*|MINIO_ROOT_PASSWORD=*)
+            MYSQL_ROOT_PASSWORD=*|MYSQL_PASSWORD=*|REDIS_PASSWORD=*|MINIO_ROOT_PASSWORD=*|JWT_SECRET=*)
                 secret_name=${environment_line%%=*}
                 deployment_secret=$(openssl rand -hex 32)
                 printf '%s=%s\n' "$secret_name" "$deployment_secret"

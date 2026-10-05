@@ -1,5 +1,11 @@
 # 部署配置
 
+账号接口新增必需环境变量 `JWT_SECRET`（随机 32 字节、64 位十六进制），仅供 Server；PowerShell/Shell 初始化脚本生成它。现有私有环境文件需补入独立随机值，不能复用数据库密码；缺失或格式错误时 API 启动失败。2026-10-05 本地私有 `.env` 已增补，Compose server 已重建运行，V18 用户表应用成功，见 [认证说明](../docs/AUTH.md)。
+
+管理后台认证新增 `ADMIN_BOOTSTRAP_USERNAME`、`ADMIN_BOOTSTRAP_PASSWORD`（可选，仅在 `admin_user` 为空时创建首个超级管理员；账号 3–32 位、密码 12–72 位且至少包含一个字母和一个数字）和 `ADMIN_TOKEN_TTL_SECONDS`（默认 3600，允许 300–86400）。引导变量只放在私有环境文件或部署密钥管理中，不写入 Git；管理员已存在时启动会跳过创建。首个管理员删除后可用同一变量重新引导，见 [管理员认证](../docs/ADMIN.md)。
+
+对象存储新增 `STORAGE_ENABLED`（默认 false）、`MINIO_ENDPOINT`、`MINIO_ACCESS_KEY`、`MINIO_SECRET_KEY`、`MINIO_BUCKET`、`MINIO_PRESIGNED_EXPIRY_SECONDS`、`MINIO_MAX_OBJECT_BYTES` 与 `MINIO_ALLOWED_CONTENT_TYPES`；Compose 默认复用 `MINIO_ROOT_USER`/`MINIO_ROOT_PASSWORD`。启用时必须同时启用 `storage` profile，生产环境要把 `MINIO_ENDPOINT` 配成客户端可解析的公开对象存储域名（预签名 URL 按该主机签名）。详见 [对象存储](../docs/STORAGE.md)。
+
 使用 Docker Compose 编排 MySQL、Redis、Server 和 Admin；Admin 镜像同时提供 Nginx 网关及基础官网入口页。MinIO 放在开发用的可选 `storage` profile 中。镜像固定版本，凭据通过仓库根目录的私有环境文件配置。
 
 本地与正式环境使用独立项目名、镜像名、网络和数据卷。2026-10-03 已使用 Docker Desktop 的 Linux Engine `29.8.1`、Compose `v5.5.1` 完成镜像构建和本地启动，四个核心服务及可选 MinIO 均健康。正式环境配置已准备，实际公网部署待完成。
@@ -52,6 +58,7 @@ docker compose --env-file ../.env -f docker-compose.yml -f docker-compose.local.
 | --- | --- |
 | 官网入口 | `http://localhost:8088/` |
 | 后台 | `http://localhost:8088/admin/` |
+| 网页版工具（规划） | `http://localhost:8088/tools/<tool_code>/` |
 | 经 Nginx 的 API | `http://localhost:8088/api/v1/health` |
 | API 直连 | `http://localhost:8081/api/v1/health` |
 | 本地 Swagger | `http://localhost:8081/swagger-ui/index.html` |
@@ -92,8 +99,11 @@ docker compose --env-file ../.env -f docker-compose.yml -f docker-compose.local.
 | 官网 | `https://tool.zhzgo.cn/` | 根路径提供官网 |
 | 管理后台 | `https://tool.zhzgo.cn/admin/` | 后台页面及静态资源使用 `/admin/` 前缀 |
 | API | `https://toolapi.zhzgo.cn/api/v1` | 保留 `/api/v1` 业务接口前缀 |
+| 网页版工具（规划） | `https://tool.zhzgo.cn/tools/<tool_code>/` | 官网子路径，一个工具一个目录；静态资源使用相对路径 |
 
 Android 和正式环境后台使用上述 API 基础地址。健康检查地址为 `https://toolapi.zhzgo.cn/api/v1/health`。
+
+复杂或体积较大的工具可以把实现放在官网 `/tools/<tool_code>/`，由 App 内置 WebView（Chrome 内核）打开，规则见 `toolbox-vibe-spec/PROJECT_SPEC.md` Decision 019。上线具体工具时需在官网静态目录和 Nginx 增加 `/tools/` 路由、HTTPS、缓存与 MIME 配置；Android 基础地址由构建配置提供，工具路径由目录 `config_json` 下发，不在客户端写死。
 
 ## 正式环境启动
 
@@ -143,6 +153,14 @@ docker compose --env-file ../.env.production -f docker-compose.yml -f docker-com
 正式 API 地址在后台构建时写入产物；修改域名或地址后重新构建。Nginx 模板只替换 `WEB_DOMAIN/API_DOMAIN`，保留 `$uri` 等 Nginx 变量。网关访问日志记录方法、状态、耗时和上游 traceId，省略请求 URL、查询参数及请求头。
 
 ## 验证记录与待办
+
+### 2026-10-05 本地真机接入
+
+在 `android/` 构建 Debug 包时传入 `-PtoolboxDebugApiBaseUrl=http://127.0.0.1:8081/api/v1`；连接手机后执行 `adb reverse tcp:8081 tcp:8081` 和 `adb reverse tcp:8088 tcp:8088`。默认 API 地址仍是模拟器 10.0.2.2，参数只允许规定的本地 HTTP 主机/端口/路径，release 使用正式 HTTPS。
+
+修改 `deploy/site/tools/` 或 Nginx 配置后，在 `deploy/` 用本地 Compose 参数执行 `build admin`、`up -d admin` 和 `exec -T admin nginx -t`。`/tools/` 返回 no-cache，App 禁止网页缓存，避免重新打开时仍执行旧逻辑。2026-10-05 镜像重建、配置检查及页面 200/no-cache 已通过。真机/浏览器覆盖和未验证范围见 [本轮记录](../docs/WEB_TOOL_ACCEPTANCE_2026-10-05.md)，本轮没有公网部署。
+
+## 历史验证记录
 
 2026-10-03：
 

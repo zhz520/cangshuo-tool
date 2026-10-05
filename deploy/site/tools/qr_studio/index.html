@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>二维码工作台（网页版）· 沧烁工具箱</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans SC", sans-serif; background: #faf8ff; color: #131b2e; }
+  main { max-width: 600px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 8px 0 4px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #003fb1; color: #fff; font-size: 12px; }
+  .card { margin-top: 12px; padding: 14px; border-radius: 14px; background: #fff; border: 1px solid #c3c5d7; }
+  label { display: block; font-size: 13px; color: #434654; margin: 8px 0 4px; }
+  input, select, textarea { width: 100%; box-sizing: border-box; padding: 9px 10px; border-radius: 8px; border: 1px solid #c3c5d7; background: #fff; color: inherit; font: inherit; }
+  textarea { min-height: 68px; }
+  .row { display: flex; gap: 8px; }
+  .row > div { flex: 1; }
+  button { margin-top: 10px; padding: 10px 14px; border-radius: 999px; border: 1px solid #003fb1; background: #003fb1; color: #fff; font: inherit; }
+  button.ghost { background: transparent; color: #003fb1; }
+  #preview { width: 100%; max-width: 320px; display: block; margin: 12px auto 0; border-radius: 8px; }
+  #status { font-size: 13px; color: #434654; margin-top: 8px; }
+  #status[data-state=error] { color: #ba1a1a; }
+  @media (prefers-color-scheme: dark) { body { background: #131b2e; color: #eef0ff; } .card { background: #1c2438; border-color: #434654; } label, #status { color: #c3c5d7; } input, select, textarea { background: #131b2e; border-color: #434654; } button.ghost { color: #b5c4ff; border-color: #b5c4ff; } }
+</style>
+</head>
+<body>
+<main>
+  <span class="badge">网页版</span>
+  <h1>二维码工作台</h1>
+  <p style="font-size:13px;color:#434654;margin:4px 0 0">数据只在本页处理，不上传、不写入密码或敏感原文。除本站脚本外不加载任何外部资源。</p>
+
+  <div class="card">
+    <label for="type">内容类型</label>
+    <select id="type">
+      <option value="text">文本 / 链接</option>
+      <option value="wifi">Wi-Fi（含 WPA3 与企业 EAP）</option>
+      <option value="vcard">联系人（vCard 多值）</option>
+    </select>
+
+    <div data-for="text">
+      <label for="text">内容</label>
+      <textarea id="text" placeholder="输入文本、网址或任意协议原文…"></textarea>
+    </div>
+
+    <div data-for="wifi" hidden>
+      <label for="ssid">网络名称 (SSID)</label>
+      <input id="ssid" placeholder="MyNetwork">
+      <label for="password">密码</label>
+      <input id="password" placeholder="无密码可留空">
+      <div class="row">
+        <div>
+          <label for="security">安全类型</label>
+          <select id="security">
+            <option value="WPA">WPA / WPA2</option>
+            <option value="WPA3">WPA3</option>
+            <option value="WPA-EAP">WPA2 企业 (EAP)</option>
+            <option value="WPA3-EAP">WPA3 企业 (EAP)</option>
+            <option value="WEP">WEP</option>
+            <option value="nopass">无密码</option>
+          </select>
+        </div>
+        <div>
+          <label for="hidden">隐藏网络</label>
+          <select id="hidden"><option value="">否</option><option value="on">是</option></select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="eap">EAP 方法</label>
+          <select id="eap">
+            <option value="TTLS">TTLS</option>
+            <option value="PEAP">PEAP</option>
+            <option value="TLS">TLS</option>
+          </select>
+        </div>
+        <div>
+          <label for="phase2">阶段二</label>
+          <select id="phase2">
+            <option value="MSCHAPV2">MSCHAPV2</option>
+            <option value="GTC">GTC</option>
+          </select>
+        </div>
+      </div>
+      <label for="identity">身份 (Identity)</label>
+      <input id="identity" placeholder="user@example.com">
+      <label for="anonymous">匿名身份</label>
+      <input id="anonymous" placeholder="anonymous@example.com">
+    </div>
+
+    <div data-for="vcard" hidden>
+      <label for="name">姓名</label>
+      <input id="name" placeholder="Alex Chen">
+      <label for="org">组织</label>
+      <input id="org" placeholder="Cangshuo Studio">
+      <label for="phones">电话（每行一个）</label>
+      <textarea id="phones" placeholder="+86 138 0013 8000"></textarea>
+      <label for="emails">邮箱（每行一个）</label>
+      <textarea id="emails" placeholder="hello@example.com"></textarea>
+      <label for="addresses">地址（每行一个）</label>
+      <textarea id="addresses" placeholder="Shanghai"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="ec">容错等级</label>
+        <select id="ec"><option>L</option><option>M</option><option>Q</option><option>H</option></select>
+      </div>
+      <div>
+        <label for="size">输出尺寸 (px)</label>
+        <select id="size"><option>512</option><option>1024</option><option>2048</option></select>
+      </div>
+      <div>
+        <label for="quiet">留白 (模块)</label>
+        <select id="quiet"><option>4</option><option>2</option><option>6</option><option>8</option></select>
+      </div>
+    </div>
+    <canvas id="preview" width="320" height="320"></canvas>
+    <p id="status" data-state="ok"></p>
+    <div class="row">
+      <button id="png" type="button">下载 PNG</button>
+      <button id="jpeg" type="button">下载 JPEG</button>
+      <button id="svg" type="button" class="ghost">下载 SVG</button>
+    </div>
+    <label for="payload">实际编码内容</label>
+    <textarea id="payload" readonly></textarea>
+    <button id="copy" type="button" class="ghost">复制内容</button>
+  </div>
+</main>
+<script src="qrcode.js"></script>
+<script src="payload.js?v=3"></script>
+<script src="app.js?v=4"></script>
+</body>
+</html>

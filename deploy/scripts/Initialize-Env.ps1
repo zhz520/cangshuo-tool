@@ -23,7 +23,7 @@ if ($FileName -eq '.env.production') {
     $environmentText = $environmentText.Replace('COMPOSE_PROJECT_NAME=cangshuo-toolbox-local',
             'COMPOSE_PROJECT_NAME=cangshuo-toolbox-production')
 }
-foreach ($secretName in @('MYSQL_ROOT_PASSWORD', 'MYSQL_PASSWORD', 'REDIS_PASSWORD', 'MINIO_ROOT_PASSWORD')) {
+foreach ($secretName in @('MYSQL_ROOT_PASSWORD', 'MYSQL_PASSWORD', 'REDIS_PASSWORD', 'MINIO_ROOT_PASSWORD', 'JWT_SECRET')) {
     $environmentText = $environmentText.Replace(($secretName + '='), ($secretName + '=' + (New-DeploymentSecret)))
 }
 
