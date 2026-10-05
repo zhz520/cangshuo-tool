@@ -5,12 +5,15 @@ import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.model.ToolStatus
 import java.text.Normalizer
 import java.util.Locale
+import kotlinx.coroutines.flow.Flow
 
 const val MAX_SEARCH_QUERY_LENGTH = 80
 private val whitespace = Regex("[\\s\\p{Z}]+")
 
 /** Literal local matching; query text is never interpreted as a regex or executable code. */
 class SearchToolsUseCase(private val repository: ToolSearchRepository) {
+    fun observeCatalogChanges(): Flow<Unit> = repository.observeCatalogChanges()
+
     operator fun invoke(
         query: String,
         category: ToolCategory? = null,

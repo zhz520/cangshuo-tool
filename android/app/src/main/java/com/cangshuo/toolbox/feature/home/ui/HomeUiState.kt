@@ -3,6 +3,7 @@ package com.cangshuo.toolbox.feature.home.ui
 import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.core.tool.ToolDefinition
 import com.cangshuo.toolbox.feature.home.domain.HomeContent
+import com.cangshuo.toolbox.feature.webtools.domain.CatalogSyncState
 
 enum class HomeTab { HOME, TOOLS, FAVORITES, PROFILE }
 
@@ -24,4 +25,5 @@ data class HomeUiState(
     val isSearchOpen: Boolean = false,
     val openedTool: ToolDefinition? = null,
     val message: HomeMessage? = null,
+    val sync: CatalogSyncState = CatalogSyncState.IDLE,
 )

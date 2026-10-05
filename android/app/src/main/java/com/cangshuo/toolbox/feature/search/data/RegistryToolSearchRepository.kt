@@ -3,12 +3,28 @@ package com.cangshuo.toolbox.feature.search.data
 import android.content.res.Resources
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
-import com.cangshuo.toolbox.core.tool.ToolRegistry
+import com.cangshuo.toolbox.core.tool.ToolRegistryStore
 import com.cangshuo.toolbox.feature.search.domain.ToolSearchDocument
 import com.cangshuo.toolbox.feature.search.domain.ToolSearchRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class RegistryToolSearchRepository(private val registry: ToolRegistry, resources: Resources) : ToolSearchRepository {
-    private val categoryNames = ToolCategory.entries.associateWith { category ->
+class RegistryToolSearchRepository internal constructor(
+    private val registry: ToolRegistryStore,
+    private val categoryNames: Map<ToolCategory, List<String>>,
+) : ToolSearchRepository {
+    constructor(registry: ToolRegistryStore, resources: Resources) : this(registry, categoryNames(resources))
+
+    override fun observeCatalogChanges(): Flow<Unit> = registry.snapshots.map { }
+
+    override fun getDocuments(): List<ToolSearchDocument> = registry.current.enabledTools().map { definition ->
+        val metadata = definition.metadata
+        ToolSearchDocument(metadata.copy(keywords = metadata.keywords.toList()), categoryNames.getValue(metadata.category))
+    }
+}
+
+private fun categoryNames(resources: Resources): Map<ToolCategory, List<String>> =
+    ToolCategory.entries.associateWith { category ->
         val resource = when (category) {
             ToolCategory.CALC -> R.array.search_category_calc
             ToolCategory.CONVERT -> R.array.search_category_convert
@@ -26,9 +42,3 @@ class RegistryToolSearchRepository(private val registry: ToolRegistry, resources
         }
         resources.getStringArray(resource).toList()
     }
-
-    override fun getDocuments(): List<ToolSearchDocument> = registry.enabledTools().map { definition ->
-        val metadata = definition.metadata
-        ToolSearchDocument(metadata.copy(keywords = metadata.keywords.toList()), categoryNames.getValue(metadata.category))
-    }
-}

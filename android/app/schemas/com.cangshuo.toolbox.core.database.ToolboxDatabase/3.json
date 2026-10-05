@@ -1,0 +1,115 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "fa7eea9a3bcb1f834e5e30fac6f1eb1e",
+    "entities": [
+      {
+        "tableName": "favorite_tool",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tool_code` TEXT NOT NULL, `added_at` INTEGER NOT NULL, PRIMARY KEY(`tool_code`))",
+        "fields": [
+          {
+            "fieldPath": "toolCode",
+            "columnName": "tool_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "added_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "tool_code"
+          ]
+        }
+      },
+      {
+        "tableName": "recent_tool",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tool_code` TEXT NOT NULL, `last_used_at` INTEGER NOT NULL, `use_count` INTEGER NOT NULL, PRIMARY KEY(`tool_code`))",
+        "fields": [
+          {
+            "fieldPath": "toolCode",
+            "columnName": "tool_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUsedAt",
+            "columnName": "last_used_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "useCount",
+            "columnName": "use_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "tool_code"
+          ]
+        }
+      },
+      {
+        "tableName": "cached_tool_catalog",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`singleton` INTEGER NOT NULL, `format_version` INTEGER NOT NULL, `source_key` TEXT NOT NULL, `written_at` INTEGER NOT NULL, `payload_sha256` TEXT NOT NULL, `payload` TEXT NOT NULL, PRIMARY KEY(`singleton`))",
+        "fields": [
+          {
+            "fieldPath": "singleton",
+            "columnName": "singleton",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "formatVersion",
+            "columnName": "format_version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceKey",
+            "columnName": "source_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "writtenAt",
+            "columnName": "written_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payloadSha256",
+            "columnName": "payload_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload",
+            "columnName": "payload",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "singleton"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fa7eea9a3bcb1f834e5e30fac6f1eb1e')"
+    ]
+  }
+}

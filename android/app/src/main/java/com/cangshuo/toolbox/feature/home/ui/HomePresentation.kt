@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
-import com.cangshuo.toolbox.core.model.ToolMode
 
 @StringRes
 fun ToolCategory.labelResource(): Int = when (this) {
@@ -40,13 +39,6 @@ fun HomeTab.iconResource(): Int = when (this) {
 }
 
 @StringRes
-fun ToolMode.labelResource(): Int = when (this) {
-    ToolMode.LOCAL -> R.string.tool_mode_local
-    ToolMode.SERVER -> R.string.tool_mode_server
-    ToolMode.HYBRID -> R.string.tool_mode_hybrid
-}
-
-@StringRes
 fun HomeMessage.labelResource(): Int = when (this) {
     HomeMessage.NOT_FOUND -> R.string.tool_not_found
     HomeMessage.DISABLED -> R.string.tool_disabled
@@ -61,6 +53,25 @@ fun HomeMessage.labelResource(): Int = when (this) {
 @DrawableRes
 fun toolIconResource(name: String?): Int = when (name) {
     "calculator" -> R.drawable.ic_calculator
+    "converter" -> R.drawable.ic_converter
+    "timestamp" -> R.drawable.ic_timestamp
+    "uuid" -> R.drawable.ic_uuid
+    "http_status" -> R.drawable.ic_http_status
+    "ping" -> R.drawable.ic_ping
+    "level" -> R.drawable.ic_level
+    "compass" -> R.drawable.ic_compass
+    "sensor_info" -> R.drawable.ic_sensor_info
+    "battery_info" -> R.drawable.ic_battery_info
+    "storage_info" -> R.drawable.ic_storage_info
+    "device_info" -> R.drawable.ic_device_info
+    "base64" -> R.drawable.ic_base64
+    "url_codec" -> R.drawable.ic_url_codec
+    "hash" -> R.drawable.ic_hash
+    "json" -> R.drawable.ic_json
+    "text" -> R.drawable.ic_text
+    "qr" -> R.drawable.ic_qr
+    "image_compress" -> R.drawable.ic_image_compress
+    "image" -> R.drawable.ic_image_compress
     "toolbox" -> R.drawable.ic_toolbox
     "tools" -> R.drawable.ic_tools
     else -> R.drawable.ic_tools

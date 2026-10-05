@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface RecentToolDao {
     @Query("SELECT * FROM recent_tool ORDER BY last_used_at DESC, tool_code ASC")
     fun observeRecent(): Flow<List<RecentToolEntity>>
+    @Query("SELECT * FROM recent_tool ORDER BY last_used_at DESC,tool_code")
+    suspend fun snapshot(): List<RecentToolEntity>
 
     @Query("SELECT * FROM recent_tool WHERE tool_code = :toolCode")
     suspend fun find(toolCode: String): RecentToolEntity?

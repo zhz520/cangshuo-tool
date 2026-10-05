@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.home.ui
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.feature.webtools.domain.CatalogSyncState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +56,7 @@ import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolboxMotion
 import com.cangshuo.toolbox.feature.home.domain.HomeCategory
 import com.cangshuo.toolbox.feature.home.domain.HomeContent
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -78,6 +82,9 @@ fun HomeScreen(
     recentState: RecentUiState,
     onRecentRetry: () -> Unit,
     onClearRecent: () -> Unit,
+    onCatalogRefresh: () -> Unit = {},
+    profileContent: (@Composable (Modifier) -> Unit)? = null,
+    gridColumns: Int = 0,
 ) {
     var confirmClearRecent by remember { mutableStateOf(false) }
     Scaffold(
@@ -94,37 +101,47 @@ fun HomeScreen(
             }
         },
     ) { padding ->
-        when (state.tab) {
-            HomeTab.FAVORITES -> FavoritesScreen(
-                modifier = Modifier.padding(padding),
-                state = favoriteState,
-                onSetFavorite = onSetFavorite,
-                onToolSelected = onToolSelected,
-                onRetry = onFavoritesRetry,
-                onBrowse = { onCategorySelected(null) },
-            )
-            HomeTab.PROFILE -> InformationPage(
-                modifier = Modifier.padding(padding),
-                title = stringResource(R.string.nav_profile),
-                icon = R.drawable.ic_person,
-                heading = stringResource(R.string.profile_guest_title),
-                description = stringResource(R.string.profile_guest_description),
-                onBrowse = { onCategorySelected(null) },
-                showPrivacy = true,
-            )
-            HomeTab.HOME, HomeTab.TOOLS -> CatalogPage(
-                modifier = Modifier.padding(padding),
-                state = state,
-                onCategorySelected = onCategorySelected,
-                onToolSelected = onToolSelected,
-                onRetry = onRetry,
-                onSearch = onSearch,
-                favoriteState = favoriteState,
-                onSetFavorite = onSetFavorite,
-                recentState = recentState,
-                onRecentRetry = onRecentRetry,
-                onClearRecentRequest = { confirmClearRecent = true },
-            )
+        AnimatedContent(
+            targetState = state.tab,
+            transitionSpec = { ToolboxMotion.tab() },
+            modifier = Modifier.fillMaxSize(),
+            label = "home-tab-transition",
+        ) { tab ->
+            val tabState = state.copy(tab = tab)
+            when (tab) {
+                HomeTab.FAVORITES -> FavoritesScreen(
+                    modifier = Modifier.padding(padding),
+                    state = favoriteState,
+                    onSetFavorite = onSetFavorite,
+                    onToolSelected = onToolSelected,
+                    onRetry = onFavoritesRetry,
+                    onBrowse = { onCategorySelected(null) },
+                )
+                HomeTab.PROFILE -> if (profileContent != null) profileContent(Modifier.padding(padding)) else InformationPage(
+                    modifier = Modifier.padding(padding),
+                    title = stringResource(R.string.nav_profile),
+                    icon = R.drawable.ic_person,
+                    heading = stringResource(R.string.profile_guest_title),
+                    description = stringResource(R.string.profile_guest_description),
+                    onBrowse = { onCategorySelected(null) },
+                    showPrivacy = true,
+                )
+                HomeTab.HOME, HomeTab.TOOLS -> CatalogPage(
+                    gridColumns = gridColumns,
+                    modifier = Modifier.padding(padding),
+                    state = tabState,
+                    onCategorySelected = onCategorySelected,
+                    onToolSelected = onToolSelected,
+                    onRetry = onRetry,
+                    onSearch = onSearch,
+                    favoriteState = favoriteState,
+                    onSetFavorite = onSetFavorite,
+                    recentState = recentState,
+                    onRecentRetry = onRecentRetry,
+                    onClearRecentRequest = { confirmClearRecent = true },
+                    onCatalogRefresh = onCatalogRefresh,
+                )
+            }
         }
     }
     if (confirmClearRecent) {
@@ -147,6 +164,28 @@ fun HomeScreen(
 }
 
 @Composable
+private fun CatalogSyncRow(state: CatalogSyncState, onRefresh: () -> Unit) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            stringResource(when (state) {
+                CatalogSyncState.IDLE -> R.string.catalog_sync_idle
+                CatalogSyncState.REFRESHING -> R.string.catalog_sync_loading
+                CatalogSyncState.UPDATED -> R.string.catalog_sync_updated
+                CatalogSyncState.FAILED -> R.string.catalog_sync_failed
+                CatalogSyncState.COOLDOWN -> R.string.catalog_sync_cooldown
+            }),
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodySmall,
+            color = if (state == CatalogSyncState.FAILED) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TextButton(onClick = onRefresh, enabled = state != CatalogSyncState.REFRESHING) {
+            if (state == CatalogSyncState.REFRESHING) ToolboxLoadingIndicator(compact = true)
+            Text(stringResource(R.string.catalog_sync_refresh))
+        }
+    }
+}
+
+@Composable
 private fun CatalogPage(
     modifier: Modifier,
     state: HomeUiState,
@@ -159,6 +198,8 @@ private fun CatalogPage(
     recentState: RecentUiState,
     onRecentRetry: () -> Unit,
     onClearRecentRequest: () -> Unit,
+    onCatalogRefresh: () -> Unit,
+    gridColumns: Int,
 ) {
     val content = when (val catalog = state.catalog) {
         is HomeCatalogState.Content -> catalog.value
@@ -166,7 +207,8 @@ private fun CatalogPage(
         else -> null
     }
     BoxWithConstraints(modifier.fillMaxSize()) {
-        val columns = (maxWidth / 168.dp).toInt().coerceIn(2, 5)
+        val capacity = (maxWidth / 168.dp).toInt().coerceIn(1, 5)
+        val columns = if (gridColumns == 0) capacity.coerceAtLeast(2) else gridColumns.coerceIn(1,capacity)
         LazyVerticalGrid(
             columns = GridCells.Fixed(columns),
             contentPadding = PaddingValues(20.dp),
@@ -175,6 +217,9 @@ private fun CatalogPage(
         ) {
             item(key = "header", span = { GridItemSpan(maxLineSpan) }) {
                 PageHeader(state.tab)
+            }
+            item(key = "catalog-sync", span = { GridItemSpan(maxLineSpan) }) {
+                CatalogSyncRow(state.sync, onCatalogRefresh)
             }
             if (state.tab == HomeTab.HOME) {
                 item(key = "hero", span = { GridItemSpan(maxLineSpan) }) {
@@ -381,11 +426,6 @@ private fun HeroBanner(onBrowse: () -> Unit) {
     Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.primaryContainer) {
         Column(Modifier.fillMaxWidth().padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(
-                stringResource(R.string.home_local_first),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-            Text(
                 stringResource(R.string.home_greeting),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
@@ -455,11 +495,6 @@ internal fun ToolCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                stringResource(tool.mode.labelResource()),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

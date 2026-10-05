@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.viewModelScope
 import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.feature.home.domain.GetHomeUseCase
 import com.cangshuo.toolbox.feature.home.domain.HomeToolResult
 import com.cangshuo.toolbox.feature.home.domain.OpenHomeToolUseCase
+import com.cangshuo.toolbox.feature.webtools.domain.RequestWebToolCatalogSyncUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 private const val TAB_KEY = "home.tab"
 private const val CATEGORY_KEY = "home.category"
@@ -23,6 +26,8 @@ class HomeViewModel(
     private val getHome: GetHomeUseCase,
     private val openTool: OpenHomeToolUseCase,
     private val savedStateHandle: SavedStateHandle,
+    private val catalogSync: RequestWebToolCatalogSyncUseCase? = null,
+    private val settings: kotlinx.coroutines.flow.StateFlow<com.cangshuo.toolbox.feature.sync.domain.AppSettings>? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(
         HomeUiState(
@@ -36,6 +41,15 @@ class HomeViewModel(
 
     init {
         refresh()
+        settings?.let { stream -> viewModelScope.launch { stream.collect { value ->
+            if (value.ready && !savedStateHandle.contains(TAB_KEY)) selectTab(HomeTab.valueOf(value.startupPage))
+        } } }
+        catalogSync?.let { sync ->
+            viewModelScope.launch { sync.state.collect { state -> mutableState.update { it.copy(sync = state) } } }
+        }
+        viewModelScope.launch {
+            getHome.observeCatalogChanges().collect { loadCatalog(showLoading = false) }
+        }
     }
 
     fun selectTab(tab: HomeTab) {
@@ -55,7 +69,15 @@ class HomeViewModel(
     }
 
     fun refresh() {
-        mutableState.update { it.copy(catalog = HomeCatalogState.Loading) }
+        loadCatalog(showLoading = true)
+    }
+
+    fun refreshRemoteCatalog(manual: Boolean = true) {
+        catalogSync?.let { sync -> viewModelScope.launch { sync(manual) } }
+    }
+
+    private fun loadCatalog(showLoading: Boolean) {
+        if (showLoading) mutableState.update { it.copy(catalog = HomeCatalogState.Loading) }
         try {
             val content = getHome(mutableState.value.category)
             val catalog = if (content.tools.isEmpty()) {
@@ -111,9 +133,10 @@ class HomeViewModel(
     }
 
     companion object {
-        fun factory(getHome: GetHomeUseCase, openTool: OpenHomeToolUseCase): ViewModelProvider.Factory =
+        fun factory(getHome: GetHomeUseCase, openTool: OpenHomeToolUseCase, catalogSync: RequestWebToolCatalogSyncUseCase? = null,
+            settings: kotlinx.coroutines.flow.StateFlow<com.cangshuo.toolbox.feature.sync.domain.AppSettings>? = null): ViewModelProvider.Factory =
             viewModelFactory {
-                initializer { HomeViewModel(getHome, openTool, createSavedStateHandle()) }
+                initializer { HomeViewModel(getHome, openTool, createSavedStateHandle(), catalogSync, settings) }
             }
     }
 }

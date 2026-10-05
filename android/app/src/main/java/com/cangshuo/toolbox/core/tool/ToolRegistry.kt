@@ -32,6 +32,19 @@ class ToolRegistry(definitions: Collection<ToolDefinition>) {
     /** Exact code lookup; callers must still check status and device support before opening. */
     fun find(code: String): ToolDefinition? = toolsByCode[code]
 
+    /**
+     * Returns a registry that also holds [extra] definitions, for catalogue entries that resolve to
+     * no local implementation (currently WEB tools). Bundled definitions win on a duplicate code, so
+     * a remote entry can never replace a trusted local one.
+     */
+    fun withExtra(extra: Collection<ToolDefinition>): ToolRegistry {
+        if (extra.isEmpty()) return this
+        val merged = LinkedHashMap<String, ToolDefinition>()
+        tools.forEach { definition -> merged[definition.code] = definition }
+        extra.forEach { definition -> merged.putIfAbsent(definition.metadata.code, definition) }
+        return ToolRegistry(merged.values)
+    }
+
     /** Lists enabled tools, retaining unsupported devices' entries for explicit UI feedback. */
     fun enabledTools(category: ToolCategory? = null): List<ToolDefinition> =
         Collections.unmodifiableList(

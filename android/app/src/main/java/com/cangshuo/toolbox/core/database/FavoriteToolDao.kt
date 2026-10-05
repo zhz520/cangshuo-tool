@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteToolDao {
     @Query("SELECT * FROM favorite_tool ORDER BY added_at DESC, tool_code ASC")
     fun observeFavorites(): Flow<List<FavoriteToolEntity>>
+    @Query("SELECT * FROM favorite_tool ORDER BY added_at DESC,tool_code")
+    suspend fun snapshot(): List<FavoriteToolEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun add(favorite: FavoriteToolEntity)

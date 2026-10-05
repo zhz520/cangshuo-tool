@@ -1,8 +1,11 @@
 package com.cangshuo.toolbox.feature.home.domain
 
 import com.cangshuo.toolbox.core.model.ToolCategory
+import kotlinx.coroutines.flow.Flow
 
 class GetHomeUseCase(private val repository: HomeRepository) {
+    fun observeCatalogChanges(): Flow<Unit> = repository.observeCatalogChanges()
+
     operator fun invoke(category: ToolCategory? = null): HomeContent {
         val allTools = repository.getTools()
         val counts = allTools.groupingBy { it.category }.eachCount()

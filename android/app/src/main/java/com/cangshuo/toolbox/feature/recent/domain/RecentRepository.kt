@@ -8,6 +8,6 @@ interface RecentRepository {
     suspend fun recordUsage(code: String, at: Long)
     suspend fun remove(code: String)
     suspend fun clear()
-    /** Bundled metadata lookup only; does not perform I/O. */
+    /** Current in-memory metadata lookup only; does not perform I/O. */
     fun getTool(code: String): ToolMetadata?
 }

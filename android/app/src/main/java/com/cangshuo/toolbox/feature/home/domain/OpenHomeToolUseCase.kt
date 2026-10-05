@@ -15,12 +15,12 @@ sealed interface HomeToolResult {
     data object PermissionRequired : HomeToolResult
 }
 
-/** Current visitor flow: permission requests and authentication belong to their feature tasks. */
-class OpenHomeToolUseCase(private val repository: HomeRepository) {
+/** Reads the current account on each open; anonymous tools keep working without a session. */
+class OpenHomeToolUseCase(private val repository: HomeRepository, private val isSignedIn: () -> Boolean = { false }) {
     operator fun invoke(code: String, context: Context): HomeToolResult =
         when (val result = repository.resolveTool(code, context)) {
             is ToolLookupResult.Available -> when {
-                result.tool.metadata.requiresLogin -> HomeToolResult.LoginRequired
+                result.tool.metadata.requiresLogin && !isSignedIn() -> HomeToolResult.LoginRequired
                 result.tool.requiredPermissions.any {
                     context.checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED
                 } -> HomeToolResult.PermissionRequired

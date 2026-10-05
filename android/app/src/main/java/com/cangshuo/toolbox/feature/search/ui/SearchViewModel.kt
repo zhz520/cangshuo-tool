@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.viewModelScope
 import com.cangshuo.toolbox.core.model.ToolCategory
 import com.cangshuo.toolbox.feature.search.domain.MAX_SEARCH_QUERY_LENGTH
 import com.cangshuo.toolbox.feature.search.domain.SearchToolsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 private const val QUERY_KEY = "search.query"
 private const val CATEGORY_KEY = "search.category"
@@ -30,7 +32,12 @@ class SearchViewModel(
     private var favoriteCodes: Set<String> = emptySet()
     private var recentCodes: Set<String> = emptySet()
 
-    init { refresh() }
+    init {
+        refresh()
+        viewModelScope.launch {
+            searchTools.observeCatalogChanges().collect { loadResults(showLoading = false) }
+        }
+    }
 
     fun updateQuery(query: String) {
         if (query.length > MAX_SEARCH_QUERY_LENGTH) {
@@ -68,7 +75,11 @@ class SearchViewModel(
     }
 
     fun refresh() {
-        mutableState.update { it.copy(results = SearchResultsState.Loading) }
+        loadResults(showLoading = true)
+    }
+
+    private fun loadResults(showLoading: Boolean) {
+        if (showLoading) mutableState.update { it.copy(results = SearchResultsState.Loading) }
         val state = mutableState.value
         val results = try {
             val tools = searchTools(state.query, state.category, favoriteCodes, recentCodes)

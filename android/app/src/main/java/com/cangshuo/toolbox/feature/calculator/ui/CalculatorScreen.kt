@@ -54,13 +54,6 @@ fun CalculatorScreen(
             contentPadding = PaddingValues(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            item(key = "intro") {
-                Text(
-                    stringResource(R.string.calculator_offline),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
             item(key = "input") {
                 OutlinedTextField(
                     value = TextFieldValue(state.expression, TextRange(state.selectionStart, state.selectionEnd)),

@@ -5,7 +5,7 @@ import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.model.ToolMode
 import com.cangshuo.toolbox.core.model.ToolStatus
 
-/** Wire field names match GET /api/v1/tools. JSON transport is integrated in a later task. */
+/** Wire field names match GET /api/v1/tools; transport validates types before constructing this DTO. */
 data class ToolCatalogDto(
     val code: String,
     val name: String,
