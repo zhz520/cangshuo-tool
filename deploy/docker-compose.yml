@@ -52,7 +52,7 @@ services:
     logging: *container-logging
 
   server:
-    image: ${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}-api:0.1.0
+    image: ${SERVER_IMAGE:-${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}-api:${RELEASE_TAG:-0.1.0}}
     build:
       context: ..
       dockerfile: server/Dockerfile
@@ -120,7 +120,7 @@ services:
     logging: *container-logging
 
   admin:
-    image: ${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}-web:0.1.0
+    image: ${WEB_IMAGE:-${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}-web:${RELEASE_TAG:-0.1.0}}
     build:
       context: ..
       dockerfile: admin/Dockerfile
