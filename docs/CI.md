@@ -8,14 +8,14 @@
 
 | 任务 | 执行内容 | 产物 |
 | --- | --- | --- |
-| Android build and lint | `:app:assembleDebug :app:lintDebug` | Debug APK、Lint HTML/XML 报告 |
-| Server package | Maven Wrapper `package -Dmaven.test.skip=true` | 可运行 API JAR |
-| Admin typecheck and build | `npm ci`、`npm run build`，含 TypeScript 检查 | `dist/`，使用正式 API 地址与 `/admin/` 路径 |
+| Android tests, build and lint | `:app:testDebugUnitTest :app:assembleDebug :app:lintDebug` + 主机 SQLite 缓存迁移与扫码历史检查 | 单元测试 HTML/XML、Debug APK、Lint HTML/XML 报告 |
+| Server tests and package | Maven Wrapper `package`（包含 25 项认证/JWT/HTTP 测试） | 可运行 API JAR、Surefire 测试报告 |
+| Admin typecheck and build | `npm ci`、`npm run build`，含 TypeScript 检查；网页二维码业务回归 | `dist/`，使用正式 API 地址与 `/admin/` 路径 |
 | Workflow and deployment configuration | actionlint、Shell 语法、本地/正式 Compose 配置校验 | 无 |
 
 产物在对应运行的 Artifacts 中保留 7 天。Debug APK 用于开发安装，发布签名、AAB、部署及镜像发布按 Phase 7 完成。
 
-当前门禁覆盖构建、静态检查与配置。服务端显式跳过测试；没有新增或运行自动化测试。单元测试、设备运行、业务集成、数据库迁移演练与公网部署不属于此次验证结果。
+当前 Android 门禁运行 150 个单元测试（新增认证输入/UseCase/真实 HTTP 9 项）：目录观察/网络/发布 51 个、缓存 23 个、刷新与首页 11 个、WebView 来源/导出/保存状态 11 个、二维码扫码历史/事件/裁剪/线性条码/导出/结构化验 45 个。Android 构建后运行 `scripts/check_android_catalog_cache.py` 的 24 项主机 SQLite 检查；Admin 任务运行 `node ../scripts/check_web_qr.cjs` 的 22 项网页回归。2026-10-05 本机全部通过，最终增量 Android 门禁 47 秒（全量约 2 分 40 秒）、Lint 0 错误/22 条既有警告，actionlint 通过。替身及主机 SQLite 不等于完整设备验收，范围见 [本轮记录](WEB_TOOL_ACCEPTANCE_2026-10-05.md)。Server 已改为运行测试，2026-10-05 本机 25/25 通过；下方首次托管记录不代表新增门禁已在 GitHub 执行。
 
 ## 工具链
 
@@ -42,9 +42,9 @@
 
 工作流只申请 `contents: read`，checkout 不保留 Git 凭据。使用普通 `pull_request` 事件。当前构建不需要仓库 Secret，不读取实际部署 `.env`、证书或签名密钥。
 
-Gradle 使用 GitHub 缓存的 `basic` 模式，PR 只读缓存；Maven 缓存按 `server/pom.xml` 更新；npm 缓存按 `admin/package-lock.json` 更新，并通过 `NPM_CONFIG_CACHE` 对齐项目 `.npm-cache`。缓存只保存构建依赖，产物上传限定 APK、Lint 报告、JAR 与 `dist/`。
+Gradle 使用 GitHub 缓存的 `basic` 模式，PR 只读缓存；Maven 缓存按 `server/pom.xml` 更新；npm 缓存按 `admin/package-lock.json` 更新，并通过 `NPM_CONFIG_CACHE` 对齐项目 `.npm-cache`。缓存只保存构建依赖，产物上传限定测试报告、APK、Lint 报告、JAR 与 `dist/`。
 
-部署配置任务显式读取公开 `.env.example`，为四个必需密码变量提供仅供配置解析的占位值。它只执行 `config --quiet`，不启动容器、不打印解析后的环境配置，也不使用这些值部署服务。本地配置同时覆盖可选 storage profile，正式配置不要求真实证书存在即可进行语法解析。
+部署配置任务显式读取公开 `.env.example`，为四个必需密码变量及 JWT_SECRET 提供仅供配置解析的占位值。它只执行 `config --quiet`，不启动容器、不打印解析后的环境配置，也不使用这些值部署服务。本地配置同时覆盖可选 storage profile，正式配置不要求真实证书存在即可进行语法解析。
 
 ## 本地复现
 
@@ -53,7 +53,7 @@ Gradle 使用 GitHub 缓存的 `basic` 模式，PR 只读缓存；Maven 缓存�
 Android：
 
 ```powershell
-.\gradlew.bat --no-daemon --console=plain :app:assembleDebug :app:lintDebug
+.\gradlew.bat --no-daemon --console=plain :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
 ```
 
 Server：
@@ -107,3 +107,5 @@ Phase 0 的 CI 绿色退出条件已满足。该次运行没有执行自动化�
 - [Gradle Actions 参数](https://github.com/gradle/actions/blob/3f5f9adaf7d9fecd50b5935e54106014257a94e6/setup-gradle/action.yml)
 - [Gradle 9.3.1 分发包校验值](https://services.gradle.org/distributions/gradle-9.3.1-bin.zip.sha256)
 - [actionlint 1.7.12 Release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12)
+
+Phase 3：新增 scripts/check_sync_sqlite.py 到 Android CI，校验 Room 4→5→6→7 与版本条件确认；本地真实接口脚本 check_auth_api.py/check_sync_api.py 使用随机账号并自动清理，不作为纯单元测试宣称。托管 CI 本轮未运行。

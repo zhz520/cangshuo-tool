@@ -14,7 +14,7 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 | `category` / `categoryCode` | `categoryCode` | 类型为 `ToolCategory`，编码通过 `category.code` 获取 |
 | `icon` | `icon` | 可空的内置图标名称，最多 128 个字符，小写字母开头，后续为小写字母、数字或下划线 |
 | `keywords` | `keywords` | 可为空列表，每项不能是空白文本 |
-| `mode` | `mode` | `LOCAL`、`SERVER`、`HYBRID` |
+| `mode` | `mode` | `LOCAL`、`SERVER`、`HYBRID`、`WEB`；`WEB` 表示官网 `/tools/<code>/` 承载、App 内置 WebView 打开，需联网；枚举、DTO、接口 Schema 与数据库 CHECK（V15）已同步，WebView 容器与首个网页版工具仍待实现 |
 | `requiresLogin` | `requiresLogin` | 默认 `false` |
 | `status` | `status` | `ENABLED`、`DISABLED`、`MAINTENANCE`，默认 `ENABLED` |
 | `version` | `version` | 正整数，默认 `1` |
@@ -23,7 +23,7 @@ Phase 1 已建立 `ToolDefinition` 和 `ToolRegistry` 基础实现。Android 使
 
 模型在构造及 `copy` 时校验编码、文本、图标名、关键词和版本。校验异常使用固定提示，不包含传入内容。图标名称需要在 UI 中映射为已打包资源；名称格式合法也不意味着设备上存在该图标。
 
-简短说明统一使用现有 API 契约的 `description` 字段，规格中的 `shortDescription` 统一为该命名。此模型是客户端领域数据；`core/network/model` 已增加 `ToolCatalogDto` 和 `ToolCatalogPageDto` 传输结构，保持接口字段名，未知分类、模式、状态或无效字段映射为 null。JSON 解析器、网络调用及缓存仍待接入；远程数据在 Repository 边界校验和映射后交给领域模型，详见 [目录接口说明](TOOL_CATALOG.md)。
+简短说明统一使用现有 API 契约的 `description` 字段，规格中的 `shortDescription` 统一为该命名。此模型是客户端领域数据；`core/network/model` 已增加 `ToolCatalogDto` 和 `ToolCatalogPageDto` 传输结构，保持接口字段名，未知分类、模式、状态或无效字段映射为 null。客户端已接入启动请求与 WEB 条目合并；`ToolRegistryStore` 向各 Repository 发布共享快照，内置定义优先，持久缓存仍待实现，详见 [目录更新说明](TOOL_CATALOG_SYNC.md)。
 
 ## 分类
 

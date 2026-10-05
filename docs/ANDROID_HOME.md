@@ -2,6 +2,8 @@
 
 本次实现 Phase 1 的首页基础任务，替换旧 Compose 启动壳，并将 `ToolRegistry` 接入应用。首页、工具、收藏、我的四个底部入口可以切换；后续已接入本地计算器、[本地搜索](LOCAL_SEARCH.md)、[本地收藏](LOCAL_FAVORITES.md)和 [本地最近使用](LOCAL_RECENT.md)，更多工具、账号及远程目录按各自路线图任务继续开发。
 
+2026-10-05「我的」页已接入邮箱注册、登录、账号展示与退出；使用同一 application-scoped AuthRepository，OpenHomeToolUseCase 在每次打开时读取登录状态。`requiresLogin` 在已登录时通过，退出/过期后恢复门槛；本机收藏/最近使用保持现有数据。当前会话驻留内存，持久登录/刷新会话为下一项；见 [认证说明](AUTH.md)。
+
 ## 数据与状态
 
 ```text
@@ -15,23 +17,25 @@ ToolboxApplication / ToolboxAppContainer / MainActivity
 
 `ToolboxApplication` 持有当前手动依赖注入入口 `ToolboxAppContainer`，创建固定定义集合、应用级 Room 实例、Repository、UseCase 与 ViewModel factory。完成具体工具后，将其定义加入这里的集合；当前已注册首个 [本地计算器](CALCULATOR.md)，没有注册占位工具。
 
-Repository 同步读取内置启用目录并复制关键词列表；此接口只用于本地、无阻塞 I/O 的读取。首页首屏不请求 API、不等待网络。后续远程刷新需通过独立异步链路合并目录，不能在当前同步接口中加入阻塞网络或数据库调用。
+Repository 同步读取共享 `ToolRegistryStore` 的当前启用目录并复制关键词列表；此接口只访问内存，不执行阻塞 I/O。首页首屏直接使用内置目录，不等待网络；应用启动时独立异步请求 WEB 目录，成功后发布快照。首页、搜索、收藏及最近使用自动观察变化，具体行为和测试范围见 [目录更新说明](TOOL_CATALOG_SYNC.md)。
 
 ViewModel 公开 `StateFlow<HomeUiState>`，UI 使用 `collectAsStateWithLifecycle` 按生命周期收集。目录有 Loading、Content、Empty、Error 状态，错误页面支持重试。错误消息来自资源，不显示原始异常，也不记录工具输入或异常原文。
 
 `SavedStateHandle` 保存当前底部入口、分类编码和搜索页是否打开；搜索 ViewModel 独立保存查询与分类。配置变化由 ViewModel 保留状态；进程重建时恢复系统保存的页面条件。当前打开的工具实例不写入 SavedStateHandle，进程重建后回到搜索页或所在目录。上述恢复行为尚未通过设备运行验证。
 
+首页、搜索与工具详情之间，以及底部四个入口之间的切换动画统一由 `core/ui/ToolboxMotion.kt` 提供；规则与验收要求见 [Android UI 规范](ANDROID_UI_SPEC.md#页面切换动画统一规范)。动画不改变上述 SavedState 恢复行为。
+
 ## 页面行为
 
 | 区域 | 当前行为 |
 | --- | --- |
-| 首页 | 本地优先介绍、搜索入口、分类、常用工具、推荐和最近使用列表 |
+| 首页 | 搜索入口、分类、常用工具、推荐和最近使用列表 |
 | 工具 | 显示注册中心的启用工具，支持全部/13 个分类筛选与清除筛选，并提供搜索入口 |
 | 常用工具 | 取目录排序后的前 6 个，当前不依据用户历史排序 |
 | 推荐工具 | 仅显示目录中 `isFeatured=true` 的启用条目；没有推荐时隐藏此区 |
 | 分类 | 显示真实启用工具数量，点击进入对应的工具列表 |
 | 收藏 | 显示本机 Room 书签、数量、加载/空/错误状态，支持取消、重试与打开工具 |
-| 我的 | 展示当前访客模式、本地处理说明及账号/云同步开放状态 |
+| 我的 | 展示访客模式与账号/云同步开放状态 |
 | 搜索 | 进入本地搜索页，支持查询、分类、相关度排序与打开已注册工具，见搜索说明 |
 | 最近使用 | 成功打开工具后自动记录；按最近时间展示、可重新打开，并支持确认后清除 |
 

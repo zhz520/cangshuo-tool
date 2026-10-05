@@ -208,7 +208,7 @@ description       简短说明
 categoryCode      分类
 icon              图标资源名
 keywords          搜索关键词
-mode              LOCAL / SERVER / HYBRID
+mode              LOCAL / SERVER / HYBRID / WEB
 requiresLogin     是否登录后才能使用
 requiredPermissions 所需 Android 权限（客户端声明，不由目录 API 下发）
 status            ENABLED / DISABLED / MAINTENANCE
@@ -256,6 +256,8 @@ val calculator = registry.find("calculator")
 服务端保存工具目录及配置；客户端保存具体执行实现。
 
 服务端不能下发可执行代码，只下发数据和配置，例如：名称、描述、分类、开关、排序、推荐状态、关键词、版本、云端 API 能力等。
+
+目录描述与页面文案统一只说明功能，不加入“本地处理/无需登录/无需联网/保护隐私”等宣传语；执行模式与登录要求保存在独立字段。V14 已将 11 个工具的默认种子描述对齐 Android 中文资源，使用原始描述精确匹配保留人工编辑内容，见 [目录说明](../docs/TOOL_CATALOG.md#目录描述规范)。
 
 ---
 
@@ -634,6 +636,8 @@ MVP 不引入远程向量搜索；基础工具数量低于 500 时，本地字�
 
 相机权限采用按需申请：只有打开扫描工具时请求 CAMERA。
 
+当前生成侧支持 QR Code 与 CODE 128/39/93、EAN-13/8、UPC-A、ITF、Codabar 八种线性符号；二维码生成共 7 类内容：文本/网址、Wi-Fi、电话（`tel:`）、邮箱（`mailto:`）、短信（`SMSTO:`）、联系人（MECARD）和日历事件（iCalendar VEVENT，本地浮动时间，日期时间按 STRICT 解析，结束可留空）。识别侧支持相册图片和 CameraX 相机实时扫描，相机与相册共用 13 种二维码/条码格式（QR、Data Matrix、Aztec、PDF417、CODE 128/93/39、Codabar、ITF、EAN-13/8、UPC-A/E）；相册解析另有“识别多个二维码”开关，用 ZXing `QRCodeMultiReader` 列出同图全部二维码（去重、按检测顺序），未命中时回退单码路径，多个条码或混合多码仍不在范围内；同一开关也让相机进入收集模式，持续累积去重后的新载荷（单次上限 50），预览显示已收集数量，停止时按 1 个/多个分别进入原结果卡或结果列表。识别结果同时标注符号名称：`QrDecodeEntry` 把载荷与 `QrSymbology` 一起传递，单码结果卡与多码列表都显示 QR Code、Data Matrix、Aztec、PDF417、Code 128/93/39、Codabar、ITF、EAN-13/8、UPC-A/E 或“未知格式”兜底；协议名称保留标准原文，中英同值。邮箱支持可选的 `mailto:` `subject`/`body` 头部字段（RFC 6068 百分号编码，正文可多行），日历事件支持可选的 `DESCRIPTION` 纪要（多行转义为 iCalendar 文本）、本地浮动或按设备时区转 UTC 的时间基准，以及可选显示提醒（准时/5/15/30 分钟、1 小时、1 天）；两者与其余结构化字段一样受长度与 UTF-8 校验并随 SavedState 恢复。2026-10-04 补齐生成结果 PNG（512/1024/2048 像素）保存/分享、识别原文分享与重新生成；2026-10-05 补齐默认关闭的扫码历史（Room v4、最新 100 条、Wi-Fi/OTP 排除）、手动框选识别（点按移动选区、滑块缩放，预览与解码共用同一几何策略）、PNG/JPEG/SVG 导出、邮件抄送/密送、WPA3 与企业 Wi-Fi（EAP）和 MECARD/vCard 3.0 多值联系人，并由 V17 修正 `qr_studio` 描述中的裁剪措辞；原生功能清单至此完成，仅剩设备与第三方应用验收。相机权限只在打开扫描时按需申请，工具其他部分无需相机权限；CameraX 依赖使 APK 增加约 4.6 MB。API 29+ 保存至相册，API 26–28 通过系统文件选择位置；分享由用户在系统选择页操作。构建/Lint 和桌面帧几何/PNG/结构化载荷样例已通过，Android 保存/分享、真机识别率、第三方扫码器导入、线性符号复用同一预览与 PNG 导出，混合多码在 2 个及以上 QR 时补一次线性全帧扫描；多码耗时与导出/导入等真机验收仍待对应任务执行，见 [二维码说明](../docs/QR_TOOL.md)。
+
 ---
 
 # 15. 网络工具规范
@@ -697,6 +701,8 @@ MVP：
 推荐第一版实现邮箱 + 密码，后续增加手机验证码；原因是开发和测试成本更低。
 
 ## 17.2 匿名模式
+
+2026-10-05 已完成首项邮箱注册登录：V18 `sys_user`、BCrypt、15 分钟 JWT 与 Android「我的」页，接口为 `POST /auth/register`、`POST /auth/login`、`GET /auth/me`。V19 Refresh Session 与 Android Keystore/DataStore 加密持久登录已接入，轮换和退出撤销即时生效；资料昵称编辑与收藏/最近/设置同步已完成，详见 [云同步](../docs/CLOUD_SYNC.md)。按用户要求暂停追加设备验收，发布验证单独记录。实现与实测见 [认证说明](../docs/AUTH.md)。
 
 用户不登录仍可：
 
@@ -1327,6 +1333,8 @@ ViewModel
 
 # 31. 缓存策略
 
+2026-10-05 已实现远程 WEB 目录的 Room v3 单行快照缓存。首屏立即用内置目录，后台恢复有效缓存后再请求网络，完整网络结果覆盖缓存；缓存版本、API 来源、checksum、严格元数据与读取/编码预算校验失败时忽略整份快照，成功空目录同样持久化。缓存为最多 300 条/1,000,000 UTF-8 字节，不缓存网页或用户输入，不设固定 TTL 删除最近成功目录；读写失败不破坏收藏/最近使用，也不删除用户数据库。源码参考、74 个单元测试及 24 项主机 SQLite 检查见 [缓存说明](../docs/TOOL_CATALOG_CACHE.md)。去重刷新已完成，真机缓存/网络/搜索与浏览器基础交互已验证；完整保存/TLS 补验推迟，见 [刷新策略](../docs/TOOL_CATALOG_REFRESH.md)和[本轮范围](../docs/WEB_TOOL_ACCEPTANCE_2026-10-05.md)。
+
 工具目录：
 
 ```text
@@ -1341,6 +1349,13 @@ Network First
 - LOCAL：不走 API
 - SERVER：必须联网
 - HYBRID：优先本地，失败后可选服务器
+- WEB：官网网页承载，必须联网；App 用内置 WebView（Chrome 内核）打开，不把网页资源打进 APK
+
+### 网页版工具承载（WEB 模式）
+
+2026-10-05 客户端目录获取已补齐读取与分页预算：最多 3 页/300 条、每页 1,000,000 字节、合计 3,000,000 字节，跨页获取和解析共用 20 秒期限；严格校验 UTF-8/JSON、业务响应、traceId、所有字段及分页，整次成功后才发布 WEB 条目，失败或取消保留当前快照。API 没有跨页版本 token，同总数且满足现有校验的跨页内容变化仍无法完全识别。Room v3 的完整快照缓存和应用级去重刷新已完成，启动先还原缓存，前台自动请求间隔 5 分钟，手动请求 2 秒防连点；原收藏/最近使用保留升级。源码、边界及验证见 [请求校验](../docs/TOOL_CATALOG_SYNC.md)、[持久缓存](../docs/TOOL_CATALOG_CACHE.md)和[刷新策略](../docs/TOOL_CATALOG_REFRESH.md)。
+
+复杂工具或依赖/资源会显著增加 APK 体积时，允许把工具实现为官网网页版，由 Android 端内置 WebView（系统 Chrome 内核）打开。正式路径为 `https://tool.zhzgo.cn/tools/<tool_code>/`，本地开发为 `http://localhost:8088/tools/<tool_code>/`；`<tool_code>` 与 ToolRegistry 稳定编码一致。网页版工具仍需唯一 code、完整元数据和 ToolRegistry 注册，使用 `WEB` 模式并处理联网、加载、离线、错误和重试状态。域名白名单、HTTPS、WebView 安全配置、隐私提示、模式枚举、数据库 CHECK 迁移、目录 `config_json` 网页路径及文档同步要求见 Decision 019。当前已实现 WEB 契约、V15/V16、qr_studio 页面与客户端容器；启动后台合并 WEB 目录后，共享 `ToolRegistryStore` 自动更新首页、搜索、收藏及最近使用。持久缓存和刷新策略已完成，本地浏览器表单/复制/错误恢复及 Android 16 目录/搜索/网页打开已验证；原生保存、完整历史/错误/TLS、网页路径配置下发和发布验收仍待对应任务，本轮范围见 [验收记录](../docs/WEB_TOOL_ACCEPTANCE_2026-10-05.md)，见 [目录更新说明](../docs/TOOL_CATALOG_SYNC.md)和 [网页版承载说明](../docs/WEB_TOOL_HOSTING.md)。
 
 ---
 
@@ -1371,7 +1386,7 @@ status
 
 同步必须幂等。
 
-当前 Room 数据库为应用私有 `toolbox.db`、版本 2：favorite_tool（稳定工具编码主键、added_at UTC 毫秒）与 recent_tool（稳定工具编码主键、last_used_at UTC 毫秒、use_count），版本 1 → 2 提供保留收藏数据的 Migration。应用级容器提供单进程共享实例，Flow/suspend DAO 经过 Repository 和 UseCase 使用，schema 导出并纳入 Git。后续结构变更新增版本与保留数据的 Migration。历史、缓存及同步队列随对应任务接入；字段、依赖版本及验证范围见 [本地收藏](../docs/LOCAL_FAVORITES.md)和 [本地最近使用](../docs/LOCAL_RECENT.md)。
+当前 Room 数据库为应用私有 `toolbox.db`、版本 4：favorite_tool（稳定工具编码主键、added_at UTC 毫秒）、recent_tool（稳定工具编码主键、last_used_at UTC 毫秒、use_count）、cached_tool_catalog（单行 WEB 元数据快照）及 qr_scan_history/qr_history_preference（默认关闭的扫码历史与开关）。版本 1 → 2 提供保留收藏数据的 Migration，2 → 3 只新增缓存表，3 → 4 只新增扫码历史表与开关。应用级容器提供单进程共享实例，Flow/suspend DAO 经过 Repository 和 UseCase 使用，schema 1/2/3/4 导出并纳入 Git。后续结构变更新增版本与保留数据的 Migration。历史及同步队列随对应任务接入；字段、依赖版本及验证范围见 [本地收藏](../docs/LOCAL_FAVORITES.md)、[本地最近使用](../docs/LOCAL_RECENT.md)和 [目录缓存](../docs/TOOL_CATALOG_CACHE.md)。
 
 ---
 
@@ -2293,6 +2308,24 @@ Docker 与 Windows 构建、启动、认证应用连接及健康接口已核对�
 **Android 后续 UI 以用户提供的 Stitch 页面和统一 UI 规范为基准，加载状态使用共享原生组件。**
 
 浅色主题采用目录、计算器、收藏和设置稿共用的 `#FAF8FF` 画布及 `#003FB1` 主色，补充跟随系统的深色主题。页面加载用统一圆角卡片与 40dp 原生进度环，局部操作用 20dp 进度环；文案保留中文/英语资源，状态仍由 ViewModel 管理，不人为延迟离线结果。参考稿与实际落地范围见 [Android UI 规范](../docs/ANDROID_UI_SPEC.md)，完整页面迁移和设备验收按对应任务进行。
+
+### Decision 019
+**复杂或体积大的工具允许采用官网网页版承载，Android 用内置 WebView（Chrome 内核）打开；原生 Compose 仍是默认选择。**
+
+用户于 2026-10-04 确定该承载方式。规则如下：
+
+- 适用场景：工具算法、依赖或资源会显著增加 APK 体积，或使用成熟 Web 生态能明显降低复杂度、加快迭代（如文档、OCR、PDF、AI、媒体处理类）。简单、离线优先、涉及敏感本机数据且适合本机完成的功能继续使用原生实现；网页版是复杂工具的例外方案，不替代已有本地工具。
+- 域名与路径：正式环境统一为 `https://tool.zhzgo.cn/tools/<tool_code>/`，本地开发经 Nginx 为 `http://localhost:8088/tools/<tool_code>/`；一个工具一个目录，静态资源使用相对路径，`<tool_code>` 与 ToolRegistry 编码一致。
+- App 打开方式：点击工具进入应用内 WebView 容器，使用系统 WebView（Chrome 内核，随系统/Play 更新），不默认跳外部浏览器；页面需要完整浏览器能力时可在具体任务评估 Chrome Custom Tabs。WebView 不可用、无网络、证书或加载失败时显示本地化错误、重试和返回，不显示空白页。
+- 交互与加载：WebView 首次加载复用共享加载组件；系统返回键优先回退网页历史，再退出工具；页面内部的加载、错误和表单状态由网页负责，但必须有可见反馈并适配移动端宽度、键盘和安全区。
+- 目录与模式：网页版工具仍使用唯一 code、名称、说明、分类、图标、关键词、排序和推荐位并注册到 ToolRegistry，使搜索、收藏和最近使用行为一致。`mode` 规划新增 `WEB`（需联网、官网承载）；实现首个网页版工具时必须同步 Android `ToolMode`、DTO、界面标签、Server 枚举/校验、`tool_definition.mode` CHECK 的 Flyway 迁移、`config_json` 网页路径、API 与数据库文档。`WEB` 的契约层已落地：Android `ToolMode`/DTO 与 Server Schema 枚举加入 `WEB`，`V15__allow_web_tool_mode.sql` 放宽 `tool_definition.mode` 的 CHECK；WebView 容器与域名白名单已实现（core/ui/ToolboxWebView.kt、WEB_TOOL_BASE_URL 构建配置、debug 变体明文白名单），客户端 WEB 打开路径与 qr_studio 网页已实现，启动合并的 WEB 目录通过共享快照自动更新各入口；实际范围见 docs/TOOL_CATALOG_SYNC.md。
+- 安全与隐私：正式环境仅允许 HTTPS；WebView 只加载白名单域名（官网及必要时的 API），页面内容不能任意导航到未知站点，重定向同样受白名单约束；关闭文件/内容访问与 `addJavascriptInterface`，按需开启 JavaScript 和 DOM Storage，禁止混合内容；不使用 URL 参数传递 Token、密码或用户敏感原文；打开前在入口或容器上说明“网页版 · 数据将在 tool.zhzgo.cn 处理”，网页端不得记录敏感原文；摄像头、麦克风、定位和文件选择按需申请权限并通过 WebView 客户端处理。
+- 发布与回退：网页版更新不要求发布 APK；客户端基础地址由构建配置提供，具体工具路径由目录 `config_json` 下发，不在客户端写死。网页版故障时其他工具和原生工具保持可用；是否为关键工具提供原生降级由具体任务决定。
+
+### Decision 020
+**Android 页面级切换动画统一由 `core/ui/ToolboxMotion.kt` 提供，页面不自定义过渡。**
+
+工具详情与搜索使用“淡入 + 自末端滑入”的前进动画和反向返回动画：进入 240ms、退出 180ms，分别使用 `LinearOutSlowInEasing` 与 `FastOutLinearInEasing`；底部四个标签使用 180ms 交叉淡化，无方向位移。首帧启动、对话框、系统弹层和 WebView 内部动画不在管辖范围；系统关闭动画时沿用 Compose 时长缩放直接完成。规范与验收要求见 [Android UI 规范](../docs/ANDROID_UI_SPEC.md)。
 
 ---
 

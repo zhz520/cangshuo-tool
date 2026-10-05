@@ -14,14 +14,15 @@ For Android UI changes, also read `../docs/ANDROID_UI_SPEC.md`. Use the Stitch r
 
 ## Workflow
 1. Inspect existing code first.
-2. State the smallest implementation plan.
-3. List files to create/modify.
-4. If DB changes, create a Flyway migration.
-5. If API changes, update DTOs, tests, and Android models.
-6. Implement one task only.
-7. Run tests/build/lint.
-8. Report exact verification results.
-9. Update ROADMAP.md.
+2. Read relevant business source and interactions in mature GitHub implementations (e.g. DevToys, CyberChef, IT-Tools, specialist Android libraries) before developing or repairing each tool. Follow `../docs/TOOL_DEVELOPMENT_GUIDE.md`; document source links, review date, adopted ideas, adaptation differences, feature/boundary coverage and actual verification. Naming a repository alone is not evidence of source review.
+3. State the implementation plan and file scope.
+4. Clean up and delete any unused/temporary files created during implementation.
+5. If DB changes, create a Flyway migration.
+6. If API changes, update DTOs, tests, and Android models.
+7. Implement one task only.
+8. Run tests/build/lint.
+9. Report exact verification results.
+10. Update ROADMAP.md.
 
 ## Do not
 - Perform large unrelated refactors.
@@ -40,6 +41,7 @@ For Android UI changes, also read `../docs/ANDROID_UI_SPEC.md`. Use the Stitch r
 - Every tool has a unique code.
 - Register tools in ToolRegistry.
 - Handle Loading/Success/Empty/Error/Unsupported where applicable.
+- Tools may be native or web-hosted under the official site (`/tools/<code>/`). Use web hosting when complexity, dependencies or assets would significantly increase APK size; open it in the app with the system WebView (Chrome kernel). Web tools still register a unique code and ToolRegistry metadata, and need network/loading/offline/error states, HTTPS domain allowlisting and a privacy notice. See PROJECT_SPEC Decision 019 and ../docs/TOOL_DEVELOPMENT_GUIDE.md.
 
 ## Server
 - Controller -> Service -> Mapper/Repository.
