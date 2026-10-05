@@ -32,7 +32,7 @@
 
 ## 未实现
 
-- Android 首页尚未消费 `GET /home/announcements`（接入属于后续 Android 任务，不能声称 App 已展示公告）。
+- Android 已接入 `GET /home/announcements`，展示当前公告标题并可打开完整纯文本，失败重试与中英状态齐全。详见 [客户端接入](ANDROID_HOME_EXTRAS.md)，设备联调延期。
 - 富文本/Markdown、多语言正文、定时草稿自动发布（当前靠时间窗在读取时判定）、已读状态与推送。
 
 ## 验证

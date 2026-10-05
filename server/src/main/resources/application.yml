@@ -88,6 +88,17 @@ logging:
       console: ecs
 
 toolbox:
+  ai:
+    enabled: ${AI_ENABLED:false}
+    endpoint: ${AI_ENDPOINT:}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:}
+    token-parameter: ${AI_TOKEN_PARAMETER:max_completion_tokens}
+    max-output-tokens: ${AI_MAX_OUTPUT_TOKENS:1024}
+    timeout-seconds: ${AI_TIMEOUT_SECONDS:30}
+    daily-attempts: ${AI_DAILY_ATTEMPTS:20}
+    max-concurrent: ${AI_MAX_CONCURRENT:4}
+    provider-name: ${AI_PROVIDER_NAME:AI provider}
   auth:
     jwt-secret: ${JWT_SECRET}
   storage:

@@ -209,6 +209,8 @@ class ToolboxAppContainer(context: Context) {
             QrToolDefinition(resources, qrFactory),
             ImageCompressToolDefinition(resources, imageCompressFactory),
             QrStudioToolDefinition(resources),
+            com.cangshuo.toolbox.feature.webtools.PdfStudioToolDefinition(resources),
+            com.cangshuo.toolbox.feature.aitext.AiTextToolDefinition(resources) { aiTextViewModelFactory },
             com.cangshuo.toolbox.feature.deviceinfo.DeviceInfoToolDefinition(resources,deviceInfoFactory),
             com.cangshuo.toolbox.feature.storage.StorageInfoToolDefinition(resources,storageInfoFactory),
             com.cangshuo.toolbox.feature.battery.BatteryInfoToolDefinition(resources,batteryInfoFactory),
@@ -220,6 +222,9 @@ class ToolboxAppContainer(context: Context) {
         ),
     )
     private val registryStore = ToolRegistryStore(bundledRegistry(resources))
+    val homeExtrasViewModelFactory = com.cangshuo.toolbox.feature.home.ui.HomeExtrasViewModel.factory(
+        com.cangshuo.toolbox.feature.home.domain.HomeExtrasUseCases(
+            com.cangshuo.toolbox.feature.home.data.RemoteHomeExtrasRepository(BuildConfig.API_BASE_URL)), registryStore)
     fun updateLocale(resources: android.content.res.Resources) { registryStore.replaceBundled(bundledRegistry(resources)) }
     private val repository = RegistryHomeRepository(registryStore)
 
@@ -231,6 +236,24 @@ class ToolboxAppContainer(context: Context) {
     private val authRepository = com.cangshuo.toolbox.feature.auth.data.RemoteAuthRepository(BuildConfig.API_BASE_URL, catalogScope, applicationContext)
     private val authUsers = authRepository.account.map { it?.id }.stateIn(catalogScope,
         kotlinx.coroutines.flow.SharingStarted.Eagerly, null)
+    val feedbackViewModelFactory = com.cangshuo.toolbox.feature.feedback.ui.FeedbackViewModel.factory(
+        com.cangshuo.toolbox.feature.feedback.domain.FeedbackUseCases(
+            com.cangshuo.toolbox.feature.feedback.data.RemoteFeedbackRepository(BuildConfig.API_BASE_URL, authUsers) { user, force ->
+                if (force) authRepository.restore()
+                val bearer = authRepository.authorization()
+                check(authRepository.account.value?.id == user)
+                bearer
+            }))
+    val aiTextViewModelFactory by lazy {
+        com.cangshuo.toolbox.feature.aitext.ui.AiTextViewModel.factory(
+            com.cangshuo.toolbox.feature.aitext.domain.AiTextUseCases(
+                com.cangshuo.toolbox.feature.aitext.data.RemoteAiTextRepository(BuildConfig.API_BASE_URL, authUsers) { user, force ->
+                    if (force) authRepository.restore()
+                    val bearer = authRepository.authorization()
+                    check(authRepository.account.value?.id == user)
+                    bearer
+                }))
+    }
     private val cloudSync = com.cangshuo.toolbox.feature.sync.domain.CloudSyncRepository(authUsers,
         com.cangshuo.toolbox.feature.sync.data.RoomSyncStore(database),
         com.cangshuo.toolbox.feature.sync.data.RemoteSyncTransport(BuildConfig.API_BASE_URL) { user,force ->

@@ -268,6 +268,7 @@ Android 的 [本地收藏](LOCAL_FAVORITES.md) 已使用 Room 保存匿名书签
 | `40001` | 文件过大 |
 | `40002` | 文件类型不支持 |
 | `40003` | 文件解析失败 |
+| `40005` | 当日 AI 尝试次数用尽（HTTP 429） |
 | `50001` | 第三方服务错误 |
 
 ## 客户端缓存和离线行为
@@ -285,6 +286,8 @@ Android 的 [本地收藏](LOCAL_FAVORITES.md) 已使用 Room 保存匿名书签
 - 未执行自动化测试、Android JSON/网络/缓存接入、设备或正式域名联调。
 
 ## 参考
+
+AI 文本接口 `GET /tools/ai-text/status`、`POST /tools/ai-text`，用户 Bearer JWT，请求与响应/错误契约见 [AI 文本助手](AI_TEXT.md)。PDF 使用网页版本页处理，未实现云转换 API，见 [PDF 工作台](PDF_STUDIO.md)。
 
 - [项目规格：REST API](../toolbox-vibe-spec/PROJECT_SPEC.md#22-rest-api-规范)
 - [项目规格：统一错误码](../toolbox-vibe-spec/PROJECT_SPEC.md#23-统一错误码)

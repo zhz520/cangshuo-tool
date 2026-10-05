@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>PDF 工作台 · 沧烁工具箱</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="engine.js"></script><script defer src="app.js"></script>
+</head>
+<body><main>
+<header><h1 data-i18n="title">PDF 工作台</h1><select id="language" aria-label="Language"><option value="zh">中文</option><option value="en">English</option></select></header>
+<section class="card">
+<label for="mode" data-i18n="operation">操作</label>
+<select id="mode"><option value="merge" data-i18n="merge">合并 PDF</option><option value="extract" data-i18n="extract">提取 / 拆分页面</option><option value="rotate" data-i18n="rotate">旋转页面</option><option value="images" data-i18n="images">图片转 PDF</option></select>
+<label for="files" data-i18n="choose">选择文件</label><input id="files" type="file" accept="application/pdf,.pdf" multiple>
+<p data-i18n="limit">最多 10 个文件，单个 8 MB，合计 20 MB，PDF 最多 200 页，输出最多 12 MB。JPG/PNG 单图最多 1200 万像素。</p>
+<ol id="fileList"></ol>
+<div id="rangeOptions" hidden><label for="range" data-i18n="range">页码范围（留空为全部）</label><input id="range" maxlength="1000" placeholder="1-3,5,2"><p data-i18n="rangeHelp">提取按填写顺序输出，可重复页码；旋转保留所有页面，仅旋转所选页码。</p></div>
+<div id="rotationOptions" hidden><label for="rotation" data-i18n="angle">顺时针旋转</label><select id="rotation"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div>
+<div id="paperOptions" hidden><label for="paper" data-i18n="paper">页面大小</label><select id="paper"><option value="a4">A4</option><option value="image" data-i18n="imageSize">按图片大小（96 DPI）</option></select></div>
+<div class="actions"><button id="run" data-i18n="run">处理</button><button id="cancel" hidden data-i18n="cancel">取消</button><button id="clear" class="secondary" data-i18n="clear">清空</button></div>
+</section>
+<section class="card" aria-live="polite"><p id="status"></p><button id="save" disabled data-i18n="save">保存 PDF</button></section>
+<details class="card"><summary data-i18n="scope">处理范围</summary><p data-i18n="scopeText">处理发生在当前页面，文件不会上传。加密 PDF、电子签名保留、交互表单、书签、附件及 OCR 不支持；页面注释可能保留。图片保留像素方向，不自动应用 EXIF 旋转。修改后的 PDF 不保留数字签名有效性。拆分通过提取指定页码生成一份 PDF。</p></details>
+</main></body></html>

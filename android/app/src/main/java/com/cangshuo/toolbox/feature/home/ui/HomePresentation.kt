@@ -70,6 +70,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text
     "qr" -> R.drawable.ic_qr
+    "pdf" -> R.drawable.ic_pdf
     "image_compress" -> R.drawable.ic_image_compress
     "image" -> R.drawable.ic_image_compress
     "toolbox" -> R.drawable.ic_toolbox

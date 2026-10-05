@@ -47,12 +47,13 @@ internal data class RefreshRequestDto(val refreshToken: String) {
 
 internal fun createAuthApi(baseUrl: String): AuthApi = createRemoteApi(baseUrl,AuthApi::class.java,16_384)
 
-internal fun <T> createRemoteApi(baseUrl: String, type: Class<T>, budget: Long): T {
+internal fun <T> createRemoteApi(baseUrl: String, type: Class<T>, budget: Long, timeoutSeconds: Long = 15): T {
+    require(timeoutSeconds in 1..70)
     val uri = URI(baseUrl)
     require(uri.scheme == "https" || (uri.scheme == "http" && uri.host in setOf("localhost", "127.0.0.1", "10.0.2.2")))
     require(uri.userInfo == null && uri.query == null && uri.fragment == null && uri.path.trimEnd('/') == "/api/v1")
-    val client = OkHttpClient.Builder().connectTimeout(8, TimeUnit.SECONDS).readTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(8, TimeUnit.SECONDS).callTimeout(15, TimeUnit.SECONDS)
+    val client = OkHttpClient.Builder().connectTimeout(8, TimeUnit.SECONDS).readTimeout(if (timeoutSeconds == 15L) 10 else timeoutSeconds, TimeUnit.SECONDS)
+        .writeTimeout(8, TimeUnit.SECONDS).callTimeout(timeoutSeconds, TimeUnit.SECONDS)
         .addInterceptor { chain ->
             val response = chain.proceed(chain.request())
             val body = response.body() ?: return@addInterceptor response

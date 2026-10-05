@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,6 +55,17 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
     var generation by remember(url) { mutableIntStateOf(0) }
     var rendererFailed by remember(url) { mutableStateOf(false) }
     val activeView = remember { mutableStateOf<WebView?>(null) }
+    val fileCallback = remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
+    var multipleFiles by remember { mutableStateOf(false) }
+    val fileLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        val callback = fileCallback.value
+        fileCallback.value = null
+        val selected = uris.filter { it.scheme == "content" }.take(if (multipleFiles) 10 else 1)
+        callback?.onReceiveValue(selected.takeIf { it.isNotEmpty() }?.toTypedArray())
+    }
+    DisposableEffect(url) {
+        onDispose { fileCallback.value?.onReceiveValue(null); fileCallback.value = null }
+    }
     val exportFactory = remember(context) {
         WebToolExportViewModel.factory(SaveWebToolExportUseCase(AndroidWebToolExportRepository(context)))
     }
@@ -97,6 +109,22 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
                             settings.allowFileAccess = false
                             settings.allowContentAccess = false
                             settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                            webChromeClient = object : WebChromeClient() {
+                                override fun onShowFileChooser(view: WebView, callback: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {
+                                    fileCallback.value?.onReceiveValue(null)
+                                    fileCallback.value = null
+                                    if (code != "pdf_studio" || !policy.allows(view.url.orEmpty())) {
+                                        callback.onReceiveValue(null)
+                                        return true
+                                    }
+                                    fileCallback.value = callback
+                                    multipleFiles = params.mode == FileChooserParams.MODE_OPEN_MULTIPLE
+                                    val images = params.acceptTypes.any { it.startsWith("image/") || it in listOf(".jpg", ".jpeg", ".png") }
+                                    try { fileLauncher.launch(if (images) arrayOf("image/jpeg", "image/png") else arrayOf("application/pdf")) }
+                                    catch (_: RuntimeException) { fileCallback.value = null; callback.onReceiveValue(null) }
+                                    return true
+                                }
+                            }
                             fun handleExport(target: String): Boolean {
                                 if (!target.startsWith("data:")) return false
                                 if (policy.allows(this.url.orEmpty())) exports.request(target)
@@ -146,6 +174,8 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
                         }
                     },
                     onRelease = { view ->
+                        fileCallback.value?.onReceiveValue(null)
+                        fileCallback.value = null
                         if (activeView.value === view) activeView.value = null
                         view.stopLoading()
                         view.webViewClient = WebViewClient()

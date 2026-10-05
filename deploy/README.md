@@ -1,5 +1,7 @@
 # 部署配置
 
+AI 文本使用兼容 OpenAI 的 Chat Completions 服务，默认 `AI_ENABLED=false`。启用前仅在 Server 私有环境配置 `AI_ENDPOINT`（完整 HTTPS `/chat/completions` 地址）、`AI_API_KEY`、`AI_MODEL` 和展示用 `AI_PROVIDER_NAME`；Compose 已透传。额度、令牌参数与超时见 [AI 文本助手](../docs/AI_TEXT.md)。Android 不接收密钥；真实上游尚未配置或验收。
+
 账号接口新增必需环境变量 `JWT_SECRET`（随机 32 字节、64 位十六进制），仅供 Server；PowerShell/Shell 初始化脚本生成它。现有私有环境文件需补入独立随机值，不能复用数据库密码；缺失或格式错误时 API 启动失败。2026-10-05 本地私有 `.env` 已增补，Compose server 已重建运行，V18 用户表应用成功，见 [认证说明](../docs/AUTH.md)。
 
 管理后台认证新增 `ADMIN_BOOTSTRAP_USERNAME`、`ADMIN_BOOTSTRAP_PASSWORD`（可选，仅在 `admin_user` 为空时创建首个超级管理员；账号 3–32 位、密码 12–72 位且至少包含一个字母和一个数字）和 `ADMIN_TOKEN_TTL_SECONDS`（默认 3600，允许 300–86400）。引导变量只放在私有环境文件或部署密钥管理中，不写入 Git；管理员已存在时启动会跳过创建。首个管理员删除后可用同一变量重新引导，见 [管理员认证](../docs/ADMIN.md)。

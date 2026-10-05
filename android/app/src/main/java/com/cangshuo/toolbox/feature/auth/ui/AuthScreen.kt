@@ -38,7 +38,8 @@ import com.cangshuo.toolbox.feature.auth.domain.AuthFailure
 import com.cangshuo.toolbox.feature.auth.domain.AuthStatus
 
 @Composable
-fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null) {
+fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
+    feedbackFactory: ViewModelProvider.Factory? = null) {
     val model: AuthViewModel = viewModel(key = "account.auth", factory = factory)
     val state by model.uiState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -47,11 +48,12 @@ fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier,
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer); model.clearCredentials() }
     }
-    AuthScreen(state, model, modifier, syncFactory)
+    AuthScreen(state, model, modifier, syncFactory, feedbackFactory)
 }
 
 @Composable
-private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null) {
+private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
+    feedbackFactory: ViewModelProvider.Factory? = null) {
     Column(modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(stringResource(R.string.nav_profile), style = MaterialTheme.typography.headlineMedium)
@@ -112,6 +114,7 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
         }
         if (state.account != null && syncFactory != null) com.cangshuo.toolbox.feature.sync.ui.CloudSyncRoute(syncFactory)
         if (syncFactory != null) com.cangshuo.toolbox.feature.sync.ui.SettingsRoute(syncFactory)
+        if (feedbackFactory != null) com.cangshuo.toolbox.feature.feedback.ui.FeedbackRoute(feedbackFactory)
         Text(stringResource(R.string.auth_local_data_kept), style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

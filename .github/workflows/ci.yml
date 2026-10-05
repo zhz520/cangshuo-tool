@@ -145,6 +145,8 @@ jobs:
         run: npm run build
       - name: Verify web QR encoding and export bindings
         run: node ../scripts/check_web_qr.cjs
+      - name: Verify PDF processing and file boundaries
+        run: node ../scripts/check_web_pdf.cjs
       - name: Upload Admin build
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

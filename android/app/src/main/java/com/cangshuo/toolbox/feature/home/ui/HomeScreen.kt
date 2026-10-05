@@ -84,6 +84,7 @@ fun HomeScreen(
     onClearRecent: () -> Unit,
     onCatalogRefresh: () -> Unit = {},
     profileContent: (@Composable (Modifier) -> Unit)? = null,
+    homeExtras: (@Composable () -> Unit)? = null,
     gridColumns: Int = 0,
 ) {
     var confirmClearRecent by remember { mutableStateOf(false) }
@@ -140,6 +141,7 @@ fun HomeScreen(
                     onRecentRetry = onRecentRetry,
                     onClearRecentRequest = { confirmClearRecent = true },
                     onCatalogRefresh = onCatalogRefresh,
+                    homeExtras = homeExtras,
                 )
             }
         }
@@ -200,6 +202,7 @@ private fun CatalogPage(
     onClearRecentRequest: () -> Unit,
     onCatalogRefresh: () -> Unit,
     gridColumns: Int,
+    homeExtras: (@Composable () -> Unit)?,
 ) {
     val content = when (val catalog = state.catalog) {
         is HomeCatalogState.Content -> catalog.value
@@ -228,6 +231,9 @@ private fun CatalogPage(
             }
             item(key = "search", span = { GridItemSpan(maxLineSpan) }) {
                 SearchEntry(onSearch)
+            }
+            if (state.tab == HomeTab.HOME && homeExtras != null) {
+                item(key = "home-extras", span = { GridItemSpan(maxLineSpan) }) { homeExtras() }
             }
             if (content != null) {
                 item(key = "categories", span = { GridItemSpan(maxLineSpan) }) {

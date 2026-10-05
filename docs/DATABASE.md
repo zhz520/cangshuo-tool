@@ -184,6 +184,8 @@ Android 的本地收藏使用独立 SQLite/Room 初始数据库版本 1，表为
 
 ## V19 Refresh Session
 
+2026-10-06：V34 登记 pdf_studio/WEB/PDF 并在本地应用；V35 新增 ai_daily_usage（用户 + UTC 日期联合主键，原子预占每日尝试、用户删除级联）和 ai_text/SERVER/AI 工具。V1–V33 未修改。实际 V35 应用结果另行记录。
+
 `auth_refresh_session` 保存唯一 session_code、user_id、expires_at、revoked_at、last_active_at。`auth_refresh_token` 保存唯一 SHA-256 token_hash、session_id、consumed_at；用户→会话→令牌级联删除。UTC 毫秒，刷新行锁事务；客户端不存密码，服务端不存明文刷新凭证。本地 V19 已应用，旧 V1–V18 文件保持不变。
 
 ## V20 / Room v5 云同步

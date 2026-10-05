@@ -18,6 +18,8 @@ public enum ApiError {
     FILE_TOO_LARGE(40001, "File is too large", HttpStatus.PAYLOAD_TOO_LARGE),
     FILE_TYPE_UNSUPPORTED(40002, "File type is not supported", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
     QUOTA_EXCEEDED(40004, "Storage quota exceeded", HttpStatus.PAYLOAD_TOO_LARGE),
+    AI_QUOTA_EXCEEDED(40005, "Daily AI attempt quota exceeded", HttpStatus.TOO_MANY_REQUESTS),
+    AI_PROVIDER_ERROR(50001, "AI provider unavailable", HttpStatus.BAD_GATEWAY),
     FORBIDDEN(10005, "Access denied", HttpStatus.FORBIDDEN),
     NOT_FOUND(10006, "Resource not found", HttpStatus.NOT_FOUND),
     TOO_MANY_REQUESTS(10007, "Too many requests", HttpStatus.TOO_MANY_REQUESTS),

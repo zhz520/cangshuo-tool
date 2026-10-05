@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
                     recentFactory = container.recentViewModelFactory,
                     authFactory = container.authViewModelFactory,
                     syncFactory = container.syncViewModelFactory,
+                    extrasFactory = container.homeExtrasViewModelFactory,
+                    feedbackFactory = container.feedbackViewModelFactory,
                     gridColumns = settings.gridColumns,
                 )
             }

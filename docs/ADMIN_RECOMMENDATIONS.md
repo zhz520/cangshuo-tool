@@ -39,7 +39,7 @@
 
 ## 未实现
 
-- Android 首页尚未消费 `GET /home/recommendations`：App 目前仍用目录快照里的 `isFeatured` 展示推荐工具，接入新接口属于后续 Android 任务，不能声称已在 App 生效。
+- Android 已接入 `GET /home/recommendations`，以独立区域展示推荐位并过滤不可用工具；外部链接确认后在浏览器打开，图片地址暂不加载。详见 [客户端接入](ANDROID_HOME_EXTRAS.md)，设备联调延期。
 - 图片上传/裁剪（当前只接受外部 https 图片地址）、点击统计、排序拖拽、A/B 实验与定时发布预览。
 
 ## 验证
