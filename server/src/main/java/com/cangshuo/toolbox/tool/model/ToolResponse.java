@@ -12,7 +12,7 @@ public record ToolResponse(
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "CALC") String categoryCode,
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED, types = {"string", "null"}, example = "calculator") String icon,
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<String> keywords,
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, allowableValues = {"LOCAL", "SERVER", "HYBRID"})
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, allowableValues = {"LOCAL", "SERVER", "HYBRID", "WEB"})
         String mode,
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED) boolean requiresLogin,
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED,

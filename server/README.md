@@ -6,16 +6,19 @@
 
 - `GET /api/v1/health`：统一响应的健康检查，汇总 Actuator 状态。
 - `GET /api/v1/tools`：匿名分页目录，支持分类筛选，过滤关闭、维护或软删除的工具及关闭/删除的分类；页大小上限 100，按排序值与编码稳定排序。实现及验证范围见 [目录接口说明](../docs/TOOL_CATALOG.md)。
+- `POST /api/v1/auth/register`、`POST /api/v1/auth/login`、`GET /api/v1/auth/me`：邮箱注册登录、15 分钟 JWT、当前启用账号；V18 用户表、BCrypt cost=12 和私有 JWT_SECRET。实现与验证见 [认证说明](../docs/AUTH.md)。
 - `GET /actuator/health`：基础设施健康检查，使用原生格式，只公开状态。
 - 统一 JSON 响应与异常处理，参数错误、认证错误和容器错误沿用 API 契约。
 - 每次请求生成 traceId，写入响应头、业务响应及 MDC；日志使用 ECS JSON 格式。
-- Spring Security 无状态访问控制；其他路径默认要求身份认证，JWT 按 Auth & Sync 阶段接入。
+- Spring Security 无状态访问控制与 JWT 验证；其他路径默认要求身份认证。
 - Swagger / OpenAPI 仅在显式启用 `local` 环境时开放。
 - CORS 按环境变量中的精确来源白名单开放，预检先于认证处理；拒绝跨域访问时沿用 `403/10005` JSON 与 traceId。
 - JDBC/HikariCP 连接 MySQL，启动时由 Flyway 校验并执行迁移；连接状态参与整体健康检查。
 - Spring Data Redis/Lettuce 连接 Redis，使用环境中的凭据和明确超时；Redis 状态参与整体健康检查。
 
 当前迁移创建工具分类与目录基础表，初始化 13 个分类，并通过 V3 登记已实现的本地计算器元数据；运算由 Android 执行。用户及其他业务表随对应功能新增迁移。Redis 客户端已配置；目录缓存、登录会话及限流按对应业务任务实现。结构及连接参数见 [DATABASE.md](../docs/DATABASE.md)，缓存约定见 [REDIS.md](../docs/REDIS.md)。
+
+2026-10-05 当前 schema v18，工具 12 条，sys_user 已创建。Maven package 运行 25 项认证/JWT/HTTP 测试，全部通过；本地数据库/API/代理 17 项检查通过。Refresh Session、限流及同步仍按后续任务新增，不将短期内存登录称为持久登录。
 
 ## 构建与启动
 

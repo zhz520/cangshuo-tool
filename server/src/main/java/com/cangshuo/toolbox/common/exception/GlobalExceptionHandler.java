@@ -19,11 +19,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import com.cangshuo.toolbox.storage.StorageUnavailableException;
+import com.cangshuo.toolbox.storage.StorageValidationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse<Void>> handleApiException(ApiException exception, HttpServletRequest request) {
+        return ResponseEntity.status(exception.error().httpStatus())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure(exception.error(), TraceIdFilter.traceId(request)));
+    }
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception exception, @Nullable Object body,
@@ -45,6 +54,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(ApiError.SERVICE_UNAVAILABLE.httpStatus())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure(ApiError.SERVICE_UNAVAILABLE, TraceIdFilter.traceId(request)));
+    }
+
+    @ExceptionHandler(StorageUnavailableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStorageUnavailable(StorageUnavailableException exception,
+                                                                      HttpServletRequest request) {
+        LOG.warn("Object storage unavailable; reason={}", exception.getMessage());
+        return ResponseEntity.status(ApiError.SERVICE_UNAVAILABLE.httpStatus())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure(ApiError.SERVICE_UNAVAILABLE, TraceIdFilter.traceId(request)));
+    }
+
+    @ExceptionHandler(StorageValidationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStorageValidation(StorageValidationException exception,
+                                                                    HttpServletRequest request) {
+        return ResponseEntity.status(ApiError.INVALID_ARGUMENT.httpStatus())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure(ApiError.INVALID_ARGUMENT, TraceIdFilter.traceId(request)));
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,0 +1,23 @@
+CREATE TABLE home_recommendation (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    slot_code VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+    title VARCHAR(64) NOT NULL,
+    subtitle VARCHAR(128) NOT NULL DEFAULT '',
+    tool_code VARCHAR(64) COLLATE utf8mb4_0900_as_cs NULL,
+    link_url VARCHAR(500) CHARACTER SET ascii COLLATE ascii_general_ci NULL,
+    image_url VARCHAR(500) CHARACTER SET ascii COLLATE ascii_general_ci NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    status TINYINT NOT NULL DEFAULT 1,
+    start_at DATETIME(3) NULL,
+    end_at DATETIME(3) NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    deleted_at DATETIME(3) NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_home_recommendation_slot_code (slot_code),
+    KEY idx_home_recommendation_active (status, sort_order, id),
+    KEY idx_home_recommendation_window (start_at, end_at),
+    CONSTRAINT fk_home_recommendation_tool FOREIGN KEY (tool_code) REFERENCES tool_definition (tool_code) ON DELETE SET NULL,
+    CONSTRAINT ck_home_recommendation_status CHECK (status IN (0, 1)),
+    CONSTRAINT ck_home_recommendation_window CHECK (end_at IS NULL OR start_at IS NULL OR end_at > start_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
