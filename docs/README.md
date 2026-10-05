@@ -58,3 +58,4 @@
 - [账号及数据删除](DATA_DELETION.md)
 - [Android 权限说明](PERMISSIONS.md)
 - [隐私政策（运营主体及联系方式）](PRIVACY_POLICY.md)
+- [基础崩溃诊断](CRASH_DIAGNOSTICS.md)

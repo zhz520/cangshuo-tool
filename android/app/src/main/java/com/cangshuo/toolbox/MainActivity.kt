@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
                     syncFactory = container.syncViewModelFactory,
                     extrasFactory = container.homeExtrasViewModelFactory,
                     feedbackFactory = container.feedbackViewModelFactory,
+                    diagnosticsFactory = container.diagnosticsViewModelFactory,
                     gridColumns = settings.gridColumns,
                 )
             }

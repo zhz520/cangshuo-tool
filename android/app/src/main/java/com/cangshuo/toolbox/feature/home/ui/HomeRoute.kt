@@ -50,6 +50,7 @@ fun HomeRoute(
     syncFactory: ViewModelProvider.Factory,
     extrasFactory: ViewModelProvider.Factory,
     feedbackFactory: ViewModelProvider.Factory,
+    diagnosticsFactory: ViewModelProvider.Factory,
     gridColumns: Int = 0,
 ) {
     val model: HomeViewModel = viewModel(factory = factory)
@@ -115,7 +116,7 @@ fun HomeRoute(
                 onRecentRetry = recent::refresh,
                 onClearRecent = recent::clear,
                 onCatalogRefresh = { model.refreshRemoteCatalog() },
-                profileContent = { modifier -> com.cangshuo.toolbox.feature.auth.ui.AuthRoute(authFactory, modifier, syncFactory, feedbackFactory) },
+                profileContent = { modifier -> com.cangshuo.toolbox.feature.auth.ui.AuthRoute(authFactory, modifier, syncFactory, feedbackFactory, diagnosticsFactory) },
                 homeExtras = { HomeExtrasRoute(extrasFactory) { model.selectTool(it, applicationContext) } },
             )
             HomePage.Search -> SearchRoute(

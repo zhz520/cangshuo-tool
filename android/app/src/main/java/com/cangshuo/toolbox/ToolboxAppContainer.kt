@@ -107,6 +107,9 @@ import com.cangshuo.toolbox.feature.recent.ui.RecentViewModel
 class ToolboxAppContainer(context: Context) {
     private val applicationContext = context.applicationContext
     private val resources = applicationContext.resources
+    val diagnosticsViewModelFactory = com.cangshuo.toolbox.feature.diagnostics.ui.DiagnosticsViewModel.factory(
+        com.cangshuo.toolbox.feature.diagnostics.domain.DiagnosticsUseCases(
+            com.cangshuo.toolbox.feature.diagnostics.data.LocalDiagnosticsRepository(applicationContext)))
     private val database = Room.databaseBuilder(applicationContext, ToolboxDatabase::class.java, "toolbox.db")
         .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, com.cangshuo.toolbox.core.database.MIGRATION_4_5,
             com.cangshuo.toolbox.core.database.MIGRATION_5_6, com.cangshuo.toolbox.core.database.MIGRATION_6_7)

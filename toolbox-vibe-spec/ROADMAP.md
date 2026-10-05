@@ -100,7 +100,7 @@ Phase 3 functional scope is complete. Two HTTP clients verified account restorat
 - [x] Rate limits (2026-10-05: Redis INCR+EXPIRE fixed-window limiter with in-memory fallback and throttled WARN, per-identity buckets (JWT sub vs X-Forwarded-For), a stricter auth bucket for /auth/login|register|refresh, X-RateLimit-Limit/Remaining on every /api/v1 response and a unified 429/10007 with Retry-After; health/actuator/OPTIONS exempt. Server 116/116 tests, 61/61 runtime checks with temporary 50/5 limits, and the full suite (logs 13, tools 20, categories 22, recommendations 26, users 19, announcements 25, feedback 17, storage/quota 38, admin auth 20) re-run green afterwards. Phase 6 dependency-free scope complete; OCR/PDF/AI await a provider decision. See docs/RATE_LIMITS.md.)
 
 ## Phase 7 — Release
-- [ ] Crash monitoring
+- [x] Crash monitoring (2026-10-06: basic local Java/native/ANR diagnostics, timestamp/reason only, bounded OS history and a Java fallback; view/copy/confirmed clear, no automatic upload/remote aggregation. Five new regressions; Android 213/213 tests and build/lint passed in 1m58s. Device fault injection deferred. See docs/CRASH_DIAGNOSTICS.md.)
 - [ ] Release CI
 - [ ] AAB
 - [x] Privacy policy (2026-10-06: 湖北花海网络科技有限公司 / 14329140@qq.com; full offline Chinese/English App disclosure, public /privacy/ and independent /account/delete/ entry, explicit cloud/AI/local/retention/deletion scopes and backup exclusion rules. Android build/lint passed in 1m48s; 22 web deletion checks and four local page/module HTTP 200 checks passed. Production hosting/store declaration and browser/device acceptance remain release steps. See docs/PRIVACY_POLICY.md.)

@@ -40,7 +40,7 @@ import com.cangshuo.toolbox.feature.auth.domain.AuthStatus
 
 @Composable
 fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
-    feedbackFactory: ViewModelProvider.Factory? = null) {
+    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null) {
     val model: AuthViewModel = viewModel(key = "account.auth", factory = factory)
     val state by model.uiState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -49,12 +49,12 @@ fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier,
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer); model.clearCredentials() }
     }
-    AuthScreen(state, model, modifier, syncFactory, feedbackFactory)
+    AuthScreen(state, model, modifier, syncFactory, feedbackFactory, diagnosticsFactory)
 }
 
 @Composable
 private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
-    feedbackFactory: ViewModelProvider.Factory? = null) {
+    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null) {
     Column(modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(stringResource(R.string.nav_profile), style = MaterialTheme.typography.headlineMedium)
@@ -124,6 +124,7 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
             color = MaterialTheme.colorScheme.onSurfaceVariant)
         com.cangshuo.toolbox.core.ui.ToolboxPermissionInfo()
         com.cangshuo.toolbox.core.ui.ToolboxPrivacyInfo()
+        diagnosticsFactory?.let { com.cangshuo.toolbox.feature.diagnostics.ui.DiagnosticsInfo(it) }
     }
     if (state.deleting && state.account != null) AlertDialog(
         onDismissRequest={if(!state.busy) model.showDeletion(false)},
