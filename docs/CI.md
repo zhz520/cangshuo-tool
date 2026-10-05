@@ -11,11 +11,11 @@
 | Android tests, build and lint | `:app:testDebugUnitTest :app:assembleDebug :app:lintDebug` + 主机 SQLite 缓存迁移与扫码历史检查 | 单元测试 HTML/XML、Debug APK、Lint HTML/XML 报告 |
 | Server tests and package | Maven Wrapper `package`（包含 25 项认证/JWT/HTTP 测试） | 可运行 API JAR、Surefire 测试报告 |
 | Admin typecheck and build | `npm ci`、`npm run build`，含 TypeScript 检查；网页二维码业务回归 | `dist/`，使用正式 API 地址与 `/admin/` 路径 |
-| Workflow and deployment configuration | actionlint、Shell 语法、本地/正式 Compose 配置校验 | 无 |
+| Workflow and deployment configuration | actionlint（`ci.yml` + `release.yml`）、Shell/备份/发布脚本语法、本地/正式 Compose 配置校验 | 无 |
 
-产物在对应运行的 Artifacts 中保留 7 天。Debug APK 用于开发安装，发布签名、AAB、部署及镜像发布按 Phase 7 完成。
+产物在对应运行的 Artifacts 中保留 7 天。Debug APK 用于开发安装。正式 APK/AAB 由 `.github/workflows/release.yml` 在 main 推送或手动执行时构建（默认未签名，产物与 SHA-256 清单保留 14 天），详见 [发布构建与上线准备](RELEASE.md)；部署、签名与灰度发布由 [灰度发布与回滚](STAGED_RELEASE.md) 描述。
 
-当前 Android 门禁运行 150 个单元测试（新增认证输入/UseCase/真实 HTTP 9 项）：目录观察/网络/发布 51 个、缓存 23 个、刷新与首页 11 个、WebView 来源/导出/保存状态 11 个、二维码扫码历史/事件/裁剪/线性条码/导出/结构化验 45 个。Android 构建后运行 `scripts/check_android_catalog_cache.py` 的 24 项主机 SQLite 检查；Admin 任务运行 `node ../scripts/check_web_qr.cjs` 的 22 项网页回归。2026-10-05 本机全部通过，最终增量 Android 门禁 47 秒（全量约 2 分 40 秒）、Lint 0 错误/22 条既有警告，actionlint 通过。替身及主机 SQLite 不等于完整设备验收，范围见 [本轮记录](WEB_TOOL_ACCEPTANCE_2026-10-05.md)。Server 已改为运行测试，2026-10-05 本机 25/25 通过；下方首次托管记录不代表新增门禁已在 GitHub 执行。
+当前 Android 门禁运行 213 个 Debug 单元测试（目录/网络/发布、缓存、刷新与首页、WebView、二维码、认证、数据删除、崩溃诊断等），Release 任务以同一批 213 项测试和 `lintRelease` 复核。Android 构建后运行 `scripts/check_android_catalog_cache.py` 的 24 项主机 SQLite 检查、`check_qr_history.py` 与 `check_sync_sqlite.py`；Admin 任务运行 `node ../scripts/check_web_qr.cjs`（22 项）、`check_web_pdf.cjs` 与 `check_web_account_deletion.cjs`（22 项）；Release 任务额外运行 `scripts/check_release_artifacts.py`（HTTPS、权限、备份、16 KB 对齐与 SHA-256 清单）。2026-10-06 本机全部通过，Lint 0 错误（Release 18 条既有警告），actionlint 1.7.12 校验两份工作流通过。替身及主机 SQLite 不等于完整设备验收，范围见 [本轮记录](WEB_TOOL_ACCEPTANCE_2026-10-05.md) 与 [发布构建](RELEASE.md)。
 
 ## 工具链
 

@@ -8,6 +8,7 @@
 *.keystore
 *.p12
 deploy/certs/
+deploy/release-state/
 
 # Android / Gradle
 .gradle/
