@@ -123,6 +123,7 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
         Text(stringResource(R.string.auth_local_data_kept), style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant)
         com.cangshuo.toolbox.core.ui.ToolboxPermissionInfo()
+        com.cangshuo.toolbox.core.ui.ToolboxPrivacyInfo()
     }
     if (state.deleting && state.account != null) AlertDialog(
         onDismissRequest={if(!state.busy) model.showDeletion(false)},

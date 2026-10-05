@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'self' https://toolapi.zhzgo.cn; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer"><title>删除账号 · 沧烁工具箱</title><link rel="stylesheet" href="/legal.css"></head>
+<body><main><h1>删除沧烁工具箱账号 / Delete account</h1>
+<p>湖北花海网络科技有限公司 · 联系邮箱 <a href="mailto:14329140@qq.com">14329140@qq.com</a></p>
+<p class="notice">无需安装 App。先登录核实身份，再输入密码并明确确认永久删除。删除不可撤销。 / Sign in, then confirm permanent deletion with your password. You do not need to install the app.</p>
+<p>删除范围：账号、登录会话、云端收藏/最近/设置、反馈和 AI 使用计数。其他设备的本机数据、匿名数据及导出文件需在设备上清理；备份按最多 30 天保留策略淘汰，恢复时应用删除台账。第三方 AI 数据删除请联系上述邮箱，按服务商能力处理。</p>
+<p>Deletes your account, sessions, synced data, feedback and AI usage counts. Local copies on other devices and exported files need separate removal. Recovery backups expire within the configured 30-day maximum; a deletion ledger prevents account restoration.</p>
+<form id="login"><label>账号邮箱 / Account email<input id="email" type="email" maxlength="254" autocomplete="username" required></label>
+<label>密码 / Password<input id="password" type="password" maxlength="128" autocomplete="current-password" required></label><button id="loginButton" type="submit">登录 / Sign in</button></form>
+<form id="deletion" hidden><p>当前账号 / Account: <strong id="account"></strong></p>
+<label>再次输入密码 / Password again<input id="confirmPassword" type="password" maxlength="128" autocomplete="current-password" required></label>
+<label><input id="confirm" type="checkbox" required> 我确认永久删除该账号及上述云端数据 / I confirm permanent deletion</label>
+<button id="deleteButton" class="danger" type="submit">永久删除 / Delete permanently</button><button id="cancel" type="button">退出并取消 / Sign out and cancel</button></form>
+<p id="status" role="status" aria-live="polite"></p><noscript><p>请启用 JavaScript，或联系上述邮箱申请删除。不要通过邮件发送密码或 Token。</p></noscript>
+<p>密码和会话仅在当前页面内存中用于认证，不存入浏览器存储；离开页面会清除。 / Credentials stay in page memory only. Never email your password or tokens.</p>
+<nav><a href="/privacy/">隐私政策 / Privacy</a> · <a href="/permissions/">权限说明 / Permissions</a> · <a href="/">首页 / Home</a></nav>
+</main><script type="module" src="./app.mjs"></script></body></html>

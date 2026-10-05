@@ -57,3 +57,4 @@
 - [Android 反馈](ANDROID_FEEDBACK.md)
 - [账号及数据删除](DATA_DELETION.md)
 - [Android 权限说明](PERMISSIONS.md)
+- [隐私政策（运营主体及联系方式）](PRIVACY_POLICY.md)
