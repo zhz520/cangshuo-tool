@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElButton, ElDrawer, ElIcon } from 'element-plus'
+import { ElButton, ElDrawer, ElDropdown, ElDropdownItem, ElDropdownMenu, ElIcon, ElTag } from 'element-plus'
 import { Menu, User, Grid } from '@element-plus/icons-vue'
 import ShellNavigation from '@/components/ShellNavigation.vue'
 import { useHealthStore } from '@/stores/health'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const health = useHealthStore()
+const auth = useAuthStore()
 const drawerOpen = ref(false)
 const title = computed(() => String(route.meta.title ?? '管理控制台'))
-onMounted(() => { void health.refresh() })
+onMounted(() => { void health.refresh(); void auth.ensureProfile().catch(() => undefined) })
+
+async function onCommand(command: string): Promise<void> {
+  if (command !== 'logout') return
+  await auth.logout()
+  await router.replace('/login')
+}
 </script>
 
 <template>
@@ -39,7 +47,15 @@ onMounted(() => { void health.refresh() })
         <div class="topbar-right">
           <span class="connection-pill" :class="health.state" role="status" aria-live="polite"><i></i>{{ health.label }}</span>
           <span class="topbar-divider"></span>
-          <ElButton text :icon="User" @click="router.push('/login')">账号</ElButton>
+          <ElDropdown trigger="click" @command="onCommand">
+            <span class="topbar-user" role="button" tabindex="0">
+              <ElIcon><User /></ElIcon>{{ auth.displayName }}
+              <ElTag v-if="auth.roleLabel" size="small">{{ auth.roleLabel }}</ElTag>
+            </span>
+            <template #dropdown>
+              <ElDropdownMenu><ElDropdownItem command="logout" :disabled="auth.loggingOut">退出登录</ElDropdownItem></ElDropdownMenu>
+            </template>
+          </ElDropdown>
         </div>
       </header>
       <main id="main-content" class="page-container"><RouterView /></main>

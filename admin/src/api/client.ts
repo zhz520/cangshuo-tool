@@ -1,10 +1,17 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { isRecord, type ApiEnvelope, type ApiResult } from './types'
+import { readAdminToken } from './token'
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   timeout: 8000,
   headers: { Accept: 'application/json' },
+})
+
+client.interceptors.request.use(config => {
+  const token = readAdminToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
 })
 
 export class ApiRequestError extends Error {
