@@ -1108,4 +1108,7 @@
     <string name="auth_delete_email">Enter full account email</string>
     <string name="auth_delete_confirm">Delete permanently</string>
     <string name="auth_deleted">Account and cloud data deleted. This device’s account sync data is cleared.</string>
+    <string name="permission_info_title">Permissions</string>
+    <string name="permission_info_close">Close</string>
+    <string name="permission_info_body">Camera: requested when you start QR/barcode scanning. Generation and image selection remain available if declined. You can revoke access in system settings.\n\nInternet: used for the catalog, accounts, sync, announcements, recommendations, feedback, AI, web tools and network diagnostics. AI needs separate consent before sending text; cloud sync is off by default.\n\nNetwork state: dependency components check connectivity. This does not provide location access.\n\nFiles: the system picker grants access to selected images/documents. You choose export destinations; sharing grants temporary file URI access. No broad storage permission is required.\n\nThe app does not request location, microphone, contacts, phone or broad storage access. Contact, calendar and Wi-Fi codes are imported by another app you choose. AndroidX’s app-internal signature permission protects receivers and does not read other apps’ data.</string>
 </resources>

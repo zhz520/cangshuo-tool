@@ -104,7 +104,7 @@ Phase 3 functional scope is complete. Two HTTP clients verified account restorat
 - [ ] Release CI
 - [ ] AAB
 - [ ] Privacy policy
-- [ ] Permission documentation
+- [x] Permission documentation (2026-10-06: source/merged manifest reviewed; camera, network, AndroidX signature receiver protection and SAF exports documented in Chinese/English App dialog and /permissions/. Android build/lint passed in 1m14s; no new runtime permission. Release manifest and hosted pages checked by final release gate; device prompts deferred. See docs/PERMISSIONS.md.)
 - [x] Data deletion (2026-10-06: password/email-confirmed self deletion, user JWT only, transactional cloud cascades/session revocation, V36 deletion ledger and locked Android per-account sync cleanup. Server 134 tests/verify, Android 208 tests/build/lint, 20 real API/MySQL checks passed. Other-device/anonymous/exported-file cleanup and backup retention limits documented; device acceptance deferred. See docs/DATA_DELETION.md.)
 - [ ] Production backups
 - [ ] Staged release

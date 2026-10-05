@@ -1158,4 +1158,7 @@
     <string name="auth_delete_email">输入完整账号邮箱</string>
     <string name="auth_delete_confirm">永久删除</string>
     <string name="auth_deleted">账号和云端数据已删除。本机该账号同步数据已清理。</string>
+    <string name="permission_info_title">权限说明</string>
+    <string name="permission_info_close">关闭</string>
+    <string name="permission_info_body">相机：仅在开启二维码扫描时请求，用于识别二维码和条码。拒绝后仍可生成二维码和选择图片识别，可在系统权限设置撤回。\n\n网络：工具目录、账号、同步、公告推荐、反馈、AI、网页版和网络诊断需要网络访问。AI 发送文本前需单独同意，云同步默认关闭。\n\n网络状态：依赖组件查询连接是否可用，不提供定位访问。\n\n文件：通过系统图片/文档选择器取得所选文件；保存由你选择位置，分享仅提供临时文件 URI。无需全盘存储权限。\n\n本应用未申请位置、麦克风、通讯录、电话或全盘存储权限。联系人、日历和 Wi-Fi 二维码由你选择的其他应用导入。AndroidX 的应用内签名权限用于保护接收器，不读取其他应用数据。</string>
 </resources>
