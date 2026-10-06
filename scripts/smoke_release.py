@@ -12,6 +12,8 @@ import urllib.error
 import urllib.request
 
 CHECKS = 0
+API_HOST = ""
+WEB_HOST = ""
 
 
 def check(condition, reason):
@@ -28,6 +30,8 @@ def call(base, path, method="GET", payload=None, token=None, origin=None, timeou
         headers["Authorization"] = "Bearer " + token
     if origin:
         headers["Origin"] = origin
+    if API_HOST:
+        headers["Host"] = API_HOST
     request = urllib.request.Request(
         base.rstrip("/") + path,
         data=None if payload is None else json.dumps(payload).encode(),
@@ -46,7 +50,10 @@ def call(base, path, method="GET", payload=None, token=None, origin=None, timeou
 
 
 def page(url, timeout=20):
-    request = urllib.request.Request(url, headers={"Accept": "text/html"})
+    headers = {"Accept": "text/html"}
+    if WEB_HOST:
+        headers["Host"] = WEB_HOST
+    request = urllib.request.Request(url, headers=headers)
     try:
         response = urllib.request.urlopen(request, timeout=timeout)
     except urllib.error.HTTPError as error:
@@ -56,12 +63,17 @@ def page(url, timeout=20):
 
 
 def main():
+    global API_HOST, WEB_HOST
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", required=True)
     parser.add_argument("--web-url", default="")
     parser.add_argument("--origin", default="")
+    parser.add_argument("--api-host", default="")
+    parser.add_argument("--web-host", default="")
     parser.add_argument("--timeout", type=int, default=20)
     args = parser.parse_args()
+    API_HOST = args.api_host
+    WEB_HOST = args.web_host
 
     base = args.base_url.rstrip("/")
     email = "smoke-" + secrets.token_hex(10) + "@example.invalid"

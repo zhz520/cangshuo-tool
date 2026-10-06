@@ -63,3 +63,4 @@
 - [Android 发布候选包](AAB.md)
 - [生产备份与恢复](BACKUP.md)
 - [灰度发布与回滚](STAGED_RELEASE.md)
+- [宝塔服务器正式部署教程](BAOTA_DEPLOY.md)

@@ -127,8 +127,8 @@ preflight() {
   FREE_KB=$(df -Pk "$SCRIPT_DIR" | awk 'NR==2{print $4}')
   case "$FREE_KB" in ''|*[!0-9]*) fail "cannot determine free disk space" ;; esac
   [ "$FREE_KB" -ge 2097152 ] || fail "less than 2 GiB free disk space"
-  case "$PROD_ENV_FILE" in
-    *.env.production)
+  case "$PROD_COMPOSE_FILES" in
+    *docker-compose.production.yml*)
       WEB_DOMAIN=$(file_value "$PROD_ENV_FILE" WEB_DOMAIN)
       API_DOMAIN=$(file_value "$PROD_ENV_FILE" API_DOMAIN)
       [ -n "$WEB_DOMAIN" ] && [ -n "$API_DOMAIN" ] || fail "production env needs WEB_DOMAIN and API_DOMAIN"

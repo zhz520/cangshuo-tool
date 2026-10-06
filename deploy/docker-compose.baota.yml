@@ -1,0 +1,30 @@
+# BaoTa deployment overlay: BaoTa's nginx owns 80/443 and terminates TLS,
+# while this stack publishes the web/API container on 127.0.0.1 only.
+# Usage (from deploy/):
+#   docker compose --env-file ../.env.production -f docker-compose.yml \
+#     -f docker-compose.baota.yml up -d --wait
+services:
+  server:
+    environment:
+      SERVER_FORWARD_HEADERS_STRATEGY: framework
+  admin:
+    build:
+      # Same absolute API origin as the pure-Docker production build, because
+      # the admin UI is served from the web domain and calls the API domain.
+      args:
+        VITE_API_BASE_URL: https://${API_DOMAIN:-toolapi.zhzgo.cn}/api/v1
+    ports:
+      - "127.0.0.1:${BAOTA_WEB_PORT:-18080}:80"
+    volumes:
+      - type: bind
+        source: ./nginx/templates/baota.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./nginx/common/api-locations-baota.conf
+        target: /etc/nginx/toolbox/api-locations-baota.conf
+        read_only: true
+        bind:
+          create_host_path: false

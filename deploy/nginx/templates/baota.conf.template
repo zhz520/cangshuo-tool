@@ -1,0 +1,32 @@
+# HTTP-only template used when BaoTa's nginx is the TLS edge and proxies
+# ${WEB_DOMAIN} / ${API_DOMAIN} to this container on 127.0.0.1.
+map $http_x_real_ip $baota_client_ip {
+    default $http_x_real_ip;
+    ""      $remote_addr;
+}
+
+map $http_x_forwarded_proto $baota_forwarded_proto {
+    default $http_x_forwarded_proto;
+    ""      https;
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+    return 444;
+}
+
+server {
+    listen 80;
+    server_name ${WEB_DOMAIN};
+    absolute_redirect off;
+    include /etc/nginx/toolbox/site-locations.conf;
+}
+
+server {
+    listen 80;
+    server_name ${API_DOMAIN};
+    absolute_redirect off;
+    include /etc/nginx/toolbox/api-locations-baota.conf;
+    location / { return 404; }
+}

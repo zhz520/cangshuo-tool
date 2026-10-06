@@ -198,6 +198,8 @@ jobs:
         run: docker compose --env-file ../.env.example -f docker-compose.yml -f docker-compose.local.yml --profile storage config --quiet
       - name: Validate production Compose
         run: docker compose -p cangshuo-toolbox-ci-production --env-file ../.env.example -f docker-compose.yml -f docker-compose.production.yml config --quiet
+      - name: Validate BaoTa overlay Compose
+        run: docker compose -p cangshuo-toolbox-ci-baota --env-file ../.env.example -f docker-compose.yml -f docker-compose.baota.yml config --quiet
 
   ci:
     name: CI
