@@ -7,6 +7,9 @@ services:
   server:
     environment:
       SERVER_FORWARD_HEADERS_STRATEGY: framework
+      # Same default as the image; override in .env.production for small hosts,
+      # e.g. JAVA_TOOL_OPTIONS=-Xmx512m -Dfile.encoding=UTF-8
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--XX:MaxRAMPercentage=75.0 -Dfile.encoding=UTF-8}
   admin:
     build:
       # Same absolute API origin as the pure-Docker production build, because

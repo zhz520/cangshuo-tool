@@ -38,6 +38,7 @@ API 容器（Spring Boot）─── mysql / redis（仅 Docker 内网）
 ## 2. 服务器、系统与域名准备
 
 - 配置：最低 2 核 4G（构建阶段建议临时加 2G swap），推荐 4 核 8G；系统盘 ≥ 40G。
+- 只有 2G 内存也能装上，但首次启动和日常运行会明显吃紧，整机可能变慢甚至像“卡死”；建议至少 4G，坚持 2G 时按 §5 限制 JVM 堆并保留 swap。
 - 系统：Ubuntu 22.04/24.04、Debian 12、AlmaLinux 9 等宝塔支持版本均可。
 - 域名解析（在域名服务商处配置 A 记录到服务器公网 IP）：
   - `tool.zhzgo.cn`（官网）
@@ -112,6 +113,7 @@ fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
 ```
 
+- 小内存机器（2G）：在 `.env.production` 追加一行 `JAVA_TOOL_OPTIONS=-Xmx512m -Dfile.encoding=UTF-8` 限制 API 堆内存（默认是容器内存的 75%），并在宝塔软件商店停掉用不到的 MySQL/PHP 等服务；4G 及以上不需要改。
 - 官网静态页与 nginx 配置都打包在 web 镜像里，所以改动它们后要重建 `admin` 镜像；只改 `deploy/nginx/templates/baota.conf.template` 或 `deploy/nginx/common/api-locations-baota.conf`（这两个文件以挂载方式使用）时，`restart admin` 即可生效。
 - 宝塔模式下 Admin 前端会按 `.env.production` 的 `API_DOMAIN` 构建成 `https://<API_DOMAIN>/api/v1`，请确保该值与实际域名一致。
 
@@ -321,6 +323,8 @@ docker compose --env-file ../.env.production -f docker-compose.yml -f docker-com
 | MySQL 首次启动失败 | `... logs mysql`；确认磁盘空间、`.env.production` 密码非空；首次初始化要 30–60 秒 |
 | 证书续期后异常 | 模式 A 由宝塔自动 reload；模式 B 需手动替换证书并 reload |
 | `docker compose` 命令找不到 | 安装 Compose 插件（宝塔 Docker 管理器或官方 docker-compose-plugin） |
+| 服务器整体卡顿 / SSH 很慢 / VNC 控制台像卡死 | 多半是内存或磁盘吃满：`free -h`、`df -h /`、`uptime`、`dmesg -T \| grep -iE 'oom\|killed process'`；按 §5 加 swap、限制 JVM、升级内存；磁盘满时先 `docker system df` 再 `docker builder prune -f` |
+| 被云控制台强制重启后 | 容器 `restart: unless-stopped` 会自动恢复；`docker compose ... up -d --wait --wait-timeout 300` 再确认一次即可，不需要重新 build |
 
 ## 13. 本机验证记录（2026-10-06）
 

@@ -4,6 +4,8 @@ services:
       SPRING_PROFILES_ACTIVE: production
       SERVER_FORWARD_HEADERS_STRATEGY: framework
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:?Set the production website origin}
+      # Same default as the image; override in .env.production for small hosts.
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--XX:MaxRAMPercentage=75.0 -Dfile.encoding=UTF-8}
   admin:
     build:
       args:
