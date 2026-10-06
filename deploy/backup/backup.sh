@@ -30,6 +30,14 @@ MINIO_VOLUME=${MINIO_VOLUME:-${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}_minio-dat
 MINIO_HELPER_IMAGE=${MINIO_HELPER_IMAGE:-nginx:1.30.5-alpine3.24}
 OPENSSL=${OPENSSL:-openssl}
 
+# Some hosts still ship OpenSSL 1.0.2, which has no -pbkdf2/-iter support.
+# Detect once and encrypt every file with the same option set.
+if "$OPENSSL" enc -aes-256-cbc -pbkdf2 -iter 1 -md sha256 -salt -pass pass:probe -in /dev/null -out /dev/null 2>/dev/null; then
+  ENC_OPTS="-aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt"
+else
+  ENC_OPTS="-aes-256-cbc -salt"
+fi
+
 fail() { printf 'backup failed: %s\n' "$1" >&2; exit 1; }
 
 # Intentional word splitting: COMPOSE_FILES holds "-f a -f b".
@@ -92,7 +100,8 @@ if [ "$LEDGER_ROWS" != "0" ]; then
        END{if(!ok) exit 1}' "$WORK_ROOT/ledger.tsv" || fail "the deletion ledger export failed validation"
 fi
 LEDGER_SHA=$(sha256sum "$WORK_ROOT/ledger.tsv" | awk '{print $1}')
-"$OPENSSL" enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt \
+# shellcheck disable=SC2086
+"$OPENSSL" enc $ENC_OPTS \
   -pass file:"$BACKUP_PASSPHRASE_FILE" -in "$WORK_ROOT/ledger.tsv" -out "$LEDGER_OUT" || fail "ledger encryption failed"
 sha256sum "$LEDGER_OUT" | awk '{print $1}' > "$LEDGER_OUT.sha256"
 printf 'ledger snapshot: %s (%s rows)\n' "$(basename "$LEDGER_OUT")" "$LEDGER_ROWS"
@@ -141,7 +150,8 @@ if [ "$MODE" = full ]; then
   if [ "$MINIO_INCLUDED" = true ]; then TAR_FILES="$TAR_FILES minio-data.tar.gz"; fi
   # shellcheck disable=SC2086
   ( cd "$WORK_ROOT" && tar -czf "$BACKUP_DIR/work/$DATE.tar.gz" $TAR_FILES ) || fail "archive creation failed"
-  "$OPENSSL" enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt \
+# shellcheck disable=SC2086
+  "$OPENSSL" enc $ENC_OPTS \
     -pass file:"$BACKUP_PASSPHRASE_FILE" -in "$BACKUP_DIR/work/$DATE.tar.gz" -out "$ARCHIVE" || fail "backup encryption failed"
   sha256sum "$ARCHIVE" | awk '{print $1}' > "$ARCHIVE.sha256"
   printf 'backup archive: %s (%s bytes)\n' "$(basename "$ARCHIVE")" "$(wc -c < "$ARCHIVE" | tr -d ' ')"

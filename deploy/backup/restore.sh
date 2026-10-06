@@ -18,6 +18,13 @@ MINIO_VOLUME=${MINIO_VOLUME:-${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}_minio-dat
 MINIO_HELPER_IMAGE=${MINIO_HELPER_IMAGE:-nginx:1.30.5-alpine3.24}
 OPENSSL=${OPENSSL:-openssl}
 
+# Must match backup.sh: OpenSSL 1.0.2 hosts cannot use -pbkdf2/-iter.
+if "$OPENSSL" enc -aes-256-cbc -pbkdf2 -iter 1 -md sha256 -salt -pass pass:probe -in /dev/null -out /dev/null 2>/dev/null; then
+  DEC_OPTS="-aes-256-cbc -pbkdf2 -iter 600000 -md sha256"
+else
+  DEC_OPTS="-aes-256-cbc"
+fi
+
 fail() { printf 'restore failed: %s\n' "$1" >&2; exit 1; }
 
 # shellcheck disable=SC2086
@@ -53,7 +60,8 @@ fi
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/toolbox-restore.XXXXXX")
 trap 'rm -rf -- "$WORK"' EXIT HUP INT TERM
 
-"$OPENSSL" enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
+# shellcheck disable=SC2086
+"$OPENSSL" enc -d $DEC_OPTS \
   -pass file:"$BACKUP_PASSPHRASE_FILE" -in "$BACKUP_FILE" -out "$WORK/backup.tar.gz" \
   || fail "decryption failed (wrong passphrase or damaged archive)"
 mkdir -p "$WORK/box"
@@ -73,7 +81,7 @@ else
   fi
   [ -n "$LEDGER_FILE" ] && [ -f "$LEDGER_FILE" ] || fail "no usable deletion ledger found; pass --ledger or --skip-ledger"
   case "$LEDGER_FILE" in
-    *.enc) "$OPENSSL" enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 \
+    *.enc) "$OPENSSL" enc -d $DEC_OPTS \
              -pass file:"$BACKUP_PASSPHRASE_FILE" -in "$LEDGER_FILE" -out "$WORK/ledger.tsv" \
              || fail "ledger decryption failed" ;;
     *) cp "$LEDGER_FILE" "$WORK/ledger.tsv" ;;

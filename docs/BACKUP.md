@@ -6,7 +6,7 @@
 
 - `deploy/backup/backup.sh`：从 `deploy/` 目录运行，在 Docker 主机或 Git Bash 上执行。要求 `mysql` 服务正在运行。
 - `deploy/backup/restore.sh`：恢复必须显式传入 `--confirm`，会先停止 API 容器，导入完成后自动等待健康检查通过。
-- 加密：`openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt`，口令只从 `BACKUP_PASSPHRASE_FILE` 指向的文件读取；脚本从不打印口令或明文数据。
+- 加密：优先 `openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt`；脚本会先探测宿主 OpenSSL 能力，1.0.2 等老版本自动回退到 `-aes-256-cbc -salt`（同一台机器加解密一致），口令只从 `BACKUP_PASSPHRASE_FILE` 读取；脚本从不打印口令或明文数据。
 - 产物：`toolbox-<UTC时间>.tar.gz.enc`（`mysql.sql`、`ledger.tsv`、`manifest.txt`、可选 `minio-data.tar.gz`）与同名 `.sha256`；台账快照为 `ledger/ledger-<UTC时间>.tsv.enc` 与 `.sha256`。
 - `manifest.txt` 记录 schema 版本、表数量、台账行数、dump/台账 SHA-256 与是否包含 MinIO 归档。
 
