@@ -114,7 +114,7 @@ if [ "$MODE" = full ]; then
 
   printf 'dumping mysql database\n'
   compose exec -T mysql sh -ec \
-    'export MYSQL_PWD="$MYSQL_PASSWORD"; exec mysqldump --single-transaction --routines --triggers --skip-lock-tables --default-character-set=utf8mb4 -u "$MYSQL_USER" "$MYSQL_DATABASE"' \
+    'export MYSQL_PWD="$MYSQL_PASSWORD"; exec mysqldump --single-transaction --routines --triggers --skip-lock-tables --no-tablespaces --default-character-set=utf8mb4 -u "$MYSQL_USER" "$MYSQL_DATABASE"' \
     > "$WORK_ROOT/mysql.sql" || fail "mysqldump failed"
   [ -s "$WORK_ROOT/mysql.sql" ] || fail "mysqldump produced an empty file"
   grep -q 'CREATE TABLE' "$WORK_ROOT/mysql.sql" || fail "dump verification failed"
