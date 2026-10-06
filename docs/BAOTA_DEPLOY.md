@@ -327,6 +327,7 @@ docker compose --env-file ../.env.production -f docker-compose.yml -f docker-com
 | MySQL 首次启动失败 | `... logs mysql`；确认磁盘空间、`.env.production` 密码非空；首次初始化要 30–60 秒 |
 | 证书续期后异常 | 模式 A 由宝塔自动 reload；模式 B 需手动替换证书并 reload |
 | `docker compose` 命令找不到 | 安装 Compose 插件（宝塔 Docker 管理器或官方 docker-compose-plugin） |
+| admin 容器一直 `unhealthy`，日志出现 `pwrite() ... failed (1: Operation not permitted)` | 宿主机 seccomp 策略拦截 nginx 写 pid 文件。`docker-compose.baota.yml` 已给 admin 容器加 `security_opt: seccomp=unconfined`；确认该行存在后执行 `up -d --force-recreate admin` |
 | 服务器整体卡顿 / SSH 很慢 / VNC 控制台像卡死 | 多半是内存或磁盘吃满：`free -h`、`df -h /`、`uptime`、`dmesg -T \| grep -iE 'oom\|killed process'`；按 §5 加 swap、限制 JVM、升级内存；磁盘满时先 `docker system df` 再 `docker builder prune -f` |
 | 被云控制台强制重启后 | 容器 `restart: unless-stopped` 会自动恢复；`docker compose ... up -d --wait --wait-timeout 300` 再确认一次即可，不需要重新 build |
 
