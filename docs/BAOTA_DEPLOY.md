@@ -67,6 +67,8 @@ docker compose version
 
 3.3 镜像加速（国内服务器强烈建议）：宝塔 Docker 管理器 → 设置 → 镜像加速，或编辑 `/etc/docker/daemon.json` 后 `systemctl restart docker`。首次构建需要拉取 `eclipse-temurin`、`node`、`nginx`、`mysql`、`redis` 等基础镜像，慢或超时基本都是这里的问题。
 
+注意：不要照抄云厂商内网镜像地址（例如腾讯云的 `mirror.ccs.tencentyun.com` 只在腾讯云内网可用，在阿里云等其他云上会 DNS 解析失败、所有镜像都拉不动）；请使用实测可用的公共镜像源，或控制台里提供给你的专属加速地址。
+
 3.4 放行端口（**宝塔「安全」页和云厂商安全组都要**）：`80`、`443`、你的宝塔面板端口、SSH 端口。
 
 不要放行 `18080`、`3306`、`6379`：18080 只绑定在 `127.0.0.1`，MySQL/Redis 只在 Docker 内网，从公网本来就访问不到，这是有意设计。
@@ -258,13 +260,15 @@ chmod 600 /www/wwwroot/cangshuo-toolbox/secrets/backup.pass
 宝塔「计划任务」→ Shell 脚本，每日 02:17 全量备份：
 
 ```sh
-cd /www/wwwroot/cangshuo-toolbox/deploy && COMPOSE_ENV_FILE=../.env.production BACKUP_DIR=/www/backup/cangshuo-toolbox BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/backup.sh >> /www/backup/cangshuo-backup.log 2>&1
+cd /www/wwwroot/cangshuo-toolbox/deploy && COMPOSE_ENV_FILE=../.env.production COMPOSE_FILES='-f docker-compose.yml -f docker-compose.baota.yml' BACKUP_DIR=/www/backup/cangshuo-toolbox BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/backup.sh >> /www/backup/cangshuo-backup.log 2>&1
 ```
 
 每 15 分钟导出一次删除台账（很小，但决定恢复后账号是否会被错误复活）：
 
 ```sh
-cd /www/wwwroot/cangshuo-toolbox/deploy && COMPOSE_ENV_FILE=../.env.production BACKUP_DIR=/www/backup/cangshuo-toolbox BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/backup.sh --ledger-only >> /www/backup/cangshuo-backup.log 2>&1
+cd /www/wwwroot/cangshuo-toolbox/deploy && COMPOSE_ENV_FILE=../.env.production COMPOSE_FILES='-f docker-compose.yml -f docker-compose.baota.yml' BACKUP_DIR=/www/backup/cangshuo-toolbox BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/backup.sh --ledger-only >> /www/backup/cangshuo-backup.log 2>&1
+
+注意：宝塔模式必须带上 `COMPOSE_FILES='-f docker-compose.yml -f docker-compose.baota.yml'`；不带的话备份/恢复脚本会按默认的 `production` 组合执行，恢复时会尝试占用 80/443 并与宝塔 nginx 冲突。
 ```
 
 - 备份目录必须放在网站不可访问的位置（不要放进 `/www/wwwroot/sites/...`）。
@@ -273,7 +277,7 @@ cd /www/wwwroot/cangshuo-toolbox/deploy && COMPOSE_ENV_FILE=../.env.production B
 
 ```sh
 cd /www/wwwroot/cangshuo-toolbox/deploy
-BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/restore.sh --backup /www/backup/cangshuo-toolbox/toolbox-XXXXXXXXTXXXXXXZ.tar.gz.enc --confirm
+COMPOSE_ENV_FILE=../.env.production COMPOSE_FILES='-f docker-compose.yml -f docker-compose.baota.yml' BACKUP_PASSPHRASE_FILE=/www/wwwroot/cangshuo-toolbox/secrets/backup.pass sh ./backup/restore.sh --backup /www/backup/cangshuo-toolbox/toolbox-XXXXXXXXTXXXXXXZ.tar.gz.enc --confirm
 ```
 
 ## 10. 安全清单
