@@ -1,17 +1,31 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { ElAlert, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElInputNumber, ElMessage, ElMessageBox,
-  ElSwitch, ElTable, ElTableColumn, ElTag } from 'element-plus'
+import { ElButton, ElForm, ElFormItem, ElInput, ElInputNumber, ElMessage, ElMessageBox,
+  ElSwitch, ElTable, ElTableColumn } from 'element-plus'
+import AdminPageHeader from '@/components/AdminPageHeader.vue'
+import AdminFilterBar from '@/components/AdminFilterBar.vue'
+import AdminDataPanel from '@/components/AdminDataPanel.vue'
+import AdminDetailDrawer from '@/components/AdminDetailDrawer.vue'
+import AdminFormError from '@/components/AdminFormError.vue'
+import AdminRecordCards from '@/components/AdminRecordCards.vue'
+import AdminStatusTag from '@/components/AdminStatusTag.vue'
+import { useAdminRequest } from '@/composables/useAdminRequest'
 import { ApiRequestError } from '@/api/client'
 import { createAdminCategory, deleteAdminCategory, listAdminCategoryEntries, updateAdminCategory,
   updateAdminCategoryStatus, type AdminCategoryEntry } from '@/api/categories'
 
 const entries = ref<AdminCategoryEntry[]>([])
-const loading = ref(false)
-const errorMessage = ref<string | null>(null)
+const keyword = ref('')
+const appliedKeyword = ref('')
+const visibleEntries = computed(() => entries.value.filter(entry =>
+  `${entry.code} ${entry.name} ${entry.description}`.toLowerCase().includes(appliedKeyword.value)))
+function search(): void { appliedKeyword.value = keyword.value.trim().toLowerCase() }
+function resetFilters(): void { keyword.value = ''; appliedKeyword.value = '' }
+const { loading, errorMessage, traceId, run } = useAdminRequest(messageFor)
 const dialogVisible = ref(false)
 const editingCode = ref<string | null>(null)
 const saving = ref(false)
+const statusBusy = ref(false)
 const dialogError = ref<string | null>(null)
 const form = reactive({ code: '', name: '', description: '', icon: '', sortOrder: 0, enabled: true })
 const dialogTitle = computed(() => editingCode.value ? `编辑分类 · ${editingCode.value}` : '新增分类')
@@ -33,16 +47,7 @@ function messageFor(error: unknown): string {
 }
 
 async function load(): Promise<void> {
-  if (loading.value) return
-  loading.value = true
-  errorMessage.value = null
-  try {
-    entries.value = (await listAdminCategoryEntries()).data
-  } catch (error: unknown) {
-    errorMessage.value = messageFor(error)
-  } finally {
-    loading.value = false
-  }
+  await run(() => listAdminCategoryEntries(), result => { entries.value = result.data })
 }
 
 function openCreate(): void {
@@ -96,24 +101,28 @@ async function save(): Promise<void> {
 }
 
 async function toggleEnabled(entry: AdminCategoryEntry): Promise<void> {
-  const next = entry.enabled
-  if (!next) {
-    try {
-      await ElMessageBox.confirm(`停用「${entry.name}」后，其下 ${entry.toolCount} 个工具会从公开目录隐藏。确认停用？`,
-        '停用分类', { type: 'warning' })
-    } catch {
-      entry.enabled = true
-      return
-    }
-  }
+  if (statusBusy.value) return
+  statusBusy.value = true
   try {
-    await updateAdminCategoryStatus(entry.code, next)
-    ElMessage.success(next ? '分类已启用' : '分类已停用')
-    await load()
-  } catch (error: unknown) {
-    entry.enabled = !next
-    ElMessage.error(messageFor(error))
-  }
+    const next = entry.enabled
+    if (!next) {
+      try {
+        await ElMessageBox.confirm(`停用「${entry.name}」后，其下 ${entry.toolCount} 个工具会从公开目录隐藏。确认停用？`,
+          '停用分类', { type: 'warning' })
+      } catch {
+        entry.enabled = true
+        return
+      }
+    }
+    try {
+      await updateAdminCategoryStatus(entry.code, next)
+      ElMessage.success(next ? '分类已启用' : '分类已停用')
+      await load()
+    } catch (error: unknown) {
+      entry.enabled = !next
+      ElMessage.error(messageFor(error))
+    }
+  } finally { statusBusy.value = false }
 }
 
 async function remove(entry: AdminCategoryEntry): Promise<void> {
@@ -141,53 +150,97 @@ onMounted(() => { void load() })
 </script>
 
 <template>
-  <section>
-    <div class="page-heading">
-      <div>
-        <p class="eyebrow">CATEGORIES</p>
-        <h1>分类管理</h1>
-        <p class="page-description">维护分类名称、图标、排序与启用状态；停用分类会同时隐藏其下工具，删除只允许空分类。</p>
-      </div>
-      <ElButton type="primary" @click="openCreate">新增分类</ElButton>
-    </div>
-
-    <ElAlert v-if="errorMessage" class="admin-error" type="error" :closable="false" :title="errorMessage" show-icon />
-
-    <ElTable v-loading="loading" :data="entries" class="admin-table" row-key="code">
-      <ElTableColumn prop="code" label="编码" width="140" />
-      <ElTableColumn prop="name" label="名称" min-width="140" />
-      <ElTableColumn prop="description" label="说明" min-width="220" show-overflow-tooltip />
-      <ElTableColumn prop="sortOrder" label="排序" width="90" />
-      <ElTableColumn label="工具数" width="90">
-        <template #default="scope"><ElTag v-if="scope.row.toolCount > 0" type="info">{{ scope.row.toolCount }}</ElTag><span v-else class="muted">0</span></template>
-      </ElTableColumn>
-      <ElTableColumn label="启用" width="100">
-        <template #default="scope"><ElSwitch :model-value="scope.row.enabled" @change="(value: string | number | boolean) => { scope.row.enabled = Boolean(value); toggleEnabled(asEntry(scope.row)) }" /></template>
-      </ElTableColumn>
-      <ElTableColumn label="操作" width="170" fixed="right">
-        <template #default="scope">
-          <ElButton size="small" @click="openEdit(asEntry(scope.row))">编辑</ElButton>
-          <ElButton size="small" type="danger" plain @click="remove(asEntry(scope.row))">删除</ElButton>
-        </template>
-      </ElTableColumn>
-    </ElTable>
-
-    <ElDialog v-model="dialogVisible" :title="dialogTitle" width="560px" top="8vh">
-      <ElAlert v-if="dialogError" class="admin-error" type="error" :closable="false" :title="dialogError" show-icon />
-      <ElForm label-position="top">
-        <ElFormItem v-if="!editingCode" label="分类编码">
-          <ElInput v-model="form.code" maxlength="32" placeholder="大写字母开头，例如 DEV" />
-        </ElFormItem>
-        <ElFormItem label="名称"><ElInput v-model="form.name" maxlength="64" /></ElFormItem>
-        <ElFormItem label="说明"><ElInput v-model="form.description" type="textarea" :rows="3" maxlength="500" /></ElFormItem>
-        <ElFormItem label="图标标识"><ElInput v-model="form.icon" maxlength="128" placeholder="可选，例如 tools" /></ElFormItem>
-        <ElFormItem label="排序"><ElInputNumber v-model="form.sortOrder" :min="0" :max="100000" /></ElFormItem>
-        <ElFormItem label="启用"><ElSwitch v-model="form.enabled" /></ElFormItem>
-      </ElForm>
-      <template #footer>
-        <ElButton @click="dialogVisible = false">取消</ElButton>
-        <ElButton type="primary" :loading="saving" @click="save">保存</ElButton>
+  <section class="admin-page">
+    <AdminPageHeader title="分类管理" description="整理工具分类、显示顺序与启用状态。">
+      <template #actions>
+        <ElButton :loading="loading" @click="load">刷新</ElButton>
+        <ElButton type="primary" @click="openCreate">新增分类</ElButton>
       </template>
-    </ElDialog>
+    </AdminPageHeader>
+    <AdminFilterBar @search="search" @reset="resetFilters">
+      <ElInput v-model="keyword" aria-label="搜索分类" placeholder="搜索分类名称、编码或说明" clearable style="width: 360px" @clear="search" />
+    </AdminFilterBar>
+    <AdminDataPanel :loading="loading" :has-content="visibleEntries.length > 0" :error="errorMessage" :trace-id="traceId" empty-title="暂无分类" empty-description="调整搜索条件，或新增一个分类。" @retry="load">
+      <ElTable :data="visibleEntries" class="admin-table admin-desktop-table" row-key="code">
+        <ElTableColumn label="分类" min-width="240">
+          <template #default="scope">
+            <strong class="admin-record-title">{{ scope.row.name }}</strong>
+            <div class="admin-record-subtitle">{{ scope.row.code }}</div>
+            <div class="admin-record-description admin-cell-description">{{ scope.row.description }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn prop="toolCount" label="工具数" width="110" />
+        <ElTableColumn prop="sortOrder" label="排序" width="100" />
+        <ElTableColumn label="启用" width="120">
+          <template #default="scope">
+            <ElSwitch :model-value="scope.row.enabled" :disabled="loading || statusBusy" :aria-label="`${scope.row.name}启用状态`" @change="(value: string | number | boolean) => { scope.row.enabled = Boolean(value); toggleEnabled(asEntry(scope.row)) }" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" width="170" fixed="right">
+          <template #default="scope">
+            <div class="admin-row-actions">
+              <ElButton size="small" :disabled="loading || statusBusy" @click="openEdit(asEntry(scope.row))">编辑</ElButton>
+              <ElButton size="small" type="danger" plain :disabled="loading || statusBusy || scope.row.toolCount > 0" @click="remove(asEntry(scope.row))">删除</ElButton>
+            </div>
+          </template>
+        </ElTableColumn>
+      </ElTable>
+      <AdminRecordCards :records="visibleEntries" :record-key="record => record.code">
+        <template #title="{ record }">
+          <strong class="admin-record-title">{{ record.name }}</strong>
+          <div class="admin-record-subtitle">{{ record.code }}</div>
+        </template>
+        <template #status="{ record }">
+          <AdminStatusTag :label="record.enabled ? '已启用' : '已停用'" :tone="record.enabled ? 'success' : 'info'" />
+        </template>
+        <template #description="{ record }">{{ record.description }}</template>
+        <template #meta="{ record }">{{ record.toolCount }} 个工具 · 排序 {{ record.sortOrder }}</template>
+        <template #actions="{ record }">
+          <ElButton size="small" :disabled="loading || statusBusy" @click="openEdit(record)">编辑</ElButton>
+          <ElButton size="small" type="danger" plain :disabled="loading || statusBusy || record.toolCount > 0" @click="remove(record)">删除</ElButton>
+          <ElSwitch :model-value="record.enabled" :disabled="loading || statusBusy" :aria-label="`${record.name}启用状态`" @change="(value: string | number | boolean) => { record.enabled = Boolean(value); toggleEnabled(record) }" />
+        </template>
+      </AdminRecordCards>
+    </AdminDataPanel>
+    <div class="admin-list-footer">
+      <span class="admin-result-count">显示 {{ visibleEntries.length }} / {{ entries.length }} 个分类 · 空分类可删除</span>
+    </div>
+    <AdminDetailDrawer v-model="dialogVisible" :title="dialogTitle" :busy="saving">
+      <p v-if="editingCode" class="admin-form-help">分类编码 {{ editingCode }}</p>
+      <AdminFormError v-if="dialogError" :message="dialogError" />
+      <ElForm label-position="top" :disabled="saving">
+        <section class="admin-form-section">
+          <h3>分类信息</h3>
+          <ElFormItem v-if="!editingCode" label="分类编码">
+            <ElInput v-model="form.code" maxlength="32" placeholder="大写字母开头，例如 DEV" />
+          </ElFormItem>
+          <ElFormItem label="名称">
+            <ElInput v-model="form.name" maxlength="64" />
+          </ElFormItem>
+          <ElFormItem label="说明">
+            <ElInput v-model="form.description" type="textarea" :rows="3" maxlength="500" />
+          </ElFormItem>
+          <ElFormItem label="图标标识">
+            <ElInput v-model="form.icon" maxlength="128" placeholder="可选，例如 tools" />
+          </ElFormItem>
+        </section>
+        <section class="admin-form-section">
+          <h3>目录展示</h3>
+          <div class="admin-form-grid">
+            <ElFormItem label="排序">
+              <ElInputNumber v-model="form.sortOrder" :min="0" :max="100000" />
+            </ElFormItem>
+            <ElFormItem label="启用">
+              <ElSwitch v-model="form.enabled" />
+            </ElFormItem>
+          </div>
+        </section>
+      </ElForm>
+      <p class="admin-form-help">停用后，该分类下的工具会从公开目录隐藏。</p>
+      <template #footer>
+        <ElButton :disabled="saving" @click="dialogVisible = false">取消</ElButton>
+        <ElButton type="primary" :loading="saving" @click="save">保存分类</ElButton>
+      </template>
+    </AdminDetailDrawer>
   </section>
 </template>

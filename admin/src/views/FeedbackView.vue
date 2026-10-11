@@ -1,164 +1,122 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
-import { ElAlert, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElMessage, ElOption, ElPagination,
-  ElSelect, ElTable, ElTableColumn, ElTag } from 'element-plus'
-import { ApiRequestError } from '@/api/client'
-import { FEEDBACK_STATUSES, listAdminFeedback, updateAdminFeedback, type AdminFeedback } from '@/api/feedback'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { ElAlert, ElButton, ElForm, ElFormItem, ElInput, ElMessage, ElOption, ElPagination, ElSelect, ElTable, ElTableColumn } from 'element-plus'
+import { Refresh, Search } from '@element-plus/icons-vue'
+import AdminPageHeader from '@/components/AdminPageHeader.vue'
+import AdminFilterBar from '@/components/AdminFilterBar.vue'
+import AdminDataPanel from '@/components/AdminDataPanel.vue'
+import AdminStatusTag from '@/components/AdminStatusTag.vue'
+import AdminDetailDrawer from '@/components/AdminDetailDrawer.vue'
+import { FEEDBACK_STATUSES, type AdminFeedback } from '@/api/feedback'
+import { useFeedbackWorkspace, FEEDBACK_STATUS_LABELS, FEEDBACK_STATUS_TONES, FEEDBACK_TYPE_LABELS, type FeedbackStatus } from '@/composables/useFeedbackWorkspace'
 
-const STATUS_LABELS: Record<string, string> = { PENDING: '待处理', PROCESSING: '处理中', RESOLVED: '已解决' }
-const STATUS_TYPES: Record<string, 'warning' | 'primary' | 'success'> = {
-  PENDING: 'warning', PROCESSING: 'primary', RESOLVED: 'success' }
-const TYPE_LABELS: Record<string, string> = { BUG: '问题', SUGGESTION: '建议', OTHER: '其他' }
-
-const entries = ref<AdminFeedback[]>([])
-const total = ref(0)
-const page = ref(1)
-const pageSize = ref(20)
-const keyword = ref('')
-const statusFilter = ref<string | undefined>(undefined)
-const loading = ref(false)
-const errorMessage = ref<string | null>(null)
-const dialogVisible = ref(false)
-const saving = ref(false)
-const dialogError = ref<string | null>(null)
-const editing = ref<AdminFeedback | null>(null)
-const form = reactive({ status: 'PENDING', reply: '' })
-const dialogTitle = computed(() => editing.value ? `处理反馈 · #${editing.value.id}` : '处理反馈')
+const { entries, total, page, pageSize, keyword, statusFilter, loading, loaded, errorMessage, errorTraceId,
+  detailVisible, editing, saving, detailError, detailTraceId, form, hasFilters, detailTitle,
+  load, search, selectStatus, reset, changePage, open, save } = useFeedbackWorkspace()
+const statusTabs: { value: FeedbackStatus | undefined; label: string }[] = [
+  { value: undefined, label: '全部' }, ...FEEDBACK_STATUSES.map(value => ({ value, label: FEEDBACK_STATUS_LABELS[value] })),
+]
+const emptyTitle = computed(() => hasFilters.value ? '没有匹配的反馈' : '暂无用户反馈')
 const asEntry = (row: unknown): AdminFeedback => row as AdminFeedback
-
-function messageFor(error: unknown): string {
-  if (error instanceof ApiRequestError) {
-    switch (error.code) {
-      case 10006: return '反馈不存在。'
-      case 10001: return '请求参数不合法，请检查状态与回复内容。'
-      case 10005: return '当前账号没有管理权限。'
-      case 10002: return '登录状态已失效，请重新登录。'
-      default: return error.message
-    }
-  }
-  return '暂时无法连接平台服务，请稍后重试。'
+const detailErrorElement = ref<HTMLElement | null>(null)
+watch(detailError, async value => {
+  if (!value) return
+  await nextTick()
+  if (detailVisible.value && detailError.value === value) detailErrorElement.value?.focus()
+})
+function statusLabel(value: string): string { return FEEDBACK_STATUS_LABELS[value as FeedbackStatus] ?? value }
+function statusTone(value: string) { return FEEDBACK_STATUS_TONES[value as FeedbackStatus] ?? 'info' }
+function displayTime(value: string | null): string {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (!Number.isFinite(date.getTime())) return value
+  return new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(date)
 }
-
-async function load(): Promise<void> {
-  if (loading.value) return
-  loading.value = true
-  errorMessage.value = null
-  try {
-    const result = await listAdminFeedback({ page: page.value, pageSize: pageSize.value,
-      keyword: keyword.value.trim() || undefined, status: statusFilter.value })
-    entries.value = result.data.records
-    total.value = result.data.total
-  } catch (error: unknown) {
-    errorMessage.value = messageFor(error)
-  } finally {
-    loading.value = false
-  }
+async function saveFeedback(): Promise<void> {
+  if (await save()) ElMessage.success('反馈已更新')
 }
-
-function search(): void {
-  page.value = 1
-  void load()
-}
-
-function open(entry: AdminFeedback): void {
-  editing.value = entry
-  dialogError.value = null
-  Object.assign(form, { status: entry.status, reply: entry.reply ?? '' })
-  dialogVisible.value = true
-}
-
-async function save(): Promise<void> {
-  if (!editing.value || saving.value) return
-  dialogError.value = null
-  if (!(FEEDBACK_STATUSES as readonly string[]).includes(form.status)) {
-    dialogError.value = '状态不在允许范围内。'
-    return
-  }
-  if (form.reply.trim().length > 2000) {
-    dialogError.value = '回复最多 2000 字符。'
-    return
-  }
-  saving.value = true
-  try {
-    await updateAdminFeedback(editing.value.id, form.status, form.reply.trim() || null)
-    dialogVisible.value = false
-    ElMessage.success('反馈已更新')
-    await load()
-  } catch (error: unknown) {
-    dialogError.value = messageFor(error)
-  } finally {
-    saving.value = false
-  }
-}
-
 onMounted(() => { void load() })
 </script>
 
 <template>
-  <section>
-    <div class="page-heading">
-      <div>
-        <p class="eyebrow">FEEDBACK</p>
-        <h1>用户反馈</h1>
-        <p class="page-description">按状态处理用户提交的问题与建议；回复一次后可继续更新状态，回复内容对提交者可见。</p>
+  <section class="feedback-workspace">
+    <AdminPageHeader title="用户反馈" description="查看问题与建议，跟进处理进度。">
+      <template #actions><ElButton :icon="Refresh" :loading="loading" :disabled="saving" @click="load">刷新</ElButton></template>
+    </AdminPageHeader>
+
+    <div class="admin-status-tabs" role="group" aria-label="反馈状态筛选">
+      <button v-for="tab in statusTabs" :key="tab.value ?? 'ALL'" type="button" class="admin-status-tab"
+        :class="{ selected: statusFilter === tab.value }" :aria-pressed="statusFilter === tab.value" :disabled="saving"
+        @click="selectStatus(tab.value)">{{ tab.label }}</button>
+    </div>
+
+    <AdminFilterBar :busy="saving" @search="search" @reset="reset">
+      <ElInput v-model="keyword" class="feedback-search" aria-label="搜索反馈" placeholder="搜索内容、联系方式或用户邮箱"
+        :prefix-icon="Search" maxlength="128" clearable :disabled="saving" @clear="search" />
+    </AdminFilterBar>
+
+    <AdminDataPanel :loading="loading" :has-content="entries.length > 0" :error="errorMessage" :trace-id="errorTraceId"
+      :empty-title="emptyTitle" :empty-description="hasFilters ? '调整搜索词或切换状态后重试。' : '用户提交的问题和建议会显示在这里。'" @retry="load">
+      <ElTable :data="entries" class="admin-table feedback-desktop-table" row-key="id">
+        <ElTableColumn label="反馈内容" min-width="280">
+          <template #default="scope"><div class="feedback-summary">{{ scope.row.content }}</div><p class="feedback-row-meta">#{{ scope.row.id }}<span>·</span>{{ FEEDBACK_TYPE_LABELS[scope.row.type] ?? scope.row.type }}<span v-if="scope.row.reply">· 已回复</span></p></template>
+        </ElTableColumn>
+        <ElTableColumn label="提交者" min-width="180">
+          <template #default="scope"><span class="feedback-email">{{ scope.row.userEmail }}</span></template>
+        </ElTableColumn>
+        <ElTableColumn label="状态" width="110">
+          <template #default="scope"><AdminStatusTag :label="statusLabel(scope.row.status)" :tone="statusTone(scope.row.status)" /></template>
+        </ElTableColumn>
+        <ElTableColumn label="提交时间" width="165">
+          <template #default="scope"><time class="feedback-time" :datetime="scope.row.createdAt" :title="scope.row.createdAt">{{ displayTime(scope.row.createdAt) }}</time></template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" width="90" fixed="right">
+          <template #default="scope"><ElButton size="small" :disabled="saving" :aria-label="`处理反馈 #${scope.row.id}`" @click="open(asEntry(scope.row))">处理</ElButton></template>
+        </ElTableColumn>
+      </ElTable>
+
+      <div class="feedback-mobile-list" aria-label="反馈列表">
+        <article v-for="entry in entries" :key="entry.id" class="feedback-mobile-card">
+          <div class="feedback-mobile-heading"><p class="feedback-row-meta">#{{ entry.id }} · {{ FEEDBACK_TYPE_LABELS[entry.type] ?? entry.type }}</p><AdminStatusTag :label="statusLabel(entry.status)" :tone="statusTone(entry.status)" /></div>
+          <p class="feedback-summary">{{ entry.content }}</p>
+          <p class="feedback-email">{{ entry.userEmail }}</p>
+          <div class="feedback-mobile-footer"><time class="feedback-time" :datetime="entry.createdAt">{{ displayTime(entry.createdAt) }}</time><ElButton :disabled="saving" :aria-label="`处理反馈 #${entry.id}`" @click="open(entry)">{{ entry.reply ? '查看与处理 · 已回复' : '查看与处理' }}</ElButton></div>
+        </article>
       </div>
+    </AdminDataPanel>
+
+    <div v-if="loaded" class="admin-list-footer">
+      <span class="admin-result-count">{{ loading || errorMessage ? '上次结果' : '当前筛选' }} · 共 {{ total }} 条</span>
+      <ElPagination :layout="'prev, pager, next'" :total="total" :current-page="page" :page-size="pageSize" :pager-count="5" :disabled="saving" @current-change="changePage" />
     </div>
 
-    <ElAlert v-if="errorMessage" class="admin-error" type="error" :closable="false" :title="errorMessage" show-icon />
-
-    <div class="admin-filters">
-      <ElInput v-model="keyword" placeholder="搜索内容、联系方式或用户邮箱" clearable style="max-width: 280px"
-        @keyup.enter="search" @clear="search" />
-      <ElSelect v-model="statusFilter" placeholder="全部状态" clearable style="width: 150px" @change="search">
-        <ElOption v-for="status in FEEDBACK_STATUSES" :key="status" :label="STATUS_LABELS[status]" :value="status" />
-      </ElSelect>
-      <ElButton @click="search">查询</ElButton>
-    </div>
-
-    <ElTable v-loading="loading" :data="entries" class="admin-table" row-key="id">
-      <ElTableColumn prop="id" label="ID" width="80" />
-      <ElTableColumn prop="userEmail" label="用户" min-width="200" />
-      <ElTableColumn label="类型" width="90">
-        <template #default="scope">{{ TYPE_LABELS[scope.row.type] ?? scope.row.type }}</template>
-      </ElTableColumn>
-      <ElTableColumn prop="content" label="内容" min-width="260" show-overflow-tooltip />
-      <ElTableColumn label="状态" width="100">
-        <template #default="scope"><ElTag :type="STATUS_TYPES[scope.row.status]">{{ STATUS_LABELS[scope.row.status] }}</ElTag></template>
-      </ElTableColumn>
-      <ElTableColumn label="回复" min-width="200" show-overflow-tooltip>
-        <template #default="scope"><span class="muted">{{ scope.row.reply ?? '—' }}</span></template>
-      </ElTableColumn>
-      <ElTableColumn label="提交时间" min-width="180">
-        <template #default="scope"><span class="muted">{{ scope.row.createdAt }}</span></template>
-      </ElTableColumn>
-      <ElTableColumn label="操作" width="110" fixed="right">
-        <template #default="scope"><ElButton size="small" @click="open(asEntry(scope.row))">处理</ElButton></template>
-      </ElTableColumn>
-    </ElTable>
-
-    <ElPagination class="admin-pagination" layout="total, prev, pager, next" :total="total"
-      :current-page="page" :page-size="pageSize" @current-change="(value: number) => { page = value; void load() }" />
-
-    <ElDialog v-model="dialogVisible" :title="dialogTitle" width="620px" top="8vh">
-      <ElAlert v-if="dialogError" class="admin-error" type="error" :closable="false" :title="dialogError" show-icon />
+    <AdminDetailDrawer v-model="detailVisible" :title="detailTitle" :busy="saving">
       <template v-if="editing">
-        <p class="muted">{{ editing.userEmail }} · {{ TYPE_LABELS[editing.type] ?? editing.type }} · {{ editing.createdAt }}</p>
+        <div v-if="detailError" ref="detailErrorElement" class="feedback-detail-error" tabindex="-1" role="alert">
+          <ElAlert class="admin-error" type="error" :closable="false" :title="detailError" show-icon />
+          <p v-if="detailTraceId" class="admin-trace">请求标识：<code>{{ detailTraceId }}</code></p>
+        </div>
+        <div class="feedback-detail-summary"><AdminStatusTag :label="statusLabel(editing.status)" :tone="statusTone(editing.status)" /><span>{{ FEEDBACK_TYPE_LABELS[editing.type] ?? editing.type }}</span></div>
+        <dl class="feedback-detail-fields">
+          <div><dt>提交者</dt><dd>{{ editing.userEmail }}<span class="feedback-detail-user-id">账号 #{{ editing.userId }}</span></dd></div>
+          <div><dt>联系方式</dt><dd>{{ editing.contact || '未填写' }}</dd></div>
+          <div><dt>提交时间</dt><dd><time :datetime="editing.createdAt" :title="editing.createdAt">{{ displayTime(editing.createdAt) }}</time></dd></div>
+          <div><dt>最近更新</dt><dd><time :datetime="editing.updatedAt" :title="editing.updatedAt">{{ displayTime(editing.updatedAt) }}</time></dd></div>
+        </dl>
+        <h3 class="feedback-detail-heading">反馈原文</h3>
         <pre class="feedback-content">{{ editing.content }}</pre>
-        <ElForm label-position="top">
-          <ElFormItem label="状态">
-            <ElSelect v-model="form.status" style="width: 100%">
-              <ElOption v-for="status in FEEDBACK_STATUSES" :key="status" :label="STATUS_LABELS[status]" :value="status" />
-            </ElSelect>
-          </ElFormItem>
-          <ElFormItem label="回复（可选，提交者可见）">
-            <ElInput v-model="form.reply" type="textarea" :rows="5" maxlength="2000" placeholder="填写处理说明" />
-          </ElFormItem>
+        <section v-if="editing.reply" class="feedback-existing-reply">
+          <h3 class="feedback-detail-heading">已有回复</h3>
+          <pre class="feedback-content">{{ editing.reply }}</pre>
+          <p class="feedback-row-meta">回复时间：<time :datetime="editing.repliedAt ?? undefined" :title="editing.repliedAt ?? undefined">{{ displayTime(editing.repliedAt) }}</time></p>
+        </section>
+        <ElForm label-position="top" :disabled="saving" @submit.prevent="saveFeedback">
+          <ElFormItem label="处理状态"><ElSelect v-model="form.status" aria-label="处理状态" style="width: 100%"><ElOption v-for="status in FEEDBACK_STATUSES" :key="status" :label="FEEDBACK_STATUS_LABELS[status]" :value="status" /></ElSelect></ElFormItem>
+          <ElFormItem label="回复（可选，提交者可见）"><ElInput v-model="form.reply" aria-label="回复内容" type="textarea" :rows="5" maxlength="2000" show-word-limit placeholder="填写用户可见的处理说明" /></ElFormItem>
+          <p class="feedback-form-help">{{ editing.reply ? '可修改已有回复；已有回复不能清空。' : '仅更新状态时可留空；填写后将对提交者可见。' }}</p>
         </ElForm>
       </template>
-      <template #footer>
-        <ElButton @click="dialogVisible = false">取消</ElButton>
-        <ElButton type="primary" :loading="saving" @click="save">保存</ElButton>
-      </template>
-    </ElDialog>
+      <template #footer><ElButton :disabled="saving" @click="detailVisible = false">取消</ElButton><ElButton type="primary" :loading="saving" @click="saveFeedback">保存更新</ElButton></template>
+    </AdminDetailDrawer>
   </section>
 </template>

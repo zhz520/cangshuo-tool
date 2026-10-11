@@ -1,0 +1,101 @@
+:root {
+  color-scheme: light;
+  --admin-bg: #ffffff;
+  --admin-sidebar: #f9fafb;
+  --admin-surface: #ffffff;
+  --admin-raised: #f9fafb;
+  --admin-hover: #f3f4f6;
+  --admin-selected: #f3f4f6;
+  --admin-border: #e5e7eb;
+  --admin-control-border: #d1d5db;
+  --admin-text: #171717;
+  --admin-secondary: #666666;
+  --admin-muted: #8a8a8a;
+  --admin-accent: #171717;
+  --admin-accent-hover: #333333;
+  --admin-on-accent: #ffffff;
+  --admin-link: #171717;
+  --admin-focus: #737373;
+  --admin-success: #237b50;
+  --admin-success-bg: #edf7f1;
+  --admin-warning: #94651b;
+  --admin-warning-bg: #fbf5e8;
+  --admin-danger: #b93838;
+  --admin-danger-bg: #fcf0f0;
+  --admin-info: #666666;
+  --admin-info-bg: #f3f4f6;
+  --admin-scrim: rgb(23 23 23 / 30%);
+  --admin-loading: rgb(255 255 255 / 82%);
+  --admin-scrollbar-thumb: #d4d4d8;
+  --admin-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+  --admin-font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --admin-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --admin-font-xs: 12px;
+  --admin-font-sm: 13px;
+  --admin-font-base: 14px;
+  --admin-font-title: 24px;
+  --admin-space-1: 4px;
+  --admin-space-2: 8px;
+  --admin-space-3: 12px;
+  --admin-space-4: 16px;
+  --admin-space-6: 24px;
+  --admin-space-8: 32px;
+  --admin-space-10: 40px;
+  --admin-radius-sm: 6px;
+  --admin-radius: 8px;
+  --admin-radius-control: 8px;
+  --admin-control-height: 34px;
+  --admin-content-width: 1440px;
+  font-family: var(--admin-font);
+  font-size: var(--admin-font-base);
+  color: var(--admin-text);
+  background: var(--admin-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+:root[data-admin-theme="dark"] {
+  color-scheme: dark;
+  --admin-bg: #171717;
+  --admin-sidebar: #1c1c1c;
+  --admin-surface: #171717;
+  --admin-raised: #202020;
+  --admin-hover: #2b2b2b;
+  --admin-selected: #303030;
+  --admin-border: #2f2f2f;
+  --admin-control-border: #434343;
+  --admin-text: #f5f5f5;
+  --admin-secondary: #b5b5b5;
+  --admin-muted: #999999;
+  --admin-accent: #f5f5f5;
+  --admin-accent-hover: #dedede;
+  --admin-on-accent: #171717;
+  --admin-link: #f5f5f5;
+  --admin-focus: #a3a3a3;
+  --admin-success: #83c8a1;
+  --admin-success-bg: #20322a;
+  --admin-warning: #d8b873;
+  --admin-warning-bg: #352f23;
+  --admin-danger: #ed9b9b;
+  --admin-danger-bg: #372525;
+  --admin-info: #b5b5b5;
+  --admin-info-bg: #2b2b2b;
+  --admin-scrim: rgb(0 0 0 / 55%);
+  --admin-loading: rgb(23 23 23 / 82%);
+  --admin-scrollbar-thumb: #404040;
+  --admin-shadow: 0 4px 16px rgb(0 0 0 / 24%);
+}
+* { box-sizing: border-box; }
+* { scrollbar-width: thin; scrollbar-color: var(--admin-scrollbar-thumb) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb { border: 3px solid transparent; border-radius: 999px; background-clip: content-box; background-color: var(--admin-scrollbar-thumb); }
+::-webkit-scrollbar-thumb:hover { background-color: var(--admin-muted); }
+body { margin: 0; min-width: 0; }
+button, input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--admin-focus); outline-offset: 3px; }
+h1, h2, h3, p { margin: 0; }
+code { font-family: var(--admin-font-mono); }
+.muted { color: var(--admin-muted); }

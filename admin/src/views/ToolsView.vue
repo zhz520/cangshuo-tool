@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { ElAlert, ElButton, ElDialog, ElDropdown, ElDropdownItem, ElDropdownMenu, ElForm, ElFormItem,
+import { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu, ElForm, ElFormItem,
   ElInput, ElInputNumber, ElMessage, ElMessageBox, ElOption, ElPagination, ElSelect, ElSwitch, ElTable,
-  ElTableColumn, ElTag } from 'element-plus'
+  ElTableColumn } from 'element-plus'
+import AdminPageHeader from '@/components/AdminPageHeader.vue'
+import AdminFilterBar from '@/components/AdminFilterBar.vue'
+import AdminDataPanel from '@/components/AdminDataPanel.vue'
+import AdminDetailDrawer from '@/components/AdminDetailDrawer.vue'
+import AdminFormError from '@/components/AdminFormError.vue'
+import AdminRecordCards from '@/components/AdminRecordCards.vue'
+import AdminStatusTag from '@/components/AdminStatusTag.vue'
+import { useAdminRequest } from '@/composables/useAdminRequest'
 import { ApiRequestError } from '@/api/client'
 import { createAdminTool, deleteAdminTool, listAdminCategories, listAdminTools, updateAdminTool,
   updateAdminToolStatus, TOOL_MODES, TOOL_STATUSES, type AdminCategory, type AdminTool } from '@/api/tools'
@@ -19,8 +27,7 @@ const pageSize = ref(20)
 const keyword = ref('')
 const categoryFilter = ref<string | undefined>(undefined)
 const statusFilter = ref<string | undefined>(undefined)
-const loading = ref(false)
-const errorMessage = ref<string | null>(null)
+const { loading, errorMessage, traceId, run } = useAdminRequest(messageFor)
 
 const dialogVisible = ref(false)
 const editingCode = ref<string | null>(null)
@@ -47,19 +54,11 @@ function messageFor(error: unknown): string {
 }
 
 async function load(): Promise<void> {
-  if (loading.value) return
-  loading.value = true
-  errorMessage.value = null
-  try {
-    const result = await listAdminTools({ page: page.value, pageSize: pageSize.value,
-      keyword: keyword.value.trim() || undefined, categoryCode: categoryFilter.value, status: statusFilter.value })
+  await run(() => listAdminTools({ page: page.value, pageSize: pageSize.value,
+    keyword: keyword.value.trim() || undefined, categoryCode: categoryFilter.value, status: statusFilter.value }), result => {
     tools.value = result.data.records
     total.value = result.data.total
-  } catch (error: unknown) {
-    errorMessage.value = messageFor(error)
-  } finally {
-    loading.value = false
-  }
+  })
 }
 
 async function loadCategories(): Promise<void> {
@@ -198,107 +197,160 @@ onMounted(() => { void loadCategories(); void load() })
 </script>
 
 <template>
-  <section>
-    <div class="page-heading">
-      <div>
-        <p class="eyebrow">CATALOG</p>
-        <h1>工具管理</h1>
-        <p class="page-description">维护工具名称、分类、运行模式、排序、推荐与上下线状态；删除为软删除，公开目录立即停止返回。</p>
-      </div>
-      <ElButton type="primary" @click="openCreate">新增工具</ElButton>
-    </div>
-
-    <ElAlert v-if="errorMessage" class="admin-error" type="error" :closable="false" :title="errorMessage" show-icon />
-
-    <div class="admin-filters">
-      <ElInput v-model="keyword" placeholder="搜索编码、名称或说明" clearable style="max-width: 240px"
-        @keyup.enter="search" @clear="search" />
-      <ElSelect v-model="categoryFilter" placeholder="全部分类" clearable style="width: 180px" @change="search">
-        <ElOption v-for="item in categories" :key="item.code" :label="`${item.name} (${item.code})`" :value="item.code" />
+  <section class="admin-page">
+    <AdminPageHeader title="工具管理" description="维护工具目录、运行模式与上下线状态。">
+      <template #actions>
+        <ElButton type="primary" @click="openCreate">新增工具</ElButton>
+      </template>
+    </AdminPageHeader>
+    <AdminFilterBar @search="search" @reset="resetFilters">
+      <ElInput v-model="keyword" aria-label="搜索工具" placeholder="搜索编码、名称或说明" clearable style="width: 300px" @clear="search" />
+      <ElSelect v-model="categoryFilter" aria-label="工具分类" placeholder="全部分类" clearable style="width: 180px" @change="search">
+        <ElOption v-for="item in categories" :key="item.code" :label="item.name" :value="item.code" />
       </ElSelect>
-      <ElSelect v-model="statusFilter" placeholder="全部状态" clearable style="width: 150px" @change="search">
+      <ElSelect v-model="statusFilter" aria-label="工具状态" placeholder="全部状态" clearable style="width: 150px" @change="search">
         <ElOption v-for="status in TOOL_STATUSES" :key="status" :label="STATUS_LABELS[status]" :value="status" />
       </ElSelect>
-      <ElButton @click="search">查询</ElButton>
-      <ElButton text @click="resetFilters">重置</ElButton>
-    </div>
-
-    <ElTable v-loading="loading" :data="tools" class="admin-table" row-key="code">
-      <ElTableColumn prop="code" label="编码" width="150" />
-      <ElTableColumn prop="name" label="名称" min-width="150" show-overflow-tooltip />
-      <ElTableColumn label="分类" width="120">
-        <template #default="scope">{{ scope.row.categoryName }}<span class="muted"> ({{ scope.row.categoryCode }})</span></template>
-      </ElTableColumn>
-      <ElTableColumn prop="mode" label="模式" width="90" />
-      <ElTableColumn label="状态" width="100">
-        <template #default="scope"><ElTag :type="STATUS_TYPES[scope.row.status]">{{ STATUS_LABELS[scope.row.status] }}</ElTag></template>
-      </ElTableColumn>
-      <ElTableColumn prop="sortOrder" label="排序" width="80" />
-      <ElTableColumn label="推荐" width="80">
-        <template #default="scope"><ElTag v-if="scope.row.featured" type="warning">推荐</ElTag><span v-else class="muted">—</span></template>
-      </ElTableColumn>
-      <ElTableColumn prop="version" label="版本" width="70" />
-      <ElTableColumn label="需登录" width="80">
-        <template #default="scope">{{ scope.row.requiresLogin ? '是' : '否' }}</template>
-      </ElTableColumn>
-      <ElTableColumn label="操作" width="220" fixed="right">
-        <template #default="scope">
-          <ElButton size="small" @click="openEdit(asTool(scope.row))">编辑</ElButton>
-          <ElDropdown trigger="click" @command="(command: string) => changeStatus(asTool(scope.row), command)">
-            <ElButton size="small">状态</ElButton>
+    </AdminFilterBar>
+    <AdminDataPanel :loading="loading" :has-content="tools.length > 0" :error="errorMessage" :trace-id="traceId" empty-title="暂无工具" empty-description="调整筛选条件，或新增一个工具。" @retry="load">
+      <ElTable :data="tools" class="admin-table admin-desktop-table" row-key="code">
+        <ElTableColumn label="工具" min-width="240">
+          <template #default="scope">
+            <strong class="admin-record-title">{{ scope.row.name }}</strong>
+            <div class="admin-record-subtitle">{{ scope.row.code }}</div>
+            <div class="admin-record-description admin-cell-description">{{ scope.row.description }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="分类" width="140">
+          <template #default="scope">
+            <span>{{ scope.row.categoryName }}</span>
+            <div class="admin-record-subtitle">{{ scope.row.categoryCode }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="运行方式" width="120">
+          <template #default="scope">{{ scope.row.mode }}<div class="admin-record-subtitle">{{ scope.row.requiresLogin ? '需要登录' : '免登录' }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="状态" width="120">
+          <template #default="scope">
+            <AdminStatusTag :tone="STATUS_TYPES[scope.row.status]" :label="STATUS_LABELS[scope.row.status] ?? scope.row.status" />
+            <div v-if="scope.row.featured" class="admin-record-subtitle">首页推荐</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="排序 / 版本" width="110">
+          <template #default="scope">{{ scope.row.sortOrder }}<div class="admin-record-subtitle">版本 {{ scope.row.version }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" width="220" fixed="right">
+          <template #default="scope">
+            <div class="admin-row-actions">
+              <ElButton size="small" :disabled="loading" @click="openEdit(asTool(scope.row))">编辑</ElButton>
+              <ElDropdown trigger="click" :disabled="loading" @command="(command: string) => changeStatus(asTool(scope.row), command)">
+                <ElButton size="small" :disabled="loading">状态</ElButton>
+                <template #dropdown>
+                  <ElDropdownMenu>
+                    <ElDropdownItem v-for="status in TOOL_STATUSES" :key="status" :command="status" :disabled="scope.row.status === status">{{ STATUS_LABELS[status] }}</ElDropdownItem>
+                  </ElDropdownMenu>
+                </template>
+              </ElDropdown>
+              <ElButton size="small" type="danger" plain :disabled="loading" @click="remove(asTool(scope.row))">删除</ElButton>
+            </div>
+          </template>
+        </ElTableColumn>
+      </ElTable>
+      <AdminRecordCards :records="tools" :record-key="record => record.code">
+        <template #title="{ record }">
+          <strong class="admin-record-title">{{ record.name }}</strong>
+          <div class="admin-record-subtitle">{{ record.code }}</div>
+        </template>
+        <template #status="{ record }">
+          <AdminStatusTag :tone="STATUS_TYPES[record.status]" :label="STATUS_LABELS[record.status] ?? record.status" />
+        </template>
+        <template #description="{ record }">{{ record.description }}</template>
+        <template #meta="{ record }">{{ record.categoryName }} · {{ record.mode }} · 排序 {{ record.sortOrder }} · 版本 {{ record.version }}<br>{{ record.requiresLogin ? '需要登录' : '免登录' }}{{ record.featured ? ' · 首页推荐' : '' }}</template>
+        <template #actions="{ record }">
+          <ElButton size="small" :disabled="loading" @click="openEdit(record)">编辑</ElButton>
+          <ElDropdown trigger="click" :disabled="loading" @command="(command: string) => changeStatus(record, command)">
+            <ElButton size="small" :disabled="loading">状态</ElButton>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="ENABLED" :disabled="scope.row.status === 'ENABLED'">上线</ElDropdownItem>
-                <ElDropdownItem command="DISABLED" :disabled="scope.row.status === 'DISABLED'">下线</ElDropdownItem>
-                <ElDropdownItem command="MAINTENANCE" :disabled="scope.row.status === 'MAINTENANCE'">维护</ElDropdownItem>
+                <ElDropdownItem v-for="status in TOOL_STATUSES" :key="status" :command="status" :disabled="record.status === status">{{ STATUS_LABELS[status] }}</ElDropdownItem>
               </ElDropdownMenu>
             </template>
           </ElDropdown>
-          <ElButton size="small" type="danger" plain @click="remove(asTool(scope.row))">删除</ElButton>
+          <ElButton size="small" type="danger" plain :disabled="loading" @click="remove(record)">删除</ElButton>
         </template>
-      </ElTableColumn>
-    </ElTable>
-
-    <ElPagination class="admin-pagination" layout="total, prev, pager, next" :total="total"
-      :current-page="page" :page-size="pageSize" @current-change="(value: number) => { page = value; void load() }" />
-
-    <ElDialog v-model="dialogVisible" :title="dialogTitle" width="620px" top="6vh">
-      <ElAlert v-if="dialogError" class="admin-error" type="error" :closable="false" :title="dialogError" show-icon />
-      <ElForm label-position="top">
-        <ElFormItem v-if="!editingCode" label="工具编码">
-          <ElInput v-model="form.code" maxlength="64" placeholder="小写字母开头，例如 image_compress" />
-        </ElFormItem>
-        <ElFormItem label="名称"><ElInput v-model="form.name" maxlength="128" /></ElFormItem>
-        <ElFormItem label="说明"><ElInput v-model="form.description" type="textarea" :rows="2" maxlength="500" /></ElFormItem>
-        <ElFormItem label="分类">
-          <ElSelect v-model="form.categoryCode" style="width: 100%">
-            <ElOption v-for="item in categories" :key="item.code" :label="`${item.name} (${item.code})`" :value="item.code" />
-          </ElSelect>
-        </ElFormItem>
-        <ElFormItem label="图标标识"><ElInput v-model="form.icon" maxlength="128" placeholder="可选，例如 tools" /></ElFormItem>
-        <ElFormItem label="关键词"><ElInput v-model="form.keywords" type="textarea" :rows="2" placeholder="使用逗号或换行分隔，最多 20 个" /></ElFormItem>
-        <ElFormItem label="运行模式">
-          <ElSelect v-model="form.mode" style="width: 100%">
-            <ElOption v-for="mode in TOOL_MODES" :key="mode" :label="mode" :value="mode" />
-          </ElSelect>
-        </ElFormItem>
-        <ElFormItem label="状态">
-          <ElSelect v-model="form.status" style="width: 100%">
-            <ElOption v-for="status in TOOL_STATUSES" :key="status" :label="STATUS_LABELS[status]" :value="status" />
-          </ElSelect>
-        </ElFormItem>
-        <ElFormItem label="版本"><ElInputNumber v-model="form.version" :min="1" :max="100000" /></ElFormItem>
-        <ElFormItem label="排序"><ElInputNumber v-model="form.sortOrder" :min="0" :max="100000" /></ElFormItem>
-        <ElFormItem label="首页推荐"><ElSwitch v-model="form.featured" /></ElFormItem>
-        <ElFormItem label="需要登录"><ElSwitch v-model="form.requiresLogin" /></ElFormItem>
-        <ElFormItem label="配置 JSON（对象）">
-          <ElInput v-model="form.configJson" type="textarea" :rows="4" placeholder='例如 {"path":"/tools/demo/"}' />
-        </ElFormItem>
+      </AdminRecordCards>
+    </AdminDataPanel>
+    <div class="admin-list-footer">
+      <span class="admin-result-count">共 {{ total }} 个工具</span>
+      <ElPagination class="admin-pagination" layout="prev, pager, next" :pager-count="5" :total="total" :current-page="page" :page-size="pageSize" @current-change="(value: number) => { page = value; void load() }" />
+    </div>
+    <AdminDetailDrawer v-model="dialogVisible" :title="dialogTitle" :busy="saving" width="620px">
+      <p v-if="editingCode" class="admin-form-help">工具编码 {{ editingCode }}</p>
+      <AdminFormError v-if="dialogError" :message="dialogError" />
+      <ElForm label-position="top" :disabled="saving">
+        <section class="admin-form-section">
+          <h3>基本信息</h3>
+          <ElFormItem v-if="!editingCode" label="工具编码">
+            <ElInput v-model="form.code" maxlength="64" placeholder="小写字母开头，例如 image_compress" />
+          </ElFormItem>
+          <ElFormItem label="名称">
+            <ElInput v-model="form.name" maxlength="128" />
+          </ElFormItem>
+          <ElFormItem label="说明">
+            <ElInput v-model="form.description" type="textarea" :rows="2" maxlength="500" />
+          </ElFormItem>
+          <ElFormItem label="分类">
+            <ElSelect v-model="form.categoryCode" style="width: 100%">
+              <ElOption v-for="item in categories" :key="item.code" :label="`${item.name} (${item.code})`" :value="item.code" />
+            </ElSelect>
+          </ElFormItem>
+          <ElFormItem label="图标标识">
+            <ElInput v-model="form.icon" maxlength="128" placeholder="可选，例如 tools" />
+          </ElFormItem>
+          <ElFormItem label="关键词">
+            <ElInput v-model="form.keywords" type="textarea" :rows="2" placeholder="使用逗号或换行分隔，最多 20 个" />
+          </ElFormItem>
+        </section>
+        <section class="admin-form-section">
+          <h3>运行与展示</h3>
+          <div class="admin-form-grid">
+            <ElFormItem label="运行模式">
+              <ElSelect v-model="form.mode" style="width: 100%">
+                <ElOption v-for="mode in TOOL_MODES" :key="mode" :label="mode" :value="mode" />
+              </ElSelect>
+            </ElFormItem>
+            <ElFormItem label="状态">
+              <ElSelect v-model="form.status" style="width: 100%">
+                <ElOption v-for="status in TOOL_STATUSES" :key="status" :label="STATUS_LABELS[status]" :value="status" />
+              </ElSelect>
+            </ElFormItem>
+            <ElFormItem label="版本">
+              <ElInputNumber v-model="form.version" :min="1" :max="100000" />
+            </ElFormItem>
+            <ElFormItem label="排序">
+              <ElInputNumber v-model="form.sortOrder" :min="0" :max="100000" />
+            </ElFormItem>
+            <ElFormItem label="首页推荐">
+              <ElSwitch v-model="form.featured" />
+            </ElFormItem>
+            <ElFormItem label="需要登录">
+              <ElSwitch v-model="form.requiresLogin" />
+            </ElFormItem>
+          </div>
+        </section>
+        <section class="admin-form-section">
+          <h3>工具配置</h3>
+          <ElFormItem label="配置 JSON（对象）">
+            <ElInput v-model="form.configJson" type="textarea" :rows="4" placeholder='例如 {"path":"/tools/demo/"}' />
+          </ElFormItem>
+        </section>
       </ElForm>
       <template #footer>
-        <ElButton @click="dialogVisible = false">取消</ElButton>
-        <ElButton type="primary" :loading="saving" @click="save">保存</ElButton>
+        <ElButton :disabled="saving" @click="dialogVisible = false">取消</ElButton>
+        <ElButton type="primary" :loading="saving" @click="save">保存工具</ElButton>
       </template>
-    </ElDialog>
+    </AdminDetailDrawer>
   </section>
 </template>

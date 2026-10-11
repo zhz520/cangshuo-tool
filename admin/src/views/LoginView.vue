@@ -4,8 +4,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElAlert, ElButton, ElForm, ElFormItem, ElInput } from 'element-plus'
 import { ApiRequestError } from '@/api/client'
 import { useAuthStore } from '@/stores/auth'
+import { useUiStore } from '@/stores/ui'
+import { Moon, Sunny } from '@element-plus/icons-vue'
 
 const auth = useAuthStore()
+const ui = useUiStore()
 const route = useRoute()
 const router = useRouter()
 const form = reactive({ username: '', password: '' })
@@ -44,15 +47,16 @@ async function submit(): Promise<void> {
 
 <template>
   <main class="login-page">
+<ElButton class="login-theme-toggle" :icon="ui.theme === 'dark' ? Sunny : Moon" :aria-label="ui.theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'" @click="ui.toggleTheme()">{{ ui.theme === 'dark' ? '浅色主题' : '深色主题' }}</ElButton>
     <section class="login-card">
       <div class="login-brand">
-        <span class="brand-mark">沧</span>
+        <span class="brand-mark" aria-hidden="true">CS</span>
         <span><strong>沧烁工具箱</strong><small>管理控制台</small></span>
       </div>
       <h1 class="login-heading">管理员登录</h1>
-      <p class="login-hint">使用部署环境初始化的管理员账号登录；连续失败会暂时锁定账号与来源地址，登录与退出会写入管理日志。</p>
+      <p class="login-hint">登录后管理工具、内容与用户反馈。</p>
       <ElAlert v-if="errorMessage" class="login-error" type="error" :closable="false" :title="errorMessage" show-icon />
-      <ElForm label-position="top" @submit.prevent="submit">
+      <ElForm label-position="top" :disabled="auth.loggingIn" @submit.prevent="submit">
         <ElFormItem label="管理员账号">
           <ElInput v-model="form.username" name="username" autocomplete="username" maxlength="32"
             placeholder="3-32 位字母、数字或 . _ -" clearable />
@@ -63,7 +67,7 @@ async function submit(): Promise<void> {
         </ElFormItem>
         <ElButton class="login-submit" type="primary" native-type="submit" :loading="auth.loggingIn">登录</ElButton>
       </ElForm>
-      <p class="login-footer">密码不会写入浏览器存储；登录令牌仅保存在本机浏览器。</p>
+      <p class="login-footer">仅限授权管理员访问 · 忘记密码请联系系统负责人</p>
     </section>
   </main>
 </template>

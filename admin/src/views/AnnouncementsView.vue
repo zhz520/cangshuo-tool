@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { ElAlert, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElMessage, ElMessageBox, ElOption,
-  ElSelect, ElSwitch, ElTable, ElTableColumn, ElTag } from 'element-plus'
+import { ElButton, ElForm, ElFormItem, ElInput, ElMessage, ElMessageBox, ElOption,
+  ElSelect, ElSwitch, ElTable, ElTableColumn } from 'element-plus'
+import AdminPageHeader from '@/components/AdminPageHeader.vue'
+import AdminDataPanel from '@/components/AdminDataPanel.vue'
+import AdminDetailDrawer from '@/components/AdminDetailDrawer.vue'
+import AdminFormError from '@/components/AdminFormError.vue'
+import AdminRecordCards from '@/components/AdminRecordCards.vue'
+import AdminStatusTag from '@/components/AdminStatusTag.vue'
+import { useAdminRequest } from '@/composables/useAdminRequest'
 import { ApiRequestError } from '@/api/client'
 import { ANNOUNCEMENT_LEVELS, createAdminAnnouncement, deleteAdminAnnouncement, listAdminAnnouncements,
   updateAdminAnnouncement, updateAdminAnnouncementStatus, type AdminAnnouncement } from '@/api/announcements'
@@ -9,8 +16,7 @@ import { ANNOUNCEMENT_LEVELS, createAdminAnnouncement, deleteAdminAnnouncement, 
 const LEVEL_LABELS: Record<string, string> = { INFO: '通知', WARNING: '提醒', CRITICAL: '重要' }
 const LEVEL_TYPES: Record<string, 'info' | 'warning' | 'danger'> = { INFO: 'info', WARNING: 'warning', CRITICAL: 'danger' }
 const entries = ref<AdminAnnouncement[]>([])
-const loading = ref(false)
-const errorMessage = ref<string | null>(null)
+const { loading, errorMessage, traceId, run } = useAdminRequest(messageFor)
 const dialogVisible = ref(false)
 const editingId = ref<number | null>(null)
 const saving = ref(false)
@@ -33,16 +39,7 @@ function messageFor(error: unknown): string {
 }
 
 async function load(): Promise<void> {
-  if (loading.value) return
-  loading.value = true
-  errorMessage.value = null
-  try {
-    entries.value = (await listAdminAnnouncements()).data
-  } catch (error: unknown) {
-    errorMessage.value = messageFor(error)
-  } finally {
-    loading.value = false
-  }
+  await run(() => listAdminAnnouncements(), result => { entries.value = result.data })
 }
 
 function openCreate(): void {
@@ -145,66 +142,104 @@ onMounted(() => { void load() })
 </script>
 
 <template>
-  <section>
-    <div class="page-heading">
-      <div>
-        <p class="eyebrow">ANNOUNCEMENTS</p>
-        <h1>公告管理</h1>
-        <p class="page-description">创建公告草稿、发布或下线，并可用 UTC 时间窗定时展示；公开接口只返回当前可见的公告。</p>
-      </div>
-      <ElButton type="primary" @click="openCreate">新增公告</ElButton>
+  <section class="admin-page">
+    <AdminPageHeader title="公告管理" description="编辑公告内容，管理发布状态与展示时间。">
+      <template #actions>
+        <ElButton :loading="loading" @click="load">刷新</ElButton>
+        <ElButton type="primary" @click="openCreate">新增公告</ElButton>
+      </template>
+    </AdminPageHeader>
+    <AdminDataPanel :loading="loading" :has-content="entries.length > 0" :error="errorMessage" :trace-id="traceId" empty-title="暂无公告" empty-description="点击右上角开始创建。" @retry="load">
+      <ElTable :data="entries" class="admin-table admin-desktop-table" row-key="id">
+        <ElTableColumn label="公告" min-width="260">
+          <template #default="scope">
+            <strong class="admin-record-title">{{ scope.row.title }}</strong>
+            <div class="admin-record-subtitle">#{{ scope.row.id }} · 更新 {{ scope.row.updatedAt }}</div>
+            <div class="admin-record-description admin-cell-description">{{ scope.row.body }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="级别" width="90">
+          <template #default="scope">
+            <AdminStatusTag :tone="LEVEL_TYPES[scope.row.level]" :label="LEVEL_LABELS[scope.row.level] ?? scope.row.level" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="状态" width="140">
+          <template #default="scope">
+            <AdminStatusTag :label="scope.row.active ? '展示中' : scope.row.published ? '已发布未生效' : '草稿'" :tone="scope.row.active ? 'success' : scope.row.published ? 'warning' : 'info'" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="展示时间 · UTC" min-width="180">
+          <template #default="scope">
+            <div class="admin-record-subtitle">{{ scope.row.startAt ?? '不限开始' }}<br>{{ scope.row.endAt ?? '不限结束' }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" width="230" fixed="right">
+          <template #default="scope">
+            <div class="admin-row-actions">
+              <ElButton size="small" :disabled="loading" @click="openEdit(asEntry(scope.row))">编辑</ElButton>
+              <ElButton size="small" :disabled="loading" :type="scope.row.published ? 'warning' : 'primary'" plain @click="togglePublished(asEntry(scope.row))">{{ scope.row.published ? '下线' : '发布' }}</ElButton>
+              <ElButton size="small" type="danger" plain :disabled="loading" @click="remove(asEntry(scope.row))">删除</ElButton>
+            </div>
+          </template>
+        </ElTableColumn>
+      </ElTable>
+      <AdminRecordCards :records="entries" :record-key="record => record.id">
+        <template #title="{ record }">
+          <strong class="admin-record-title">{{ record.title }}</strong>
+          <div class="admin-record-subtitle">#{{ record.id }} · {{ LEVEL_LABELS[record.level] }}</div>
+        </template>
+        <template #status="{ record }">
+          <AdminStatusTag :label="record.active ? '展示中' : record.published ? '已发布未生效' : '草稿'" :tone="record.active ? 'success' : record.published ? 'warning' : 'info'" />
+        </template>
+        <template #description="{ record }">{{ record.body }}</template>
+        <template #meta="{ record }">更新 {{ record.updatedAt }}<br>{{ record.startAt ?? '不限开始' }} → {{ record.endAt ?? '不限结束' }}</template>
+        <template #actions="{ record }">
+          <ElButton size="small" :disabled="loading" @click="openEdit(record)">编辑</ElButton>
+          <ElButton size="small" :disabled="loading" :type="record.published ? 'warning' : 'primary'" plain @click="togglePublished(record)">{{ record.published ? '下线' : '发布' }}</ElButton>
+          <ElButton size="small" type="danger" plain :disabled="loading" @click="remove(record)">删除</ElButton>
+        </template>
+      </AdminRecordCards>
+    </AdminDataPanel>
+    <div class="admin-list-footer">
+      <span class="admin-result-count">共 {{ entries.length }} 条记录</span>
     </div>
-
-    <ElAlert v-if="errorMessage" class="admin-error" type="error" :closable="false" :title="errorMessage" show-icon />
-
-    <ElTable v-loading="loading" :data="entries" class="admin-table" row-key="id">
-      <ElTableColumn prop="id" label="ID" width="80" />
-      <ElTableColumn prop="title" label="标题" min-width="180" />
-      <ElTableColumn label="级别" width="100">
-        <template #default="scope"><ElTag :type="LEVEL_TYPES[scope.row.level]">{{ LEVEL_LABELS[scope.row.level] }}</ElTag></template>
-      </ElTableColumn>
-      <ElTableColumn label="状态" width="110">
-        <template #default="scope">
-          <ElTag v-if="scope.row.active" type="success">展示中</ElTag>
-          <ElTag v-else-if="scope.row.published" type="warning">已发布未生效</ElTag>
-          <ElTag v-else type="info">草稿</ElTag>
-        </template>
-      </ElTableColumn>
-      <ElTableColumn label="时间窗" min-width="190">
-        <template #default="scope"><span class="muted">{{ scope.row.startAt ?? '不限' }} → {{ scope.row.endAt ?? '不限' }}</span></template>
-      </ElTableColumn>
-      <ElTableColumn label="更新时间" min-width="190">
-        <template #default="scope"><span class="muted">{{ scope.row.updatedAt }}</span></template>
-      </ElTableColumn>
-      <ElTableColumn label="操作" width="230" fixed="right">
-        <template #default="scope">
-          <ElButton size="small" @click="openEdit(asEntry(scope.row))">编辑</ElButton>
-          <ElButton size="small" :type="scope.row.published ? 'warning' : 'primary'" plain @click="togglePublished(asEntry(scope.row))">
-            {{ scope.row.published ? '下线' : '发布' }}
-          </ElButton>
-          <ElButton size="small" type="danger" plain @click="remove(asEntry(scope.row))">删除</ElButton>
-        </template>
-      </ElTableColumn>
-    </ElTable>
-
-    <ElDialog v-model="dialogVisible" :title="dialogTitle" width="600px" top="8vh">
-      <ElAlert v-if="dialogError" class="admin-error" type="error" :closable="false" :title="dialogError" show-icon />
-      <ElForm label-position="top">
-        <ElFormItem label="标题"><ElInput v-model="form.title" maxlength="128" /></ElFormItem>
-        <ElFormItem label="正文"><ElInput v-model="form.body" type="textarea" :rows="5" maxlength="2000" /></ElFormItem>
-        <ElFormItem label="级别">
-          <ElSelect v-model="form.level" style="width: 100%">
-            <ElOption v-for="level in ANNOUNCEMENT_LEVELS" :key="level" :label="LEVEL_LABELS[level]" :value="level" />
-          </ElSelect>
-        </ElFormItem>
-        <ElFormItem label="发布"><ElSwitch v-model="form.enabled" /></ElFormItem>
-        <ElFormItem label="开始时间（UTC，可选）"><ElInput v-model="form.startAt" placeholder="2026-10-05T00:00:00Z" /></ElFormItem>
-        <ElFormItem label="结束时间（UTC，可选）"><ElInput v-model="form.endAt" placeholder="2026-11-05T00:00:00Z" /></ElFormItem>
+    <AdminDetailDrawer v-model="dialogVisible" :title="dialogTitle" :busy="saving" width="600px">
+      <AdminFormError v-if="dialogError" :message="dialogError" />
+      <ElForm label-position="top" :disabled="saving">
+        <section class="admin-form-section">
+          <h3>公告内容</h3>
+          <ElFormItem label="标题">
+            <ElInput v-model="form.title" maxlength="128" />
+          </ElFormItem>
+          <ElFormItem label="正文">
+            <ElInput v-model="form.body" type="textarea" :rows="5" maxlength="2000" />
+          </ElFormItem>
+        </section>
+        <section class="admin-form-section">
+          <h3>展示设置</h3>
+          <div class="admin-form-grid">
+            <ElFormItem label="级别">
+              <ElSelect v-model="form.level" style="width: 100%">
+                <ElOption v-for="level in ANNOUNCEMENT_LEVELS" :key="level" :label="LEVEL_LABELS[level]" :value="level" />
+              </ElSelect>
+            </ElFormItem>
+            <ElFormItem label="发布">
+              <ElSwitch v-model="form.enabled" />
+            </ElFormItem>
+          </div>
+          <p class="admin-form-help">时间使用 UTC，留空表示不限制。</p>
+          <ElFormItem label="开始时间（UTC，可选）">
+            <ElInput v-model="form.startAt" placeholder="2026-10-05T00:00:00Z" />
+          </ElFormItem>
+          <ElFormItem label="结束时间（UTC，可选）">
+            <ElInput v-model="form.endAt" placeholder="2026-11-05T00:00:00Z" />
+          </ElFormItem>
+        </section>
       </ElForm>
       <template #footer>
-        <ElButton @click="dialogVisible = false">取消</ElButton>
-        <ElButton type="primary" :loading="saving" @click="save">保存</ElButton>
+        <ElButton :disabled="saving" @click="dialogVisible = false">取消</ElButton>
+        <ElButton type="primary" :loading="saving" @click="save">保存公告</ElButton>
       </template>
-    </ElDialog>
+    </AdminDetailDrawer>
   </section>
 </template>

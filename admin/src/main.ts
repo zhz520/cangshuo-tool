@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/es/components/button/style/css'
 import 'element-plus/es/components/icon/style/css'
 import 'element-plus/es/components/tag/style/css'

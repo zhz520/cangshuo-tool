@@ -3,7 +3,7 @@ import { navigationItems } from './navigation'
 import { useAuthStore } from '@/stores/auth'
 
 const moduleRoutes: RouteRecordRaw[] = navigationItems
-  .filter(item => !['/dashboard', '/tools', '/categories', '/banners', '/users', '/announcements', '/feedback', '/logs'].includes(item.path)).map(item => ({
+  .filter(item => item.availability === 'planned').map(item => ({
   path: item.path.slice(1),
   component: () => import('@/views/ComingSoonView.vue'),
   props: { title: item.title, description: item.description },
