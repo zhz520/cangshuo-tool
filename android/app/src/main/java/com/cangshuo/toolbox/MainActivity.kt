@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
                     settingsFactory = container.settingsViewModelFactory,
                     accentFactory = container.accentViewModelFactory,
                     updateFactory = container.updateViewModelFactory,
+                    siteLinkFactory = container.siteLinkViewModelFactory,
                 )
             }
             }

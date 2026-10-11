@@ -105,6 +105,7 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenAuth: () -> Unit,
     onOpenFeedback: () -> Unit,
+    onOpenSiteLinks: () -> Unit,
     onShowUnavailable: () -> Unit,
     homeExtras: (@Composable () -> Unit)? = null,
     gridColumns: Int = 0,
@@ -172,6 +173,7 @@ fun HomeScreen(
             )
             HomeTab.PROFILE -> ProfileContent(
                 Modifier.fillMaxSize(), onOpenAuth, onOpenSettings, onOpenFeedback,
+                    onOpenSiteLinks = onOpenSiteLinks,
                 onOpenRecent = onOpenRecent,
                 onOpenFavorites = { onTabSelected(HomeTab.FAVORITES) },
                 onShowUnavailable = onShowUnavailable,
@@ -449,6 +451,7 @@ private fun ProfileContent(
     onOpenAuth: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenFeedback: () -> Unit,
+    onOpenSiteLinks: () -> Unit,
     onOpenRecent: () -> Unit,
     onOpenFavorites: () -> Unit,
     onShowUnavailable: () -> Unit,
@@ -481,6 +484,7 @@ private fun ProfileContent(
                 ToolListItem(stringResource(R.string.profile_recent), icon = R.drawable.ic_timestamp, onClick = onOpenRecent, trailing = { ToolboxChevron() })
                 ToolListItem(stringResource(R.string.profile_stats), icon = R.drawable.ic_chart, onClick = onShowUnavailable, trailing = { ToolboxChevron() })
                 ToolListItem(stringResource(R.string.profile_feedback), icon = R.drawable.ic_chat, onClick = onOpenFeedback, trailing = { ToolboxChevron() })
+                ToolListItem(stringResource(R.string.sitelink_title), icon = R.drawable.ic_tools, onClick = onOpenSiteLinks, trailing = { ToolboxChevron() })
                 ToolListItem(stringResource(R.string.profile_about), icon = R.drawable.ic_info, onClick = onShowUnavailable, trailing = { ToolboxChevron() }, showDivider = false)
             }
         }

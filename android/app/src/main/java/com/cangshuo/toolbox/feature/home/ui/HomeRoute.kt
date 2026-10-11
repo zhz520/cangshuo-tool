@@ -44,6 +44,8 @@ import com.cangshuo.toolbox.feature.favorites.ui.FavoritesViewModel
 import com.cangshuo.toolbox.feature.feedback.ui.FeedbackRoute
 import com.cangshuo.toolbox.feature.recent.ui.RecentScreen
 import com.cangshuo.toolbox.feature.popular.ui.PopularScreen
+import com.cangshuo.toolbox.feature.sitelink.ui.SiteLinkScreen
+import com.cangshuo.toolbox.feature.sitelink.ui.SiteLinkViewModel
 import com.cangshuo.toolbox.feature.recent.ui.RecentViewModel
 import com.cangshuo.toolbox.feature.search.ui.SearchRoute
 import com.cangshuo.toolbox.feature.settings.ui.SettingsScreen
@@ -63,6 +65,7 @@ fun HomeRoute(
     settingsFactory: ViewModelProvider.Factory,
     accentFactory: ViewModelProvider.Factory,
     updateFactory: ViewModelProvider.Factory,
+    siteLinkFactory: ViewModelProvider.Factory,
 ) {
     val model: HomeViewModel = viewModel(factory = factory)
     val favorites: FavoritesViewModel = viewModel(key = "local.favorites", factory = favoritesFactory)
@@ -100,6 +103,7 @@ fun HomeRoute(
         state.isSearchOpen -> HomePage.Search
         state.overlay == HomeOverlay.RECENT -> HomePage.Recent
         state.overlay == HomeOverlay.POPULAR -> HomePage.Popular
+        state.overlay == HomeOverlay.SITE_LINKS -> HomePage.SiteLinks
         state.overlay == HomeOverlay.SETTINGS -> HomePage.Settings
         state.overlay == HomeOverlay.AUTH -> HomePage.Auth
         state.overlay == HomeOverlay.FEEDBACK -> HomePage.Feedback
@@ -125,6 +129,7 @@ fun HomeRoute(
                 onCatalogRefresh = { model.refreshRemoteCatalog() },
                 onOpenRecent = model::openRecent,
                 onOpenPopular = { model.openOverlay(HomeOverlay.POPULAR) },
+                onOpenSiteLinks = { model.openOverlay(HomeOverlay.SITE_LINKS) },
                 onOpenSettings = model::openSettings,
                 onOpenAuth = { model.openOverlay(HomeOverlay.AUTH) },
                 onOpenFeedback = { model.openOverlay(HomeOverlay.FEEDBACK) },
@@ -154,6 +159,15 @@ fun HomeRoute(
                     (state.catalog as? HomeCatalogState.Content)?.value
                         ?: (state.catalog as? HomeCatalogState.Empty)?.value,
                     onToolSelected = { model.selectTool(it, applicationContext) },
+                )
+            }
+            HomePage.SiteLinks -> OverlayPage(stringResource(R.string.sitelink_title), model::closeOverlay) { modifier ->
+                val siteLinkModel: SiteLinkViewModel = viewModel(key = "site.links", factory = siteLinkFactory)
+                val siteLinkState by siteLinkModel.state.collectAsStateWithLifecycle()
+                SiteLinkScreen(
+                    siteLinkState, authState.account != null, siteLinkModel::refresh,
+                    siteLinkModel::title, siteLinkModel::url, siteLinkModel::description,
+                    siteLinkModel::submit, siteLinkModel::clearFlags, modifier,
                 )
             }
             HomePage.Settings -> SettingsScreen(
@@ -246,6 +260,7 @@ private sealed interface HomePage {
     data object Search : HomePage { override val key: String = "search" }
     data object Recent : HomePage { override val key: String = "recent" }
     data object Popular : HomePage { override val key: String = "popular" }
+    data object SiteLinks : HomePage { override val key: String = "sitelinks" }
     data object Settings : HomePage { override val key: String = "settings" }
     data object Auth : HomePage { override val key: String = "auth" }
     data object Feedback : HomePage { override val key: String = "feedback" }

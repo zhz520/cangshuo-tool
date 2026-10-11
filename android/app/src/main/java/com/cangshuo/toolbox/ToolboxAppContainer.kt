@@ -282,6 +282,10 @@ class ToolboxAppContainer(context: Context) {
     val updateViewModelFactory = com.cangshuo.toolbox.feature.settings.ui.UpdateViewModel.factory(
         com.cangshuo.toolbox.feature.settings.data.RemoteUpdateRepository(BuildConfig.API_BASE_URL),
         BuildConfig.VERSION_CODE.toLong())
+    val siteLinkViewModelFactory = com.cangshuo.toolbox.feature.sitelink.ui.SiteLinkViewModel.factory(
+        com.cangshuo.toolbox.feature.sitelink.data.RemoteSiteLinkRepository(BuildConfig.API_BASE_URL) {
+            authRepository.authorization()
+        })
     private val authRestoreFinished=kotlinx.coroutines.flow.MutableStateFlow(false)
     private val startupSettings=combine(authRestoreFinished,authRepository.account,cloudSync.context,settings) { ready,account,context,settings ->
         settings.takeIf { ready && it.ready && account?.id==context.userId && it.ownerScope==(context.settingsScope ?: 0) }
