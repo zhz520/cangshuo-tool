@@ -25,12 +25,12 @@
 | --- | --- | --- |
 | 概览 | `GET /api/v1/health` | 已实测 200（含连测 10/10） |
 | 工具 / 分类 / 推荐位 / 公告 / 用户 / 反馈 / 操作日志 | `/api/v1/admin/*` 对应模块 | 历史已验 |
-| 网站导航审核 | `GET/PATCH /api/v1/admin/site-links` | 页面已部署（`/admin/site-links` 200）；**待管理员复测** |
-| 系统配置 | `GET/PUT /api/v1/admin/config` | 匿名访问 401 已验；页面已部署（`/admin/system-config` 200）；**待管理员复测** |
-| 用户会员发放 | `GET/PUT /api/v1/admin/users/{id}/membership` | 接口已上线；**待管理员复测** |
+| 网站导航审核 | `GET/PATCH /api/v1/admin/site-links` | 已实测：投稿 201 待审不公开 → PATCH `APPROVED` 200 公开列表可见 → `REJECTED` 200 后从公开列表移除；页面 `/admin/site-links` 200 |
+| 系统配置 | `GET/PUT /api/v1/admin/config` | 已实测：读取 4 个配置键、PUT 同值 200、匿名 401；页面 `/admin/system-config` 200 |
+| 用户会员发放 | `GET/PUT /api/v1/admin/users/{id}/membership` | 已实测：管理员发放 PRO 200 → GET 返回 `plan=PRO/active=true` → 撤销 FREE 200；临时测试账号已删除 |
 
 ## 已知边界
 
-- 管理员登录后的页面级实测（审核、配置保存、会员发放）需要管理员口令，本轮未执行；接口与页面都已上线，建议在后台点一遍确认交互细节。
+- 管理员侧接口复测已用引导管理员账号完成（会员发放、导航审核、配置保存）；页面级人工点击建议管理员登录后再走一遍，确认交互细节与提示文案。
 - 会员在线支付未接入：当前由管理员发放，App 内明确说明，不做虚假支付。
 - 服务器 SSH 端口持续被扫描（当日 700+ 次失败登录），建议更换端口或启用 fail2ban。
