@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { ElButton, ElInput, ElMessage, ElMessageBox, ElOption, ElPagination, ElSelect, ElTable,
-  ElTableColumn } from 'element-plus'
+import { ElButton, ElDatePicker, ElForm, ElFormItem, ElInput, ElMessage, ElMessageBox, ElOption,
+  ElPagination, ElSelect, ElTable, ElTableColumn } from 'element-plus'
 import AdminPageHeader from '@/components/AdminPageHeader.vue'
 import AdminFilterBar from '@/components/AdminFilterBar.vue'
 import AdminDataPanel from '@/components/AdminDataPanel.vue'
@@ -10,8 +10,9 @@ import AdminRecordCards from '@/components/AdminRecordCards.vue'
 import AdminStatusTag from '@/components/AdminStatusTag.vue'
 import { useAdminRequest } from '@/composables/useAdminRequest'
 import { ApiRequestError } from '@/api/client'
-import { getAdminUser, listAdminUsers, listAdminUserSessions, listAdminUserSync, updateAdminUserStatus,
-  type AdminUser, type AdminUserSession, type AdminUserSyncEntry } from '@/api/users'
+import { getAdminMembership, getAdminUser, listAdminUsers, listAdminUserSessions, listAdminUserSync,
+  updateAdminMembership, updateAdminUserStatus, type AdminMembership, type AdminUser, type AdminUserSession,
+  type AdminUserSyncEntry } from '@/api/users'
 
 const users = ref<AdminUser[]>([])
 const total = ref(0)
@@ -27,6 +28,9 @@ const { loading: detailLoading, errorMessage: detailError, traceId: detailTraceI
 const detail = ref<AdminUser | null>(null)
 const sessions = ref<AdminUserSession[]>([])
 const syncEntries = ref<AdminUserSyncEntry[]>([])
+const membership = ref<AdminMembership | null>(null)
+const membershipForm = ref<{ plan: string; expiresAt: Date | null }>({ plan: 'FREE', expiresAt: null })
+const membershipSaving = ref(false)
 const asUser = (row: unknown): AdminUser => row as AdminUser
 
 function messageFor(error: unknown): string {
@@ -63,12 +67,44 @@ async function openDetail(user: AdminUser): Promise<void> {
   detail.value = null
   sessions.value = []
   syncEntries.value = []
+  membership.value = null
+  membershipForm.value = { plan: 'FREE', expiresAt: null }
   await detailRequest.run(() => Promise.all([
-    getAdminUser(user.id), listAdminUserSessions(user.id), listAdminUserSync(user.id, 20)]), ([profile, sessionList, syncList]) => {
+    getAdminUser(user.id), listAdminUserSessions(user.id), listAdminUserSync(user.id, 20),
+    getAdminMembership(user.id)]), ([profile, sessionList, syncList, membershipResult]) => {
     detail.value = profile.data
     sessions.value = sessionList.data
     syncEntries.value = syncList.data
+    membership.value = membershipResult.data
+    membershipForm.value = {
+      plan: membershipResult.data.plan,
+      expiresAt: membershipResult.data.expiresAt ? new Date(membershipResult.data.expiresAt) : null,
+    }
   })
+}
+
+function membershipLabel(value: AdminMembership): string {
+  const plan = value.plan === 'PRO' ? '专业版' : '免费版'
+  if (value.plan !== 'PRO') return plan
+  const expiry = value.expiresAt ? `到期 ${value.expiresAt.slice(0, 10)}` : '长期有效'
+  return value.active ? `${plan} · ${expiry}` : `${plan} · ${expiry}（已过期）`
+}
+
+async function saveMembership(): Promise<void> {
+  if (!selectedUser.value || membershipSaving.value) return
+  membershipSaving.value = true
+  try {
+    const expiresAt = membershipForm.value.plan === 'PRO' && membershipForm.value.expiresAt
+      ? membershipForm.value.expiresAt.toISOString()
+      : null
+    const result = await updateAdminMembership(selectedUser.value.id, membershipForm.value.plan, expiresAt)
+    membership.value = result.data
+    ElMessage.success('会员设置已保存')
+  } catch (error: unknown) {
+    ElMessage.error(messageFor(error))
+  } finally {
+    membershipSaving.value = false
+  }
 }
 
 async function changeStatus(user: AdminUser): Promise<void> {
@@ -187,6 +223,23 @@ onMounted(() => { void load() })
                 <dd>收藏 {{ detail.favoriteCount }} · 最近 {{ detail.recentCount }}</dd>
               </div>
             </dl>
+          </section>
+          <section class="admin-detail-section">
+            <h3>会员</h3>
+            <p class="admin-form-help">当前：{{ membership ? membershipLabel(membership) : '读取中…' }}</p>
+            <ElForm label-position="top">
+              <ElFormItem label="方案">
+                <ElSelect v-model="membershipForm.plan" style="width: 200px" :disabled="membershipSaving">
+                  <ElOption label="免费版" value="FREE" />
+                  <ElOption label="专业版" value="PRO" />
+                </ElSelect>
+              </ElFormItem>
+              <ElFormItem v-if="membershipForm.plan === 'PRO'" label="到期时间（留空表示长期有效）">
+                <ElDatePicker v-model="membershipForm.expiresAt" type="datetime" placement="bottom-start"
+                  :disabled="membershipSaving" />
+              </ElFormItem>
+              <ElButton type="primary" :loading="membershipSaving" @click="saveMembership">保存会员设置</ElButton>
+            </ElForm>
           </section>
           <section class="admin-detail-section">
             <h3>登录会话 · 最近 20 条</h3>

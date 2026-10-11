@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,11 @@ public class AdminMembershipController {
     public ApiResponse<MembershipResponse> update(@PathVariable long id,
             @Valid @RequestBody MembershipRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.grant(id, body), TraceIdFilter.traceId(request));
+    }
+
+    @GetMapping(value = "/{id}/membership")
+    @Operation(summary = "Read one account's membership for the admin console")
+    public ApiResponse<MembershipResponse> status(@PathVariable long id, HttpServletRequest request) {
+        return ApiResponse.success(service.status(id), TraceIdFilter.traceId(request));
     }
 }

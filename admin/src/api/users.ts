@@ -111,3 +111,26 @@ export function listAdminUserSessions(id: number): Promise<ApiResult<AdminUserSe
 export function listAdminUserSync(id: number, limit = 20): Promise<ApiResult<AdminUserSyncEntry[]>> {
   return apiRequest({ url: `/admin/users/${id}/sync`, method: 'GET', params: { limit } }, decodeSyncEntries)
 }
+
+export interface AdminMembership {
+  plan: string
+  expiresAt: string | null
+  active: boolean
+}
+
+function decodeMembership(value: unknown): AdminMembership {
+  if (!isRecord(value) || typeof value.plan !== 'string'
+    || (value.expiresAt !== null && typeof value.expiresAt !== 'string')
+    || typeof value.active !== 'boolean') {
+    throw new Error('invalid membership')
+  }
+  return { plan: value.plan, expiresAt: value.expiresAt ?? null, active: value.active }
+}
+
+export function getAdminMembership(id: number): Promise<ApiResult<AdminMembership>> {
+  return apiRequest({ url: `/admin/users/${id}/membership`, method: 'GET' }, decodeMembership)
+}
+
+export function updateAdminMembership(id: number, plan: string, expiresAt: string | null): Promise<ApiResult<AdminMembership>> {
+  return apiRequest({ url: `/admin/users/${id}/membership`, method: 'PUT', data: { plan, expiresAt } }, decodeMembership)
+}
