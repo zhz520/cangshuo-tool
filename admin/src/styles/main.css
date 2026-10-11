@@ -2,6 +2,7 @@
 @import './element-plus.css';
 @import './layout.css';
 @import './pages.css';
+@import './statistics.css';
 
 .admin-error { margin-bottom: var(--admin-space-4); }
 .admin-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 20px; }

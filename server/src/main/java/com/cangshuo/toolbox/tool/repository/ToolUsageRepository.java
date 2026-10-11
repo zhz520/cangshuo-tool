@@ -36,6 +36,12 @@ public class ToolUsageRepository {
                 VALUES (:code, 1, UTC_TIMESTAMP(3))
                 ON DUPLICATE KEY UPDATE use_count = use_count + 1, updated_at = UTC_TIMESTAMP(3)
                 """, new MapSqlParameterSource("code", toolCode));
+        // Both counters participate in ToolUsageService.record's transaction.
+        jdbc.update("""
+                INSERT INTO tool_usage_daily (usage_date, tool_code, use_count)
+                VALUES (DATE(UTC_TIMESTAMP(3) + INTERVAL 8 HOUR), :code, 1)
+                ON DUPLICATE KEY UPDATE use_count = use_count + 1
+                """, new MapSqlParameterSource("code", toolCode));
     }
 
     public List<PopularToolRow> findPopular(int limit) {

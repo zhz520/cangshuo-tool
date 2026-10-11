@@ -11,7 +11,7 @@ export interface NavigationItem {
 
 export const navigationGroups: { title: string; items: NavigationItem[] }[] = [
   { title: '工作台', items: [
-    { path: '/dashboard', title: '概览', description: '平台状态与管理入口', icon: Grid, availability: 'ready' },
+    { path: '/dashboard', title: '概览', description: '用户增长、工具排行与运营统计', icon: Grid, availability: 'ready' },
   ] },
   { title: '工具与内容', items: [
     { path: '/tools', title: '工具管理', description: '管理工具信息、可用状态与展示顺序。', icon: Tools, availability: 'ready' },

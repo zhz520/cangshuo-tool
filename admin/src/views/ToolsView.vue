@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu, ElForm, ElFormItem,
   ElInput, ElInputNumber, ElMessage, ElMessageBox, ElOption, ElPagination, ElSelect, ElSwitch, ElTable,
   ElTableColumn } from 'element-plus'
@@ -25,7 +26,9 @@ const total = ref(0)
 const page = ref(1)
 const pageSize = ref(20)
 const keyword = ref('')
-const categoryFilter = ref<string | undefined>(undefined)
+const route = useRoute()
+const categoryFilter = ref<string | undefined>(typeof route.query.categoryCode === 'string'
+  && /^[A-Z][A-Z0-9_]{0,31}$/.test(route.query.categoryCode) ? route.query.categoryCode : undefined)
 const statusFilter = ref<string | undefined>(undefined)
 const { loading, errorMessage, traceId, run } = useAdminRequest(messageFor)
 

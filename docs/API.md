@@ -288,6 +288,8 @@ Android 的 [本地收藏](LOCAL_FAVORITES.md) 已使用 Room 保存匿名书签
 
 ## 参考
 
+后台运营统计 `GET /api/v1/admin/statistics?days=7|30|90`，管理员专用、禁止缓存。响应中的 summary/daily/ranking/categories/modes/traffic、采集起始时间、北京时间日界线和 API 进程指标口径见 [后台统计](ADMIN_STATISTICS.md)。原累计工具打开 API 契约不变，V43 增加事务内每日聚合；用户活跃表随账号删除级联清理。
+
 AI 文本接口 `GET /tools/ai-text/status`、`POST /tools/ai-text`，用户 Bearer JWT，请求与响应/错误契约见 [AI 文本助手](AI_TEXT.md)。PDF 使用网页版本页处理，未实现云转换 API，见 [PDF 工作台](PDF_STUDIO.md)。
 
 - [项目规格：REST API](../toolbox-vibe-spec/PROJECT_SPEC.md#22-rest-api-规范)
