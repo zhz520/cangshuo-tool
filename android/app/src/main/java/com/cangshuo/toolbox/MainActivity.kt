@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
                     gridColumns = settings.gridColumns,
                     settingsFactory = container.settingsViewModelFactory,
                     accentFactory = container.accentViewModelFactory,
+                    updateFactory = container.updateViewModelFactory,
                 )
             }
             }

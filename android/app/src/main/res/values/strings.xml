@@ -876,6 +876,11 @@
     <string name="accent_orange">橙色</string>
     <string name="accent_pink">玫红</string>
     <string name="accent_black">黑色</string>
+    <string name="settings_update">检查更新</string>
+    <string name="settings_update_failed">检查更新失败，请检查网络后重试。</string>
+    <string name="settings_update_available">发现新版本 %1$s</string>
+    <string name="settings_update_latest">当前已是最新版本 %1$s。</string>
+    <string name="settings_update_open">打开发布页</string>
     <string name="settings_language">语言</string>
     <string name="settings_columns">目录列数</string>
     <string name="settings_startup">启动页</string>

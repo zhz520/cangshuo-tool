@@ -826,6 +826,11 @@
     <string name="accent_orange">Orange</string>
     <string name="accent_pink">Pink</string>
     <string name="accent_black">Black</string>
+    <string name="settings_update">Check for updates</string>
+    <string name="settings_update_failed">Could not check for updates. Check your network and retry.</string>
+    <string name="settings_update_available">New version %1$s is available</string>
+    <string name="settings_update_latest">You are on the latest version %1$s.</string>
+    <string name="settings_update_open">Open release page</string>
     <string name="settings_language">Language</string>
     <string name="settings_columns">Catalog columns</string>
     <string name="settings_startup">Startup page</string>

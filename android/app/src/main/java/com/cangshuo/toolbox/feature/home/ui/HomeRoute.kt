@@ -62,6 +62,7 @@ fun HomeRoute(
     gridColumns: Int = 0,
     settingsFactory: ViewModelProvider.Factory,
     accentFactory: ViewModelProvider.Factory,
+    updateFactory: ViewModelProvider.Factory,
 ) {
     val model: HomeViewModel = viewModel(factory = factory)
     val favorites: FavoritesViewModel = viewModel(key = "local.favorites", factory = favoritesFactory)
@@ -160,6 +161,7 @@ fun HomeRoute(
                 factory = settingsFactory,
                 diagnosticsFactory = diagnosticsFactory,
                 accentFactory = accentFactory,
+                updateFactory = updateFactory,
                 onClose = model::closeOverlay,
                 onShowUnavailable = model::showFeatureUnavailable,
             )

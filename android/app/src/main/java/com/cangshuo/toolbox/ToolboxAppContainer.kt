@@ -279,6 +279,9 @@ class ToolboxAppContainer(context: Context) {
     val accent = accentRepository.observe().stateIn(catalogScope,
         kotlinx.coroutines.flow.SharingStarted.Eagerly, com.cangshuo.toolbox.ui.theme.ToolboxAccent.BLUE)
     val accentViewModelFactory = com.cangshuo.toolbox.feature.settings.ui.AccentViewModel.factory(accentRepository)
+    val updateViewModelFactory = com.cangshuo.toolbox.feature.settings.ui.UpdateViewModel.factory(
+        com.cangshuo.toolbox.feature.settings.data.RemoteUpdateRepository(BuildConfig.API_BASE_URL),
+        BuildConfig.VERSION_CODE.toLong())
     private val authRestoreFinished=kotlinx.coroutines.flow.MutableStateFlow(false)
     private val startupSettings=combine(authRestoreFinished,authRepository.account,cloudSync.context,settings) { ready,account,context,settings ->
         settings.takeIf { ready && it.ready && account?.id==context.userId && it.ownerScope==(context.settingsScope ?: 0) }

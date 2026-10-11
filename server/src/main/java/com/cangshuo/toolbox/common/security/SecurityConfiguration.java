@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/tools", "/api/v1/tools/popular").permitAll();
                     // Anonymous aggregate counting for tool opens.
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/tools/*/usage").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/app/version").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/home/recommendations").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/home/announcements").permitAll();
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login",

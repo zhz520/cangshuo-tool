@@ -47,6 +47,7 @@ fun SettingsScreen(
     factory: ViewModelProvider.Factory,
     diagnosticsFactory: ViewModelProvider.Factory,
     accentFactory: ViewModelProvider.Factory,
+    updateFactory: ViewModelProvider.Factory,
     onClose: () -> Unit,
     onShowUnavailable: () -> Unit,
 ) {
@@ -55,6 +56,8 @@ fun SettingsScreen(
     val cache by model.state.collectAsStateWithLifecycle()
     val accentModel: AccentViewModel = viewModel(key = "settings.accent", factory = accentFactory)
     val accent by accentModel.accent.collectAsStateWithLifecycle()
+    val updateModel: UpdateViewModel = viewModel(key = "settings.update", factory = updateFactory)
+    val updateState by updateModel.state.collectAsStateWithLifecycle()
     var confirmCache by remember {mutableStateOf(false)}
     val versionName = remember {
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty()
@@ -84,6 +87,13 @@ fun SettingsScreen(
                     },
                     onClick = {confirmCache=true},
                     loading = cache.busy,
+                )
+                ToolSettingItem(
+                    title = stringResource(R.string.settings_update),
+                    value = versionName,
+                    icon = R.drawable.ic_info,
+                    onClick = { updateModel.check() },
+                    loading = updateState.checking,
                 )
                 ToolboxPrivacyInfo(asListItem=true)
                 ToolboxPermissionInfo(asListItem=true)
@@ -118,4 +128,33 @@ fun SettingsScreen(
         text={Text(stringResource(R.string.settings_cache_description))},
         confirmButton={ToolboxTextButton(onClick={confirmCache=false;model.clear()}) {Text(stringResource(R.string.settings_cache))}},
         dismissButton={ToolboxTextButton(onClick={confirmCache=false}) {Text(stringResource(R.string.action_cancel))}})
+    val updateResult = updateState.result
+    val outdated = updateResult != null && updateModel.isNewer(updateResult)
+    if (updateResult != null || updateState.failed) AlertDialog(
+        onDismissRequest = { updateModel.clear() },
+        title = { Text(stringResource(R.string.settings_update)) },
+        text = {
+            if (updateState.failed) {
+                Text(stringResource(R.string.settings_update_failed))
+            } else if (outdated && updateResult != null) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.settings_update_available, updateResult.versionName))
+                    if (updateResult.notes.isNotBlank()) Text(updateResult.notes,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            } else {
+                Text(stringResource(R.string.settings_update_latest, versionName))
+            }
+        },
+        confirmButton = {
+            val url = if (outdated) updateResult?.url.orEmpty() else ""
+            if (url.isNotBlank()) ToolboxTextButton(onClick = {
+                runCatching {
+                    context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)))
+                }
+                updateModel.clear()
+            }) { Text(stringResource(R.string.settings_update_open)) }
+            else ToolboxTextButton(onClick = { updateModel.clear() }) { Text(stringResource(R.string.action_understood)) }
+        })
 }
