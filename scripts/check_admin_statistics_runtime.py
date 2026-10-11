@@ -56,6 +56,7 @@ def run(image):
         source = inspect('cangshuo-toolbox-production-server-1')
         environment = dict(pair.split('=', 1) for pair in source['Config']['Env'] if '=' in pair)
         network = next(name for name in source['NetworkSettings']['Networks'] if name.endswith('_backend'))
+        edge = next(name for name in source['NetworkSettings']['Networks'] if name.endswith('_edge'))
         sql("CREATE DATABASE `%s`; CREATE USER '%s'@'%%' IDENTIFIED BY '%s'; GRANT ALL ON `%s`.* TO '%s'@'%%';" %
             (database, user, password, database, user))
         created_db = True
@@ -63,11 +64,14 @@ def run(image):
             JWT_SECRET=uuid.uuid4().hex + uuid.uuid4().hex, ADMIN_BOOTSTRAP_ENABLED='true',
             ADMIN_BOOTSTRAP_USERNAME='stats_check', ADMIN_BOOTSTRAP_PASSWORD=admin_password,
             RATE_LIMIT_ENABLED='false', AI_ENABLED='false', STORAGE_ENABLED='false')
-        args = ['docker', 'run', '-d', '--name', container, '--network', network, '-p', '127.0.0.1::8080']
+        # An internal-only Docker network does not publish a host port. Mirror both app networks.
+        args = ['docker', 'create', '--name', container, '--network', edge, '-p', '127.0.0.1::8080']
         for key, value in environment.items():
             args.extend(['-e', key + '=' + value])
         args.append(image)
         command(args)
+        command(['docker', 'network', 'connect', network, container])
+        command(['docker', 'start', container])
         port = None
         for attempt in range(20):
             state = inspect(container)
