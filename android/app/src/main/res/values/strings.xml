@@ -893,6 +893,14 @@
     <string name="sitelink_form_description">一句话介绍（可选）</string>
     <string name="sitelink_submit_failed">投稿失败，请检查网址格式或稍后重试。</string>
     <string name="sitelink_submitted">已提交，等待管理员审核。</string>
+    <string name="membership_title">会员</string>
+    <string name="membership_free">免费版</string>
+    <string name="membership_pro">专业版</string>
+    <string name="membership_expires">到期 %1$s</string>
+    <string name="membership_permanent">长期有效</string>
+    <string name="membership_loading">正在读取会员状态…</string>
+    <string name="membership_failed">会员状态读取失败</string>
+    <string name="membership_admin_granted">会员目前由管理员发放；在线支付接入后开放自助订阅。</string>
     <string name="settings_language">语言</string>
     <string name="settings_columns">目录列数</string>
     <string name="settings_startup">启动页</string>

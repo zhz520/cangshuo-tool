@@ -66,6 +66,7 @@ fun HomeRoute(
     accentFactory: ViewModelProvider.Factory,
     updateFactory: ViewModelProvider.Factory,
     siteLinkFactory: ViewModelProvider.Factory,
+    membershipFactory: ViewModelProvider.Factory,
 ) {
     val model: HomeViewModel = viewModel(factory = factory)
     val favorites: FavoritesViewModel = viewModel(key = "local.favorites", factory = favoritesFactory)
@@ -181,7 +182,7 @@ fun HomeRoute(
             )
             HomePage.Auth -> OverlayPage(stringResource(if(authState.account != null) R.string.auth_profile_heading
                 else if(authState.registering) R.string.auth_register else R.string.auth_login), model::closeOverlay) { modifier ->
-                AuthRoute(authFactory, modifier, syncFactory, feedbackFactory, diagnosticsFactory)
+                AuthRoute(authFactory, modifier, syncFactory, feedbackFactory, diagnosticsFactory, membershipFactory)
             }
             HomePage.Feedback -> OverlayPage(stringResource(R.string.profile_feedback), model::closeOverlay) { modifier ->
                 Column(modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {

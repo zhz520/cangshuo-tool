@@ -843,6 +843,14 @@
     <string name="sitelink_form_description">One-line description (optional)</string>
     <string name="sitelink_submit_failed">Submission failed. Check the URL format or retry later.</string>
     <string name="sitelink_submitted">Submitted. Waiting for review.</string>
+    <string name="membership_title">Membership</string>
+    <string name="membership_free">Free</string>
+    <string name="membership_pro">Pro</string>
+    <string name="membership_expires">Expires %1$s</string>
+    <string name="membership_permanent">No expiry</string>
+    <string name="membership_loading">Loading membership…</string>
+    <string name="membership_failed">Could not load membership status</string>
+    <string name="membership_admin_granted">Membership is granted by administrators for now; self-serve checkout arrives with the payment provider.</string>
     <string name="settings_language">Language</string>
     <string name="settings_columns">Catalog columns</string>
     <string name="settings_startup">Startup page</string>

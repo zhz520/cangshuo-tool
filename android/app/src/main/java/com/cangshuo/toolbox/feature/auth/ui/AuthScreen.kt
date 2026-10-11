@@ -56,7 +56,8 @@ import com.cangshuo.toolbox.feature.sync.ui.CloudSyncRoute
 
 @Composable
 fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
-    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null) {
+    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null,
+    membershipFactory: ViewModelProvider.Factory? = null) {
     val model: AuthViewModel = viewModel(key = "account.auth", factory = factory)
     val state by model.uiState.collectAsStateWithLifecycle()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -65,12 +66,13 @@ fun AuthRoute(factory: ViewModelProvider.Factory, modifier: Modifier = Modifier,
         lifecycle.addObserver(observer)
         onDispose { lifecycle.removeObserver(observer); model.clearCredentials() }
     }
-    AuthScreen(state, model, modifier, syncFactory, feedbackFactory, diagnosticsFactory)
+    AuthScreen(state, model, modifier, syncFactory, feedbackFactory, diagnosticsFactory, membershipFactory)
 }
 
 @Composable
 private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modifier = Modifier, syncFactory: ViewModelProvider.Factory? = null,
-    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null) {
+    feedbackFactory: ViewModelProvider.Factory? = null, diagnosticsFactory: ViewModelProvider.Factory? = null,
+    membershipFactory: ViewModelProvider.Factory? = null) {
     val focus = LocalFocusManager.current
     var showPassword by rememberSaveable { mutableStateOf(false) }
     Box(modifier, contentAlignment = Alignment.TopCenter) {
@@ -95,6 +97,7 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
                         Text(account.email, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
+                if (membershipFactory != null) MembershipLine(membershipFactory)
                 ToolboxDivider(startIndent = 0.dp)
                 ToolSectionHeader(stringResource(R.string.auth_profile_heading))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -215,6 +218,38 @@ private fun AuthScreen(state: AuthUiState, model: AuthViewModel, modifier: Modif
         } },
         dismissButton = { TextButton(onClick = { model.showDeletion(false) }, enabled = !state.busy) { Text(stringResource(R.string.action_cancel)) } },
     )
+}
+
+@Composable
+private fun MembershipLine(factory: ViewModelProvider.Factory) {
+    val model: com.cangshuo.toolbox.feature.membership.ui.MembershipViewModel =
+        viewModel(key = "account.membership", factory = factory)
+    val state by model.state.collectAsStateWithLifecycle()
+    val label = when {
+        state.loading -> stringResource(R.string.membership_loading)
+        state.failed -> stringResource(R.string.membership_failed)
+        state.value != null -> membershipText(state.value!!)
+        else -> return
+    }
+    Text(
+        text = stringResource(R.string.membership_title) + "：" + label,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Text(
+        text = stringResource(R.string.membership_admin_granted),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+@Composable
+private fun membershipText(value: com.cangshuo.toolbox.feature.membership.data.MembershipDto): String {
+    val plan = stringResource(if (value.plan == "PRO") R.string.membership_pro else R.string.membership_free)
+    if (value.plan != "PRO") return plan
+    val expires = value.expiresAt
+    return if (expires.isNullOrBlank()) plan + " · " + stringResource(R.string.membership_permanent)
+    else plan + " · " + stringResource(R.string.membership_expires, expires.take(10))
 }
 
 @Composable

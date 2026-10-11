@@ -1,0 +1,3 @@
+ALTER TABLE sys_user
+    ADD COLUMN plan VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'FREE' AFTER status,
+    ADD COLUMN plan_expires_at DATETIME(3) NULL AFTER plan;

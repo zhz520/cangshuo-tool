@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
                     accentFactory = container.accentViewModelFactory,
                     updateFactory = container.updateViewModelFactory,
                     siteLinkFactory = container.siteLinkViewModelFactory,
+                    membershipFactory = container.membershipViewModelFactory,
                 )
             }
             }
