@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { OverviewIcon as Grid, ToolboxIcon as Tools, CategoryIcon as FolderOpened, UsersIcon as User, AnnouncementIcon as Bell, RecommendationIcon as Picture, FeedbackIcon as ChatLineSquare, SettingsIcon as Setting, LogsIcon as Document } from '@/components/outlineIcons'
+import { OverviewIcon as Grid, ToolboxIcon as Tools, CategoryIcon as FolderOpened, UsersIcon as User, AnnouncementIcon as Bell, RecommendationIcon as Picture, FeedbackIcon as ChatLineSquare, SettingsIcon as Setting, LogsIcon as Document, LinkIcon as Link } from '@/components/outlineIcons'
 
 export interface NavigationItem {
   path: string
@@ -18,6 +18,7 @@ export const navigationGroups: { title: string; items: NavigationItem[] }[] = [
     { path: '/categories', title: '分类管理', description: '整理分类，让每个工具都容易被找到。', icon: FolderOpened, availability: 'ready' },
     { path: '/banners', title: '推荐位', description: '管理首页推荐内容与展示顺序。', icon: Picture, availability: 'ready' },
     { path: '/announcements', title: '公告', description: '编辑与发布面向用户的公告。', icon: Bell, availability: 'ready' },
+    { path: '/site-links', title: '网站导航', description: '审核用户投稿的网站导航条目。', icon: Link, availability: 'ready' },
   ] },
   { title: '用户与反馈', items: [
     { path: '/users', title: '用户管理', description: '查看账号信息并管理用户访问权限。', icon: User, availability: 'ready' },

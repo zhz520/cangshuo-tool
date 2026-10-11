@@ -18,3 +18,4 @@ export const UsersIcon = outline(['M8 7a4 4 0 1 0 8 0a4 4 0 1 0-8 0', 'M4 21v-2a
 export const FeedbackIcon = outline(['M4 4h16v12H9l-5 4z M8 8h8 M8 12h5'])
 export const LogsIcon = outline(['M5 3h9l5 5v13H5z M14 3v5h5 M9 12h6 M9 16h6'])
 export const SettingsIcon = outline(['M3 6h4 M11 6h10 M3 12h10 M17 12h4 M3 18h4 M11 18h10', 'M7 4h4v4H7z M13 10h4v4h-4z M7 16h4v4H7z'])
+export const LinkIcon = outline(['M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1', 'M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1'])
