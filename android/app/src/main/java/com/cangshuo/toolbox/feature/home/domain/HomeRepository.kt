@@ -10,7 +10,7 @@ interface HomeRepository {
     fun getTools(): List<ToolMetadata>
 
     /** Cached popularity snapshot (most used first); empty until the first refresh succeeds. */
-    fun popularCodes(): List<String> = emptyList()
+    fun popularTools(): List<PopularTool> = emptyList()
 
     /** Emits initially and whenever the catalog is replaced. */
     fun observeCatalogChanges(): Flow<Unit>

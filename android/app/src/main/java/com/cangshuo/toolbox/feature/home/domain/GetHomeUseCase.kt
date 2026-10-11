@@ -15,13 +15,15 @@ class GetHomeUseCase(private val repository: HomeRepository) {
         val visibleTools = allTools.filter { category == null || it.category == category }
         // Quick access shows the most used tools first; unknown codes fall back to registry order.
         val byCode = visibleTools.associateBy { it.code }
-        val ranked = repository.popularCodes().mapNotNull { byCode[it] }
+        val popular = repository.popularTools()
+        val ranked = popular.mapNotNull { byCode[it.code] }
         return HomeContent(
             tools = visibleTools,
             commonTools = (ranked + visibleTools).distinctBy { it.code }.take(COMMON_TOOL_LIMIT),
             featuredTools = visibleTools.filter { it.isFeatured },
             categories = ToolCategory.entries.map { HomeCategory(it, counts[it] ?: 0) },
             totalToolCount = allTools.size,
+            popularTools = popular,
         )
     }
 }

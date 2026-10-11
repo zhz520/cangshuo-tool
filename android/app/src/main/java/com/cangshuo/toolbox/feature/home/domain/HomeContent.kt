@@ -11,4 +11,5 @@ data class HomeContent(
     val featuredTools: List<ToolMetadata>,
     val categories: List<HomeCategory>,
     val totalToolCount: Int,
+    val popularTools: List<PopularTool> = emptyList(),
 )

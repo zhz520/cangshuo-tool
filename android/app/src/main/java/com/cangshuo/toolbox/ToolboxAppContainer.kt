@@ -230,7 +230,9 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.home.data.RemoteHomeExtrasRepository(BuildConfig.API_BASE_URL)), registryStore)
     fun updateLocale(resources: android.content.res.Resources) { registryStore.replaceBundled(bundledRegistry(resources)) }
     private val toolUsage = com.cangshuo.toolbox.feature.popular.data.RemoteToolUsageRepository(BuildConfig.API_BASE_URL)
-    private val repository = RegistryHomeRepository(registryStore) { toolUsage.popular(8).map { it.code } }
+    private val repository = RegistryHomeRepository(registryStore) {
+        toolUsage.popular(20).map { com.cangshuo.toolbox.feature.home.domain.PopularTool(it.code, it.useCount) }
+    }
 
     private val catalogCache = RoomWebToolCatalogCache(database.cachedToolCatalogDao(), BuildConfig.API_BASE_URL)
     private val refreshWebCatalog = RefreshWebToolCatalogUseCase(ToolCatalogClient(BuildConfig.API_BASE_URL), registryStore, catalogCache)

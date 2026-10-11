@@ -43,6 +43,7 @@ import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesViewModel
 import com.cangshuo.toolbox.feature.feedback.ui.FeedbackRoute
 import com.cangshuo.toolbox.feature.recent.ui.RecentScreen
+import com.cangshuo.toolbox.feature.popular.ui.PopularScreen
 import com.cangshuo.toolbox.feature.recent.ui.RecentViewModel
 import com.cangshuo.toolbox.feature.search.ui.SearchRoute
 import com.cangshuo.toolbox.feature.settings.ui.SettingsScreen
@@ -97,6 +98,7 @@ fun HomeRoute(
         openedTool != null -> HomePage.Tool(openedTool)
         state.isSearchOpen -> HomePage.Search
         state.overlay == HomeOverlay.RECENT -> HomePage.Recent
+        state.overlay == HomeOverlay.POPULAR -> HomePage.Popular
         state.overlay == HomeOverlay.SETTINGS -> HomePage.Settings
         state.overlay == HomeOverlay.AUTH -> HomePage.Auth
         state.overlay == HomeOverlay.FEEDBACK -> HomePage.Feedback
@@ -121,6 +123,7 @@ fun HomeRoute(
                 onClearRecent = recent::clear,
                 onCatalogRefresh = { model.refreshRemoteCatalog() },
                 onOpenRecent = model::openRecent,
+                onOpenPopular = { model.openOverlay(HomeOverlay.POPULAR) },
                 onOpenSettings = model::openSettings,
                 onOpenAuth = { model.openOverlay(HomeOverlay.AUTH) },
                 onOpenFeedback = { model.openOverlay(HomeOverlay.FEEDBACK) },
@@ -144,6 +147,14 @@ fun HomeRoute(
                 onRetry = recent::refresh,
                 onClose = model::closeOverlay,
             )
+            HomePage.Popular -> OverlayPage(stringResource(R.string.home_popular_ranking), model::closeOverlay) { modifier ->
+                PopularScreen(
+                    modifier,
+                    (state.catalog as? HomeCatalogState.Content)?.value
+                        ?: (state.catalog as? HomeCatalogState.Empty)?.value,
+                    onToolSelected = { model.selectTool(it, applicationContext) },
+                )
+            }
             HomePage.Settings -> SettingsScreen(
                 syncFactory = syncFactory,
                 factory = settingsFactory,
@@ -232,6 +243,7 @@ private sealed interface HomePage {
     data object Home : HomePage { override val key: String = "home" }
     data object Search : HomePage { override val key: String = "search" }
     data object Recent : HomePage { override val key: String = "recent" }
+    data object Popular : HomePage { override val key: String = "popular" }
     data object Settings : HomePage { override val key: String = "settings" }
     data object Auth : HomePage { override val key: String = "auth" }
     data object Feedback : HomePage { override val key: String = "feedback" }

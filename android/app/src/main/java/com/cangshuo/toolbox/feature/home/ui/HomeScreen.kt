@@ -83,6 +83,7 @@ import com.cangshuo.toolbox.feature.recent.ui.RecentUiState
 private const val RECENT_PREVIEW_LIMIT = 2
 private const val COMMON_GRID_LIMIT = 8
 private const val EXPLORE_LIMIT = 4
+private const val POPULAR_PREVIEW_LIMIT = 4
 
 @Composable
 fun HomeScreen(
@@ -100,6 +101,7 @@ fun HomeScreen(
     onClearRecent: () -> Unit,
     onCatalogRefresh: () -> Unit,
     onOpenRecent: () -> Unit,
+    onOpenPopular: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenAuth: () -> Unit,
     onOpenFeedback: () -> Unit,
@@ -154,7 +156,7 @@ fun HomeScreen(
         when (tab) {
             HomeTab.HOME -> HomeTabContent(
                 state, Modifier.fillMaxSize(), onCategorySelected, onToolSelected, onSearch, onRetry,
-                favoriteState, onSetFavorite, recentState, onOpenRecent, onCatalogRefresh, homeExtras,
+                    favoriteState, onSetFavorite, recentState, onOpenRecent, onOpenPopular, onCatalogRefresh, homeExtras,
             )
             HomeTab.TOOLS -> LibraryContent(
                 state, Modifier.fillMaxSize(), onCategorySelected, onToolSelected,
@@ -193,6 +195,7 @@ private fun HomeTabContent(
     onSetFavorite: (String, Boolean) -> Unit,
     recentState: RecentUiState,
     onOpenRecent: () -> Unit,
+    onOpenPopular: () -> Unit,
     onCatalogRefresh: () -> Unit,
     homeExtras: (@Composable () -> Unit)?,
 ) {
@@ -253,6 +256,30 @@ private fun HomeTabContent(
                         subtitle = metadata.description,
                         icon = toolIconResource(metadata.icon),
                         onClick = { onToolSelected(code) },
+                        trailing = { ToolboxChevron() },
+                    )
+                }
+            }
+            val popularRanking = content.popularTools
+            if (popularRanking.isNotEmpty()) {
+                item(key = "popular-heading") {
+                    ToolSectionHeader(stringResource(R.string.home_popular_ranking), Modifier.padding(top = 8.dp)) {
+                        ToolboxTextButton(onClick = onOpenPopular) {
+                            Text(stringResource(R.string.home_all_categories), style = MaterialTheme.typography.labelMedium)
+                            ToolboxChevron()
+                        }
+                    }
+                }
+                val rankingByCode = content.tools.associateBy { it.code }
+                items(
+                    popularRanking.take(POPULAR_PREVIEW_LIMIT).mapNotNull { entry -> rankingByCode[entry.code]?.let { entry to it } },
+                    key = { "popular:" + it.second.code },
+                ) { (rankEntry, metadata) ->
+                    ToolListItem(
+                        title = metadata.name,
+                        subtitle = stringResource(R.string.popular_use_count, rankEntry.useCount),
+                        icon = toolIconResource(metadata.icon),
+                        onClick = { onToolSelected(metadata.code) },
                         trailing = { ToolboxChevron() },
                     )
                 }

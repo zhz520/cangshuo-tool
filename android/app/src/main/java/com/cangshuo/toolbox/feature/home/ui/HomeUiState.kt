@@ -8,7 +8,7 @@ import com.cangshuo.toolbox.feature.webtools.domain.CatalogSyncState
 enum class HomeTab { HOME, TOOLS, FAVORITES, PROFILE }
 
 /** Full-screen pages pushed over the tab scaffold. */
-enum class HomeOverlay { RECENT, SETTINGS, AUTH, FEEDBACK }
+enum class HomeOverlay { RECENT, POPULAR, SETTINGS, AUTH, FEEDBACK }
 
 /** Transient, honest notices for not-yet-implemented actions. */
 enum class HomeNotice { FEATURE_UNAVAILABLE }

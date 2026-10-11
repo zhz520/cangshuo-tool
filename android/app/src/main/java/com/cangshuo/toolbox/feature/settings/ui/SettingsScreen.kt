@@ -28,6 +28,7 @@ import androidx.compose.material3.AlertDialog
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.core.ui.ToolboxPrivacyInfo
 import com.cangshuo.toolbox.core.ui.ToolboxPermissionInfo
+import com.cangshuo.toolbox.core.ui.ToolboxLicensesInfo
 import com.cangshuo.toolbox.feature.diagnostics.ui.DiagnosticsInfo
 import android.text.format.Formatter
 import com.cangshuo.toolbox.R
@@ -86,6 +87,7 @@ fun SettingsScreen(
                 )
                 ToolboxPrivacyInfo(asListItem=true)
                 ToolboxPermissionInfo(asListItem=true)
+                ToolboxLicensesInfo(asListItem=true)
                 ToolListItem(
                     title = stringResource(R.string.settings_terms),
                     icon = R.drawable.ic_info,

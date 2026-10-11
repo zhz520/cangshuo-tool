@@ -5,6 +5,7 @@ import com.cangshuo.toolbox.core.model.ToolMetadata
 import com.cangshuo.toolbox.core.tool.ToolLookupResult
 import com.cangshuo.toolbox.core.tool.ToolRegistryStore
 import com.cangshuo.toolbox.feature.home.domain.HomeRepository
+import com.cangshuo.toolbox.feature.home.domain.PopularTool
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +14,9 @@ import kotlinx.coroutines.flow.merge
 
 class RegistryHomeRepository(
     private val registry: ToolRegistryStore,
-    private val popularSource: suspend () -> List<String> = { emptyList() },
+    private val popularSource: suspend () -> List<PopularTool> = { emptyList() },
 ) : HomeRepository {
-    @Volatile private var popular: List<String> = emptyList()
+    @Volatile private var popular: List<PopularTool> = emptyList()
     private val popularUpdates = MutableStateFlow(0)
 
     override fun observeCatalogChanges(): Flow<Unit> = merge(registry.snapshots.map { }, popularUpdates.map { })
@@ -24,7 +25,7 @@ class RegistryHomeRepository(
         it.metadata.copy(keywords = it.metadata.keywords.toList())
     }
 
-    override fun popularCodes(): List<String> = popular
+    override fun popularTools(): List<PopularTool> = popular
 
     /** Best effort refresh; failures keep the previous snapshot instead of blocking the home page. */
     suspend fun refreshPopular() {
