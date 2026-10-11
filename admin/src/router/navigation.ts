@@ -26,7 +26,7 @@ export const navigationGroups: { title: string; items: NavigationItem[] }[] = [
   ] },
   { title: '平台', items: [
     { path: '/logs', title: '操作日志', description: '查看管理操作记录与变更历史。', icon: Document, availability: 'ready' },
-    { path: '/system-config', title: '系统配置', description: '管理平台运行所需的业务配置。', icon: Setting, availability: 'planned' },
+    { path: '/system-config', title: '系统配置', description: '管理平台运行所需的业务配置。', icon: Setting, availability: 'ready' },
   ] },
 ]
 

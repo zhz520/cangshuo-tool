@@ -31,6 +31,7 @@ const router = createRouter({
       { path: 'feedback', component: () => import('@/views/FeedbackView.vue'), meta: { title: '用户反馈' } },
       { path: 'site-links', component: () => import('@/views/SiteLinksView.vue'), meta: { title: '网站导航' } },
       { path: 'logs', component: () => import('@/views/OperationLogsView.vue'), meta: { title: '操作日志' } },
+      { path: 'system-config', component: () => import('@/views/SystemConfigView.vue'), meta: { title: '系统配置' } },
       ...moduleRoutes,
       { path: ':pathMatch(.*)*', component: () => import('@/views/NotFoundView.vue'), meta: { title: '页面不存在' } },
     ],
