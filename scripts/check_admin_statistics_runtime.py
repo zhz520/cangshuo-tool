@@ -10,6 +10,7 @@ import json
 import subprocess
 import sys
 import time
+import threading
 import uuid
 try:
     from urllib.request import Request, urlopen
@@ -44,11 +45,13 @@ def run(image):
     admin_password = uuid.uuid4().hex
     created_db = False
     checks = [0]
+    check_lock = threading.Lock()
     def check(condition, name):
         if not condition:
             raise AssertionError(name + ' (response content omitted)')
-        checks[0] += 1
-        print('PASS', checks[0], name)
+        with check_lock:
+            checks[0] += 1
+            print('PASS', checks[0], name)
     try:
         source = inspect('cangshuo-toolbox-production-server-1')
         environment = dict(pair.split('=', 1) for pair in source['Config']['Env'] if '=' in pair)
@@ -65,7 +68,23 @@ def run(image):
             args.extend(['-e', key + '=' + value])
         args.append(image)
         command(args)
-        port = inspect(container)['NetworkSettings']['Ports']['8080/tcp'][0]['HostPort']
+        port = None
+        for attempt in range(20):
+            state = inspect(container)
+            ports = state['NetworkSettings'].get('Ports') or {}
+            if ports.get('8080/tcp'):
+                port = ports['8080/tcp'][0]['HostPort']
+                break
+            if state['State']['Status'] == 'exited':
+                process = subprocess.Popen(['docker', 'logs', '--tail', '25', container], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                logs = process.communicate()[0].decode('utf-8', 'replace')
+                for key, value in environment.items():
+                    if any(word in key for word in ('PASSWORD', 'SECRET', 'TOKEN', 'KEY')) and value:
+                        logs = logs.replace(value, '[redacted]')
+                print(logs[-6000:])
+                raise RuntimeError('candidate exited before port binding')
+            time.sleep(1)
+        check(port is not None, 'isolated HTTP port available')
         base = 'http://127.0.0.1:' + port + '/api/v1/'
         def request(path, payload=None, token=None, method=None):
             headers = {'Accept': 'application/json'}
