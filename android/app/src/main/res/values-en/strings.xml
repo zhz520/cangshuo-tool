@@ -1076,7 +1076,7 @@
     <string name="popular_use_count">Used %1$d times</string>
     <string name="popular_empty">No usage data yet. Open a few tools first.</string>
     <string name="licenses_info_title">Open source licenses</string>
-    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):&#10;&#10;Kotlin and kotlinx.coroutines — Apache-2.0&#10;AndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0&#10;Jetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0&#10;OkHttp — Apache-2.0&#10;Retrofit — Apache-2.0&#10;Moshi — Apache-2.0&#10;ZXing core — Apache-2.0&#10;re2j — BSD-3-Clause&#10;CameraX (core, camera2, lifecycle, view) — Apache-2.0&#10;&#10;Full license texts are available in the repository of each project.</string>
+    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull license texts are available in the repository of each project.</string>
     <string name="profile_my_favorites">My favorites</string>
     <string name="profile_recent">Recently used</string>
     <string name="profile_stats">Usage statistics</string>
