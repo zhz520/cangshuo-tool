@@ -46,3 +46,11 @@ temp/
 .tmp/
 __pycache__/
 *.pyc
+
+# Local release APK output
+android/app/release/
+
+
+# Local release APK output
+android/app/release/
+

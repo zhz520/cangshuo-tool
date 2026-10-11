@@ -36,6 +36,7 @@ For Android UI changes, also read `../docs/ANDROID_UI_SPEC.md`. Use the Stitch r
 
 ## Android
 - Compose + ViewModel + UseCase + Repository.
+- Follow `../docs/ANDROID_DESIGN_SYSTEM.md` for every page (existing and new): use theme tokens and `core/ui` shared components only; no hardcoded colors, radii or strings. The accent defaults to blue `#1677FF` and can be switched in-app (Settings → Accent color: blue/teal/violet/orange/pink/black, device-local only); gray rounded icon containers are for tool grids only, lists and menus use bare line icons. Never fake success for unimplemented features.
 - UI must not call Retrofit directly.
 - UI must not access Room directly.
 - Every tool has a unique code.

@@ -51,3 +51,8 @@ Server 31/31 测试通过；实际 MySQL/API/Nginx 30/30 检查通过（含轮�
 Profile 验证：Server 34/34、Android 157/157 测试通过，实际 API/数据库/代理 35/35；昵称保存与读取一致，匿名、控制字符与伪造目标 ID 已覆盖。Android test/assemble/lint 通过（1 分 54 秒），设备验收按用户要求省略。
 
 Phase 3 最终：Server 40/40、Android 170/170、真实认证 API 35/35 和同步 API 37/37，通过构建/Lint。续期同账号时保持仍有效的旧身份，me=401 立即清账号，新增 2 个回归防止刷新取消自身同步；没有追加真机验证。
+
+## 本机会话存储健壮性（2026-10-11）
+
+现场：用户手机在更新安装后登录/恢复登录只显示“服务暂不可用”，服务器访问日志证实失败期间客户端没有发出任何认证请求（同期目录接口 200），清除应用数据后立即恢复。根因是加密会话存储（文件 + Android Keystore）读取异常时代码直接中止认证流程。修复：`RemoteAuthRepository.load()` 读取失败时清理并按空会话继续（恢复登录退化到未登录状态）；`persist()` 写入失败仅保留内存会话，不再阻断登录；错误提示附加 HTTP 状态码 / 服务端 code / traceId。新增回归 `brokenLocalStoreNeverBlocksRestoreOrLogin`。
+

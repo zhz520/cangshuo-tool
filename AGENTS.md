@@ -19,6 +19,12 @@
 - 本地工具默认离线运行；不得把 API 密钥或其他秘密放进 Android 客户端或 Git。
 - 工具可采用原生实现或官网网页版：代码复杂、依赖或资源会显著增加 APK 体积时，可放在官网 `/tools/<tool_code>/`，App 用内置 Chrome 内核（系统 WebView）打开；网页版仍需唯一 code、ToolRegistry 元数据、联网/离线/错误状态、域名白名单和隐私提示，规则见 `toolbox-vibe-spec/PROJECT_SPEC.md` Decision 019 与 `docs/TOOL_DEVELOPMENT_GUIDE.md`。
 
+## UI 设计系统
+
+- Android 所有页面（含以后新增的页面与工具界面）必须遵循 `docs/ANDROID_DESIGN_SYSTEM.md`：只用主题令牌与 `core/ui` 共享组件，禁止硬编码颜色、圆角或文案。
+- 强调色默认为蓝色 `#1677FF`，可在应用内「设置 → 主题色」切换（蓝 / 青绿 / 紫 / 橙 / 玫红 / 黑，仅保存在本机）；灰底圆角图标容器**仅**用于工具网格，列表与菜单使用裸线性图标。
+- 未实现的功能必须显式提示（不得假装操作成功）；深浅色都要适配。
+
 ## 数据、接口与安全
 
 - 数据库结构变更必须新增 Flyway migration，不修改已执行的 migration。
