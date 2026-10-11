@@ -31,6 +31,37 @@ class RadixConversionTest {
         assertEquals(8, result.bitLength)
     }
 
+    @Test fun signedPrefixesUseMagnitudeForBitAndByteStatistics() {
+        val negative = success("-0xFF")
+        assertEquals("-255", negative.normalized)
+        assertEquals(8, negative.bitLength)
+        assertEquals(1, negative.groupCount)
+        assertEquals("-11111111", negative.outputs.first { it.radix == 2 }.value)
+        assertEquals("15", success("+0o17").normalized)
+        assertEquals("0", success("-0").normalized)
+    }
+
+    @Test fun whitespaceSeparatorsAndRawErrorPositionsAreConsistent() {
+        assertEquals("255", success("1111\t1111", 2).normalized)
+        assertEquals("255", success("F\r\nF", 16).normalized)
+        assertEquals(7, (repo.convert("  -0xFg", null, false) as RadixResult.Error).position)
+        assertEquals(4, (repo.convert("0b12", null, false) as RadixResult.Error).position)
+    }
+
+    @Test fun limitsAreCheckedBeforeParsingAndInvalidBasesHaveTheirOwnError() {
+        assertEquals(RadixError.INPUT_TOO_LARGE, (repo.convert("1".repeat(10_001), 10, false) as RadixResult.Error).reason)
+        assertEquals(RadixError.INPUT_TOO_LARGE, (repo.convert(" ".repeat(10_001), null, false) as RadixResult.Error).reason)
+        assertEquals(RadixError.INVALID_RADIX, (repo.convert("1", -1, false) as RadixResult.Error).reason)
+        assertEquals(RadixError.INVALID_RADIX, (repo.convert("1", 37, false) as RadixResult.Error).reason)
+        assertEquals(10_000, success("1".repeat(10_000), 2).bitLength)
+    }
+
+    @Test fun emptySignedValuesDoNotPretendToBeZero() {
+        for (value in listOf("+", "-", "-0x", "+0b", "'_,\t")) {
+            assertEquals(RadixError.EMPTY, (repo.convert(value, null, false) as RadixResult.Error).reason)
+        }
+    }
+
     @Test
     fun hexadecimalInputAndUppercaseOutput() {
         val result = success("ff", 16, upper = true)

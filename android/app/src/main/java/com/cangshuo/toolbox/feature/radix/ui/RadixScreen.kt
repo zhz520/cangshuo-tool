@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.core.ui.ToolboxTextField
+import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.feature.radix.domain.RadixError
 import com.cangshuo.toolbox.feature.radix.domain.RadixResult
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -121,7 +123,7 @@ fun RadixScreen(
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             FilterChip(
                                 selected = state.selectedRadix == null && !state.customMode,
                                 onClick = { onRadixSelected(null) },
@@ -163,7 +165,10 @@ fun RadixScreen(
             }
 
             when {
-                result is RadixResult.Error && result.reason == RadixError.INVALID_CHAR -> {
+                state.isProcessing -> {
+                    item(key = "processing") { ToolboxLoadingState(stringResource(R.string.radix_processing)) }
+                }
+                result is RadixResult.Error -> {
                     item(key = "error_card") {
                         Surface(
                             shape = MaterialTheme.shapes.medium,
@@ -171,10 +176,13 @@ fun RadixScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
-                                text = if (result.position != null) {
-                                    stringResource(R.string.radix_error_invalid, result.position)
-                                } else {
-                                    stringResource(R.string.radix_error_generic)
+                                text = when (result.reason) {
+                                    RadixError.INPUT_TOO_LARGE -> stringResource(R.string.radix_error_limit)
+                                    RadixError.INVALID_RADIX -> stringResource(R.string.radix_error_base)
+                                    RadixError.EMPTY -> stringResource(R.string.radix_error_empty)
+                                    RadixError.INVALID_CHAR -> if (result.position != null) {
+                                        stringResource(R.string.radix_error_invalid, result.position)
+                                    } else stringResource(R.string.radix_error_generic)
                                 },
                                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                                 style = MaterialTheme.typography.bodyMedium,

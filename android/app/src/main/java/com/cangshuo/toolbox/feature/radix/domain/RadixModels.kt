@@ -17,6 +17,12 @@ data class RadixInput(
 enum class RadixError {
     EMPTY,
     INVALID_CHAR,
+    INVALID_RADIX,
+    INPUT_TOO_LARGE,
+}
+
+object RadixLimits {
+    const val MAX_INPUT_LENGTH = 10_000
 }
 
 sealed interface RadixResult {

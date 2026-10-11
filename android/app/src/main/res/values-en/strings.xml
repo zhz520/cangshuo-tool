@@ -377,6 +377,10 @@
     <string name="radix_meta_format">Input base: %1$s · %2$d digits · %3$d bit · %4$d bytes</string>
     <string name="radix_error_invalid">Invalid input: character %1$d is not valid for this base.</string>
     <string name="radix_error_generic">Unable to parse a number; check the input.</string>
+    <string name="radix_error_limit">Input is limited to 10,000 characters. Oversized content was rejected; your previous input is kept. Shorten it and retry.</string>
+    <string name="radix_error_base">The base must be between 2 and 36.</string>
+    <string name="radix_error_empty">Enter at least one digit after a sign or prefix.</string>
+    <string name="radix_processing">Converting number…</string>
     <string name="radix_empty_placeholder">Enter a number to convert to bases 2 / 8 / 10 / 16 / 36…</string>
     <string name="morse_name">Morse Code</string>
     <string name="morse_description">Convert text to and from Morse code (ITU-R M.1677) with letters, digits, common punctuation and standard-timing audio playback.</string>

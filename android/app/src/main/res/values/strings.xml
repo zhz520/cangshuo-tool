@@ -412,6 +412,10 @@
     <string name="radix_meta_format">输入进制：%1$s · %2$d 位 · %3$d bit · %4$d 字节</string>
     <string name="radix_error_invalid">无效输入：第 %1$d 个字符不属于该进制。</string>
     <string name="radix_error_generic">无法解析为有效数字，请检查输入。</string>
+    <string name="radix_error_limit">输入最多 10,000 个字符。超长内容未采用，保留原输入；请缩短后重试。</string>
+    <string name="radix_error_base">进制必须在 2 到 36 之间。</string>
+    <string name="radix_error_empty">请输入数值，符号或前缀后至少需要一位数字。</string>
+    <string name="radix_processing">正在转换数值…</string>
     <string name="radix_empty_placeholder">输入数字后自动转换为 2 / 8 / 10 / 16 / 36 进制…</string>
     <string-array name="radix_keywords" translatable="false">
         <item>radix</item><item>base</item><item>binary</item><item>hex</item><item>进制</item><item>进制转换</item><item>二进制</item><item>八进制</item><item>十进制</item><item>十六进制</item><item>bin</item><item>oct</item><item>dec</item>

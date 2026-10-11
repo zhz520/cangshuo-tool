@@ -10,4 +10,5 @@ data class RadixUiState(
     val customRadix: Int = 12,
     val uppercase: Boolean = false,
     val result: RadixResult? = null,
+    val isProcessing: Boolean = false,
 )

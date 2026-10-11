@@ -2,6 +2,7 @@ package com.cangshuo.toolbox.feature.radix.data
 
 import com.cangshuo.toolbox.feature.radix.domain.RadixError
 import com.cangshuo.toolbox.feature.radix.domain.RadixInput
+import com.cangshuo.toolbox.feature.radix.domain.RadixLimits
 import com.cangshuo.toolbox.feature.radix.domain.RadixOutput
 import com.cangshuo.toolbox.feature.radix.domain.RadixRepository
 import com.cangshuo.toolbox.feature.radix.domain.RadixResult
@@ -14,28 +15,32 @@ import java.math.BigInteger
 class LocalRadixRepository : RadixRepository {
 
     override fun convert(rawInput: String, explicitRadix: Int?, uppercase: Boolean): RadixResult {
+        if (rawInput.length > RadixLimits.MAX_INPUT_LENGTH) return RadixResult.Error(RadixError.INPUT_TOO_LARGE)
+        if (explicitRadix != null && explicitRadix !in MIN_RADIX..MAX_RADIX) return RadixResult.Error(RadixError.INVALID_RADIX)
         val text = rawInput.trim()
         if (text.isEmpty()) return RadixResult.Error(RadixError.EMPTY)
-
-        val prefix = detectPrefix(text)
+        val signLength = if (text[0] == '-' || text[0] == '+') 1 else 0
+        val unsigned = text.substring(signLength)
+        val prefix = detectPrefix(unsigned)
         // A prefix applies in auto mode, or when it matches the explicit base.
         val usePrefix = prefix != null && (explicitRadix == null || explicitRadix == prefix)
-        val digits = if (usePrefix) text.substring(2) else text
+        val prefixLength = if (usePrefix) 2 else 0
+        val digits = unsigned.substring(prefixLength)
         if (digits.isEmpty()) return RadixResult.Error(RadixError.EMPTY)
 
         val inRadix = explicitRadix ?: prefix ?: 10
-        if (inRadix !in MIN_RADIX..MAX_RADIX) return RadixResult.Error(RadixError.INVALID_CHAR, null)
+        val rawOffset = rawInput.indexOfFirst { !it.isWhitespace() } + signLength + prefixLength
 
         var digitCount = 0
         for ((index, ch) in digits.withIndex()) {
-            if (ch == ' ' || ch == '_' || ch == ',' || ch == '\'') continue
-            val value = digitValue(ch) ?: return RadixResult.Error(RadixError.INVALID_CHAR, index + 1)
-            if (value >= inRadix) return RadixResult.Error(RadixError.INVALID_CHAR, index + 1)
+            if (separator(ch)) continue
+            val value = digitValue(ch) ?: return RadixResult.Error(RadixError.INVALID_CHAR, rawOffset + index + 1)
+            if (value >= inRadix) return RadixResult.Error(RadixError.INVALID_CHAR, rawOffset + index + 1)
             digitCount++
         }
         if (digitCount == 0) return RadixResult.Error(RadixError.EMPTY)
 
-        val cleaned = digits.filterNot { it == ' ' || it == '_' || it == ',' || it == '\'' }
+        val cleaned = (if (text[0] == '-') "-" else "") + digits.filterNot(::separator)
         val number = runCatching { BigInteger(cleaned, inRadix) }.getOrNull()
             ?: return RadixResult.Error(RadixError.INVALID_CHAR, null)
 
@@ -51,11 +56,14 @@ class LocalRadixRepository : RadixRepository {
             input = RadixInput(text = text, radix = inRadix, autoDetected = explicitRadix == null),
             normalized = render(number, 10, upper),
             outputs = outputs,
-            bitLength = number.bitLength(),
+            bitLength = number.abs().bitLength(),
             digitCount = digitCount,
-            groupCount = (number.bitLength() + 7) / 8,
+            groupCount = (number.abs().bitLength() + 7) / 8,
         )
     }
+
+    private fun separator(ch: Char) = ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n'
+        || ch == '_' || ch == ',' || ch == '\''
 
     private fun detectPrefix(text: String): Int? = when {
         text.length >= 2 && text[0] == '0' && (text[1] == 'x' || text[1] == 'X') -> 16
