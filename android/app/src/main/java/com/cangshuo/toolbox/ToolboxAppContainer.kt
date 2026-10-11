@@ -143,6 +143,23 @@ class ToolboxAppContainer(context: Context) {
     private val hashFactory = HashViewModel.factory(
         computeHashesUseCase = ComputeHashesUseCase(hashRepository),
     )
+    private val radixFactory = com.cangshuo.toolbox.feature.radix.ui.RadixViewModel.factory(
+        com.cangshuo.toolbox.feature.radix.domain.ConvertRadixUseCase(
+            com.cangshuo.toolbox.feature.radix.data.LocalRadixRepository(),
+        ),
+    )
+    private val morseFactory = com.cangshuo.toolbox.feature.morse.ui.MorseViewModel.factory(
+        encodeMorse = com.cangshuo.toolbox.feature.morse.domain.EncodeMorseUseCase(
+            com.cangshuo.toolbox.feature.morse.data.LocalMorseRepository(),
+        ),
+        decodeMorse = com.cangshuo.toolbox.feature.morse.domain.DecodeMorseUseCase(
+            com.cangshuo.toolbox.feature.morse.data.LocalMorseRepository(),
+        ),
+        buildTimeline = com.cangshuo.toolbox.feature.morse.domain.BuildMorseTimelineUseCase(
+            com.cangshuo.toolbox.feature.morse.data.LocalMorseRepository(),
+        ),
+        player = com.cangshuo.toolbox.feature.morse.data.MorseAudioPlayer(),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -207,6 +224,8 @@ class ToolboxAppContainer(context: Context) {
             Base64ToolDefinition(resources, base64Factory),
             UrlCodecToolDefinition(resources, urlCodecFactory),
             HashToolDefinition(resources, hashFactory),
+            com.cangshuo.toolbox.feature.radix.RadixToolDefinition(resources, radixFactory),
+            com.cangshuo.toolbox.feature.morse.MorseToolDefinition(resources, morseFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

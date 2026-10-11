@@ -85,6 +85,8 @@ fun toolIconResource(name: String?): Int = when (name) {
     "base64" -> R.drawable.ic_base64
     "url_codec" -> R.drawable.ic_url_codec
     "hash" -> R.drawable.ic_hash
+    "radix" -> R.drawable.ic_radix
+    "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text
     "qr" -> R.drawable.ic_qr
