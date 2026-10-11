@@ -35,7 +35,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> {
                     requests.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
                     requests.requestMatchers("/api/v1/health", "/actuator/health").permitAll();
-                    requests.requestMatchers(HttpMethod.GET, "/api/v1/tools").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/tools", "/api/v1/tools/popular").permitAll();
+                    // Anonymous aggregate counting for tool opens.
+                    requests.requestMatchers(HttpMethod.POST, "/api/v1/tools/*/usage").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/home/recommendations").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/home/announcements").permitAll();
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login",
