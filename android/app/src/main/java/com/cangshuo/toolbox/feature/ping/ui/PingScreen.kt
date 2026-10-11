@@ -35,15 +35,15 @@ fun PingRoute(factory: ViewModelProvider.Factory) {
     val report = rows.takeIf { it.isNotEmpty() }?.joinToString("\n",postfix = "\n\n$note") { "${it.first}: ${it.second}" }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(note,style = MaterialTheme.typography.bodySmall,color = MaterialTheme.colorScheme.onSurfaceVariant)
-        OutlinedTextField(value = state.host,onValueChange = model::host,label = { Text(stringResource(R.string.ping_host)) },
+        ToolboxTextField(value = state.host,onValueChange = model::host,label = stringResource(R.string.ping_host),
             modifier = Modifier.fillMaxWidth(),singleLine = true,enabled = !state.running,isError = state.error == PingError.INVALID_TARGET)
         Row { Switch(checked = state.ipv6,onCheckedChange = model::ipv6,enabled = !state.running);Text(stringResource(R.string.ping_ipv6),Modifier.padding(12.dp)) }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(1,4,8).forEach { count -> FilterChip(selected = state.count == count,onClick = { model.count(count) },enabled = !state.running,label = { Text(stringResource(R.string.ping_count,count)) }) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = model::run,enabled = !state.running) { Text(stringResource(R.string.ping_run)) }
-            OutlinedButton(onClick = model::cancel,enabled = state.running) { Text(stringResource(R.string.ping_cancel)) }
+            ToolboxButton(onClick = model::run,enabled = !state.running) { Text(stringResource(R.string.ping_run)) }
+            ToolboxOutlinedButton(onClick = model::cancel,enabled = state.running) { Text(stringResource(R.string.ping_cancel)) }
         }
         if (state.running) ToolboxLoadingState(stringResource(R.string.ping_running))
         if (state.cancelled) Text(stringResource(R.string.ping_cancelled))

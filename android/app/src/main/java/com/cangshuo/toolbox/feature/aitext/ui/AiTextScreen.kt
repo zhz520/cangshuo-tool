@@ -16,7 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolGroupCard
+import com.cangshuo.toolbox.core.ui.ToolboxButton
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.aitext.domain.AiFailure
 
 @Composable
@@ -28,13 +32,13 @@ fun AiTextRoute(factory: ViewModelProvider.Factory) {
     var shareFailed by remember{mutableStateOf(false)}
     val shareTitle=stringResource(R.string.ai_share)
     DisposableEffect(model){onDispose{model.cancel()}}
-    Column(Modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxSize().imePadding().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         if(state.user==null)Text(stringResource(R.string.auth_expired))
         state.status?.let{status->
             Text(if(status.enabled)stringResource(R.string.ai_provider,status.providerName,status.model) else stringResource(R.string.ai_disabled))
             if(status.enabled)Text(stringResource(R.string.ai_usage,status.usedToday,status.dailyLimit))
         }
-        TextButton(onClick=model::refresh,enabled=!state.busy){Text(stringResource(R.string.ai_refresh))}
+        ToolboxTextButton(onClick=model::refresh,enabled=!state.busy){Text(stringResource(R.string.ai_refresh))}
         Row(horizontalArrangement=Arrangement.spacedBy(4.dp)) {
             listOf("SUMMARIZE" to R.string.ai_summarize,"REWRITE" to R.string.ai_rewrite,"TRANSLATE" to R.string.ai_translate).forEach{(value,label)->
                 FilterChip(selected=state.task==value,onClick={model.task(value)},enabled=!state.busy,label={Text(stringResource(label))})
@@ -45,11 +49,11 @@ fun AiTextRoute(factory: ViewModelProvider.Factory) {
                 FilterChip(selected=state.target==value,onClick={model.target(value)},enabled=!state.busy,label={Text(stringResource(label))})
             }
         }
-        OutlinedTextField(state.input,model::input,enabled=!state.busy,label={Text(stringResource(R.string.ai_input))},minLines=5,modifier=Modifier.fillMaxWidth(),supportingText={Text("${state.input.length}/8000")})
+        ToolboxTextField(state.input,model::input,enabled=!state.busy,label=stringResource(R.string.ai_input),minLines=5,modifier=Modifier.fillMaxWidth(),supportingText={Text("${state.input.length}/8000")})
         Row{Checkbox(state.consent,model::consent,enabled=!state.busy);Text(stringResource(R.string.ai_consent,state.status?.providerName.orEmpty()),Modifier.weight(1f))}
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
-            Button(onClick=model::execute,enabled=!state.busy&&state.consent&&state.status?.enabled==true&&state.input.isNotBlank()){Text(stringResource(R.string.ai_run))}
-            if(state.busy){ToolboxLoadingIndicator(compact=true);TextButton(onClick=model::cancel){Text(stringResource(R.string.action_cancel))}}
+            ToolboxButton(onClick=model::execute,enabled=!state.busy&&state.consent&&state.status?.enabled==true&&state.input.isNotBlank()){Text(stringResource(R.string.ai_run))}
+            if(state.busy){ToolboxLoadingIndicator(compact=true);ToolboxTextButton(onClick=model::cancel){Text(stringResource(R.string.action_cancel))}}
         }
         state.failure?.let{error->Text(stringResource(when(error){
             AiFailure.INPUT->R.string.ai_invalid;AiFailure.LOGIN->R.string.auth_expired;AiFailure.DISABLED->R.string.ai_unavailable
@@ -58,10 +62,10 @@ fun AiTextRoute(factory: ViewModelProvider.Factory) {
         }),color=MaterialTheme.colorScheme.error)}
         state.result?.let{result->
             if(result.truncated)Text(stringResource(R.string.ai_truncated),color=MaterialTheme.colorScheme.error)
-            Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceContainerLowest)) {Text(result.text,Modifier.fillMaxWidth().padding(16.dp))}
+            ToolGroupCard { Text(result.text) }
             Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){
-                TextButton(onClick={clipboard.setText(AnnotatedString(result.text))}){Text(stringResource(R.string.ai_copy))}
-                TextButton(onClick={try{context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT,result.text),shareTitle))}
+                ToolboxTextButton(onClick={clipboard.setText(AnnotatedString(result.text))}){Text(stringResource(R.string.ai_copy))}
+                ToolboxTextButton(onClick={try{context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT,result.text),shareTitle))}
                     catch(_: RuntimeException){shareFailed=true}}){Text(shareTitle)}
             }
         }

@@ -16,7 +16,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.SystemReportActions
 import com.cangshuo.toolbox.core.ui.SystemReportCard
+import com.cangshuo.toolbox.core.ui.ToolboxButton
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.httpstatus.domain.*
 import java.util.Locale
 
@@ -65,7 +68,7 @@ fun HttpStatusRoute(factory: ViewModelProvider.Factory) {
     } }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        OutlinedTextField(value = state.url, onValueChange = model::url, label = { Text(stringResource(R.string.http_status_url)) },
+        ToolboxTextField(value = state.url, onValueChange = model::url, label = stringResource(R.string.http_status_url),
             modifier = Modifier.fillMaxWidth(), singleLine = true, enabled = !state.running,
             isError = state.error == HttpError.INVALID_URL || state.error == HttpError.UNSUPPORTED_SCHEME)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -79,8 +82,8 @@ fun HttpStatusRoute(factory: ViewModelProvider.Factory) {
             Text(stringResource(R.string.http_status_follow), Modifier.padding(12.dp))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = model::run, enabled = !state.running) { Text(stringResource(R.string.http_status_run)) }
-            OutlinedButton(onClick = model::cancel, enabled = state.running) { Text(stringResource(R.string.http_status_cancel)) }
+            ToolboxButton(onClick = model::run, enabled = !state.running) { Text(stringResource(R.string.http_status_run)) }
+            ToolboxOutlinedButton(onClick = model::cancel, enabled = state.running) { Text(stringResource(R.string.http_status_cancel)) }
         }
         if (state.running) ToolboxLoadingState(stringResource(R.string.http_status_running))
         if (state.cancelled) Text(stringResource(R.string.http_status_cancelled))

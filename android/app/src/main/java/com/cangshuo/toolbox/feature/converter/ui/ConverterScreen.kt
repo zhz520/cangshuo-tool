@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.converter.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,6 +48,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.converter.domain.ConversionType
 import com.cangshuo.toolbox.feature.converter.domain.UnitDef
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -70,7 +72,7 @@ fun ConverterScreen(
                 .widthIn(max = 600.dp)
                 .fillMaxWidth()
                 .fillMaxHeight(),
-            contentPadding = PaddingValues(20.dp),
+            contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
@@ -96,12 +98,11 @@ fun ConverterScreen(
             item(key = "from") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
                 ) {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                            .fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
@@ -114,11 +115,11 @@ fun ConverterScreen(
                             selected = state.fromUnit,
                             onSelected = onFromUnitSelected,
                         )
-                        OutlinedTextField(
+                        ToolboxTextField(
                             value = state.inputValue,
                             onValueChange = onInputChanged,
                             modifier = Modifier.fillMaxWidth(),
-                            placeholder = { Text(stringResource(R.string.converter_input_hint)) },
+                            placeholder = stringResource(R.string.converter_input_hint),
                             supportingText = {
                                 when {
                                     state.isInputError -> Text(stringResource(R.string.converter_error_invalid))
@@ -154,12 +155,11 @@ fun ConverterScreen(
             item(key = "to") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
                 ) {
                     Column(
                         Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                            .fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
@@ -175,7 +175,7 @@ fun ConverterScreen(
                         // Result display
                         Surface(
                             shape = MaterialTheme.shapes.medium,
-                            color = MaterialTheme.colorScheme.surfaceContainerLow,
+                            color = MaterialTheme.colorScheme.surfaceVariant,
                         ) {
                             Column(
                                 Modifier
@@ -214,7 +214,7 @@ fun ConverterScreen(
             // ── Copy button ─────────────────────────────────────────
             if (state.result.isNotEmpty()) {
                 item(key = "copy") {
-                    OutlinedButton(
+                    ToolboxOutlinedButton(
                         onClick = { clipboardManager.setText(AnnotatedString(state.result)) },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
@@ -243,7 +243,7 @@ private fun UnitDropdown(
         expanded = expanded,
         onExpandedChange = { expanded = it },
     ) {
-        OutlinedTextField(
+        ToolboxTextField(
             value = selected?.let { "${it.symbol}  —  ${stringResource(it.nameResId)}" } ?: "",
             onValueChange = {},
             readOnly = true,

@@ -48,7 +48,7 @@ fun CompassRoute(factory: ViewModelProvider.Factory) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         SystemReportActions(report, false, model::refresh)
-        OutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
+        ToolboxOutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
         if (state.waiting && reading == null) ToolboxLoadingState(stringResource(R.string.compass_loading))
         if (state.unsupported) Text(stringResource(R.string.compass_unsupported))
         else if (state.failed) Text(stringResource(R.string.compass_error), color = MaterialTheme.colorScheme.error)

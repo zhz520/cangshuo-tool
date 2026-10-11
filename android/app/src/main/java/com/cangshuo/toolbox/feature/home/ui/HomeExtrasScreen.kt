@@ -17,6 +17,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolListItem
+import com.cangshuo.toolbox.core.ui.ToolSectionHeader
+import com.cangshuo.toolbox.core.ui.ToolboxChevron
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.feature.home.domain.HomeAnnouncement
 import com.cangshuo.toolbox.feature.home.domain.HomeRecommendation
 
@@ -33,27 +37,19 @@ fun HomeExtrasRoute(factory: ViewModelProvider.Factory, onTool: (String) -> Unit
         if (state.busy) ToolboxLoadingIndicator(compact = true)
         if (state.failed) Row {
             Text(stringResource(R.string.home_updates_failed), Modifier.weight(1f), color = MaterialTheme.colorScheme.error)
-            TextButton(onClick = { model.refresh(true) }) { Text(stringResource(R.string.action_retry)) }
+            ToolboxTextButton(onClick = { model.refresh(true) }) { Text(stringResource(R.string.action_retry)) }
         }
         if (state.announcements.isNotEmpty()) {
-            Text(stringResource(R.string.home_announcements), style = MaterialTheme.typography.titleMedium)
+            ToolSectionHeader(stringResource(R.string.home_announcements))
             state.announcements.forEach { item ->
-                OutlinedButton(onClick = { announcement = item }, modifier = Modifier.fillMaxWidth()) {
-                    Text(item.title, color = if (item.level == "INFO") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
-                }
+                ToolListItem(item.title, icon=R.drawable.ic_info,onClick={announcement=item},trailing={ToolboxChevron()})
             }
         }
         if (state.recommendations.isNotEmpty()) {
-            Text(stringResource(R.string.home_recommendation_slots), style = MaterialTheme.typography.titleMedium)
+            ToolSectionHeader(stringResource(R.string.home_recommendation_slots))
             state.recommendations.forEach { item ->
-                Card(onClick = { item.toolCode?.let(onTool) ?: run { external = item } }, modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest)) {
-                    Column(Modifier.padding(16.dp)) {
-                        Text(item.title, style = MaterialTheme.typography.titleMedium)
-                        item.subtitle?.takeIf(String::isNotBlank)?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
-                        if (item.linkUrl != null) Text(stringResource(R.string.home_external_link), style = MaterialTheme.typography.bodySmall)
-                    }
-                }
+                ToolListItem(item.title,subtitle=item.subtitle,icon=R.drawable.ic_tools,
+                    onClick={item.toolCode?.let(onTool) ?: run {external=item}},trailing={ToolboxChevron()})
             }
         }
     }

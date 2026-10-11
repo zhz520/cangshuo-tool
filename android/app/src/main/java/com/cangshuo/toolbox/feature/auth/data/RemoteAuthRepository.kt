@@ -94,7 +94,7 @@ class RemoteAuthRepository internal constructor(private val api: AuthApi, privat
             }
             if (!response.isSuccessful) {
                 response.errorBody()?.close()
-                fail(if(response.code()==401) AuthFailure.CREDENTIALS else AuthFailure.SERVICE)
+                failHttp(response.code())
             }
             if (response.body()?.code != 0) fail(AuthFailure.SERVICE)
             withContext(NonCancellable) {
@@ -120,9 +120,16 @@ class RemoteAuthRepository internal constructor(private val api: AuthApi, privat
 
     private suspend fun load() {
         if (!loaded) {
-            try { session = store.read(); loaded = true }
+            session = try { store.read() }
             catch (exception: CancellationException) { throw exception }
-            catch (_: Exception) { fail(AuthFailure.STORAGE) }
+            catch (_: Exception) {
+                // A broken local store must never block signing in: start clean and continue.
+                try { store.write(StoredAuthSession()) }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { }
+                StoredAuthSession()
+            }
+            loaded = true
         }
     }
     private fun refreshValid(): Boolean = session.refreshToken.matches(Regex("[0-9a-f]{32}\\.[A-Za-z0-9_-]{43}")) &&
@@ -200,21 +207,30 @@ class RemoteAuthRepository internal constructor(private val api: AuthApi, privat
     }
     private suspend fun persist(value: StoredAuthSession) {
         try { store.write(value) } catch (exception: CancellationException) { throw exception }
-        catch (_: Exception) { fail(AuthFailure.STORAGE) }
+        // Persisting is best effort; keep the session in memory when the local store fails.
+        catch (_: Exception) { }
     }
     private fun <T> successful(response: Response<AuthEnvelope<T>>): T {
         if (!response.isSuccessful) {
             response.errorBody()?.close()
-            fail(when (response.code()) { 401 -> AuthFailure.CREDENTIALS; 409 -> AuthFailure.ACCOUNT_EXISTS; else -> AuthFailure.SERVICE })
+            failHttp(response.code())
         }
         val envelope = response.body() ?: fail(AuthFailure.SERVICE)
-        if (envelope.code != 0) fail(AuthFailure.SERVICE)
+        if (envelope.code != 0) fail(AuthFailure.SERVICE, "code ${envelope.code} · traceId ${envelope.traceId}")
         return envelope.data ?: fail(AuthFailure.SERVICE)
+    }
+
+    /** Maps a status to a failure; 429 and unknown statuses keep the code so it can be traced. */
+    private fun failHttp(code: Int): Nothing = when (code) {
+        401 -> fail(AuthFailure.CREDENTIALS)
+        409 -> fail(AuthFailure.ACCOUNT_EXISTS)
+        429 -> fail(AuthFailure.LIMITED, "HTTP 429")
+        else -> fail(AuthFailure.SERVICE, "HTTP $code")
     }
     private suspend fun <T> protect(operation: suspend () -> T): T = try { operation() }
         catch (exception: CancellationException) { throw exception }
         catch (exception: AuthException) { throw exception }
         catch (_: IOException) { fail(AuthFailure.NETWORK) }
         catch (_: Exception) { fail(AuthFailure.SERVICE) }
-    private fun fail(failure: AuthFailure): Nothing = throw AuthException(failure)
+    private fun fail(failure: AuthFailure, detail: String? = null): Nothing = throw AuthException(failure, detail)
 }

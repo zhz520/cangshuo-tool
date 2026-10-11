@@ -2,6 +2,7 @@ package com.cangshuo.toolbox.feature.auth.data
 
 import com.cangshuo.toolbox.feature.auth.domain.AuthException
 import com.cangshuo.toolbox.feature.auth.domain.AuthFailure
+import com.cangshuo.toolbox.feature.auth.domain.AuthStatus
 import com.sun.net.httpserver.HttpServer
 import java.net.InetSocketAddress
 import java.time.Instant
@@ -35,6 +36,31 @@ class RemoteAuthRepositoryTest {
         } finally { server.stop(0) }
     }
 
+    @Test fun brokenLocalStoreNeverBlocksRestoreOrLogin() = runTest {
+        val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0)
+        server.createContext("/api/v1/auth/login") { exchange ->
+            exchange.requestBody.close()
+            exchange.respond(200, """{"code":0,"message":"success","traceId":"trace","data":{"accessToken":"${"a".repeat(40)}","tokenType":"Bearer","refreshToken":"${"12".repeat(16)}.${"a".repeat(43)}","refreshExpiresAt":"${Instant.now().plusSeconds(2592000)}","expiresIn":900,"expiresAt":"${Instant.now().plusSeconds(900)}","user":{"id":1,"email":"a@b.com","nickname":"用户"}}}""")
+        }
+        server.createContext("/api/v1/auth/me") { exchange ->
+            exchange.respond(200, """{"code":0,"message":"success","traceId":"trace","data":{"id":1,"email":"a@b.com","nickname":"用户"}}""")
+        }
+        server.start()
+        try {
+            val brokenStore = object : AuthSessionStore {
+                override suspend fun read(): StoredAuthSession = throw IllegalStateException("broken store")
+                override suspend fun write(session: StoredAuthSession) = throw IllegalStateException("broken store")
+            }
+            val repository = RemoteAuthRepository(
+                createAuthApi("http://127.0.0.1:${server.address.port}/api/v1"), backgroundScope, brokenStore)
+            repository.restore()
+            assertEquals(AuthStatus.SIGNED_OUT, repository.status.value)
+            repository.login("a@b.com", "password12")
+            assertEquals("a@b.com", repository.account.value?.email)
+            assertEquals(AuthStatus.SIGNED_IN, repository.status.value)
+        } finally { server.stop(0) }
+    }
+
     @Test fun httpFailureAndOversizedChunkedResponseNeverPublishAccount() = runTest {
         val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0)
         var oversized = false
@@ -53,6 +79,25 @@ class RemoteAuthRepositoryTest {
             oversized = true
             try { repository.login("a@b.com", "password12"); fail() }
             catch (exception: AuthException) { assertEquals(AuthFailure.NETWORK, exception.failure) }
+            assertNull(repository.account.value)
+        } finally { server.stop(0) }
+    }
+
+    @Test fun rateLimitedLoginMapsToLimitedInsteadOfService() = runTest {
+        val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0)
+        server.createContext("/api/v1/auth/login") { exchange ->
+            exchange.requestBody.close()
+            exchange.responseHeaders.add("Retry-After", "60")
+            exchange.respond(429, """{"code":10007,"message":"Too many requests","traceId":"trace","data":null}""")
+        }
+        server.start()
+        try {
+            val repository = RemoteAuthRepository("http://127.0.0.1:${server.address.port}/api/v1", backgroundScope)
+            try { repository.login("a@b.com", "password12"); fail() }
+            catch (exception: AuthException) {
+                assertEquals(AuthFailure.LIMITED, exception.failure)
+                assertEquals("HTTP 429", exception.detail)
+            }
             assertNull(repository.account.value)
         } finally { server.stop(0) }
     }

@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +17,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,17 +30,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -53,8 +53,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxButton
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
@@ -125,6 +128,7 @@ fun ImageCompressScreen(
             .fillMaxSize()
             .imePadding()
             .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(top = 12.dp,bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         // Notification banner if user message is present
@@ -157,9 +161,9 @@ fun ImageCompressScreen(
                             modifier = Modifier.weight(1f),
                         )
                         if (!state.isSuccessMessage && state.result == null && !isProcessing && !isExporting) {
-                            TextButton(onClick = onRetry) { Text(stringResource(R.string.image_compress_retry)) }
+                            ToolboxTextButton(onClick = onRetry) { Text(stringResource(R.string.image_compress_retry)) }
                         }
-                        TextButton(onClick = onDismissMessage) {
+                        ToolboxTextButton(onClick = onDismissMessage) {
                             Text(
                                 text = stringResource(R.string.image_compress_dismiss),
                                 color = if (state.isSuccessMessage) {
@@ -179,7 +183,8 @@ fun ImageCompressScreen(
             item {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(
@@ -205,7 +210,7 @@ fun ImageCompressScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
-                        Button(
+                        ToolboxButton(
                             onClick = {
                                 pickerLauncher.launch(
                                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -225,7 +230,7 @@ fun ImageCompressScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    OutlinedButton(
+                    ToolboxOutlinedButton(
                         enabled = !isExporting,
                         onClick = {
                             pickerLauncher.launch(
@@ -236,7 +241,7 @@ fun ImageCompressScreen(
                     ) {
                         Text(stringResource(R.string.image_compress_btn_repick))
                     }
-                    OutlinedButton(
+                    ToolboxOutlinedButton(
                         enabled = !isExporting,
                         onClick = onClear,
                         modifier = Modifier.weight(1f),
@@ -289,7 +294,7 @@ fun ImageCompressScreen(
                         .padding(bottom = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Button(
+                    ToolboxButton(
                         onClick = {
                             val request = onSaveRequested(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
                             if (request != null) {
@@ -314,7 +319,7 @@ fun ImageCompressScreen(
                         }
                     }
 
-                    OutlinedButton(
+                    ToolboxOutlinedButton(
                         onClick = onShareRequested,
                         enabled = canExport,
                     ) {
@@ -572,7 +577,7 @@ private fun SettingsCard(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-                Row(
+                FlowRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {

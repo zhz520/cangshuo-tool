@@ -229,7 +229,8 @@ class ToolboxAppContainer(context: Context) {
         com.cangshuo.toolbox.feature.home.domain.HomeExtrasUseCases(
             com.cangshuo.toolbox.feature.home.data.RemoteHomeExtrasRepository(BuildConfig.API_BASE_URL)), registryStore)
     fun updateLocale(resources: android.content.res.Resources) { registryStore.replaceBundled(bundledRegistry(resources)) }
-    private val repository = RegistryHomeRepository(registryStore)
+    private val toolUsage = com.cangshuo.toolbox.feature.popular.data.RemoteToolUsageRepository(BuildConfig.API_BASE_URL)
+    private val repository = RegistryHomeRepository(registryStore) { toolUsage.popular(8).map { it.code } }
 
     private val catalogCache = RoomWebToolCatalogCache(database.cachedToolCatalogDao(), BuildConfig.API_BASE_URL)
     private val refreshWebCatalog = RefreshWebToolCatalogUseCase(ToolCatalogClient(BuildConfig.API_BASE_URL), registryStore, catalogCache)
@@ -268,6 +269,14 @@ class ToolboxAppContainer(context: Context) {
     val syncViewModelFactory=com.cangshuo.toolbox.feature.sync.ui.CloudSyncViewModel.factory(
         com.cangshuo.toolbox.feature.sync.domain.CloudSyncUseCases(cloudSync))
     val settings get() = cloudSync.settings
+    val settingsViewModelFactory = com.cangshuo.toolbox.feature.settings.ui.SettingsViewModel.factory(
+        com.cangshuo.toolbox.feature.settings.domain.SettingsCacheUseCases(
+            com.cangshuo.toolbox.feature.settings.data.LocalSettingsCacheRepository(applicationContext)))
+    private val accentRepository = com.cangshuo.toolbox.feature.settings.data.AccentPreferenceRepository(
+        applicationContext, catalogScope)
+    val accent = accentRepository.observe().stateIn(catalogScope,
+        kotlinx.coroutines.flow.SharingStarted.Eagerly, com.cangshuo.toolbox.ui.theme.ToolboxAccent.BLUE)
+    val accentViewModelFactory = com.cangshuo.toolbox.feature.settings.ui.AccentViewModel.factory(accentRepository)
     private val authRestoreFinished=kotlinx.coroutines.flow.MutableStateFlow(false)
     private val startupSettings=combine(authRestoreFinished,authRepository.account,cloudSync.context,settings) { ready,account,context,settings ->
         settings.takeIf { ready && it.ready && account?.id==context.userId && it.ownerScope==(context.settingsScope ?: 0) }
@@ -275,6 +284,8 @@ class ToolboxAppContainer(context: Context) {
         com.cangshuo.toolbox.feature.sync.domain.AppSettings())
     val authViewModelFactory = com.cangshuo.toolbox.feature.auth.ui.AuthViewModel.factory(
         com.cangshuo.toolbox.feature.auth.domain.AuthUseCases(authRepository) { user, action -> cloudSync.deleteAccount(user,action) },
+        com.cangshuo.toolbox.feature.auth.domain.AvatarUseCases(
+            com.cangshuo.toolbox.feature.auth.data.QqAvatarRepository(applicationContext, catalogScope)),
     )
     private val catalogSync = RequestWebToolCatalogSyncUseCase(
         applicationScope = catalogScope,
@@ -288,6 +299,12 @@ class ToolboxAppContainer(context: Context) {
             catch(_: Exception) { } finally { authRestoreFinished.value=true }
         }
         catalogScope.launch {
+            while (true) {
+                repository.refreshPopular()
+                kotlinx.coroutines.delay(5 * 60_000L)
+            }
+        }
+        catalogScope.launch {
             catalogSync()
         }
     }
@@ -297,7 +314,7 @@ class ToolboxAppContainer(context: Context) {
     val favoritesViewModelFactory = FavoritesViewModel.factory(ObserveFavoritesUseCase(favorites), SetFavoriteUseCase(favorites))
     val recentViewModelFactory = RecentViewModel.factory(
         observe = ObserveRecentUseCase(recent),
-        record = RecordToolUseUseCase(recent),
+        record = RecordToolUseUseCase(recent, toolUsage::record),
         clear = ClearRecentUseCase(recent),
     )
 

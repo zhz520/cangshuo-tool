@@ -20,7 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelProvider
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxDivider
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
 import com.cangshuo.toolbox.feature.deviceinfo.domain.*
 import kotlinx.coroutines.launch
 
@@ -43,10 +45,10 @@ private fun DeviceInfoScreen(state: DeviceInfoUiState,onRefresh: ()->Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.device_info_privacy),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick=onRefresh,enabled=!state.loading) { Text(stringResource(R.string.device_info_refresh)) }
-            OutlinedButton(onClick={scope.launch { try { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Device info",report))) }
+            ToolboxOutlinedButton(onClick=onRefresh,enabled=!state.loading) { Text(stringResource(R.string.device_info_refresh)) }
+            ToolboxOutlinedButton(onClick={scope.launch { try { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Device info",report))) }
                 catch(_: Exception) { actionFailed=true } }},enabled=report!=null) { Text(stringResource(R.string.device_info_copy)) }
-            OutlinedButton(onClick={ try {
+            ToolboxOutlinedButton(onClick={ try {
                 context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply { type="text/plain";putExtra(Intent.EXTRA_TEXT,report) },null))
             } catch(_: Exception) { actionFailed=true } },enabled=report!=null) { Text(stringResource(R.string.device_info_share)) }
         }
@@ -54,12 +56,11 @@ private fun DeviceInfoScreen(state: DeviceInfoUiState,onRefresh: ()->Unit) {
         if(state.failed || actionFailed) Text(stringResource(R.string.device_info_error),color=MaterialTheme.colorScheme.error)
         state.snapshot?.let { snapshot ->
             DeviceField.entries.forEach { field ->
-                Card(colors=CardDefaults.cardColors(containerColor=MaterialTheme.colorScheme.surfaceContainerLowest)) {
-                    Column(Modifier.fillMaxWidth().padding(16.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-                        Text(labels.getValue(field),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant)
-                        SelectionContainer { Text(snapshot.values[field] ?: unknown,style=MaterialTheme.typography.bodyLarge) }
-                    }
+                Column(Modifier.fillMaxWidth().padding(vertical=10.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                    Text(labels.getValue(field),style=MaterialTheme.typography.labelSmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                    SelectionContainer { Text(snapshot.values[field] ?: unknown,style=MaterialTheme.typography.bodyMedium) }
                 }
+                ToolboxDivider()
             }
         }
     }

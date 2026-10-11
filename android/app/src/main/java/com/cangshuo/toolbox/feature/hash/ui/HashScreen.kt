@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.hash.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,10 +19,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +31,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.hash.domain.HashAlgorithm
 import com.cangshuo.toolbox.feature.hash.domain.HashResult
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -61,7 +62,8 @@ fun HashScreen(
             item(key = "input_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -80,7 +82,7 @@ fun HashScreen(
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             Row {
-                                TextButton(
+                                ToolboxTextButton(
                                     onClick = {
                                         val clipText = clipboardManager.getText()?.text
                                         if (!clipText.isNullOrEmpty()) {
@@ -91,22 +93,20 @@ fun HashScreen(
                                     Text(stringResource(R.string.hash_btn_paste))
                                 }
                                 if (state.inputText.isNotEmpty()) {
-                                    TextButton(onClick = onClear) {
+                                    ToolboxTextButton(onClick = onClear) {
                                         Text(stringResource(R.string.hash_btn_clear))
                                     }
                                 }
                             }
                         }
 
-                        OutlinedTextField(
+                        ToolboxTextField(
                             value = state.inputText,
                             onValueChange = onInputChanged,
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 3,
                             maxLines = 6,
-                            placeholder = {
-                                Text(stringResource(R.string.hash_input_placeholder))
-                            },
+                            placeholder = stringResource(R.string.hash_input_placeholder),
                             supportingText = {
                                 if (state.inputText.isNotEmpty()) {
                                     Text(
@@ -127,7 +127,8 @@ fun HashScreen(
             item(key = "options_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -167,7 +168,7 @@ fun HashScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     if (state.hashes.isNotEmpty()) {
-                        TextButton(
+                        ToolboxTextButton(
                             onClick = {
                             val allFormatted = state.hashes.joinToString("\n\n") { item ->
                                 "${item.algorithm.displayName}:\n${item.hash}"
@@ -185,7 +186,7 @@ fun HashScreen(
                 item(key = "empty_results") {
                     Surface(
                         shape = MaterialTheme.shapes.medium,
-                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Box(
@@ -211,7 +212,8 @@ fun HashScreen(
             ) { result ->
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(
@@ -246,7 +248,7 @@ fun HashScreen(
                                     )
                                 }
                             }
-                            TextButton(
+                            ToolboxTextButton(
                                 onClick = {
                                     clipboardManager.setText(AnnotatedString(result.hash))
                                 },
@@ -257,7 +259,7 @@ fun HashScreen(
 
                         Surface(
                             shape = MaterialTheme.shapes.medium,
-                            color = MaterialTheme.colorScheme.surfaceContainerLow,
+                            color = MaterialTheme.colorScheme.surfaceVariant,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Box(

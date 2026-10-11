@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.StateFlow
 data class AccountProfile(val id: Long, val email: String, val nickname: String)
 
 enum class AuthFailure { INVALID_EMAIL, INVALID_PASSWORD, INVALID_NICKNAME, PASSWORD_MISMATCH,
-    CREDENTIALS, ACCOUNT_EXISTS, EXPIRED, NETWORK, SERVICE, STORAGE }
+    CREDENTIALS, ACCOUNT_EXISTS, EXPIRED, NETWORK, SERVICE, STORAGE, LIMITED }
 
 enum class AuthStatus { SIGNED_OUT, RESTORING, SIGNED_IN, RETRY_REQUIRED }
 
-class AuthException(val failure: AuthFailure) : Exception(failure.name)
+class AuthException(val failure: AuthFailure, val detail: String? = null) : Exception(failure.name)
 
 interface AuthRepository {
     val account: StateFlow<AccountProfile?>

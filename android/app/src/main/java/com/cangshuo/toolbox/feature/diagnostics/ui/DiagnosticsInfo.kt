@@ -17,10 +17,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolListItem
+import com.cangshuo.toolbox.core.ui.ToolboxChevron
 import kotlinx.coroutines.launch
 
 @Composable
-fun DiagnosticsInfo(factory: ViewModelProvider.Factory) {
+fun DiagnosticsInfo(factory: ViewModelProvider.Factory, asListItem: Boolean = false) {
     val model: DiagnosticsViewModel = viewModel(key = "local.diagnostics", factory = factory)
     val state by model.state.collectAsStateWithLifecycle()
     var visible by remember { mutableStateOf(false) }
@@ -28,7 +31,9 @@ fun DiagnosticsInfo(factory: ViewModelProvider.Factory) {
     var copied by remember { mutableStateOf(false) }
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
-    TextButton(onClick = { visible = true; copied = false; model.refresh() }) { Text(stringResource(R.string.diagnostics_title)) }
+    if(asListItem) ToolListItem(stringResource(R.string.diagnostics_title),icon=R.drawable.ic_chart,
+        onClick={visible=true;copied=false;model.refresh()},trailing={ToolboxChevron()})
+    else ToolboxTextButton(onClick = { visible = true; copied = false; model.refresh() }) { Text(stringResource(R.string.diagnostics_title)) }
     if (visible) AlertDialog(onDismissRequest = { visible = false }, title = { Text(stringResource(R.string.diagnostics_title)) },
         text = { Column(Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.diagnostics_privacy))

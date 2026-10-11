@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.base64.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +18,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +32,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.base64.domain.Base64Mode
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 
@@ -63,7 +64,8 @@ fun Base64Screen(
             item(key = "mode_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -118,7 +120,8 @@ fun Base64Screen(
             item(key = "input_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -141,7 +144,7 @@ fun Base64Screen(
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             Row {
-                                TextButton(
+                                ToolboxTextButton(
                                     onClick = {
                                         val clipText = clipboardManager.getText()?.text
                                         if (!clipText.isNullOrEmpty()) {
@@ -152,27 +155,23 @@ fun Base64Screen(
                                     Text(stringResource(R.string.base64_btn_paste))
                                 }
                                 if (state.inputText.isNotEmpty()) {
-                                    TextButton(onClick = onClear) {
+                                    ToolboxTextButton(onClick = onClear) {
                                         Text(stringResource(R.string.base64_btn_clear))
                                     }
                                 }
                             }
                         }
 
-                        OutlinedTextField(
+                        ToolboxTextField(
                             value = state.inputText,
                             onValueChange = onInputChanged,
                             modifier = Modifier.fillMaxWidth(),
                             minLines = 4,
                             maxLines = 8,
-                            placeholder = {
-                                Text(
-                                    if (state.mode == Base64Mode.ENCODE) {
-                                        stringResource(R.string.base64_placeholder_text)
-                                    } else {
-                                        stringResource(R.string.base64_placeholder_b64)
-                                    },
-                                )
+                            placeholder = if (state.mode == Base64Mode.ENCODE) {
+                                stringResource(R.string.base64_placeholder_text)
+                            } else {
+                                stringResource(R.string.base64_placeholder_b64)
                             },
                             isError = state.isError,
                             supportingText = {
@@ -191,7 +190,7 @@ fun Base64Screen(
             if (state.outputText.isNotEmpty()) {
                 item(key = "swap_action") {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        OutlinedButton(onClick = onSwap) {
+                        ToolboxOutlinedButton(onClick = onSwap) {
                             Text(stringResource(R.string.base64_btn_swap))
                         }
                     }
@@ -202,7 +201,8 @@ fun Base64Screen(
             item(key = "output_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -226,7 +226,7 @@ fun Base64Screen(
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             if (state.outputText.isNotEmpty()) {
-                                TextButton(
+                                ToolboxTextButton(
                                     onClick = {
                                         clipboardManager.setText(AnnotatedString(state.outputText))
                                     },
@@ -257,7 +257,7 @@ fun Base64Screen(
                         } else {
                             Surface(
                                 shape = MaterialTheme.shapes.medium,
-                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
                                 Box(
@@ -327,13 +327,13 @@ private fun HexResultSection(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            TextButton(onClick = onCopyHex) {
+            ToolboxTextButton(onClick = onCopyHex) {
                 Text(stringResource(R.string.base64_btn_copy_hex))
             }
         }
         Surface(
             shape = MaterialTheme.shapes.medium,
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            color = MaterialTheme.colorScheme.surfaceVariant,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(

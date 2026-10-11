@@ -2,6 +2,7 @@ package com.cangshuo.toolbox.core.ui
 
 import android.content.ClipData
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.*
@@ -24,11 +25,11 @@ fun SystemReportActions(report: String?, loading: Boolean, onRefresh: () -> Unit
     var failed by remember { mutableStateOf(false) }
     Column {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (showRefresh) OutlinedButton(onClick = { failed = false; onRefresh() }, enabled = !loading) {
+            if (showRefresh) ToolboxOutlinedButton(onClick = { failed = false; onRefresh() }, enabled = !loading) {
                 if (loading) ToolboxLoadingIndicator(compact = true)
                 Text(stringResource(R.string.device_info_refresh))
             }
-            OutlinedButton(enabled = report != null, onClick = {
+            ToolboxOutlinedButton(enabled = report != null, onClick = {
                 failed = false
                 scope.launch {
                     try { clipboard.setClipEntry(ClipEntry(ClipData.newPlainText("Report", report))) }
@@ -36,7 +37,7 @@ fun SystemReportActions(report: String?, loading: Boolean, onRefresh: () -> Unit
                     catch (_: Exception) { failed = true }
                 }
             }) { Text(stringResource(R.string.device_info_copy)) }
-            OutlinedButton(enabled = report != null, onClick = {
+            ToolboxOutlinedButton(enabled = report != null, onClick = {
                 failed = false
                 try {
                     context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
@@ -51,13 +52,18 @@ fun SystemReportActions(report: String?, loading: Boolean, onRefresh: () -> Unit
 
 @Composable
 fun SystemReportCard(title: String, rows: List<Pair<String, String>>) {
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest)) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(title, style = MaterialTheme.typography.titleSmall)
             rows.forEach { (label, value) ->
                 Column {
-                    Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    SelectionContainer { Text(value, style = MaterialTheme.typography.bodyLarge) }
+                    Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    SelectionContainer { Text(value, style = MaterialTheme.typography.bodyMedium) }
                 }
             }
         }

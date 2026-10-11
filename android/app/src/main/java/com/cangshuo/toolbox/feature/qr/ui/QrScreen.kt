@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -28,16 +29,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,8 +64,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxButton
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.qr.domain.QrHistoryEntry
 import com.cangshuo.toolbox.feature.qr.domain.QrColorStyle
 import com.cangshuo.toolbox.feature.qr.domain.QrCodeFormat
@@ -203,7 +204,7 @@ fun QrScreen(
                     QrCard {
                         Text(stringResource(message), color = if (state.exportMessageIsError)
                             MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
-                        TextButton(onClick = onDismissExportMessage) { Text(stringResource(R.string.qr_btn_dismiss)) }
+                        ToolboxTextButton(onClick = onDismissExportMessage) { Text(stringResource(R.string.qr_btn_dismiss)) }
                     }
                 }
             }
@@ -259,43 +260,43 @@ fun QrScreen(
                                 label = { Text(stringResource(R.string.qr_type_event)) })
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            TextButton(onClick = onLoadSample, enabled = !state.isExporting) { Text(stringResource(R.string.qr_btn_sample)) }
-                            TextButton(onClick = onClear, enabled = !state.isExporting) { Text(stringResource(R.string.qr_btn_clear)) }
+                            ToolboxTextButton(onClick = onLoadSample, enabled = !state.isExporting) { Text(stringResource(R.string.qr_btn_sample)) }
+                            ToolboxTextButton(onClick = onClear, enabled = !state.isExporting) { Text(stringResource(R.string.qr_btn_clear)) }
                         }
                         state.inputMessageRes?.let { QrError(it) }
                         when (state.contentType) {
                             QrContentType.TEXT -> {
-                            OutlinedTextField(
+                            ToolboxTextField(
                                 value = state.textContent, onValueChange = onTextChanged,
                                 enabled = !state.isExporting,
                                 modifier = Modifier.fillMaxWidth(), minLines = 3, maxLines = 6,
-                                label = { Text(stringResource(R.string.qr_label_text)) },
-                                placeholder = { Text(stringResource(R.string.qr_placeholder_text)) },
+                                label = stringResource(R.string.qr_label_text),
+                                placeholder = stringResource(R.string.qr_placeholder_text),
                                 supportingText = { Text(stringResource(R.string.qr_input_count,
                                     state.textContent.length, QrInputPolicy.MAX_TEXT_LENGTH)) },
                             )
-                            TextButton(onClick = { clipboard.getText()?.text?.let(onTextChanged) }, enabled = !state.isExporting) {
+                            ToolboxTextButton(onClick = { clipboard.getText()?.text?.let(onTextChanged) }, enabled = !state.isExporting) {
                                 Text(stringResource(R.string.qr_btn_paste))
                             }
                             }
                             QrContentType.WIFI -> {
-                            OutlinedTextField(
+                            ToolboxTextField(
                                 value = state.wifiSsid, onValueChange = onWifiSsidChanged,
                                 enabled = !state.isExporting,
                                 modifier = Modifier.fillMaxWidth(), singleLine = true,
-                                label = { Text(stringResource(R.string.qr_wifi_ssid_label)) },
-                                placeholder = { Text(stringResource(R.string.qr_wifi_ssid_placeholder)) },
+                                label = stringResource(R.string.qr_wifi_ssid_label),
+                                placeholder = stringResource(R.string.qr_wifi_ssid_placeholder),
                                 supportingText = { Text(stringResource(R.string.qr_wifi_ssid_hint)) },
                             )
-                            OutlinedTextField(
+                            ToolboxTextField(
                                 value = state.wifiPassword, onValueChange = onWifiPasswordChanged,
                                 modifier = Modifier.fillMaxWidth(), singleLine = true,
                                 enabled = state.wifiSecurity != "nopass" && !state.isExporting,
-                                label = { Text(stringResource(R.string.qr_wifi_password_label)) },
-                                placeholder = { Text(stringResource(R.string.qr_wifi_password_placeholder)) },
+                                label = stringResource(R.string.qr_wifi_password_label),
+                                placeholder = stringResource(R.string.qr_wifi_password_placeholder),
                                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
-                                    TextButton(onClick = { showPassword = !showPassword }, enabled = state.wifiSecurity != "nopass") {
+                                    ToolboxTextButton(onClick = { showPassword = !showPassword }, enabled = state.wifiSecurity != "nopass") {
                                         Text(stringResource(if (showPassword) R.string.qr_hide_password else R.string.qr_show_password))
                                     }
                                 },
@@ -534,7 +535,7 @@ fun QrScreen(
                                     .aspectRatio(if (state.format.linear) 2.4f else 1f)
                                     .semantics { contentDescription = description })
                             QrContent(state.resolvedContent)
-                            Button(onClick = { clipboard.setText(AnnotatedString(state.resolvedContent)) }) {
+                            ToolboxButton(onClick = { clipboard.setText(AnnotatedString(state.resolvedContent)) }) {
                                 Text(stringResource(R.string.qr_btn_copy_content))
                             }
                             Text(stringResource(R.string.qr_export_format_title), style = MaterialTheme.typography.titleSmall)
@@ -553,13 +554,13 @@ fun QrScreen(
                                         label = { Text(stringResource(R.string.qr_export_size, size.pixels)) })
                                 }
                             }
-                            Button(onClick = onSaveImage, enabled = state.canExportImage, modifier = Modifier.fillMaxWidth()) {
+                            ToolboxButton(onClick = onSaveImage, enabled = state.canExportImage, modifier = Modifier.fillMaxWidth()) {
                                 val gallery = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                                     state.exportFormat != QrExportFormat.SVG
                                 Text(stringResource(if (gallery) R.string.qr_btn_save_gallery
                                     else R.string.qr_btn_save_document))
                             }
-                            TextButton(onClick = onShareImage, enabled = state.canExportImage, modifier = Modifier.fillMaxWidth()) {
+                            ToolboxTextButton(onClick = onShareImage, enabled = state.canExportImage, modifier = Modifier.fillMaxWidth()) {
                                 Text(stringResource(R.string.qr_btn_share_image))
                             }
                         }
@@ -579,11 +580,11 @@ fun QrScreen(
                         if (state.historyBusy) ToolboxLoadingIndicator(compact = true)
                         state.historyMessageRes?.let { message ->
                             Text(stringResource(message), color = MaterialTheme.colorScheme.error)
-                            if (message == R.string.qr_history_error) TextButton(onClick = onHistoryRetry) {
+                            if (message == R.string.qr_history_error) ToolboxTextButton(onClick = onHistoryRetry) {
                                 Text(stringResource(R.string.qr_btn_retry))
                             }
                         }
-                        TextButton(onClick = { confirmClear = true },
+                        ToolboxTextButton(onClick = { confirmClear = true },
                             enabled = !state.historyBusy && state.history.entries.isNotEmpty()) {
                             Text(stringResource(R.string.qr_history_clear))
                         }
@@ -592,10 +593,10 @@ fun QrScreen(
                         onDismissRequest = { confirmClear = false },
                         title = { Text(stringResource(R.string.qr_history_clear)) },
                         text = { Text(stringResource(R.string.qr_history_clear_confirm)) },
-                        confirmButton = { TextButton(onClick = { confirmClear = false; onHistoryClear() }) {
+                        confirmButton = { ToolboxTextButton(onClick = { confirmClear = false; onHistoryClear() }) {
                             Text(stringResource(R.string.qr_history_clear))
                         } },
-                        dismissButton = { TextButton(onClick = { confirmClear = false }) {
+                        dismissButton = { ToolboxTextButton(onClick = { confirmClear = false }) {
                             Text(stringResource(R.string.qr_btn_cancel))
                         } },
                     )
@@ -610,10 +611,10 @@ fun QrScreen(
                             style = MaterialTheme.typography.bodySmall)
                         Text(entry.result.text, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         Row {
-                            TextButton(onClick = { onHistoryOpen(entry) }, enabled = !state.historyBusy) {
+                            ToolboxTextButton(onClick = { onHistoryOpen(entry) }, enabled = !state.historyBusy) {
                                 Text(stringResource(R.string.qr_history_open))
                             }
-                            TextButton(onClick = { onHistoryRemove(entry.key) }, enabled = !state.historyBusy) {
+                            ToolboxTextButton(onClick = { onHistoryRemove(entry.key) }, enabled = !state.historyBusy) {
                                 Text(stringResource(R.string.qr_history_remove))
                             }
                         }
@@ -632,7 +633,7 @@ fun QrScreen(
                                 onClose = onStopCameraScan,
                             )
                         } else {
-                            Button(
+                            ToolboxButton(
                                 onClick = onStartCameraScan,
                                 enabled = !state.isExporting,
                                 modifier = Modifier.fillMaxWidth(),
@@ -651,15 +652,15 @@ fun QrScreen(
                         }
                         Text(stringResource(R.string.qr_multi_hint), style = MaterialTheme.typography.bodySmall)
                         state.inputMessageRes?.let { QrError(it) }
-                        Button(enabled = !state.isExporting, onClick = {
+                        ToolboxButton(enabled = !state.isExporting, onClick = {
                             try {
                                 imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                             } catch (_: Exception) { onPickerFailed() }
                         }) { Text(stringResource(R.string.qr_btn_pick_image)) }
-                        TextButton(onClick = onClear, enabled = !state.isExporting) {
+                        ToolboxTextButton(onClick = onClear, enabled = !state.isExporting) {
                             Text(stringResource(if (state.isDecoding) R.string.qr_btn_cancel else R.string.qr_btn_clear))
                         }
-                        if (state.hasSelectedImage) TextButton(onClick = onCropOpen,
+                        if (state.hasSelectedImage) ToolboxTextButton(onClick = onCropOpen,
                             enabled = !state.isExporting && !state.isDecoding) {
                             Text(stringResource(R.string.qr_crop_open))
                         }
@@ -673,7 +674,7 @@ fun QrScreen(
                             if (state.previewLoading) ToolboxLoadingState(stringResource(R.string.qr_crop_loading))
                             state.previewErrorRes?.let { error ->
                                 QrError(error)
-                                TextButton(onClick = onCropPreviewRetry) { Text(stringResource(R.string.qr_btn_retry)) }
+                                ToolboxTextButton(onClick = onCropPreviewRetry) { Text(stringResource(R.string.qr_btn_retry)) }
                             }
                             state.preview?.let { bitmap ->
                                 val image = remember(bitmap) { bitmap.asImageBitmap() }
@@ -716,11 +717,11 @@ fun QrScreen(
                                     valueRange = QrCropPolicy.MIN_SIDE_FRACTION..1f, enabled = !state.isExporting)
                             }
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Button(onClick = onCropConfirm,
+                                ToolboxButton(onClick = onCropConfirm,
                                     enabled = state.preview != null && !state.isExporting && !state.isDecoding) {
                                     Text(stringResource(R.string.qr_crop_confirm))
                                 }
-                                TextButton(onClick = onCropCancel) { Text(stringResource(R.string.qr_crop_cancel)) }
+                                ToolboxTextButton(onClick = onCropCancel) { Text(stringResource(R.string.qr_crop_cancel)) }
                             }
                         }
                     }
@@ -730,7 +731,7 @@ fun QrScreen(
                     item {
                         QrCard {
                             QrError(error)
-                            if (state.canRetryDecode) TextButton(onClick = onRetryDecode, enabled = !state.isExporting) {
+                            if (state.canRetryDecode) ToolboxTextButton(onClick = onRetryDecode, enabled = !state.isExporting) {
                                 Text(stringResource(R.string.qr_btn_retry))
                             }
                         }
@@ -742,13 +743,13 @@ fun QrScreen(
                             Text(stringResource(R.string.qr_decode_result_title), style = MaterialTheme.typography.titleMedium)
                             QrSymbologyLabel(entry.symbology)
                             QrContent(entry.text)
-                            Button(onClick = { clipboard.setText(AnnotatedString(entry.text)) }) {
+                            ToolboxButton(onClick = { clipboard.setText(AnnotatedString(entry.text)) }) {
                                 Text(stringResource(R.string.qr_btn_copy_content))
                             }
-                            TextButton(onClick = onShareDecodedText, enabled = !state.isExporting) {
+                            ToolboxTextButton(onClick = onShareDecodedText, enabled = !state.isExporting) {
                                 Text(stringResource(R.string.qr_btn_share_content))
                             }
-                            TextButton(onClick = onRegenerateDecodedText, enabled = !state.isExporting) {
+                            ToolboxTextButton(onClick = onRegenerateDecodedText, enabled = !state.isExporting) {
                                 Text(stringResource(R.string.qr_btn_regenerate))
                             }
                         }
@@ -765,16 +766,16 @@ fun QrScreen(
                                     style = MaterialTheme.typography.labelLarge)
                                 QrSymbologyLabel(entry.symbology)
                                 QrContent(entry.text)
-                                TextButton(onClick = { clipboard.setText(AnnotatedString(entry.text)) }) {
+                                ToolboxTextButton(onClick = { clipboard.setText(AnnotatedString(entry.text)) }) {
                                     Text(stringResource(R.string.qr_btn_copy_content))
                                 }
                             }
-                            Button(onClick = {
+                            ToolboxButton(onClick = {
                                 clipboard.setText(AnnotatedString(state.decodeEntries.joinToString("\n") { it.text }))
                             }) {
                                 Text(stringResource(R.string.qr_btn_copy_all))
                             }
-                            TextButton(onClick = onShareDecodedTexts, enabled = !state.isExporting) {
+                            ToolboxTextButton(onClick = onShareDecodedTexts, enabled = !state.isExporting) {
                                 Text(stringResource(R.string.qr_btn_share_content))
                             }
                         }
@@ -789,7 +790,8 @@ fun QrScreen(
 @Composable
 private fun QrCard(content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit) {
     Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
 }
@@ -843,10 +845,7 @@ private fun QrField(
     minLines: Int = 1,
     maxLines: Int = 1,
 ) {
-    val label = stringResource(labelRes)
-    val placeholder: (@Composable () -> Unit)? = placeholderRes?.let { res -> { Text(stringResource(res)) } }
-    val hint: (@Composable () -> Unit)? = hintRes?.let { res -> { Text(stringResource(res)) } }
-    OutlinedTextField(
+    ToolboxTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
@@ -854,15 +853,15 @@ private fun QrField(
         singleLine = singleLine,
         minLines = minLines,
         maxLines = maxLines,
-        label = { Text(label) },
-        placeholder = placeholder,
-        supportingText = hint,
+        label = stringResource(labelRes),
+        placeholder = placeholderRes?.let { stringResource(it) },
+        supportingText = hintRes?.let { res -> { Text(stringResource(res)) } },
     )
 }
 
 @Composable
 private fun QrContent(content: String) {
-    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerLow) {
+    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceVariant) {
         SelectionContainer(Modifier.padding(12.dp)) {
             Text(content, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace))
         }
@@ -990,12 +989,12 @@ private fun QrContactListEditor(
                 value = value, onValueChange = { onValueChange(index, it) },
                 labelRes = labelRes, enabled = enabled, modifier = Modifier.weight(1f),
             )
-            if (values.size > 1) TextButton(onClick = { onRemove(index) }, enabled = enabled) {
+            if (values.size > 1) ToolboxTextButton(onClick = { onRemove(index) }, enabled = enabled) {
                 Text(stringResource(R.string.qr_contact_remove_row))
             }
         }
     }
-    if (values.size < maxEntries) TextButton(onClick = onAdd, enabled = enabled) {
+    if (values.size < maxEntries) ToolboxTextButton(onClick = onAdd, enabled = enabled) {
         Text(stringResource(addLabelRes))
     }
 }

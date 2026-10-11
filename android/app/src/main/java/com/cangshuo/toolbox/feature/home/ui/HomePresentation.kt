@@ -22,6 +22,24 @@ fun ToolCategory.labelResource(): Int = when (this) {
     ToolCategory.OTHER -> R.string.category_other
 }
 
+/** Category representative icon, used by the home "explore" cards and the library. */
+@DrawableRes
+fun ToolCategory.iconResource(): Int = when (this) {
+    ToolCategory.CALC -> R.drawable.ic_calculator
+    ToolCategory.CONVERT -> R.drawable.ic_converter
+    ToolCategory.TEXT -> R.drawable.ic_text
+    ToolCategory.DEV -> R.drawable.ic_hash
+    ToolCategory.QR -> R.drawable.ic_qr
+    ToolCategory.IMAGE -> R.drawable.ic_image_compress
+    ToolCategory.PDF -> R.drawable.ic_pdf
+    ToolCategory.DEVICE -> R.drawable.ic_device_info
+    ToolCategory.SENSOR -> R.drawable.ic_sensor_info
+    ToolCategory.NETWORK -> R.drawable.ic_http_status
+    ToolCategory.LIFE -> R.drawable.ic_timestamp
+    ToolCategory.AI -> R.drawable.ic_chat
+    ToolCategory.OTHER -> R.drawable.ic_tools
+}
+
 @StringRes
 fun HomeTab.labelResource(): Int = when (this) {
     HomeTab.HOME -> R.string.nav_home

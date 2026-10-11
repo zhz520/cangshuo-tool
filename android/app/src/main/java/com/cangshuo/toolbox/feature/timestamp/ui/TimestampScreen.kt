@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.timestamp.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,9 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +43,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.timestamp.domain.SupportedTimeZone
 import com.cangshuo.toolbox.feature.timestamp.domain.TimestampUnit
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
@@ -78,7 +80,8 @@ fun TimestampScreen(
             item(key = "current_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -97,7 +100,7 @@ fun TimestampScreen(
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                TextButton(onClick = onToggleLive) {
+                                ToolboxTextButton(onClick = onToggleLive) {
                                     Text(
                                         if (state.isLive) {
                                             stringResource(R.string.timestamp_live)
@@ -107,7 +110,7 @@ fun TimestampScreen(
                                         style = MaterialTheme.typography.labelMedium,
                                     )
                                 }
-                                TextButton(onClick = onRefreshNow) {
+                                ToolboxTextButton(onClick = onRefreshNow) {
                                     Text(stringResource(R.string.action_retry))
                                 }
                             }
@@ -149,11 +152,10 @@ fun TimestampScreen(
                                         ),
                                     )
                                     Spacer(Modifier.height(4.dp))
-                                    TextButton(
+                                    ToolboxTextButton(
                                         onClick = {
                                             clipboardManager.setText(AnnotatedString(state.currentSeconds.toString()))
                                         },
-                                        contentPadding = PaddingValues(0.dp),
                                     ) {
                                         Text(stringResource(R.string.timestamp_copy), style = MaterialTheme.typography.labelSmall)
                                     }
@@ -180,11 +182,10 @@ fun TimestampScreen(
                                         ),
                                     )
                                     Spacer(Modifier.height(4.dp))
-                                    TextButton(
+                                    ToolboxTextButton(
                                         onClick = {
                                             clipboardManager.setText(AnnotatedString(state.currentMillis.toString()))
                                         },
-                                        contentPadding = PaddingValues(0.dp),
                                     ) {
                                         Text(stringResource(R.string.timestamp_copy), style = MaterialTheme.typography.labelSmall)
                                     }
@@ -199,7 +200,8 @@ fun TimestampScreen(
             item(key = "ts_to_date_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -238,11 +240,11 @@ fun TimestampScreen(
                             Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            OutlinedTextField(
+                            ToolboxTextField(
                                 value = state.tsInput,
                                 onValueChange = onTimestampInputChanged,
                                 modifier = Modifier.weight(1f),
-                                placeholder = { Text(stringResource(R.string.timestamp_input_hint)) },
+                                placeholder = stringResource(R.string.timestamp_input_hint),
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 isError = state.tsIsError,
@@ -251,7 +253,7 @@ fun TimestampScreen(
                                 } else null,
                             )
                             Spacer(Modifier.width(8.dp))
-                            TextButton(onClick = onFillCurrentTimestamp) {
+                            ToolboxTextButton(onClick = onFillCurrentTimestamp) {
                                 Text(stringResource(R.string.timestamp_fill_now))
                             }
                         }
@@ -260,7 +262,7 @@ fun TimestampScreen(
                         if (state.tsResultFormatted.isNotEmpty()) {
                             Surface(
                                 shape = MaterialTheme.shapes.medium,
-                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             ) {
                                 Column(
                                     Modifier
@@ -288,7 +290,7 @@ fun TimestampScreen(
                                                 )
                                             }
                                         }
-                                        OutlinedButton(
+                                        ToolboxOutlinedButton(
                                             onClick = {
                                                 clipboardManager.setText(AnnotatedString(state.tsResultFormatted))
                                             },
@@ -317,7 +319,7 @@ fun TimestampScreen(
                                                 )
                                             }
                                         }
-                                        OutlinedButton(
+                                        ToolboxOutlinedButton(
                                             onClick = {
                                                 clipboardManager.setText(AnnotatedString(state.tsResultIso))
                                             },
@@ -336,7 +338,8 @@ fun TimestampScreen(
             item(key = "date_to_ts_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -361,11 +364,11 @@ fun TimestampScreen(
                             Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            OutlinedTextField(
+                            ToolboxTextField(
                                 value = state.dateInput,
                                 onValueChange = onDateInputChanged,
                                 modifier = Modifier.weight(1f),
-                                placeholder = { Text(stringResource(R.string.timestamp_date_input_hint)) },
+                                placeholder = stringResource(R.string.timestamp_date_input_hint),
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                                 isError = state.dateError != null,
@@ -374,7 +377,7 @@ fun TimestampScreen(
                                 },
                             )
                             Spacer(Modifier.width(8.dp))
-                            TextButton(onClick = onFillCurrentDateTime) {
+                            ToolboxTextButton(onClick = onFillCurrentDateTime) {
                                 Text(stringResource(R.string.timestamp_fill_now))
                             }
                         }
@@ -383,7 +386,7 @@ fun TimestampScreen(
                         if (state.dateResultSeconds.isNotEmpty()) {
                             Surface(
                                 shape = MaterialTheme.shapes.medium,
-                                color = MaterialTheme.colorScheme.surfaceContainerLow,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                             ) {
                                 Column(
                                     Modifier
@@ -411,7 +414,7 @@ fun TimestampScreen(
                                                 )
                                             }
                                         }
-                                        OutlinedButton(
+                                        ToolboxOutlinedButton(
                                             onClick = {
                                                 clipboardManager.setText(AnnotatedString(state.dateResultSeconds))
                                             },
@@ -440,7 +443,7 @@ fun TimestampScreen(
                                                 )
                                             }
                                         }
-                                        OutlinedButton(
+                                        ToolboxOutlinedButton(
                                             onClick = {
                                                 clipboardManager.setText(AnnotatedString(state.dateResultMillis))
                                             },

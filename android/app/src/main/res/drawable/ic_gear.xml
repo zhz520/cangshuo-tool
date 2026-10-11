@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M12.22,2 h-0.44 a2,2 0 0,0 -2,2 v0.18 a2,2 0 0,1 -1,1.73 l-0.43,0.25 a2,2 0 0,1 -2,0 l-0.15,-0.08 a2,2 0 0,0 -2.73,0.73 l-0.22,0.38 a2,2 0 0,0 0.73,2.73 l0.15,0.1 a2,2 0 0,1 1,1.72 v0.51 a2,2 0 0,1 -1,1.74 l-0.15,0.09 a2,2 0 0,0 -0.73,2.73 l0.22,0.38 a2,2 0 0,0 2.73,0.73 l0.15,-0.08 a2,2 0 0,1 2,0 l0.43,0.25 a2,2 0 0,1 1,1.73 V20 a2,2 0 0,0 2,2 h0.44 a2,2 0 0,0 2,-2 v-0.18 a2,2 0 0,1 1,-1.73 l0.43,-0.25 a2,2 0 0,1 2,0 l0.15,0.08 a2,2 0 0,0 2.73,-0.73 l0.22,-0.39 a2,2 0 0,0 -0.73,-2.73 l-0.15,-0.08 a2,2 0 0,1 -1,-1.74 v-0.5 a2,2 0 0,1 1,-1.74 l0.15,-0.09 a2,2 0 0,0 0.73,-2.73 l-0.22,-0.38 a2,2 0 0,0 -2.73,-0.73 l-0.15,0.08 a2,2 0 0,1 -2,0 l-0.43,-0.25 a2,2 0 0,1 -1,-1.73 V4 a2,2 0 0,0 -2,-2 z M12,15 a3,3 0 1,0 0,-6 a3,3 0 1,0 0,6" />
+</vector>

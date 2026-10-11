@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.uuid.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -19,15 +20,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +36,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
+import com.cangshuo.toolbox.core.ui.ToolboxButton
+import com.cangshuo.toolbox.core.ui.ToolboxDivider
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.ui.theme.ToolboxTheme
 
 private val COUNT_OPTIONS = listOf(1, 5, 10, 20, 50, 100)
@@ -68,7 +70,8 @@ fun UuidScreen(
             item(key = "config_card") {
                 Surface(
                     shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
                     Column(
                         Modifier
@@ -184,13 +187,13 @@ fun UuidScreen(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-                            Button(
+                            ToolboxButton(
                                 onClick = onRegenerate,
                                 modifier = Modifier.weight(1f),
                             ) {
                                 Text(stringResource(R.string.uuid_btn_regenerate))
                             }
-                            OutlinedButton(
+                            ToolboxOutlinedButton(
                                 onClick = {
                                     val all = state.generatedUuids.joinToString("\n")
                                     clipboardManager.setText(AnnotatedString(all))
@@ -229,9 +232,7 @@ fun UuidScreen(
                 items = state.generatedUuids,
                 key = { index, item -> "$index-$item" },
             ) { index, uuidStr ->
-                Surface(
-                    shape = MaterialTheme.shapes.small,
-                    color = MaterialTheme.colorScheme.surfaceContainerLow,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -241,7 +242,7 @@ fun UuidScreen(
                     Row(
                         Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                            .padding(horizontal = 4.dp, vertical = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -259,11 +260,10 @@ fun UuidScreen(
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f),
                         )
-                        TextButton(
+                        ToolboxTextButton(
                             onClick = {
                                 clipboardManager.setText(AnnotatedString(uuidStr))
                             },
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                         ) {
                             Text(
                                 stringResource(R.string.uuid_copy_single),
@@ -271,6 +271,7 @@ fun UuidScreen(
                             )
                         }
                     }
+                    ToolboxDivider()
                 }
             }
 

@@ -3,6 +3,7 @@ package com.cangshuo.toolbox
 import android.os.Bundle
 import android.content.ContextWrapper
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,11 +19,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 class MainActivity : ComponentActivity() {
     private val container get() = (application as ToolboxApplication).container
 
+    // Dialog/Popup windows are created from the activity context, so pages alone are not
+    // enough for the in-app language switch; keep the activity resources localized too.
+    private var localizedResources: Resources? = null
+
+    override fun getResources(): Resources = localizedResources ?: super.getResources()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val settings by container.settings.collectAsStateWithLifecycle()
+            val accent by container.accent.collectAsStateWithLifecycle()
             val configuration=LocalConfiguration.current
             val localized=remember(settings.language,configuration) {
                 val override=Configuration(configuration)
@@ -32,9 +40,12 @@ class MainActivity : ComponentActivity() {
                     override fun getResources()=adjusted.resources
                 }
             }
-            LaunchedEffect(localized) { container.updateLocale(localized.resources) }
+            LaunchedEffect(localized) {
+                localizedResources = localized.resources
+                container.updateLocale(localized.resources)
+            }
             CompositionLocalProvider(LocalContext provides localized,LocalConfiguration provides localized.resources.configuration) {
-            ToolboxTheme(darkTheme=when(settings.theme) { "LIGHT"->false; "DARK"->true; else->isSystemInDarkTheme() }) {
+            ToolboxTheme(darkTheme=when(settings.theme) { "LIGHT"->false; "DARK"->true; else->isSystemInDarkTheme() }, accent=accent) {
                 HomeRoute(
                     factory = container.homeViewModelFactory,
                     searchFactory = container.searchViewModelFactory,
@@ -46,6 +57,8 @@ class MainActivity : ComponentActivity() {
                     feedbackFactory = container.feedbackViewModelFactory,
                     diagnosticsFactory = container.diagnosticsViewModelFactory,
                     gridColumns = settings.gridColumns,
+                    settingsFactory = container.settingsViewModelFactory,
+                    accentFactory = container.accentViewModelFactory,
                 )
             }
             }

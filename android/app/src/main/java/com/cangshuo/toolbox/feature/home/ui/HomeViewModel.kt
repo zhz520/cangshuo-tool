@@ -56,7 +56,12 @@ class HomeViewModel(
         savedStateHandle[TAB_KEY] = tab.name
         if (tab == HomeTab.HOME) savedStateHandle[CATEGORY_KEY] = null
         mutableState.update {
-            it.copy(tab = tab, category = if (tab == HomeTab.HOME) null else it.category, message = null)
+            it.copy(
+                tab = tab,
+                category = if (tab == HomeTab.HOME) null else it.category,
+                overlay = null,
+                message = null,
+            )
         }
         refresh()
     }
@@ -126,6 +131,30 @@ class HomeViewModel(
     fun closeSearch() {
         savedStateHandle[SEARCH_OPEN_KEY] = false
         mutableState.update { it.copy(isSearchOpen = false, message = null) }
+    }
+
+    fun openRecent() {
+        mutableState.update { it.copy(overlay = HomeOverlay.RECENT, message = null) }
+    }
+
+    fun openSettings() {
+        mutableState.update { it.copy(overlay = HomeOverlay.SETTINGS, message = null) }
+    }
+
+    fun openOverlay(overlay: HomeOverlay) {
+        mutableState.update { it.copy(overlay = overlay, message = null) }
+    }
+
+    fun closeOverlay() {
+        mutableState.update { it.copy(overlay = null, message = null) }
+    }
+
+    fun showFeatureUnavailable() {
+        mutableState.update { it.copy(notice = HomeNotice.FEATURE_UNAVAILABLE) }
+    }
+
+    fun dismissNotice() {
+        mutableState.update { it.copy(notice = null) }
     }
 
     fun dismissMessage() {

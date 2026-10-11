@@ -13,9 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 
 @Composable
-fun ToolboxPrivacyInfo() {
+fun ToolboxPrivacyInfo(asListItem: Boolean = false) {
     var visible by remember { mutableStateOf(false) }
-    TextButton(onClick = { visible = true }) { Text(stringResource(R.string.privacy_info_title)) }
+    if(asListItem) ToolListItem(stringResource(R.string.privacy_info_title),icon=R.drawable.ic_lock,onClick={visible=true},trailing={ToolboxChevron()})
+    else ToolboxTextButton(onClick = { visible = true }) { Text(stringResource(R.string.privacy_info_title)) }
     if (visible) AlertDialog(onDismissRequest = { visible = false },
         title = { Text(stringResource(R.string.privacy_info_title)) },
         text = { Text(stringResource(R.string.privacy_info_body), Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState())) },

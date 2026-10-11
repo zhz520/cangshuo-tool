@@ -7,6 +7,12 @@ import com.cangshuo.toolbox.feature.webtools.domain.CatalogSyncState
 
 enum class HomeTab { HOME, TOOLS, FAVORITES, PROFILE }
 
+/** Full-screen pages pushed over the tab scaffold. */
+enum class HomeOverlay { RECENT, SETTINGS, AUTH, FEEDBACK }
+
+/** Transient, honest notices for not-yet-implemented actions. */
+enum class HomeNotice { FEATURE_UNAVAILABLE }
+
 sealed interface HomeCatalogState {
     data object Loading : HomeCatalogState
     data class Content(val value: HomeContent) : HomeCatalogState
@@ -24,6 +30,8 @@ data class HomeUiState(
     val catalog: HomeCatalogState = HomeCatalogState.Loading,
     val isSearchOpen: Boolean = false,
     val openedTool: ToolDefinition? = null,
+    val overlay: HomeOverlay? = null,
+    val notice: HomeNotice? = null,
     val message: HomeMessage? = null,
     val sync: CatalogSyncState = CatalogSyncState.IDLE,
 )

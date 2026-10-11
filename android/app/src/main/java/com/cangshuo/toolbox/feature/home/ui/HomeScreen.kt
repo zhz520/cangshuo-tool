@@ -1,72 +1,88 @@
 package com.cangshuo.toolbox.feature.home.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
+import com.cangshuo.toolbox.core.ui.ToolboxMotion
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilterChip
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
-import com.cangshuo.toolbox.feature.webtools.domain.CatalogSyncState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.annotation.DrawableRes
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.model.ToolCategory
-import com.cangshuo.toolbox.core.model.ToolMetadata
+import com.cangshuo.toolbox.core.ui.ToolGridTile
+import com.cangshuo.toolbox.core.ui.ToolListItem
+import com.cangshuo.toolbox.core.ui.ToolSectionHeader
+import com.cangshuo.toolbox.core.ui.ToolboxButton
+import com.cangshuo.toolbox.core.ui.ToolboxChevron
+import com.cangshuo.toolbox.core.ui.ToolboxIconButton
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
-import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
-import com.cangshuo.toolbox.core.ui.ToolboxMotion
-import com.cangshuo.toolbox.feature.home.domain.HomeCategory
-import com.cangshuo.toolbox.feature.home.domain.HomeContent
-import com.cangshuo.toolbox.ui.theme.ToolboxTheme
-import com.cangshuo.toolbox.feature.favorites.ui.FavoriteButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTopBar
+import com.cangshuo.toolbox.core.ui.ToolboxScaffold
+import com.cangshuo.toolbox.core.ui.ToolboxDivider
+import com.cangshuo.toolbox.core.ui.toolboxGridColumns
+import com.cangshuo.toolbox.ui.theme.ToolboxDimens
+import com.cangshuo.toolbox.feature.auth.ui.AuthUiState
+import com.cangshuo.toolbox.core.ui.ToolboxAvatar
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesScreen
 import com.cangshuo.toolbox.feature.favorites.ui.FavoritesUiState
+import com.cangshuo.toolbox.feature.home.domain.HomeContent
 import com.cangshuo.toolbox.feature.recent.ui.RecentListState
 import com.cangshuo.toolbox.feature.recent.ui.RecentUiState
 
-private const val RECENT_PREVIEW_LIMIT = 6
+private const val RECENT_PREVIEW_LIMIT = 2
+private const val COMMON_GRID_LIMIT = 8
+private const val EXPLORE_LIMIT = 4
 
 @Composable
 fun HomeScreen(
@@ -82,317 +98,205 @@ fun HomeScreen(
     recentState: RecentUiState,
     onRecentRetry: () -> Unit,
     onClearRecent: () -> Unit,
-    onCatalogRefresh: () -> Unit = {},
-    profileContent: (@Composable (Modifier) -> Unit)? = null,
+    onCatalogRefresh: () -> Unit,
+    onOpenRecent: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenAuth: () -> Unit,
+    onOpenFeedback: () -> Unit,
+    onShowUnavailable: () -> Unit,
     homeExtras: (@Composable () -> Unit)? = null,
     gridColumns: Int = 0,
+    authState: AuthUiState = AuthUiState(),
 ) {
-    var confirmClearRecent by remember { mutableStateOf(false) }
-    Scaffold(
+    val tabState = rememberSaveableStateHolder()
+    ToolboxScaffold(
+        title = stringResource(if (state.tab == HomeTab.HOME) R.string.app_name else state.tab.labelResource()),
+        actions = {
+            when (state.tab) {
+                HomeTab.HOME -> {
+                    ToolboxIconButton(R.drawable.ic_person, stringResource(R.string.profile_login), onOpenAuth)
+                    ToolboxIconButton(R.drawable.ic_more, stringResource(R.string.home_more), onOpenSettings)
+                }
+                HomeTab.TOOLS -> ToolboxIconButton(R.drawable.ic_search, stringResource(R.string.home_search_hint), onSearch)
+                HomeTab.PROFILE -> ToolboxIconButton(R.drawable.ic_gear, stringResource(R.string.profile_settings), onOpenSettings)
+                HomeTab.FAVORITES -> Unit
+            }
+        },
         bottomBar = {
-            NavigationBar {
+            Column {
+            ToolboxDivider(startIndent = 0.dp)
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.background,
+                tonalElevation = 0.dp,
+                windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal),
+            ) {
                 HomeTab.entries.forEach { tab ->
                     NavigationBarItem(
                         selected = state.tab == tab,
                         onClick = { onTabSelected(tab) },
-                        icon = { Icon(painterResource(tab.iconResource()), contentDescription = null) },
+                        icon = { Icon(painterResource(tab.iconResource()), contentDescription = null, modifier = Modifier.size(22.dp)) },
                         label = { Text(stringResource(tab.labelResource())) },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
                     )
                 }
             }
-        },
-    ) { padding ->
-        AnimatedContent(
-            targetState = state.tab,
-            transitionSpec = { ToolboxMotion.tab() },
-            modifier = Modifier.fillMaxSize(),
-            label = "home-tab-transition",
-        ) { tab ->
-            val tabState = state.copy(tab = tab)
-            when (tab) {
-                HomeTab.FAVORITES -> FavoritesScreen(
-                    modifier = Modifier.padding(padding),
-                    state = favoriteState,
-                    onSetFavorite = onSetFavorite,
-                    onToolSelected = onToolSelected,
-                    onRetry = onFavoritesRetry,
-                    onBrowse = { onCategorySelected(null) },
-                )
-                HomeTab.PROFILE -> if (profileContent != null) profileContent(Modifier.padding(padding)) else InformationPage(
-                    modifier = Modifier.padding(padding),
-                    title = stringResource(R.string.nav_profile),
-                    icon = R.drawable.ic_person,
-                    heading = stringResource(R.string.profile_guest_title),
-                    description = stringResource(R.string.profile_guest_description),
-                    onBrowse = { onCategorySelected(null) },
-                    showPrivacy = true,
-                )
-                HomeTab.HOME, HomeTab.TOOLS -> CatalogPage(
-                    gridColumns = gridColumns,
-                    modifier = Modifier.padding(padding),
-                    state = tabState,
-                    onCategorySelected = onCategorySelected,
-                    onToolSelected = onToolSelected,
-                    onRetry = onRetry,
-                    onSearch = onSearch,
-                    favoriteState = favoriteState,
-                    onSetFavorite = onSetFavorite,
-                    recentState = recentState,
-                    onRecentRetry = onRecentRetry,
-                    onClearRecentRequest = { confirmClearRecent = true },
-                    onCatalogRefresh = onCatalogRefresh,
-                    homeExtras = homeExtras,
-                )
             }
+        },
+    ) { contentModifier ->
+        AnimatedContent(targetState=state.tab,transitionSpec={ToolboxMotion.tab()},label="home-tab-transition",modifier=contentModifier) { tab ->
+        tabState.SaveableStateProvider(tab.name) {
+        when (tab) {
+            HomeTab.HOME -> HomeTabContent(
+                state, Modifier.fillMaxSize(), onCategorySelected, onToolSelected, onSearch, onRetry,
+                favoriteState, onSetFavorite, recentState, onOpenRecent, onCatalogRefresh, homeExtras,
+            )
+            HomeTab.TOOLS -> LibraryContent(
+                state, Modifier.fillMaxSize(), onCategorySelected, onToolSelected,
+                favoriteState, onSetFavorite, onSearch, onRetry, gridColumns,
+            )
+            HomeTab.FAVORITES -> FavoritesScreen(
+                modifier = Modifier.fillMaxSize(),
+                state = favoriteState,
+                onSetFavorite = onSetFavorite,
+                onToolSelected = onToolSelected,
+                onRetry = onFavoritesRetry,
+                onBrowse = { onTabSelected(HomeTab.TOOLS) },
+            )
+            HomeTab.PROFILE -> ProfileContent(
+                Modifier.fillMaxSize(), onOpenAuth, onOpenSettings, onOpenFeedback,
+                onOpenRecent = onOpenRecent,
+                onOpenFavorites = { onTabSelected(HomeTab.FAVORITES) },
+                onShowUnavailable = onShowUnavailable,
+                authState = authState,
+            )
         }
-    }
-    if (confirmClearRecent) {
-        AlertDialog(
-            onDismissRequest = { confirmClearRecent = false },
-            title = { Text(stringResource(R.string.home_recent_clear_title)) },
-            text = { Text(stringResource(R.string.home_recent_clear_message)) },
-            confirmButton = {
-                TextButton(onClick = { confirmClearRecent = false; onClearRecent() }) {
-                    Text(stringResource(R.string.home_recent_clear_confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { confirmClearRecent = false }) {
-                    Text(stringResource(R.string.action_cancel))
-                }
-            },
-        )
-    }
-}
-
-@Composable
-private fun CatalogSyncRow(state: CatalogSyncState, onRefresh: () -> Unit) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            stringResource(when (state) {
-                CatalogSyncState.IDLE -> R.string.catalog_sync_idle
-                CatalogSyncState.REFRESHING -> R.string.catalog_sync_loading
-                CatalogSyncState.UPDATED -> R.string.catalog_sync_updated
-                CatalogSyncState.FAILED -> R.string.catalog_sync_failed
-                CatalogSyncState.COOLDOWN -> R.string.catalog_sync_cooldown
-            }),
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodySmall,
-            color = if (state == CatalogSyncState.FAILED) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        TextButton(onClick = onRefresh, enabled = state != CatalogSyncState.REFRESHING) {
-            if (state == CatalogSyncState.REFRESHING) ToolboxLoadingIndicator(compact = true)
-            Text(stringResource(R.string.catalog_sync_refresh))
+        }
         }
     }
 }
 
 @Composable
-private fun CatalogPage(
-    modifier: Modifier,
+private fun HomeTabContent(
     state: HomeUiState,
+    modifier: Modifier,
     onCategorySelected: (ToolCategory?) -> Unit,
     onToolSelected: (String) -> Unit,
-    onRetry: () -> Unit,
     onSearch: () -> Unit,
+    onRetry: () -> Unit,
     favoriteState: FavoritesUiState,
     onSetFavorite: (String, Boolean) -> Unit,
     recentState: RecentUiState,
-    onRecentRetry: () -> Unit,
-    onClearRecentRequest: () -> Unit,
+    onOpenRecent: () -> Unit,
     onCatalogRefresh: () -> Unit,
-    gridColumns: Int,
     homeExtras: (@Composable () -> Unit)?,
 ) {
-    val content = when (val catalog = state.catalog) {
-        is HomeCatalogState.Content -> catalog.value
-        is HomeCatalogState.Empty -> catalog.value
-        else -> null
-    }
-    BoxWithConstraints(modifier.fillMaxSize()) {
-        val capacity = (maxWidth / 168.dp).toInt().coerceIn(1, 5)
-        val columns = if (gridColumns == 0) capacity.coerceAtLeast(2) else gridColumns.coerceIn(1,capacity)
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
-            contentPadding = PaddingValues(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item(key = "header", span = { GridItemSpan(maxLineSpan) }) {
-                PageHeader(state.tab)
-            }
-            item(key = "catalog-sync", span = { GridItemSpan(maxLineSpan) }) {
-                CatalogSyncRow(state.sync, onCatalogRefresh)
-            }
-            if (state.tab == HomeTab.HOME) {
-                item(key = "hero", span = { GridItemSpan(maxLineSpan) }) {
-                    HeroBanner(onBrowse = { onCategorySelected(null) })
-                }
-            }
-            item(key = "search", span = { GridItemSpan(maxLineSpan) }) {
-                SearchEntry(onSearch)
-            }
-            if (state.tab == HomeTab.HOME && homeExtras != null) {
-                item(key = "home-extras", span = { GridItemSpan(maxLineSpan) }) { homeExtras() }
-            }
-            if (content != null) {
-                item(key = "categories", span = { GridItemSpan(maxLineSpan) }) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        SectionHeader(stringResource(R.string.home_categories))
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            item(key = "all") {
-                                FilterChip(
-                                    selected = state.category == null,
-                                    onClick = { onCategorySelected(null) },
-                                    label = {
-                                        Text(
-                                            stringResource(
-                                                R.string.home_category_count,
-                                                stringResource(R.string.category_all),
-                                                content.totalToolCount,
-                                            ),
-                                        )
-                                    },
-                                )
-                            }
-                            items(content.categories, key = { it.category.code }) { entry ->
-                                FilterChip(
-                                    selected = state.category == entry.category,
-                                    onClick = { onCategorySelected(entry.category) },
-                                    label = {
-                                        Text(
-                                            stringResource(
-                                                R.string.home_category_count,
-                                                stringResource(entry.category.labelResource()),
-                                                entry.toolCount,
-                                            ),
-                                        )
-                                    },
-                                )
+    val content = (state.catalog as? HomeCatalogState.Content)?.value
+        ?: (state.catalog as? HomeCatalogState.Empty)?.value
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 24.dp),
+    ) {
+        item(key = "search") { SearchEntry(onSearch) }
+        if (content != null) {
+            item(key = "common-heading") { ToolSectionHeader(stringResource(R.string.home_common), Modifier.padding(top = 12.dp)) }
+            item(key = "common-grid") {
+                val tools = content.commonTools.take(COMMON_GRID_LIMIT)
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    // Same four-column rhythm as the tool library; only an overflow row is centered.
+                    val columns = toolboxGridColumns(maxWidth.value, LocalDensity.current.fontScale, 4)
+                    val rows = tools.chunked(columns)
+                    Column(verticalArrangement = Arrangement.spacedBy(ToolboxDimens.gridRowGap)) {
+                        rows.forEachIndexed { index, row ->
+                            val missing = if (index == rows.lastIndex && rows.size > 1) columns - row.size else 0
+                            val leading = missing / 2
+                            Row(horizontalArrangement = Arrangement.spacedBy(ToolboxDimens.gridGap)) {
+                                repeat(leading) { Box(Modifier.weight(1f)) }
+                                row.forEach { tool ->
+                                    ToolGridTile(tool.name, toolIconResource(tool.icon), Modifier.weight(1f)) { onToolSelected(tool.code) }
+                                }
+                                repeat(missing - leading) { Box(Modifier.weight(1f)) }
                             }
                         }
                     }
                 }
-                item(key = "catalog-heading", span = { GridItemSpan(maxLineSpan) }) {
-                    SectionHeader(
-                        title = stringResource(
-                            if (state.tab == HomeTab.HOME) R.string.home_common else R.string.home_all_tools,
-                        ),
-                        trailing = {
-                            Text(
-                                pluralStringResource(
-                                    R.plurals.tool_count,
-                                    if (state.tab == HomeTab.HOME) content.commonTools.size else content.tools.size,
-                                    if (state.tab == HomeTab.HOME) content.commonTools.size else content.tools.size,
-                                ),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        },
+            }
+            item(key = "recent-heading") {
+                ToolSectionHeader(stringResource(R.string.home_recent), Modifier.padding(top = 8.dp)) {
+                    ToolboxTextButton(onClick = onOpenRecent) {
+                        Text(stringResource(R.string.home_all_categories), style = MaterialTheme.typography.labelMedium)
+                        ToolboxChevron()
+                    }
+                }
+            }
+            val recentTools = (recentState.list as? RecentListState.Content)?.items.orEmpty()
+                .mapNotNull { entry -> entry.metadata?.let { entry.code to it } }
+                .take(RECENT_PREVIEW_LIMIT)
+            if (recentTools.isEmpty()) {
+                item(key = "recent-empty") {
+                    Text(
+                        stringResource(R.string.home_recent_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(vertical = 8.dp),
                     )
                 }
-                if (content.tools.isEmpty()) {
-                    item(key = "empty", span = { GridItemSpan(maxLineSpan) }) {
-                        EmptyCatalog(
-                            filtered = state.category != null,
-                            onClear = { onCategorySelected(null) },
-                        )
-                    }
-                } else {
-                    val tools = if (state.tab == HomeTab.HOME) content.commonTools else content.tools
-                    items(tools, key = { "tool:" + it.code }) { tool ->
-                        ToolCard(
-                            tool, onClick = { onToolSelected(tool.code) },
-                            isFavorite = tool.code in favoriteState.codes,
-                            favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
-                            favoriteSaving = tool.code in favoriteState.pendingCodes,
-                            onFavoriteChanged = { onSetFavorite(tool.code, it) },
-                        )
-                    }
-                    if (state.tab == HomeTab.HOME && content.tools.size > content.commonTools.size) {
-                        item(key = "browse", span = { GridItemSpan(maxLineSpan) }) {
-                            OutlinedButton(onClick = { onCategorySelected(null) }) {
-                                Text(stringResource(R.string.action_browse_tools))
-                            }
-                        }
-                    }
-                }
-                if (state.tab == HomeTab.HOME && content.featuredTools.isNotEmpty()) {
-                    item(key = "featured-heading", span = { GridItemSpan(maxLineSpan) }) {
-                        SectionHeader(stringResource(R.string.home_featured))
-                    }
-                    items(content.featuredTools, key = { "featured:" + it.code }) { tool ->
-                        ToolCard(
-                            tool, onClick = { onToolSelected(tool.code) },
-                            isFavorite = tool.code in favoriteState.codes,
-                            favoriteEnabled = favoriteState.ready && tool.code !in favoriteState.pendingCodes,
-                            favoriteSaving = tool.code in favoriteState.pendingCodes,
-                            onFavoriteChanged = { onSetFavorite(tool.code, it) },
-                        )
-                    }
-                }
-                if (state.tab == HomeTab.HOME) {
-                    item(key = "recent-heading", span = { GridItemSpan(maxLineSpan) }) {
-                        SectionHeader(stringResource(R.string.home_recent)) {
-                            if (recentState.list is RecentListState.Content) {
-                                TextButton(onClick = onClearRecentRequest) {
-                                    Text(stringResource(R.string.home_recent_clear))
-                                }
-                            }
-                        }
-                    }
-                    when (val recent = recentState.list) {
-                        RecentListState.Loading -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
-                            RecentStatusRow(stringResource(R.string.recent_loading), showIndicator = true)
-                        }
-                        RecentListState.Empty -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
-                            Text(
-                                stringResource(R.string.home_recent_description),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        RecentListState.Error -> item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
-                            RecentStatusRow(stringResource(R.string.recent_error), onRetry = onRecentRetry)
-                        }
-                        is RecentListState.Content -> {
-                            val visible = recent.items.take(RECENT_PREVIEW_LIMIT).filter { it.metadata != null }
-                            if (visible.isEmpty()) {
-                                item(key = "recent-status", span = { GridItemSpan(maxLineSpan) }) {
-                                    Text(
-                                        stringResource(R.string.home_recent_description),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                }
-                            } else {
-                                items(visible, key = { "recent:" + it.code }) { entry ->
-                                    entry.metadata?.let { metadata ->
-                                        ToolCard(
-                                            tool = metadata,
-                                            onClick = { onToolSelected(entry.code) },
-                                            isFavorite = entry.code in favoriteState.codes,
-                                            favoriteEnabled = favoriteState.ready && entry.code !in favoriteState.pendingCodes,
-                                            favoriteSaving = entry.code in favoriteState.pendingCodes,
-                                            onFavoriteChanged = { onSetFavorite(entry.code, it) },
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             } else {
-                item(key = "status", span = { GridItemSpan(maxLineSpan) }) {
+                items(recentTools, key = { "recent:" + it.first }) { (code, metadata) ->
+                    ToolListItem(
+                        title = metadata.name,
+                        subtitle = metadata.description,
+                        icon = toolIconResource(metadata.icon),
+                        onClick = { onToolSelected(code) },
+                        trailing = { ToolboxChevron() },
+                    )
+                }
+            }
+            item(key = "explore-heading") {
+                ToolSectionHeader(stringResource(R.string.home_explore_categories), Modifier.padding(top = 8.dp)) {
+                    ToolboxTextButton(onClick = { onCategorySelected(null) }) {
+                        Text(stringResource(R.string.home_all_categories), style = MaterialTheme.typography.labelMedium)
+                        ToolboxChevron()
+                    }
+                }
+            }
+            item(key = "explore") {
+                val categories = content.categories.take(EXPLORE_LIMIT)
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    categories.chunked(2).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            row.forEach { entry ->
+                                ExploreCard(
+                                    name = stringResource(entry.category.labelResource()),
+                                    count = entry.toolCount,
+                                    icon = entry.category.iconResource(),
+                                    modifier = Modifier.weight(1f),
+                                    onClick = { onCategorySelected(entry.category) },
+                                )
+                            }
+                            if (row.size == 1) Box(Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+            if (homeExtras != null) {
+                item(key = "home-extras") { Box(Modifier.padding(top = 12.dp)) { homeExtras() } }
+            }
+        } else {
+            item(key = "status") {
+                Box(Modifier.padding(top = 24.dp)) {
                     if (state.catalog == HomeCatalogState.Loading) {
                         ToolboxLoadingState(stringResource(R.string.home_loading))
                     } else {
-                        StatusCard(
+                        StatusMessage(
                             title = stringResource(R.string.home_error_title),
                             description = stringResource(R.string.home_error_description),
-                            action = {
-                                Button(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
-                            },
+                            onRetry = onRetry,
                         )
                     }
                 }
@@ -402,237 +306,210 @@ private fun CatalogPage(
 }
 
 @Composable
-private fun PageHeader(tab: HomeTab) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Surface(shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.primaryContainer) {
-            Icon(
-                painter = painterResource(R.drawable.ic_toolbox),
-                contentDescription = null,
-                modifier = Modifier.padding(12.dp).size(24.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-        }
-        Column {
-            Text(
-                stringResource(if (tab == HomeTab.HOME) R.string.app_name else tab.labelResource()),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                stringResource(R.string.home_subtitle),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+private fun LibraryContent(
+    state: HomeUiState,
+    modifier: Modifier,
+    onCategorySelected: (ToolCategory?) -> Unit,
+    onToolSelected: (String) -> Unit,
+    favoriteState: FavoritesUiState,
+    onSetFavorite: (String, Boolean) -> Unit,
+    onSearch: () -> Unit,
+    onRetry: () -> Unit,
+    gridColumns: Int,
+) {
+    val content = (state.catalog as? HomeCatalogState.Content)?.value
+        ?: (state.catalog as? HomeCatalogState.Empty)?.value
+    Column(modifier) {
+        Box(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) { SearchEntry(onSearch) }
+        if (content != null) {
+            Row(Modifier.fillMaxSize()) {
+                Column(
+                    Modifier
+                        .width(ToolboxDimens.categoryWidth)
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    LibraryCategory(stringResource(R.string.category_all), state.category == null) { onCategorySelected(null) }
+                    content.categories.forEach { entry ->
+                        LibraryCategory(stringResource(entry.category.labelResource()), state.category == entry.category) {
+                            onCategorySelected(entry.category)
+                        }
+                    }
+                }
+                BoxWithConstraints(Modifier.weight(1f).fillMaxSize()) {
+                val columns = toolboxGridColumns(maxWidth.value - 28f, LocalDensity.current.fontScale, gridColumns)
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(columns),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(14.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    item(key = "head", span = { GridItemSpan(maxLineSpan) }) {
+                        ToolSectionHeader(
+                            title = state.category?.let { stringResource(it.labelResource()) } ?: stringResource(R.string.home_all_tools),
+                            trailing = {
+                                Text(
+                                    stringResource(R.string.library_count, content.tools.size),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            },
+                        )
+                    }
+                    if (content.tools.isEmpty()) {
+                        item(key = "empty", span = { GridItemSpan(maxLineSpan) }) {
+                            Text(
+                                stringResource(R.string.home_empty_description),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 20.dp),
+                            )
+                        }
+                    } else {
+                        items(content.tools, key = { it.code }) { tool ->
+                            ToolGridTile(tool.name, toolIconResource(tool.icon)) { onToolSelected(tool.code) }
+                        }
+                    }
+                }
+                }
+            }
+        } else {
+            Box(Modifier.padding(16.dp)) {
+                if (state.catalog == HomeCatalogState.Loading) {
+                    ToolboxLoadingState(stringResource(R.string.home_loading))
+                } else {
+                    StatusMessage(stringResource(R.string.home_error_title), stringResource(R.string.home_error_description), onRetry)
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun HeroBanner(onBrowse: () -> Unit) {
-    Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.primaryContainer) {
-        Column(Modifier.fillMaxWidth().padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(
-                stringResource(R.string.home_greeting),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(stringResource(R.string.home_hero_description), style = MaterialTheme.typography.bodyMedium)
-            Button(onClick = onBrowse) { Text(stringResource(R.string.action_browse_tools)) }
+private fun LibraryCategory(label: String, selected: Boolean, onClick: () -> Unit) {
+    val background by animateColorAsState(if(selected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant, label="category-background")
+    val foreground by animateColorAsState(if(selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, label="category-foreground")
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .heightIn(min = ToolboxDimens.touchTarget)
+            .background(background)
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            Modifier
+                .width(3.dp)
+                .height(16.dp)
+                .clip(MaterialTheme.shapes.small)
+                .background(if (selected) MaterialTheme.colorScheme.primary else Color.Transparent),
+        )
+        Text(
+            text = label,
+            modifier = Modifier.weight(1f).padding(horizontal = 12.dp, vertical = 12.dp),
+            style = MaterialTheme.typography.bodyMedium,
+            color = foreground,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+        )
+    }
+}
+
+@Composable
+private fun ProfileContent(
+    modifier: Modifier,
+    onOpenAuth: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenFeedback: () -> Unit,
+    onOpenRecent: () -> Unit,
+    onOpenFavorites: () -> Unit,
+    onShowUnavailable: () -> Unit,
+    authState: AuthUiState,
+) {
+    LazyColumn(modifier, contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp)) {
+        item(key = "account") {
+            Row(
+                Modifier.fillMaxWidth().clickable(onClick = onOpenAuth).padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                ToolboxAvatar(authState.avatar, authState.avatarLoading)
+                Column(Modifier.weight(1f)) {
+                    Text(authState.account?.nickname ?: stringResource(R.string.profile_login), style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        authState.account?.email ?: stringResource(R.string.profile_sync_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 2.dp),
+                    )
+                }
+                ToolboxChevron()
+            }
+            ToolboxDivider(startIndent = 0.dp)
+        }
+        item(key = "menu") {
+            Column {
+                ToolListItem(stringResource(R.string.profile_my_favorites), icon = R.drawable.ic_star, onClick = onOpenFavorites, trailing = { ToolboxChevron() })
+                ToolListItem(stringResource(R.string.profile_recent), icon = R.drawable.ic_timestamp, onClick = onOpenRecent, trailing = { ToolboxChevron() })
+                ToolListItem(stringResource(R.string.profile_stats), icon = R.drawable.ic_chart, onClick = onShowUnavailable, trailing = { ToolboxChevron() })
+                ToolListItem(stringResource(R.string.profile_feedback), icon = R.drawable.ic_chat, onClick = onOpenFeedback, trailing = { ToolboxChevron() })
+                ToolListItem(stringResource(R.string.profile_about), icon = R.drawable.ic_info, onClick = onShowUnavailable, trailing = { ToolboxChevron() }, showDivider = false)
+            }
         }
     }
 }
 
 @Composable
 private fun SearchEntry(onClick: () -> Unit) {
-    Surface(onClick = onClick, shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
-        Row(
-            Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Icon(painterResource(R.drawable.ic_search), contentDescription = null)
-            Text(
-                stringResource(R.string.home_search_hint),
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
-    }
-}
-
-@Composable
-private fun SectionHeader(title: String, trailing: @Composable () -> Unit = {}) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        trailing()
-    }
-}
-
-@Composable
-internal fun ToolCard(
-    tool: ToolMetadata,
-    onClick: () -> Unit,
-    isFavorite: Boolean,
-    favoriteEnabled: Boolean,
-    onFavoriteChanged: (Boolean) -> Unit,
-    favoriteSaving: Boolean = false,
-) {
-    Card(
+    Surface(
         onClick = onClick,
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surfaceContainer,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painterResource(toolIconResource(tool.icon)),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-                Spacer(Modifier.weight(1f))
-                FavoriteButton(isFavorite, favoriteEnabled, tool.name, onFavoriteChanged, saving = favoriteSaving)
-            }
-            Text(tool.name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(
-                tool.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-    }
-}
-
-@Composable
-private fun EmptyCatalog(filtered: Boolean, onClear: () -> Unit) {
-    StatusCard(
-        title = stringResource(if (filtered) R.string.home_category_empty_title else R.string.home_empty_title),
-        description = stringResource(
-            if (filtered) R.string.home_category_empty_description else R.string.home_empty_description,
-        ),
-        action = {
-            if (filtered) {
-                TextButton(onClick = onClear) { Text(stringResource(R.string.action_clear_category)) }
-            }
-        },
-    )
-}
-
-@Composable
-private fun StatusCard(title: String, description: String, action: @Composable () -> Unit = {}) {
-    Surface(shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainerLow) {
-        Column(
-            Modifier.fillMaxWidth().padding(28.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = ToolboxDimens.touchTarget).padding(horizontal = 14.dp, vertical = 11.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Icon(
-                painterResource(R.drawable.ic_toolbox),
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = MaterialTheme.colorScheme.primary,
-            )
-            Text(title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
-            Text(
-                description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-            action()
+            Icon(painterResource(R.drawable.ic_search), contentDescription = null, modifier = Modifier.size(19.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.home_search_hint), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
 
 @Composable
-private fun RecentStatusRow(
-    message: String,
-    onRetry: (() -> Unit)? = null,
-    showIndicator: Boolean = false,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        if (showIndicator) ToolboxLoadingIndicator(compact = true)
-        Text(
-            message,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        if (onRetry != null) {
-            TextButton(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
-        }
-    }
-}
-
-@Composable
-private fun InformationPage(
-    modifier: Modifier,
-    title: String,
-    @DrawableRes icon: Int,
-    heading: String,
-    description: String,
-    onBrowse: () -> Unit,
-    showPrivacy: Boolean = false,
-) {
-    // Use a lazy container so large text and short landscape windows remain scrollable.
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+private fun ExploreCard(name: String, count: Int, icon: Int, modifier: Modifier, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier,
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
     ) {
-        item { Text(title, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold) }
-        item {
-            Column(
-                Modifier.fillMaxWidth().padding(vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                Icon(painterResource(icon), null, Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
-                Text(heading, style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center)
-                Text(
-                    description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                )
-                Button(onClick = onBrowse) { Text(stringResource(R.string.action_browse_tools)) }
-            }
-        }
-        if (showPrivacy) {
-            item {
-                StatusCard(
-                    title = stringResource(R.string.profile_privacy_title),
-                    description = stringResource(R.string.profile_privacy_description),
-                )
-            }
+        Column(Modifier.padding(14.dp)) {
+            Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurface)
+            Text(name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 10.dp))
+            Text(
+                stringResource(R.string.library_count, count),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 2.dp),
+            )
         }
     }
 }
 
-@Preview(showBackground = true, name = "Home empty")
 @Composable
-private fun EmptyHomePreview() {
-    ToolboxTheme {
-        HomeScreen(
-            state = HomeUiState(
-                catalog = HomeCatalogState.Empty(
-                    HomeContent(emptyList(), emptyList(), emptyList(), ToolCategory.entries.map { HomeCategory(it, 0) }, 0),
-                ),
-            ),
-            onTabSelected = {},
-            onCategorySelected = {},
-            onToolSelected = {},
-            onRetry = {},
-            onSearch = {},
-            favoriteState = FavoritesUiState(),
-            onSetFavorite = { _, _ -> },
-            onFavoritesRetry = {},
-            recentState = RecentUiState(list = RecentListState.Empty),
-            onRecentRetry = {},
-            onClearRecent = {},
-        )
+private fun StatusMessage(title: String, description: String, onRetry: () -> Unit) {
+    Column(
+        Modifier.fillMaxWidth().padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+        Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+        ToolboxButton(onClick = onRetry) { Text(stringResource(R.string.action_retry)) }
     }
 }

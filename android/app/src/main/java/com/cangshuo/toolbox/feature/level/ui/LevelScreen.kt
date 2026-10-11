@@ -42,9 +42,9 @@ fun LevelRoute(factory: ViewModelProvider.Factory) {
         Text(note,style = MaterialTheme.typography.bodySmall,color = MaterialTheme.colorScheme.onSurfaceVariant)
         SystemReportActions(report,false,model::refresh)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
-            OutlinedButton(onClick = model::zero,enabled = reading?.angles?.faceUp == true) { Text(stringResource(R.string.level_zero)) }
-            OutlinedButton(onClick = model::reset,enabled = state.reference != null) { Text(stringResource(R.string.level_reset)) }
+            ToolboxOutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
+            ToolboxOutlinedButton(onClick = model::zero,enabled = reading?.angles?.faceUp == true) { Text(stringResource(R.string.level_zero)) }
+            ToolboxOutlinedButton(onClick = model::reset,enabled = state.reference != null) { Text(stringResource(R.string.level_reset)) }
         }
         if (state.waiting) ToolboxLoadingState(stringResource(R.string.level_loading))
         if (state.unsupported) Text(stringResource(R.string.level_unsupported))

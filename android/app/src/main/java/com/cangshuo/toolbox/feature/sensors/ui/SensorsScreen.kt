@@ -63,7 +63,7 @@ fun SensorsRoute(factory: ViewModelProvider.Factory) {
                 Text(sensor.name, style = MaterialTheme.typography.titleMedium)
                 if (!sensor.liveSupported) Text(stringResource(R.string.sensors_metadata_only))
                 else {
-                    OutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
+                    ToolboxOutlinedButton(onClick = model::togglePause) { Text(stringResource(if (state.paused) R.string.sensors_resume else R.string.sensors_pause)) }
                     if (live.isEmpty()) Text(stringResource(R.string.sensors_waiting))
                     else SystemReportCard(stringResource(R.string.sensors_values), live)
                 }
@@ -71,7 +71,7 @@ fun SensorsRoute(factory: ViewModelProvider.Factory) {
         } }
         items(groups, key = { it.first.id }) { (sensor, rows) ->
             Column {
-                TextButton(onClick = { model.select(sensor.id) }, enabled = !state.loading) { Text(sensor.name) }
+                ToolboxTextButton(onClick = { model.select(sensor.id) }, enabled = !state.loading) { Text(sensor.name) }
                 SystemReportCard(sensor.name, rows)
             }
         }

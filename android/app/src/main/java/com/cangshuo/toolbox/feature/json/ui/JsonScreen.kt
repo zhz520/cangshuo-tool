@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.json.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,11 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.json.domain.JsonFailure
 import com.cangshuo.toolbox.feature.json.domain.JsonIndent
 import com.cangshuo.toolbox.feature.json.domain.JsonStringInput
@@ -68,14 +69,14 @@ fun JsonScreen(
                 JsonCard {
                     Text(stringResource(R.string.json_input_label), style = MaterialTheme.typography.titleMedium)
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
-                        TextButton(onClick = onLoadSample) { Text(stringResource(R.string.json_btn_sample)) }
-                        TextButton(onClick = { clipboard.getText()?.text?.let(onInputChanged) }) { Text(stringResource(R.string.json_btn_paste)) }
-                        TextButton(onClick = onClear) { Text(stringResource(R.string.json_btn_clear)) }
+                        ToolboxTextButton(onClick = onLoadSample) { Text(stringResource(R.string.json_btn_sample)) }
+                        ToolboxTextButton(onClick = { clipboard.getText()?.text?.let(onInputChanged) }) { Text(stringResource(R.string.json_btn_paste)) }
+                        ToolboxTextButton(onClick = onClear) { Text(stringResource(R.string.json_btn_clear)) }
                     }
                     if (state.inputRejected) JsonError(R.string.json_error_input_limit)
-                    OutlinedTextField(state.inputText, onInputChanged, Modifier.fillMaxWidth(), minLines = 5, maxLines = 10,
+                    ToolboxTextField(state.inputText, onInputChanged, Modifier.fillMaxWidth(), minLines = 5, maxLines = 10,
                         isError = state.error != null,
-                        placeholder = { Text(stringResource(R.string.json_placeholder_input)) },
+                        placeholder = stringResource(R.string.json_placeholder_input),
                         supportingText = {
                             Text(if (state.inputByteCount != null) stringResource(R.string.json_input_stats,
                                 state.inputText.length, state.inputByteCount)
@@ -124,13 +125,13 @@ fun JsonScreen(
             }
             if (state.isProcessing) {
                 item(key = "processing") { ToolboxLoadingState(stringResource(R.string.json_processing)) }
-                item(key = "cancel") { OutlinedButton(onClick = onCancel) { Text(stringResource(R.string.json_btn_cancel)) } }
+                item(key = "cancel") { ToolboxOutlinedButton(onClick = onCancel) { Text(stringResource(R.string.json_btn_cancel)) } }
             } else {
                 item(key = "output") {
                     JsonCard {
                         Text(stringResource(R.string.json_output_label), style = MaterialTheme.typography.titleMedium)
                         if (state.cancelled) Text(stringResource(R.string.json_cancelled), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        if (state.cancelled || state.error != null) TextButton(onClick = onRetry) { Text(stringResource(R.string.json_btn_retry)) }
+                        if (state.cancelled || state.error != null) ToolboxTextButton(onClick = onRetry) { Text(stringResource(R.string.json_btn_retry)) }
                         if (state.hasResult) {
                             if (state.mode != JsonMode.UNESCAPE) Text(stringResource(R.string.json_valid), color = MaterialTheme.colorScheme.tertiary)
                             Text(stringResource(R.string.json_output_stats, state.outputLineCount, state.outputByteCount),
@@ -140,15 +141,15 @@ fun JsonScreen(
                             if (preview.length < state.outputText.length) Text(stringResource(R.string.json_preview_limited),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium,
-                                color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                                color = MaterialTheme.colorScheme.surfaceVariant) {
                                 if (state.outputText.isEmpty()) Text(stringResource(R.string.json_output_empty), Modifier.padding(12.dp))
                                 else SelectionContainer(Modifier.padding(12.dp)) {
                                     Text(preview, style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace))
                                 }
                             }
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                OutlinedButton(onClick = { clipboard.setText(AnnotatedString(state.outputText)) }) { Text(stringResource(R.string.json_btn_copy)) }
-                                OutlinedButton(onClick = onSwap) { Text(stringResource(R.string.json_btn_swap)) }
+                                ToolboxOutlinedButton(onClick = { clipboard.setText(AnnotatedString(state.outputText)) }) { Text(stringResource(R.string.json_btn_copy)) }
+                                ToolboxOutlinedButton(onClick = onSwap) { Text(stringResource(R.string.json_btn_swap)) }
                             }
                         } else if (state.error == null && !state.cancelled) {
                             Text(stringResource(R.string.json_output_placeholder), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -162,7 +163,8 @@ fun JsonScreen(
 
 @Composable
 private fun JsonCard(content: @Composable ColumnScope.() -> Unit) {
-    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
 }

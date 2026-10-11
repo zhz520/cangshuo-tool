@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.text.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,11 +22,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingIndicator
 import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
+import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.feature.text.domain.TextCategoryGroup
 import com.cangshuo.toolbox.feature.text.domain.TextOperation
 import com.cangshuo.toolbox.feature.text.domain.TextProcessingPolicy
@@ -80,15 +81,15 @@ fun TextScreen(
                 TextCard {
                     Text(stringResource(R.string.text_input_label), style = MaterialTheme.typography.titleMedium)
                     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
-                        TextButton(onClick = onLoadSample) { Text(stringResource(R.string.text_btn_sample)) }
-                        TextButton(onClick = { clipboard.getText()?.text?.let(onInputChanged) }) {
+                        ToolboxTextButton(onClick = onLoadSample) { Text(stringResource(R.string.text_btn_sample)) }
+                        ToolboxTextButton(onClick = { clipboard.getText()?.text?.let(onInputChanged) }) {
                             Text(stringResource(R.string.text_btn_paste))
                         }
-                        TextButton(onClick = onClear) { Text(stringResource(R.string.text_btn_clear)) }
+                        ToolboxTextButton(onClick = onClear) { Text(stringResource(R.string.text_btn_clear)) }
                     }
                     state.inputErrorRes?.let { TextError(it) }
-                    OutlinedTextField(state.inputText, onInputChanged, Modifier.fillMaxWidth(), minLines = 4, maxLines = 10,
-                        placeholder = { Text(stringResource(R.string.text_placeholder_input)) },
+                    ToolboxTextField(state.inputText, onInputChanged, Modifier.fillMaxWidth(), minLines = 4, maxLines = 10,
+                        placeholder = stringResource(R.string.text_placeholder_input),
                         supportingText = { Text(stringResource(R.string.text_input_count,
                             state.inputText.length, TextProcessingPolicy.MAX_INPUT_LENGTH)) })
                 }
@@ -126,12 +127,12 @@ fun TextScreen(
                         }
                     }
                     if (state.selectedGroup == TextCategoryGroup.FIND_REPLACE) {
-                        OutlinedTextField(state.findText, onFindChanged, Modifier.fillMaxWidth(), maxLines = 3,
-                            label = { Text(stringResource(R.string.text_fr_find_label)) },
-                            placeholder = { Text(stringResource(R.string.text_fr_find_placeholder)) })
-                        OutlinedTextField(state.replaceText, onReplaceChanged, Modifier.fillMaxWidth(), maxLines = 3,
-                            label = { Text(stringResource(R.string.text_fr_replace_label)) },
-                            placeholder = { Text(stringResource(R.string.text_fr_replace_placeholder)) })
+                        ToolboxTextField(state.findText, onFindChanged, Modifier.fillMaxWidth(), maxLines = 3,
+                            label = stringResource(R.string.text_fr_find_label),
+                            placeholder = stringResource(R.string.text_fr_find_placeholder))
+                        ToolboxTextField(state.replaceText, onReplaceChanged, Modifier.fillMaxWidth(), maxLines = 3,
+                            label = stringResource(R.string.text_fr_replace_label),
+                            placeholder = stringResource(R.string.text_fr_replace_placeholder))
                         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             FilterChip(state.matchCase, { onMatchCaseChanged(!state.matchCase) },
                                 label = { Text(stringResource(R.string.text_fr_match_case)) })
@@ -160,7 +161,7 @@ fun TextScreen(
             }
             if (state.isProcessing) {
                 item(key = "processing") { ToolboxLoadingState(stringResource(R.string.text_processing)) }
-                item(key = "cancel") { OutlinedButton(onClick = onCancel) { Text(stringResource(R.string.text_btn_cancel)) } }
+                item(key = "cancel") { ToolboxOutlinedButton(onClick = onCancel) { Text(stringResource(R.string.text_btn_cancel)) } }
             } else {
                 item(key = "result") {
                     TextCard {
@@ -168,7 +169,7 @@ fun TextScreen(
                         state.processingErrorRes?.let { TextError(it) }
                         state.statusMessageRes?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.onSurfaceVariant) }
                         if (state.processingErrorRes != null || state.statusMessageRes != null) {
-                            TextButton(onClick = onRetry) { Text(stringResource(R.string.text_btn_retry)) }
+                            ToolboxTextButton(onClick = onRetry) { Text(stringResource(R.string.text_btn_retry)) }
                         }
                         state.matchCount?.let { Text(stringResource(R.string.text_match_count, it),
                             color = MaterialTheme.colorScheme.onSurfaceVariant) }
@@ -176,17 +177,17 @@ fun TextScreen(
                             if (preview.length < state.outputText.length) Text(stringResource(R.string.text_preview_limited),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium,
-                                color = MaterialTheme.colorScheme.surfaceContainerLow) {
+                                color = MaterialTheme.colorScheme.surfaceVariant) {
                                 if (state.outputText.isEmpty()) Text(stringResource(R.string.text_output_empty), Modifier.padding(12.dp))
                                 else SelectionContainer(Modifier.padding(12.dp)) {
                                     Text(preview, style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace))
                                 }
                             }
                             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                OutlinedButton(onClick = { clipboard.setText(AnnotatedString(state.outputText)) }) {
+                                ToolboxOutlinedButton(onClick = { clipboard.setText(AnnotatedString(state.outputText)) }) {
                                     Text(stringResource(R.string.text_btn_copy))
                                 }
-                                OutlinedButton(onClick = onSwap) { Text(stringResource(R.string.text_btn_swap)) }
+                                ToolboxOutlinedButton(onClick = onSwap) { Text(stringResource(R.string.text_btn_swap)) }
                             }
                         } else if (state.processingErrorRes == null && state.statusMessageRes == null) {
                             Text(stringResource(R.string.text_output_placeholder), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -201,7 +202,8 @@ fun TextScreen(
 
 @Composable
 private fun TextCard(content: @Composable ColumnScope.() -> Unit) {
-    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLowest) {
+    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
 }

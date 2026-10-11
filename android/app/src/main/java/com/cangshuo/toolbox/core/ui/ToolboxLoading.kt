@@ -41,23 +41,18 @@ fun ToolboxLoadingIndicator(modifier: Modifier = Modifier, compact: Boolean = fa
 /** An inline content state: navigation and other available actions remain usable. */
 @Composable
 fun ToolboxLoadingState(message: String, modifier: Modifier = Modifier) {
-    Surface(
+    Box(
         modifier = modifier.fillMaxWidth().semantics(mergeDescendants = true) {
             liveRegion = LiveRegionMode.Polite
         },
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.surfaceContainerLowest,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
     ) {
         Column(
-            modifier = Modifier.heightIn(min = 184.dp).padding(24.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 184.dp).padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier.size(64.dp).background(
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.08f), CircleShape,
-                ),
+                modifier = Modifier.size(48.dp),
                 contentAlignment = Alignment.Center,
             ) { ToolboxLoadingIndicator() }
             Text(
