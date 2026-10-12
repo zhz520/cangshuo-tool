@@ -274,6 +274,10 @@ class ToolboxAppContainer(context: Context) {
     private val levelFactory=com.cangshuo.toolbox.feature.level.ui.LevelViewModel.factory(
         com.cangshuo.toolbox.feature.level.domain.ObserveLevelUseCase(
             com.cangshuo.toolbox.feature.level.data.AndroidLevelRepository(applicationContext)))
+    private val lightMeterFactory = com.cangshuo.toolbox.feature.lightmeter.ui.LightMeterViewModel.factory(
+        com.cangshuo.toolbox.feature.lightmeter.domain.ObserveLightUseCase(
+            com.cangshuo.toolbox.feature.lightmeter.data.SensorLightMeterRepository(
+                com.cangshuo.toolbox.feature.sensors.data.AndroidSensorsRepository(applicationContext))))
     private val pingFactory=com.cangshuo.toolbox.feature.ping.ui.PingViewModel.factory(
         com.cangshuo.toolbox.feature.ping.domain.ExecutePingUseCase(
             com.cangshuo.toolbox.feature.ping.data.NativePingRepository()))
@@ -317,6 +321,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.sensors.SensorsToolDefinition(resources,sensorsFactory),
             com.cangshuo.toolbox.feature.compass.CompassToolDefinition(resources,compassFactory),
             com.cangshuo.toolbox.feature.level.LevelToolDefinition(resources,levelFactory),
+            com.cangshuo.toolbox.feature.lightmeter.LightMeterToolDefinition(resources,lightMeterFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

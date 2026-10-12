@@ -164,6 +164,8 @@ Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契
 
 ## 工具目录接口
 
+`light_meter`（V51，SENSOR/LOCAL）复用目录、后台开关与使用统计接口；照度、趋势与校准在 Android 执行，不新增测量接口或上传传感器数据。实现与实际验收见 [光感仪](LIGHT_METER.md)。
+
 | 方法与路径 | 规划认证 | 用途 | 当前状态 |
 | --- | --- | --- | --- |
 | `GET /api/v1/tools` | 无 | 分页获取启用的工具，可按分类筛选 | 已实现，验证范围见目录接口说明 |

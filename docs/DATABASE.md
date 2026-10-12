@@ -202,3 +202,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V50 Zepp Life 网页步数工具
 
 `V50__seed_zepp_steps_web_tool.sql` 登记 `zepp_steps`，LIFE/WEB/ENABLED，排序 510、requires_login=0，config_json 仅含 `/tools/zepp_steps/` 路径。`ON DUPLICATE KEY` 不覆盖管理员配置。没有第三方账号、密码、Token 或提交记录表；计数沿用已有 tool_usage_* 和 API 流量统计。V1–V48 已执行文件保持不变；实际迁移结果见 ZEPP_STEPS.md。
+
+## V51 光感仪目录
+
+`V51__seed_light_meter_tool.sql` 登记 `light_meter`，SENSOR/LOCAL/ENABLED，排序 340、requires_login=0。复用既有后台管理及使用统计；重复执行保留管理员编辑、维护/关闭状态与软删除。不新增测量记录表，不上传传感器数据。验证范围见 [光感仪](LIGHT_METER.md)。

@@ -1729,4 +1729,57 @@
     </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
+    <string name="light_name">光感仪</string>
+    <string name="light_description">测量环境照度，查看趋势与最小、最大、平均值，支持单位切换、参考校准和报告分享。</string>
+    <string-array name="light_keywords" translatable="false">
+        <item>光感仪</item><item>照度计</item><item>光线</item><item>亮度</item><item>lux</item><item>light meter</item><item>illuminance</item>
+    </string-array>
+    <string name="light_unit_lux" translatable="false">lx</string>
+    <string name="light_unit_fc" translatable="false">fc</string>
+    <string name="light_idle">尚未开始测量</string>
+    <string name="light_waiting">正在等待光线传感器读数…</string>
+    <string name="light_live">正在测量 · 读数变化时更新</string>
+    <string name="light_paused">已暂停 · 显示最后一次读数</string>
+    <string name="light_unsupported">此设备没有可用的光线传感器，无法测量照度。</string>
+    <string name="light_no_reading">传感器暂未返回有效读数。请检查传感器是否被遮挡，然后刷新。</string>
+    <string name="light_error">测量已停止，暂时无法读取光线传感器，请刷新重试。</string>
+    <string name="light_current">当前照度</string>
+    <string name="light_status">测量状态</string>
+    <string name="light_minimum">最小照度</string>
+    <string name="light_maximum">最大照度</string>
+    <string name="light_average">平均照度</string>
+    <string name="light_samples">有效样本数</string>
+    <string name="light_statistics">本次测量</string>
+    <string name="light_average_note">平均值按已接收样本计算，不是按时间加权；暂停与后台期间不计入。</string>
+    <string name="light_clear">清空测量记录</string>
+    <string name="light_trend">照度趋势</string>
+    <string name="light_window">%1$d 秒</string>
+    <string name="light_trend_empty">暂无趋势记录，收到新的有效读数后显示。</string>
+    <string name="light_trend_range">%1$s — %2$s</string>
+    <string name="light_trend_accessibility">照度趋势，%1$d 个样本，最小 %2$s，最大 %3$s。</string>
+    <string name="light_trend_note">以最后一次读数为截止点，显示选定时间内最近 600 个样本；横轴按实际时间间隔绘制。</string>
+    <string name="light_calibration">参考校准</string>
+    <string name="light_calibration_note">先暂停并与参考照度计对照，再输入参考值（lx）。校准系数限 0.1–10 倍，只保留在此工具会话中。</string>
+    <string name="light_factor">校准系数：%1$.3f 倍</string>
+    <string name="light_reference">参考照度（lx）</string>
+    <string name="light_reference_error">请输入大于 0 且不超过 10⁹ 的照度，最多 4 位小数。</string>
+    <string name="light_calibration_no_reading">需要一个大于 0 的有效读数才能校准。</string>
+    <string name="light_factor_error">参考值与原始读数之比需要在 0.1–10 之间。</string>
+    <string name="light_apply_calibration">应用校准</string>
+    <string name="light_reset_calibration">恢复默认校准</string>
+    <string name="light_raw">原始照度</string>
+    <string name="light_sensor">传感器信息</string>
+    <string name="light_sensor_name">名称</string>
+    <string name="light_invalid">传感器返回了无效读数，已忽略；当前显示最后一次有效读数。</string>
+    <string name="light_saturated">原始读数已达到传感器量程，实际照度可能更高。</string>
+    <string name="light_report">复制与分享</string>
+    <string name="light_summary">测量摘要</string>
+    <string name="light_csv">趋势 CSV</string>
+    <string name="light_band">环境参考：%1$s</string>
+    <string name="light_dark">昏暗</string>
+    <string name="light_dim">较暗</string>
+    <string name="light_indoor">室内光线</string>
+    <string name="light_bright">明亮</string>
+    <string name="light_very_bright">强光</string>
+    <string name="light_note">手机传感器与专业照度计可能存在差异，遮挡、方向及设备量程都会影响结果；环境分级仅供参考。lx 为勒克斯，fc 为英尺烛光（1 fc ≈ 10.764 lx）。</string>
 </resources>
