@@ -1521,6 +1521,97 @@
     <string-array name="color_keywords" translatable="false">
         <item>color</item><item>颜色</item><item>颜色转换</item><item>HEX</item><item>RGB</item><item>HSL</item><item>HSV</item><item>color converter</item><item>hex to rgb</item>
     </string-array>
+    <string name="password_name">随机密码生成</string>
+    <string name="password_description">用安全随机数生成高强度密码，可配置字符集、排除易混淆字符并评估熵值。</string>
+    <string name="password_options_title">生成设置</string>
+    <string name="password_length_label">密码长度（4–64）</string>
+    <string name="password_length_hint">例如 16</string>
+    <string name="password_count_label">生成数量（1–10）</string>
+    <string name="password_count_hint">例如 1</string>
+    <string name="password_charset_title">字符集</string>
+    <string name="password_charset_upper">大写字母</string>
+    <string name="password_charset_lower">小写字母</string>
+    <string name="password_charset_digits">数字</string>
+    <string name="password_charset_symbols">符号</string>
+    <string name="password_exclude_similar">排除易混淆字符（0O1lI|`）</string>
+    <string name="password_require_each">每类至少一个字符</string>
+    <string name="password_unique">字符不重复</string>
+    <string name="password_exclude_label">额外排除字符（可选）</string>
+    <string name="password_exclude_hint">例如 abc123</string>
+    <string name="password_result_title">生成结果</string>
+    <string name="password_more_hint">其余 %1$d 条已在复制内容中，长按可选择单条。</string>
+    <string name="password_pool_label">字符池大小</string>
+    <string name="password_entropy_label">熵值</string>
+    <string name="password_entropy_format">≈ %1$s 位</string>
+    <string name="password_entropy_hint">熵值 = 长度 × log2(字符池大小)，数值越大暴力破解越困难。</string>
+    <string name="password_strength_label">强度</string>
+    <string name="password_strength_weak">弱</string>
+    <string name="password_strength_moderate">中等</string>
+    <string name="password_strength_strong">强</string>
+    <string name="password_strength_excellent">极强</string>
+    <string name="password_btn_regenerate">重新生成</string>
+    <string name="password_btn_copy">复制</string>
+    <string name="password_placeholder">设置长度与字符集后自动生成…</string>
+    <string name="password_error_no_charset">至少启用一种字符集，且排除后不能为空。</string>
+    <string name="password_error_length">密码长度需为 4–64 的整数。</string>
+    <string name="password_error_count">生成数量需为 1–10 的整数。</string>
+    <string name="password_error_strict">「每类至少一个字符」时，长度不能小于启用的字符集数量。</string>
+    <string name="password_error_unique">「字符不重复」时，长度不能超过可用字符数。</string>
+    <string name="password_error_exclude_long">排除字符过长（最多 32 个），已保留原输入。</string>
+    <string-array name="password_keywords" translatable="false">
+        <item>password</item><item>密码</item><item>随机密码</item><item>密码生成</item><item>强密码</item><item>password generator</item><item>strong password</item>
+    </string-array>
+    <string name="text_count_name">字数统计</string>
+    <string name="text_count_description">统计字符、中文、英文单词、行数、段落与 UTF-8 体积，并估算阅读时间。</string>
+    <string name="text_count_input_title">文本输入</string>
+    <string name="text_count_input_label">文本内容</string>
+    <string name="text_count_input_hint">粘贴或输入要统计的文本…</string>
+    <string name="text_count_result_title">统计结果</string>
+    <string name="text_count_words_total">字数（中文按字 + 英文按词）</string>
+    <string name="text_count_chars_with_spaces">字符数（含空格）</string>
+    <string name="text_count_chars_without_spaces">字符数（不含空格）</string>
+    <string name="text_count_cjk">中文字符</string>
+    <string name="text_count_words_latin">英文单词</string>
+    <string name="text_count_lines">行数</string>
+    <string name="text_count_non_empty_lines">非空行</string>
+    <string name="text_count_paragraphs">段落数</string>
+    <string name="text_count_bytes">UTF-8 体积（字节）</string>
+    <string name="text_count_reading">预计阅读时间</string>
+    <string name="text_count_seconds">约 %1$d 秒</string>
+    <string name="text_count_minutes">约 %1$d 分 %2$d 秒</string>
+    <string name="text_count_note">中文按「字」计数（含扩展区与兼容区），英文/数字按「词」计数；行数按换行符拆分，结尾换行不算新行。</string>
+    <string name="text_count_btn_copy">复制结果</string>
+    <string name="text_count_btn_clear">清空</string>
+    <string name="text_count_empty">输入文本后自动统计…</string>
+    <string name="text_count_error_too_long">文本过长（上限 20 万字符），已保留原内容。</string>
+    <string name="text_count_copy_summary">字符 %1$d（不含空格 %2$d）· 中文 %3$d 字 · 英文 %4$d 词 · 行 %5$d · 段落 %6$d · UTF-8 %7$d 字节</string>
+    <string-array name="text_count_keywords" translatable="false">
+        <item>count</item><item>字数</item><item>字数统计</item><item>字符统计</item><item>单词数</item><item>word count</item><item>character count</item>
+    </string-array>
+    <string name="url_extract_name">网址提取</string>
+    <string name="url_extract_description">从文本中提取链接，支持仅完整链接或包含 www 与常见裸域名，去重后可复制为纯文本或 Markdown。</string>
+    <string name="url_extract_input_title">文本输入</string>
+    <string name="url_extract_input_label">包含链接的文本</string>
+    <string name="url_extract_input_hint">粘贴聊天记录、日志或文章…</string>
+    <string name="url_extract_mode_title">匹配模式</string>
+    <string name="url_extract_mode_strict">仅完整链接</string>
+    <string name="url_extract_mode_fuzzy">含 www 与裸域名</string>
+    <string name="url_extract_dedupe">自动去重（忽略大小写）</string>
+    <string name="url_extract_format_title">复制格式</string>
+    <string name="url_extract_format_lines">每行一个</string>
+    <string name="url_extract_format_markdown">Markdown 链接</string>
+    <string name="url_extract_result_title">提取结果</string>
+    <string name="url_extract_count">共 %1$d 个链接</string>
+    <string name="url_extract_none">未找到链接，可尝试开启「含 www 与裸域名」。</string>
+    <string name="url_extract_show_note">仅显示前 %1$d 个，复制会包含全部 %2$d 个。</string>
+    <string name="url_extract_truncated_note">结果超过上限，仅保留前 %1$d 个。</string>
+    <string name="url_extract_btn_copy">复制结果</string>
+    <string name="url_extract_btn_clear">清空</string>
+    <string name="url_extract_empty">输入文本后自动提取…</string>
+    <string name="url_extract_error_too_long">文本过长（上限 20 万字符），已保留原内容。</string>
+    <string-array name="url_extract_keywords" translatable="false">
+        <item>url</item><item>链接</item><item>网址提取</item><item>提取链接</item><item>url extract</item><item>link extractor</item>
+    </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>

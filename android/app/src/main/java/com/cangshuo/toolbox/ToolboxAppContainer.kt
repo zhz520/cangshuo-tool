@@ -190,6 +190,21 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.color.data.LocalColorRepository(),
         ),
     )
+    private val passwordFactory = com.cangshuo.toolbox.feature.password.ui.PasswordViewModel.factory(
+        com.cangshuo.toolbox.feature.password.domain.GeneratePasswordsUseCase(
+            com.cangshuo.toolbox.feature.password.data.LocalPasswordRepository(),
+        ),
+    )
+    private val textCountFactory = com.cangshuo.toolbox.feature.textcount.ui.TextCountViewModel.factory(
+        com.cangshuo.toolbox.feature.textcount.domain.AnalyzeTextUseCase(
+            com.cangshuo.toolbox.feature.textcount.data.LocalTextCountRepository(),
+        ),
+    )
+    private val urlExtractFactory = com.cangshuo.toolbox.feature.urlextract.ui.UrlExtractViewModel.factory(
+        com.cangshuo.toolbox.feature.urlextract.domain.ExtractUrlsUseCase(
+            com.cangshuo.toolbox.feature.urlextract.data.LocalUrlExtractRepository(),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -262,6 +277,9 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.fuel.FuelToolDefinition(resources, fuelFactory),
             com.cangshuo.toolbox.feature.datecalc.DateCalcToolDefinition(resources, dateCalcFactory),
             com.cangshuo.toolbox.feature.color.ColorToolDefinition(resources, colorFactory),
+            com.cangshuo.toolbox.feature.password.PasswordToolDefinition(resources, passwordFactory),
+            com.cangshuo.toolbox.feature.textcount.TextCountToolDefinition(resources, textCountFactory),
+            com.cangshuo.toolbox.feature.urlextract.UrlExtractToolDefinition(resources, urlExtractFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

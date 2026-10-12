@@ -92,6 +92,9 @@ fun toolIconResource(name: String?): Int = when (name) {
     "fuel" -> R.drawable.ic_fuel
     "date_calc" -> R.drawable.ic_date
     "color_converter" -> R.drawable.ic_color
+    "password_gen" -> R.drawable.ic_password
+    "text_counter" -> R.drawable.ic_text_count
+    "url_extract" -> R.drawable.ic_url_extract
     "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text

@@ -1452,6 +1452,97 @@
     <string-array name="color_keywords" translatable="false">
         <item>color</item><item>颜色</item><item>颜色转换</item><item>HEX</item><item>RGB</item><item>HSL</item><item>HSV</item><item>color converter</item><item>hex to rgb</item>
     </string-array>
+    <string name="password_name">Password Generator</string>
+    <string name="password_description">Generate strong passwords with a secure random source; configure character sets, exclude ambiguous characters and review the entropy estimate.</string>
+    <string name="password_options_title">Generator options</string>
+    <string name="password_length_label">Password length (4–64)</string>
+    <string name="password_length_hint">e.g. 16</string>
+    <string name="password_count_label">Count (1–10)</string>
+    <string name="password_count_hint">e.g. 1</string>
+    <string name="password_charset_title">Character sets</string>
+    <string name="password_charset_upper">Uppercase</string>
+    <string name="password_charset_lower">Lowercase</string>
+    <string name="password_charset_digits">Digits</string>
+    <string name="password_charset_symbols">Symbols</string>
+    <string name="password_exclude_similar">Exclude ambiguous characters (0O1lI|`)</string>
+    <string name="password_require_each">At least one character per set</string>
+    <string name="password_unique">No repeated characters</string>
+    <string name="password_exclude_label">Extra excluded characters (optional)</string>
+    <string name="password_exclude_hint">e.g. abc123</string>
+    <string name="password_result_title">Generated passwords</string>
+    <string name="password_more_hint">The remaining %1$d are included when copying; long-press to select individual ones.</string>
+    <string name="password_pool_label">Pool size</string>
+    <string name="password_entropy_label">Entropy</string>
+    <string name="password_entropy_format">≈ %1$s bits</string>
+    <string name="password_entropy_hint">Entropy = length × log2(pool size); higher values are harder to brute-force.</string>
+    <string name="password_strength_label">Strength</string>
+    <string name="password_strength_weak">Weak</string>
+    <string name="password_strength_moderate">Moderate</string>
+    <string name="password_strength_strong">Strong</string>
+    <string name="password_strength_excellent">Excellent</string>
+    <string name="password_btn_regenerate">Regenerate</string>
+    <string name="password_btn_copy">Copy</string>
+    <string name="password_placeholder">Set a length and character sets to generate…</string>
+    <string name="password_error_no_charset">Enable at least one character set; exclusions cannot empty the pool.</string>
+    <string name="password_error_length">Password length must be a whole number from 4 to 64.</string>
+    <string name="password_error_count">Count must be a whole number from 1 to 10.</string>
+    <string name="password_error_strict">With "one per set" the length cannot be smaller than the number of enabled sets.</string>
+    <string name="password_error_unique">With "no repeated characters" the length cannot exceed the available character count.</string>
+    <string name="password_error_exclude_long">Too many excluded characters (32 max); the previous value was kept.</string>
+    <string-array name="password_keywords" translatable="false">
+        <item>password</item><item>密码</item><item>随机密码</item><item>密码生成</item><item>强密码</item><item>password generator</item><item>strong password</item>
+    </string-array>
+    <string name="text_count_name">Text Counter</string>
+    <string name="text_count_description">Count characters, CJK characters, English words, lines, paragraphs and UTF-8 size, and estimate reading time.</string>
+    <string name="text_count_input_title">Text input</string>
+    <string name="text_count_input_label">Text</string>
+    <string name="text_count_input_hint">Paste or type the text to analyse…</string>
+    <string name="text_count_result_title">Statistics</string>
+    <string name="text_count_words_total">Words (CJK per character + English words)</string>
+    <string name="text_count_chars_with_spaces">Characters (with spaces)</string>
+    <string name="text_count_chars_without_spaces">Characters (without spaces)</string>
+    <string name="text_count_cjk">CJK characters</string>
+    <string name="text_count_words_latin">English words</string>
+    <string name="text_count_lines">Lines</string>
+    <string name="text_count_non_empty_lines">Non-empty lines</string>
+    <string name="text_count_paragraphs">Paragraphs</string>
+    <string name="text_count_bytes">UTF-8 size (bytes)</string>
+    <string name="text_count_reading">Estimated reading time</string>
+    <string name="text_count_seconds">about %1$d s</string>
+    <string name="text_count_minutes">about %1$d m %2$d s</string>
+    <string name="text_count_note">CJK characters count per character (extensions included); letters and digits count per word; lines follow newline splitting so a trailing newline adds no extra line.</string>
+    <string name="text_count_btn_copy">Copy result</string>
+    <string name="text_count_btn_clear">Clear</string>
+    <string name="text_count_empty">Enter text to see statistics…</string>
+    <string name="text_count_error_too_long">Text is too long (200,000 characters max); the previous content was kept.</string>
+    <string name="text_count_copy_summary">Characters %1$d (%2$d without spaces) · CJK %3$d · English %4$d words · lines %5$d · paragraphs %6$d · UTF-8 %7$d bytes</string>
+    <string-array name="text_count_keywords" translatable="false">
+        <item>count</item><item>字数</item><item>字数统计</item><item>字符统计</item><item>单词数</item><item>word count</item><item>character count</item>
+    </string-array>
+    <string name="url_extract_name">URL Extractor</string>
+    <string name="url_extract_description">Pull links out of any text: complete links only or including www/bare domains, deduplicated and copyable as plain text or Markdown.</string>
+    <string name="url_extract_input_title">Text input</string>
+    <string name="url_extract_input_label">Text containing links</string>
+    <string name="url_extract_input_hint">Paste a chat log, article or log file…</string>
+    <string name="url_extract_mode_title">Matching mode</string>
+    <string name="url_extract_mode_strict">Complete links only</string>
+    <string name="url_extract_mode_fuzzy">Include www and bare domains</string>
+    <string name="url_extract_dedupe">Deduplicate (case-insensitive)</string>
+    <string name="url_extract_format_title">Copy format</string>
+    <string name="url_extract_format_lines">One per line</string>
+    <string name="url_extract_format_markdown">Markdown links</string>
+    <string name="url_extract_result_title">Extracted links</string>
+    <string name="url_extract_count">%1$d links found</string>
+    <string name="url_extract_none">No links found; try enabling "Include www and bare domains".</string>
+    <string name="url_extract_show_note">Showing the first %1$d; copying includes all %2$d.</string>
+    <string name="url_extract_truncated_note">Result limit reached; only the first %1$d were kept.</string>
+    <string name="url_extract_btn_copy">Copy result</string>
+    <string name="url_extract_btn_clear">Clear</string>
+    <string name="url_extract_empty">Enter text to extract links…</string>
+    <string name="url_extract_error_too_long">Text is too long (200,000 characters max); the previous content was kept.</string>
+    <string-array name="url_extract_keywords" translatable="false">
+        <item>url</item><item>链接</item><item>网址提取</item><item>提取链接</item><item>url extract</item><item>link extractor</item>
+    </string-array>
     <string name="numeric_error_input_too_long">The input is too long. Enter a shorter number; the previous value was kept.</string>
     <string name="compound_error_result_limit">The projected amount exceeds the calculation limit (10¹⁸ yuan). Reduce the principal, rate or term.</string>
 </resources>
