@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>微信运动步数 · 沧烁工具箱</title>
+  <link rel="stylesheet" href="style.css?v=1">
+  <script defer src="engine.js?v=1"></script>
+  <script defer src="app.js?v=1"></script>
+</head>
+<body>
+<main>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="沧烁工具箱">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+      <span data-i18n="brand">沧烁工具箱</span>
+    </a>
+    <select id="language" aria-label="语言 / Language"><option value="zh">中文</option><option value="en">English</option></select>
+  </header>
+  <div class="intro">
+    <div class="eyebrow"><span class="dot"></span> ZEPP LIFE <span data-i18n="web">网页版工具</span></div>
+    <h1 data-i18n="title">微信运动步数</h1>
+    <p data-i18n="subtitle">通过 Zepp Life 提交当天步数，让运动数据同步到已绑定的微信运动。</p>
+  </div>
+  <div class="workspace">
+    <section class="editor" aria-labelledby="accountHeading">
+      <div id="availability" class="notice" role="status"><span id="availabilityText" data-i18n="checking">正在检查服务…</span><button id="retry" class="text-button" type="button" hidden data-i18n="retry">重试</button></div>
+      <form id="form" novalidate autocomplete="off">
+        <fieldset id="fields">
+          <h2 id="accountHeading" data-i18n="accountHeading">连接你的账号</h2>
+          <label for="account" data-i18n="account">Zepp Life 账号</label>
+          <input id="account" name="zepp-account" type="text" maxlength="254" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="accountHelp">
+          <p id="accountHelp" class="help" data-i18n="accountHelp">使用 Zepp Life 的邮箱或中国区手机号，不能使用小米账号或微信账号。</p>
+          <label for="password" data-i18n="password">密码</label>
+          <div class="password-field"><input id="password" name="zepp-password" type="password" maxlength="128" autocomplete="off" aria-describedby="privacyNote"><button id="visibility" type="button" class="text-button" aria-pressed="false" data-i18n="show">显示</button></div>
+          <div class="section-heading"><h2 data-i18n="stepsHeading">设置今日步数</h2><span id="today" class="date">—</span></div>
+          <div class="step-field"><input id="steps" type="text" inputmode="numeric" value="10000" maxlength="5" aria-label="今日步数" aria-describedby="stepHelp"><span data-i18n="unit">步</span></div>
+          <div id="presets" class="presets" aria-label="预设步数">
+            <button type="button" data-steps="8000">8,000</button><button type="button" data-steps="10000" aria-pressed="true">10,000</button><button type="button" data-steps="15000">15,000</button><button type="button" data-steps="20000">20,000</button><button type="button" data-steps="30000">30,000</button>
+          </div>
+          <p id="stepHelp" class="help" data-i18n="stepHelp">输入 1–50,000 的整数。提交的是当天总步数，不是在当前步数上累加；日期以北京时间为准。</p>
+          <label class="consent"><input id="consent" type="checkbox"><span data-i18n="consent">我已在 Zepp Life 绑定微信运动，并同意使用此账号提交步数。</span></label>
+        </fieldset>
+        <div id="formError" class="form-error" role="alert" hidden></div>
+        <div class="actions"><button id="submit" type="submit" class="primary" disabled><span id="spinner" class="spinner" hidden></span><span id="submitLabel" data-i18n="submit">提交今日步数</span></button><button id="clear" type="button" class="secondary" data-i18n="clear">清空账号</button><button id="stop" type="button" class="text-button" hidden data-i18n="stop">停止等待</button></div>
+        <p id="privacyNote" class="help privacy" data-i18n="privacy">账号密码通过 HTTPS 发送至本站，再由服务器请求 Zepp Life。本站不保存账号密码及令牌；关闭页面后需重新输入。</p>
+      </form>
+      <section id="result" class="result" aria-live="polite" aria-atomic="true" tabindex="-1" hidden>
+        <div class="result-title"><span id="resultMarker" aria-hidden="true">✓</span><h2 id="resultTitle"></h2></div>
+        <p id="resultMessage"></p>
+        <dl id="receipt" hidden><div><dt data-i18n="receiptSteps">提交步数</dt><dd id="receiptSteps"></dd></div><div><dt data-i18n="receiptDate">同步日期</dt><dd id="receiptDate"></dd></div><div><dt data-i18n="receiptAccount">账号</dt><dd id="receiptAccount"></dd></div></dl>
+        <p id="resultTrace" class="help"></p>
+        <button id="copy" type="button" class="secondary" hidden data-i18n="copy">复制提交结果</button>
+      </section>
+    </section>
+    <aside class="guide" aria-labelledby="guideHeading">
+      <h2 id="guideHeading" data-i18n="guide">开始前，完成这三步</h2>
+      <ol class="guide-list">
+        <li><span class="number">01</span><div><h3 data-i18n="guide1">注册 Zepp Life</h3><p data-i18n="guide1Text">在应用商店搜索 Zepp Life（原小米运动），注册邮箱或手机号账号。</p></div></li>
+        <li><span class="number">02</span><div><h3 data-i18n="guide2">绑定微信运动</h3><p data-i18n="guide2Text">在 Zepp Life「我的 → 第三方接入 → 微信」完成绑定，并在微信启用微信运动。菜单名称可能随版本变化。</p></div></li>
+        <li><span class="number">03</span><div><h3 data-i18n="guide3">提交后查看同步</h3><p data-i18n="guide3Text">提交完成后打开微信运动查看数据。Zepp Life 接收成功不代表微信排行榜已更新，同步时间由第三方决定。</p></div></li>
+      </ol>
+      <div class="guide-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg><div><h3 data-i18n="privateHeading">一次提交，一次连接</h3><p data-i18n="privateText">每个账号至少间隔 60 秒。页面不会自动重复提交、定时运行或更改账号的设备绑定。</p></div></div>
+      <details><summary data-i18n="faq1">Zepp Life 成功接收，微信没有更新？</summary><p data-i18n="faq1Text">先检查账号的微信绑定、微信运动是否启用，并等待第三方同步。新账号可能需要在官方 App 完成设备绑定。先核对记录，再尝试重新提交。</p></details>
+      <details><summary data-i18n="faq2">遇到验证或请求超时怎么办？</summary><p data-i18n="faq2Text">验证码需要在 Zepp Life 官方 App 完成。提交阶段断网或超时可能已经写入，请先查看第三方记录；停止等待不会撤销已经发出的请求。</p></details>
+      <details><summary data-i18n="faq3">支持哪些账号和日期？</summary><p data-i18n="faq3Text">支持 Zepp Life 邮箱和中国大陆手机号，只提交北京时间当天。其他区号、小米账号、微信账号、历史补刷和后台自动任务暂不支持。</p></details>
+    </aside>
+  </div>
+  <footer><span data-i18n="footer">沧烁工具箱 · 第三方接口工具</span><a href="/privacy/" data-i18n="privacyLink">隐私政策</a></footer>
+</main>
+</body>
+</html>

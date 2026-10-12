@@ -194,3 +194,11 @@ Android 的本地收藏使用独立 SQLite/Room 初始数据库版本 1，表为
 V20 创建 user_sync_state 和 user_sync_entity，用户 FK 级联删除，账号维度 revision 唯一及实体复合主键；只存同步元数据。Android Room v5 新增账号实体、开关/游标和随机设备标识，4→5 migration 保留所有旧表，schema 已导出，主机 SQLite 12 项通过。见 CLOUD_SYNC.md。
 
 Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收藏、游标和全部旧表保留；4→5→6→7 实际 SQL/schema 与队列条件更新在主机 SQLite 30 项通过，schema 5/6/7 已导出。Server 复用 V20，不修改已应用迁移。
+
+## V49 本地文本工具目录
+
+`V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
+
+## V50 Zepp Life 网页步数工具
+
+`V50__seed_zepp_steps_web_tool.sql` 登记 `zepp_steps`，LIFE/WEB/ENABLED，排序 510、requires_login=0，config_json 仅含 `/tools/zepp_steps/` 路径。`ON DUPLICATE KEY` 不覆盖管理员配置。没有第三方账号、密码、Token 或提交记录表；计数沿用已有 tool_usage_* 和 API 流量统计。V1–V48 已执行文件保持不变；实际迁移结果见 ZEPP_STEPS.md。

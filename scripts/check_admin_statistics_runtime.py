@@ -36,7 +36,7 @@ def sql(statement):
         'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --batch --skip-column-names'], statement)
 
 
-def run(image, extra_checks=None):
+def run(image, extra_checks=None, candidate_environment=None):
     suffix = uuid.uuid4().hex[:12]
     database = 'codex_stats_' + suffix
     user = 'stats_' + suffix
@@ -64,6 +64,8 @@ def run(image, extra_checks=None):
             JWT_SECRET=uuid.uuid4().hex + uuid.uuid4().hex, ADMIN_BOOTSTRAP_ENABLED='true',
             ADMIN_BOOTSTRAP_USERNAME='stats_check', ADMIN_BOOTSTRAP_PASSWORD=admin_password,
             RATE_LIMIT_ENABLED='false', AI_ENABLED='false', STORAGE_ENABLED='false')
+        if candidate_environment:
+            environment.update(candidate_environment)
         # An internal-only Docker network does not publish a host port. Mirror both app networks.
         args = ['docker', 'create', '--name', container, '--network', edge, '-p', '127.0.0.1::8080']
         for key, value in environment.items():

@@ -271,6 +271,23 @@ Android 的 [本地收藏](LOCAL_FAVORITES.md) 已使用 Room 保存匿名书签
 | `40003` | 文件解析失败 |
 | `40005` | 当日 AI 尝试次数用尽（HTTP 429） |
 | `50001` | 第三方服务错误 |
+| `60001` | Zepp Life 账号密码被拒绝（HTTP 422，不注销工具箱账号） |
+| `60002` | Zepp Life 要求验证码/安全验证（HTTP 422） |
+| `60003` | Zepp Life 请求失败（HTTP 502） |
+| `60004` | Zepp Life 限流（HTTP 429，Retry-After: 60） |
+| `60005` | 提交结果无法确认（HTTP 504，可能已写入，禁止自动重试） |
+| `60006` | Zepp Life 协议配置缺失/关闭（HTTP 503） |
+| `60007` | 账号 60 秒冷却（HTTP 429，Retry-After: 60） |
+
+## Zepp Life 网页步数工具
+
+匿名精确端点：`GET /api/v1/web-tools/zepp_steps/capabilities`，返回统一 envelope，data 为 `{available,date,minSteps:1,maxSteps:50000,cooldownSeconds:60,timeoutSeconds:30}`；date 使用 `Asia/Shanghai`。缺协议配置、关闭工具或分类时 `available=false`。
+
+`POST /api/v1/web-tools/zepp_steps/submit`（application/json），请求 `{account,password,steps,consent}`：账号最长 254（邮箱/中国大陆手机号），密码非空最长 128 且原样保留；steps 必须是 JSON 整数 1–50000，consent 必须是布尔值 true。请求正文最多 4096 字节，超出为 413/40001；非法输入 400/10001。独立于工具箱注册登录。
+
+成功 HTTP 200/code 0，data 为 `{status:"ACCEPTED",steps,date,submittedAt,accountMasked,boundDevice,wechatVerified:false}`；submittedAt 为 UTC Instant。只确认 Zepp 返回成功，微信同步不能验证。第三方密码/验证码错误用 422 和 60001/60002，不能按 401 清除工具箱会话。提交超时/5xx/损坏响应为 504/60005，可能已写入，不自动重试。
+
+Controller → Service → Provider 分层；工具或分类关闭时 503/10008，缺配置为 503/60006；每账号 60 秒冷却、4 并发、30 秒总期限。复用现有 IP 限流和统计。不持久保存第三方凭据、令牌或提交明细，API 使用 no-store，正文和第三方原文不记日志。详情见 [ZEPP_STEPS.md](ZEPP_STEPS.md)。
 
 ## 客户端缓存和离线行为
 

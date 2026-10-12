@@ -88,6 +88,10 @@ logging:
       console: ecs
 
 toolbox:
+  zepp:
+    enabled: ${ZEPP_ENABLED:true}
+    login-key: ${ZEPP_LOGIN_KEY:}
+    login-iv: ${ZEPP_LOGIN_IV:}
   ai:
     enabled: ${AI_ENABLED:false}
     endpoint: ${AI_ENDPOINT:}

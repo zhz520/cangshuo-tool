@@ -36,6 +36,8 @@ public class SecurityConfiguration {
                     requests.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
                     requests.requestMatchers("/api/v1/health", "/actuator/health").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/tools", "/api/v1/tools/popular").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/web-tools/zepp_steps/capabilities").permitAll();
+                    requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/zepp_steps/submit").permitAll();
                     // Anonymous aggregate counting for tool opens.
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/tools/*/usage").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/app/version").permitAll();

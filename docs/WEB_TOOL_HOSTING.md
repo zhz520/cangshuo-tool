@@ -66,7 +66,11 @@ deploy/site/tools/qr_studio/
 - 容器（真机）：首次加载显示共享加载组件；断网与证书错误显示本地化错误并可重试；越权域名被拦截；返回键先回退网页历史；提示文案显示处理域名；系统返回与工具关闭行为一致。
 - 安全：不通过 URL 传递 Token 或敏感原文；页面不记录敏感数据；WebView 关闭文件/内容访问与 JS 桥。
 
-## 6. 运行记录（2026-10-04）
+## 6. Zepp Life 网页工具（2026-10-12）
+
+2026-10-12 新增 `deploy/site/tools/zepp_steps/{index.html,style.css,engine.js,app.js}` 与 V50 元数据。复用远程 WEB 注册和 WebView，不增加 Android 依赖。密码只通过 HTTPS 同源 POST 交给服务器，页面有离线/缺配置反馈、隐私说明和微信绑定引导。后台工具/分类状态同时控制目录和执行。需同步构建 server 和 admin/web 镜像；具体开源参考、边界和实测记录见 [ZEPP_STEPS.md](ZEPP_STEPS.md)。
+
+## 7. 运行记录（2026-10-04）
 
 - schema v15：放宽 mode CHECK 允许 WEB；schema v16：登记 `qr_studio`（WEB/ENABLED/211）。
 - `/api/v1/tools` 直连与 Nginx 代理均返回 total=12 且包含 `qr_studio`。

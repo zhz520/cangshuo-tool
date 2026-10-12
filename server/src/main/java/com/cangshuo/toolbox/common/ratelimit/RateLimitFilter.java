@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class RateLimitFilter extends OncePerRequestFilter {
     private static final Set<String> AUTH_PATHS = Set.of("/api/v1/auth/login", "/api/v1/auth/register",
-            "/api/v1/auth/refresh");
+            "/api/v1/auth/refresh", "/api/v1/web-tools/zepp_steps/submit");
     private static final String HEALTH_PATH = "/api/v1/health";
     private final RateLimitProperties properties;
     private final RateLimitService limiter;
