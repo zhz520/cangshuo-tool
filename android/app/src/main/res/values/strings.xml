@@ -1612,6 +1612,39 @@
     <string-array name="url_extract_keywords" translatable="false">
         <item>url</item><item>链接</item><item>网址提取</item><item>提取链接</item><item>url extract</item><item>link extractor</item>
     </string-array>
+    <string name="kinship_name">亲戚称呼换算</string>
+    <string name="kinship_description">输入「爸爸的妈妈」这类关系链，算出标准称谓；支持对方称呼我、关系链与关系合称，数据含 6 段以内约 4800 条关系链。</string>
+    <string name="kinship_input_title">关系链</string>
+    <string name="kinship_input_label">关系链（用「的」连接）</string>
+    <string name="kinship_input_hint">例如 爸爸的妈妈、老婆的哥哥</string>
+    <string name="kinship_quick_title">快速输入</string>
+    <string name="kinship_btn_remove_last">删除末段</string>
+    <string name="kinship_btn_clear">清空</string>
+    <string name="kinship_options_title">计算设置</string>
+    <string name="kinship_sex_title">我的性别</string>
+    <string name="kinship_sex_any">不限</string>
+    <string name="kinship_sex_male">男</string>
+    <string name="kinship_sex_female">女</string>
+    <string name="kinship_direction_title">称呼方向</string>
+    <string name="kinship_direction_call">我称呼对方</string>
+    <string name="kinship_direction_reverse">对方称呼我</string>
+    <string name="kinship_type_title">计算类型</string>
+    <string name="kinship_type_title_name">称谓</string>
+    <string name="kinship_type_chain">关系链</string>
+    <string name="kinship_type_pair">关系合称</string>
+    <string name="kinship_optimal">自动取最短关系</string>
+    <string name="kinship_target_label">相对对象（可选）</string>
+    <string name="kinship_target_hint">例如 老公、姐姐</string>
+    <string name="kinship_note">数据上限：6 段关系链（约 4800 条唯一链、5.5 万条称谓别名）；超出范围会提示未找到。</string>
+    <string name="kinship_result_title">称呼结果</string>
+    <string name="kinship_result_empty">未找到对应称谓，试试更常见的说法或开启「自动取最短关系」。</string>
+    <string name="kinship_btn_copy">复制结果</string>
+    <string name="kinship_empty">输入关系链后自动计算…</string>
+    <string name="kinship_error_too_long">输入过长（最多 60 个字符），已保留原内容。</string>
+    <string name="kinship_error_data">数据加载失败，请重试。</string>
+    <string-array name="kinship_keywords" translatable="false">
+        <item>kinship</item><item>亲戚</item><item>称呼</item><item>亲戚称呼</item><item>关系计算</item><item>辈分</item><item>kinship calculator</item><item>family title</item>
+    </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>

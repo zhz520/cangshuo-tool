@@ -20,14 +20,14 @@ def verify(check, request, sql, admin):
              ('mortgage', 'mortgage', 40, 'CALC'), ('fuel', 'fuel', 45, 'CALC'),
              ('date_calc', 'date_calc', 50, 'CALC'), ('color_converter', 'color', 55, 'CALC'),
              ('password_gen', 'password', 60, 'TEXT'), ('text_counter', 'text_count', 65, 'TEXT'),
-             ('url_extract', 'url_extract', 70, 'TEXT')]
+             ('url_extract', 'url_extract', 70, 'TEXT'), ('kinship', 'kinship', 75, 'CALC')]
     seeds = []
     for name in ('V44__seed_calc_tools.sql', 'V45__seed_date_tool.sql', 'V46__seed_color_tool.sql',
-                 'V47__seed_text_tools.sql'):
+                 'V47__seed_text_tools.sql', 'V48__seed_kinship_tool.sql'):
         with open(os.path.join(root, 'server/src/main/resources/db/migration', name), 'rb') as stream:
             seeds.append(stream.read().decode('utf-8'))
-    check(sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('44','45','46','47') AND success=1") == '4',
-          'V44-V47 applied')
+    check(sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('44','45','46','47','48') AND success=1") == '5',
+          'V44-V48 applied')
     status, body, unused = request('tools?pageSize=100')
     check(status == 200, 'public tool catalog available')
     catalog = dict((row['code'], row) for row in body['data']['records'])
@@ -49,7 +49,7 @@ def verify(check, request, sql, admin):
     for code, unused_prefix, unused_order, unused_category in specs:
         check(code in ranking and ranking[code]['opens'] == 1 and ranking[code]['allTimeOpens'] == 1,
               'daily and cumulative ranking ' + code)
-    check(stats['summary']['allTimeOpens'] == 21 and stats['summary']['windowOpens'] == 21,
+    check(stats['summary']['allTimeOpens'] == 22 and stats['summary']['windowOpens'] == 22,
           'new tools participate in aggregate statistics')
 
     check(request('admin/tools/bmi/status', {'status': 'MAINTENANCE'}, token=admin, method='PATCH')[0] == 200,
@@ -64,7 +64,7 @@ def verify(check, request, sql, admin):
     check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='fuel' AND deleted_at IS NOT NULL") == '1',
           'replayed seed preserves deletion')
     check(request('admin/tools/fuel', token=admin)[0] == 404, 'deleted tool stays deleted')
-    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code IN ('bmi','compound_interest','mortgage','fuel','date_calc','color_converter','password_gen','text_counter','url_extract')") == '9',
+    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code IN ('bmi','compound_interest','mortgage','fuel','date_calc','color_converter','password_gen','text_counter','url_extract','kinship')") == '10',
           'replayed seed introduces no duplicates')
     check(request('admin/tools/bmi/status', {'status': 'ENABLED'}, token=admin, method='PATCH')[0] == 200,
           'administrator can re-enable new tool')

@@ -1543,6 +1543,39 @@
     <string-array name="url_extract_keywords" translatable="false">
         <item>url</item><item>链接</item><item>网址提取</item><item>提取链接</item><item>url extract</item><item>link extractor</item>
     </string-array>
+    <string name="kinship_name">Kinship Calculator</string>
+    <string name="kinship_description">Enter a chain such as 爸爸的妈妈 to get the standard Chinese kinship title; supports reverse lookup, relationship chains and pair names with about 4,800 chains up to six relations.</string>
+    <string name="kinship_input_title">Relationship chain</string>
+    <string name="kinship_input_label">Chain (joined with 「的」)</string>
+    <string name="kinship_input_hint">e.g. 爸爸的妈妈、老婆的哥哥</string>
+    <string name="kinship_quick_title">Quick input</string>
+    <string name="kinship_btn_remove_last">Remove last</string>
+    <string name="kinship_btn_clear">Clear</string>
+    <string name="kinship_options_title">Options</string>
+    <string name="kinship_sex_title">My gender</string>
+    <string name="kinship_sex_any">Any</string>
+    <string name="kinship_sex_male">Male</string>
+    <string name="kinship_sex_female">Female</string>
+    <string name="kinship_direction_title">Direction</string>
+    <string name="kinship_direction_call">I call them</string>
+    <string name="kinship_direction_reverse">They call me</string>
+    <string name="kinship_type_title">Result type</string>
+    <string name="kinship_type_title_name">Title</string>
+    <string name="kinship_type_chain">Chain</string>
+    <string name="kinship_type_pair">Pair name</string>
+    <string name="kinship_optimal">Shortest relation</string>
+    <string name="kinship_target_label">Relative object (optional)</string>
+    <string name="kinship_target_hint">e.g. 老公、姐姐</string>
+    <string name="kinship_note">Scope: chains of up to six relations (about 4,800 chains and 55k aliases); longer chains report “not found”.</string>
+    <string name="kinship_result_title">Result</string>
+    <string name="kinship_result_empty">No matching title found; try a more common wording or enable “Shortest relation”.</string>
+    <string name="kinship_btn_copy">Copy result</string>
+    <string name="kinship_empty">Enter a chain to calculate…</string>
+    <string name="kinship_error_too_long">Input is too long (60 characters max); the previous content was kept.</string>
+    <string name="kinship_error_data">Failed to load the data tables; please retry.</string>
+    <string-array name="kinship_keywords" translatable="false">
+        <item>kinship</item><item>亲戚</item><item>称呼</item><item>亲戚称呼</item><item>关系计算</item><item>辈分</item><item>kinship calculator</item><item>family title</item>
+    </string-array>
     <string name="numeric_error_input_too_long">The input is too long. Enter a shorter number; the previous value was kept.</string>
     <string name="compound_error_result_limit">The projected amount exceeds the calculation limit (10¹⁸ yuan). Reduce the principal, rate or term.</string>
 </resources>

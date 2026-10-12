@@ -205,6 +205,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.urlextract.data.LocalUrlExtractRepository(),
         ),
     )
+    private val kinshipFactory = com.cangshuo.toolbox.feature.kinship.ui.KinshipViewModel.factory(
+        com.cangshuo.toolbox.feature.kinship.domain.AskKinshipUseCase(
+            com.cangshuo.toolbox.feature.kinship.data.LocalKinshipRepository(context.assets),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -280,6 +285,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.password.PasswordToolDefinition(resources, passwordFactory),
             com.cangshuo.toolbox.feature.textcount.TextCountToolDefinition(resources, textCountFactory),
             com.cangshuo.toolbox.feature.urlextract.UrlExtractToolDefinition(resources, urlExtractFactory),
+            com.cangshuo.toolbox.feature.kinship.KinshipToolDefinition(resources, kinshipFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),
