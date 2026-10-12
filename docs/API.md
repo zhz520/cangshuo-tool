@@ -166,6 +166,8 @@ Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契
 
 `light_meter`（V51，SENSOR/LOCAL）复用目录、后台开关与使用统计接口；照度、趋势与校准在 Android 执行，不新增测量接口或上传传感器数据。实现与实际验收见 [光感仪](LIGHT_METER.md)。
 
+`coin_flip`（V52，OTHER/LOCAL）复用工具目录、后台管理与使用统计；随机投掷、文字与历史仅在 Android 本机处理。无需新投掷接口，不上传投掷结果。实现与验收见 [抛硬币](COIN_FLIP.md)。
+
 | 方法与路径 | 规划认证 | 用途 | 当前状态 |
 | --- | --- | --- | --- |
 | `GET /api/v1/tools` | 无 | 分页获取启用的工具，可按分类筛选 | 已实现，验证范围见目录接口说明 |

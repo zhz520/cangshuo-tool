@@ -1782,4 +1782,61 @@
     <string name="light_bright">明亮</string>
     <string name="light_very_bright">强光</string>
     <string name="light_note">手机传感器与专业照度计可能存在差异，遮挡、方向及设备量程都会影响结果；环境分级仅供参考。lx 为勒克斯，fc 为英尺烛光（1 fc ≈ 10.764 lx）。</string>
+    <string name="coin_name">抛硬币</string>
+    <string name="coin_description">单次或批量随机投掷，自定义正反面，查看比例、连续次数和历史，分享摘要或 CSV。</string>
+    <string-array name="coin_keywords" translatable="false">
+        <item>抛硬币</item><item>投硬币</item><item>随机</item><item>正反面</item><item>coin flip</item><item>coin toss</item><item>heads tails</item>
+    </string-array>
+    <string name="coin_heads">正面</string>
+    <string name="coin_tails">反面</string>
+    <string name="coin_ready_face" translatable="false">?</string>
+    <string name="coin_no_value">暂无</string>
+    <string name="coin_ready">点击硬币或按钮开始投掷</string>
+    <string name="coin_flipping">正在投掷…</string>
+    <string name="coin_result">本次结果：%1$s</string>
+    <string name="coin_flip_one">投掷一次</string>
+    <string name="coin_batch_title">批量投掷</string>
+    <string name="coin_batch_count">次数（1–100）</string>
+    <plurals name="coin_preset">
+        <item quantity="other">%1$d 次</item>
+    </plurals>
+    <string name="coin_flip_batch">投掷这一批</string>
+    <string name="coin_batch_summary">本批 %1$d 次：%2$s %3$d 次 · %4$s %5$d 次</string>
+    <string name="coin_majority">本批较多的是：%1$s</string>
+    <string name="coin_tie">本批两面次数相同，没有多数结果。</string>
+    <string name="coin_labels_title">自定义正反面</string>
+    <string name="coin_heads_label">正面文字</string>
+    <string name="coin_tails_label">反面文字</string>
+    <string name="coin_labels_note">每面最多 20 个字符；留空使用默认文字。两面需不同，修改后不会改写已有历史。</string>
+    <string name="coin_animation">翻面动画</string>
+    <string name="coin_stats_title">本次会话统计</string>
+    <string name="coin_total">累计投掷</string>
+    <plurals name="coin_count_ratio">
+        <item quantity="other">%1$d 次 · %2$s</item>
+    </plurals>
+    <string name="coin_streak">当前连续</string>
+    <plurals name="coin_streak_value">
+        <item quantity="other">%1$s · %2$d 次</item>
+    </plurals>
+    <string name="coin_longest">最长连续同面</string>
+    <string name="coin_clear">清空投掷记录</string>
+    <string name="coin_clear_message">本次统计和历史将被清空，正反面文字、批量次数及动画设置会保留。</string>
+    <string name="coin_clear_confirm">清空</string>
+    <string name="coin_cancel">取消</string>
+    <string name="coin_history_title">最近投掷</string>
+    <string name="coin_history_empty">还没有结果。完成投掷后在这里查看。</string>
+    <string name="coin_history_note">保留最近 %1$d 条，累计 %2$d 次；CSV 只导出保留的记录。</string>
+    <string name="coin_record_number">第 %1$d 次</string>
+    <string name="coin_record_value">%1$s · %2$s</string>
+    <string name="coin_history_less">收起为最近 20 条</string>
+    <string name="coin_history_all">展开保留的全部记录</string>
+    <string name="coin_report">复制与分享</string>
+    <string name="coin_summary">统计摘要</string>
+    <string name="coin_csv">历史 CSV</string>
+    <string name="coin_error_labels">两面文字需不同，最多 20 个字符；不支持控制字符或隐藏方向字符。</string>
+    <string name="coin_error_count">批量次数请输入 1–100 的整数。</string>
+    <string name="coin_error_limit">本次会话上限为 100 万次，请清空记录后再开始。</string>
+    <string name="coin_error_failed">随机投掷未完成，请重试；本次没有计入统计。</string>
+    <string name="coin_error_interrupted">投掷中断，本次没有计入统计，可以重新投掷。</string>
+    <string name="coin_note" formatted="false">每次由设备 SecureRandom 独立生成，正反面理论概率各 50%；短期次数不保证相等，也不强制交替。结果与统计只留在当前工具会话，不上传；进程退出后清空。每批最多 100 次、会话最多 100 万次，最近 100 条历史保留投掷时的文字。</string>
 </resources>

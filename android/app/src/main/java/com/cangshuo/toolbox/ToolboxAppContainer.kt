@@ -278,6 +278,9 @@ class ToolboxAppContainer(context: Context) {
         com.cangshuo.toolbox.feature.lightmeter.domain.ObserveLightUseCase(
             com.cangshuo.toolbox.feature.lightmeter.data.SensorLightMeterRepository(
                 com.cangshuo.toolbox.feature.sensors.data.AndroidSensorsRepository(applicationContext))))
+    private val coinFlipFactory = com.cangshuo.toolbox.feature.coinflip.ui.CoinFlipViewModel.factory(
+        com.cangshuo.toolbox.feature.coinflip.domain.FlipCoinsUseCase(
+            com.cangshuo.toolbox.feature.coinflip.data.LocalCoinRepository()))
     private val pingFactory=com.cangshuo.toolbox.feature.ping.ui.PingViewModel.factory(
         com.cangshuo.toolbox.feature.ping.domain.ExecutePingUseCase(
             com.cangshuo.toolbox.feature.ping.data.NativePingRepository()))
@@ -322,6 +325,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.compass.CompassToolDefinition(resources,compassFactory),
             com.cangshuo.toolbox.feature.level.LevelToolDefinition(resources,levelFactory),
             com.cangshuo.toolbox.feature.lightmeter.LightMeterToolDefinition(resources,lightMeterFactory),
+            com.cangshuo.toolbox.feature.coinflip.CoinFlipToolDefinition(resources,coinFlipFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

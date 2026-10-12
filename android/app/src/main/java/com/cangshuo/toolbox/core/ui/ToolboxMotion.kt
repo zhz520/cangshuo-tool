@@ -20,6 +20,7 @@ object ToolboxMotion {
     const val PAGE_ENTER_DURATION_MS = 260
     const val PAGE_EXIT_DURATION_MS = 200
     const val TAB_DURATION_MS = 200
+    const val COIN_FLIP_DURATION_MS = 480
 
     /** Entering page slides in by a tenth of the pane width. */
     private const val ENTER_SLIDE_DIVISOR = 10

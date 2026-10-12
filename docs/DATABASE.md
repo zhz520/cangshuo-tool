@@ -206,3 +206,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V51 光感仪目录
 
 `V51__seed_light_meter_tool.sql` 登记 `light_meter`，SENSOR/LOCAL/ENABLED，排序 340、requires_login=0。复用既有后台管理及使用统计；重复执行保留管理员编辑、维护/关闭状态与软删除。不新增测量记录表，不上传传感器数据。验证范围见 [光感仪](LIGHT_METER.md)。
+
+## V52 抛硬币目录
+
+`V52__seed_coin_flip_tool.sql` 登记 `coin_flip`，OTHER/LOCAL/ENABLED，排序 600、requires_login=0。元数据与 Android 中文资源一致，复用后台管理、使用计数和排行榜；重放不会覆盖管理员编辑、维护状态或软删除。没有投掷记录表，结果和文字只保留在客户端会话。验证见 [抛硬币](COIN_FLIP.md)。

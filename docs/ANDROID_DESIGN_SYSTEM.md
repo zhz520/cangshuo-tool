@@ -52,6 +52,7 @@
 - `ToolboxLoadingState` / `ToolboxLoadingIndicator`、`SystemReportCard` / `SystemReportActions`。
 - `ToolResultRow(label, value)`：计算结果的标签与数值；窄屏、大字号或长数值上下排布，完整显示结果；明细列表可通过 `ToolListItem.subtitleMaxLines` 展开全文。
 - `ToolboxTrendChart(points, description)`：最多 600 点的时间趋势，使用主题强调色与低干扰网格；横轴按真实时间比例，支持平值、单点与可访问描述。
+- `ToolboxFlipCoin`：主题圆形正反面、480ms 有限翻面与不镜像的文字；支持关闭动画和系统动画缩放，落定回调携带投掷编号。随机与统计由 ViewModel/领域层管理。
 - `ToolboxAvatar`：圆形 QQ 图片、加载环或默认用户图标；不直接请求网络。
 - `ToolboxScaffold`：统一顶栏、安全区、键盘避让与内容最大宽度；`ToolboxMotion` 提供页面及底栏过渡。
 
