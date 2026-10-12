@@ -82,6 +82,6 @@
 5. **未实现的功能必须显式提示**（如 `feature_unavailable_*` 文案），不得假装成功。
 6. 深浅色都要适配；正确处理状态栏、导航栏与 Insets。
 
-2026-10-12 开关适配依据：实际查阅 [AndroidX SwitchTokens](https://github.com/androidx/androidx/blob/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/SwitchTokens.kt)，blob `1fd474ec436e63b0ec54c455f32445d2d4ef5123`。默认未选中圆点使用 `outline`、轨道使用 `surfaceContainerHighest`，本主题两者均为 `#E5E5E5`，模拟器中圆点不可辨。共享包装只调整主题角色，保留 Material3 触摸、动画及状态逻辑；房贷明细开关整行可切换并合并文字标签。分支链接可变化，未复制上游源码。
+2026-10-12 开关适配依据：实际查阅 [AndroidX SwitchTokens](https://github.com/androidx/androidx/blob/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/SwitchTokens.kt)，blob `1fd474ec436e63b0ec54c455f32445d2d4ef5123`。默认未选中圆点使用 `outline`、轨道使用 `surfaceContainerHighest`，本主题两者均为 `#E5E5E5`，模拟器中圆点不可辨。共享包装只调整主题角色，保留 Material3 触摸、动画及状态逻辑；房贷明细开关整行可切换并合并文字标签。分支链接可变化，未复制上游源码。修复后在模拟器（Android 16，1.5 倍字体、840dp 宽、深色与浅色）复核：未选中圆点清晰可辨，明细开关整行点击可开可关。
 
 参考实现：`feature/home/ui/HomeScreen.kt`（骨架 + 首页 + 工具库 + 我的）、`HomeRoute.kt`（全屏子页与路由）、`feature/recent/ui/RecentScreen.kt`、`feature/settings/ui/SettingsScreen.kt`、`feature/auth/ui/AuthScreen.kt`。实现和验收记录见 [账号与设置 UI](ANDROID_ACCOUNT_SETTINGS_UI.md)。
