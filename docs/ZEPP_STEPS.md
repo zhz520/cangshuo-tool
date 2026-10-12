@@ -36,6 +36,10 @@
 
 2026-10-12：Server Maven 全量 **170/170** 测试通过，打包成功；其中 Zepp **17** 项覆盖四阶段请求、密码特殊字符、AES 往返、北京时间跨日、设备优先级、严格 JSON、响应预算、限流无重试、上传超时分类、输入校验、请求预算、脱敏、后台开关、并发上限及异常释放。Windows 采用已有 Byte Buddy agent 和 `forkCount=0` 避免沙箱进程附加限制，生产 Docker 不使用该测试选项。
 
-`node --test scripts/check_web_zepp.cjs` **5/5** 通过，校验账号/密码/整数/授权边界、能力契约、日历日期、精确步数回执和固定错误消息；`node --check`、`git diff --check` 通过。部署、浏览器和隔离数据库检查结果在执行后补充。
+`node --test scripts/check_web_zepp.cjs` **5/5** 通过，校验账号/密码/整数/授权边界、能力契约、日历日期、精确步数回执和固定错误消息；`node --check`、`git diff --check` 通过。
+
+2026-10-12 隔离候选验收 **268/268**：V44–V50 目录与 Android 资源一致、匿名/管理权限边界、维护与分类关闭、排行榜与聚合统计、V50 幂等重放，以及 capabilities、输入校验、维护阻断、用量计数等 Zepp 用例。过程中发现并修复两个响应头缺陷：submit 的校验失败响应缺少 `Cache-Control: no-store`（现由请求预算过滤器统一设置），以及能力/提交响应与控制器重复设置导致 `no-store, no-store`（控制器提交路径去重，capabilities 保留 no-store）。
+
+发布后只读 HTTPS 验收 **79/79**（59 项目录/统计/管理 + 20 项 Zepp）：页面与全部静态资源 200、首页入口与隐私披露存在、同源目录与 capabilities 正常、非法输入在触达第三方前被 400 拒绝且响应不含凭据。生产 API `sha256:166cd9442e56ac87ef67c5248f65a314be80abc0cd58ca591d68315c1daa58c8`、Web `sha256:8fa76ed60c3322726bb0a7a9c56e5f664fbd100812aadcfa6627d344682a158a`，回滚标签 `before-zepp-v50`，四个容器健康。浏览器内的人工步数提交流程与真机 WebView 验收未执行。
 
 **未提供真实 Zepp Life 测试账号，因此加密登录、最小 band_data 载荷被真实账号接受及微信运动实际同步仍未验证。** 自动测试使用可控的第三方响应，不能替代这项验收。

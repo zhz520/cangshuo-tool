@@ -13,10 +13,12 @@ from check_calc_catalog_runtime import verify as verify_local_catalog
 def verify(check, request, sql, admin):
     verify_local_catalog(check, request, sql, admin)
     check(sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='50' AND success=1") == '1', 'V50 applied')
-    status, body, unused = request('tools/zepp_steps')
-    row = body['data']
+    status, body, unused = request('tools?pageSize=100')
+    records = dict((item['code'], item) for item in body['data']['records'])
+    check(status == 200 and 'zepp_steps' in records, 'public catalog includes zepp_steps')
+    row = records['zepp_steps']
     print('Zepp public metadata:', dict((key, row.get(key)) for key in ('code','mode','categoryCode','sortOrder','requiresLogin')))
-    check(status == 200 and row['mode'] == 'WEB' and row['categoryCode'] == 'LIFE'
+    check(row['mode'] == 'WEB' and row['categoryCode'] == 'LIFE'
           and row['sortOrder'] == 510 and not row['requiresLogin'], 'Zepp WEB metadata')
     path = 'web-tools/zepp_steps/'
     status, body, cache = request(path + 'capabilities')

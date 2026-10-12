@@ -68,7 +68,7 @@ deploy/site/tools/qr_studio/
 
 ## 6. Zepp Life 网页工具（2026-10-12）
 
-2026-10-12 新增 `deploy/site/tools/zepp_steps/{index.html,style.css,engine.js,app.js}` 与 V50 元数据。复用远程 WEB 注册和 WebView，不增加 Android 依赖。密码只通过 HTTPS 同源 POST 交给服务器，页面有离线/缺配置反馈、隐私说明和微信绑定引导。后台工具/分类状态同时控制目录和执行。需同步构建 server 和 admin/web 镜像；具体开源参考、边界和实测记录见 [ZEPP_STEPS.md](ZEPP_STEPS.md)。
+2026-10-12 新增 `deploy/site/tools/zepp_steps/{index.html,style.css,engine.js,app.js}` 与 V50 元数据。复用远程 WEB 注册和 WebView，不增加 Android 依赖。密码只通过 HTTPS 同源 POST 交给服务器，页面有离线/缺配置反馈、隐私说明和微信绑定引导。后台工具/分类状态同时控制目录和执行。网页域名的 server 块新增 `/api/v1/` 同源代理（BaoTa 与纯 Docker 模板），因为宝塔把整个 web 域名转发到本站容器，页面才能同源调用步骤接口；需同步构建 server 和 admin/web 镜像；具体开源参考、边界和实测记录见 [ZEPP_STEPS.md](ZEPP_STEPS.md)。
 
 ## 7. 运行记录（2026-10-04）
 

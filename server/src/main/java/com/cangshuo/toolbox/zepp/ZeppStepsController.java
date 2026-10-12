@@ -25,10 +25,10 @@ public class ZeppStepsController {
     public ResponseEntity<? extends ApiResponse<?>> submit(@Valid @RequestBody ZeppStepsRequest input,
                                                            HttpServletRequest request) {
         try {
-            return ResponseEntity.ok().cacheControl(CacheControl.noStore())
+            return ResponseEntity.ok()
                     .body(ApiResponse.success(service.submit(input), TraceIdFilter.traceId(request)));
         } catch (ApiException error) {
-            var builder = ResponseEntity.status(error.error().httpStatus()).cacheControl(CacheControl.noStore());
+            var builder = ResponseEntity.status(error.error().httpStatus());
             if (error.error() == ApiError.ZEPP_RATE_LIMITED || error.error() == ApiError.ZEPP_ACCOUNT_COOLDOWN)
                 builder.header("Retry-After", "60");
             return builder.body(ApiResponse.failure(error.error(), TraceIdFilter.traceId(request)));

@@ -21,6 +21,9 @@ server {
     server_name ${WEB_DOMAIN};
     absolute_redirect off;
     include /etc/nginx/toolbox/site-locations.conf;
+    # The step page calls /api/v1/ same-origin; BaoTa forwards the whole web
+    # domain to this container, so the web block must proxy the API itself.
+    include /etc/nginx/toolbox/api-locations-baota.conf;
 }
 
 server {

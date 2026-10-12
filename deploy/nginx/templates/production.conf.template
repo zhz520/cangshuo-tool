@@ -30,6 +30,8 @@ server {
     ssl_certificate_key /etc/nginx/certs/${WEB_DOMAIN}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     include /etc/nginx/toolbox/site-locations.conf;
+    # Same-origin /api/v1 access for web-hosted tools that need server calls.
+    include /etc/nginx/toolbox/api-locations.conf;
 }
 
 server {

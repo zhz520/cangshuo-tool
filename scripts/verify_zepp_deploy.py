@@ -36,10 +36,12 @@ def main():
         check(status == 200 and len(body) > 100, 'page/resource reachable ' + (name or 'index'))
     check('zepp_steps' in fetch('/')[2], 'public homepage entry')
     check('Zepp Life' in fetch('/privacy/')[2], 'privacy disclosure published')
-    status, header, body = fetch('/api/v1/tools/zepp_steps')
-    row = json.loads(body)['data']
-    check(status == 200 and row['mode'] == 'WEB' and row['categoryCode'] == 'LIFE' and row['sortOrder'] == 510,
-          'same-origin WEB catalog')
+    status, unused_header, body = fetch('/api/v1/tools?pageSize=100')
+    records = dict((item['code'], item) for item in json.loads(body)['data']['records'])
+    check(status == 200 and 'zepp_steps' in records, 'same-origin catalog includes zepp_steps')
+    row = records['zepp_steps']
+    check(row['mode'] == 'WEB' and row['categoryCode'] == 'LIFE' and row['sortOrder'] == 510,
+          'same-origin WEB catalog metadata')
     status, header, body = fetch('/api/v1/web-tools/zepp_steps/capabilities')
     value = json.loads(body)
     check(status == 200 and value['code'] == 0 and value['data']['available'], 'configured anonymous capability')
