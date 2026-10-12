@@ -140,6 +140,7 @@ fun ToolListItem(
     onClick: (() -> Unit)? = null,
     showDivider: Boolean = true,
     dividerIndent: Dp = 34.dp,
+    subtitleMaxLines: Int = 2,
     trailing: @Composable () -> Unit = {},
 ) {
     Column(modifier.fillMaxWidth()) {
@@ -168,7 +169,7 @@ fun ToolListItem(
                         text = subtitle,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
+                        maxLines = subtitleMaxLines,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }

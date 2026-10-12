@@ -36,7 +36,7 @@ def sql(statement):
         'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --batch --skip-column-names'], statement)
 
 
-def run(image):
+def run(image, extra_checks=None):
     suffix = uuid.uuid4().hex[:12]
     database = 'codex_stats_' + suffix
     user = 'stats_' + suffix
@@ -180,6 +180,8 @@ def run(image):
         check(status == 200, 'self deletion succeeds')
         check(test_sql('SELECT COUNT(*) FROM user_activity_daily') == '0', 'account deletion cascades activity rows')
         check(request('admin/statistics', token=admin)[1]['data']['summary']['users'] == 0, 'deleted account no longer counted')
+        if extra_checks is not None:
+            extra_checks(check, request, test_sql, admin)
         print('Isolated statistics acceptance:', checks[0], 'checks passed')
     finally:
         subprocess.call(['docker', 'rm', '-f', container], stdout=subprocess.PIPE, stderr=subprocess.PIPE)

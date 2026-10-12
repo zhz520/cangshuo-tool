@@ -49,6 +49,7 @@
 - `ToolboxTextField`：浅灰填充输入框（无边框）。
 - `ToolboxDivider(startIndent)`：1dp 细分割线。
 - `ToolboxLoadingState` / `ToolboxLoadingIndicator`、`SystemReportCard` / `SystemReportActions`。
+- `ToolResultRow(label, value)`：计算结果的标签与数值；窄屏、大字号或长数值上下排布，完整显示结果；明细列表可通过 `ToolListItem.subtitleMaxLines` 展开全文。
 - `ToolboxAvatar`：圆形 QQ 图片、加载环或默认用户图标；不直接请求网络。
 - `ToolboxScaffold`：统一顶栏、安全区、键盘避让与内容最大宽度；`ToolboxMotion` 提供页面及底栏过渡。
 

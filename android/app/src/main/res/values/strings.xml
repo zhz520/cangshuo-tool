@@ -1298,4 +1298,151 @@
     <string name="settings_cache_failed">缓存清理未完成，请稍后重试。</string>
     <string name="settings_cache_working">正在清理…</string>
     <string name="feedback_login_hint">登录后可提交意见并查看处理进度。</string>
+    <string name="bmi_name">BMI 计算</string>
+    <string name="bmi_description">按中国成人标准与 WHO 标准计算 BMI、体重分类和健康体重范围。</string>
+    <string name="bmi_units_title">测量单位</string>
+    <string name="bmi_units_metric">公制（cm / kg）</string>
+    <string name="bmi_units_imperial">英制（in / lb）</string>
+    <string name="bmi_height_cm">身高（厘米）</string>
+    <string name="bmi_height_cm_hint">例如 170</string>
+    <string name="bmi_height_in">身高（英寸）</string>
+    <string name="bmi_height_in_hint">例如 67</string>
+    <string name="bmi_weight_kg">体重（公斤）</string>
+    <string name="bmi_weight_kg_hint">例如 65</string>
+    <string name="bmi_weight_lb">体重（磅）</string>
+    <string name="bmi_weight_lb_hint">例如 143</string>
+    <string name="bmi_standard_title">分类标准</string>
+    <string name="bmi_standard_cn">中国标准（WS/T 428）</string>
+    <string name="bmi_standard_who">WHO 标准</string>
+    <string name="bmi_standard_note">适用于 18 岁及以上成人；孕妇、运动员和肌肉量较高人群请以专业评估为准。</string>
+    <string name="bmi_result_title">计算结果</string>
+    <string name="bmi_result_healthy_kg">健康体重范围：%1$s – %2$s kg</string>
+    <string name="bmi_result_healthy_lb">健康体重范围：%1$s – %2$s lb</string>
+    <string name="bmi_result_formula">计算方式：体重(kg) ÷ 身高(m)²</string>
+    <string name="bmi_btn_copy">复制结果</string>
+    <string name="bmi_btn_clear">清空</string>
+    <string name="bmi_copy_summary">BMI %1$s（%2$s）；%3$s</string>
+    <string name="bmi_empty_placeholder">输入身高和体重后自动计算 BMI…</string>
+    <string name="bmi_error_invalid">请输入有效的数字。</string>
+    <string name="bmi_error_range">身高需在 50–260 cm，体重需在 10–500 kg；英制输入会先换算再校验。</string>
+    <string name="bmi_band_severe_thinness">重度消瘦</string>
+    <string name="bmi_band_moderate_thinness">中度消瘦</string>
+    <string name="bmi_band_mild_thinness">轻度消瘦</string>
+    <string name="bmi_band_underweight">偏瘦</string>
+    <string name="bmi_band_normal">正常</string>
+    <string name="bmi_band_overweight">超重</string>
+    <string name="bmi_band_obese">肥胖</string>
+    <string name="bmi_band_obese_i">肥胖 I 级</string>
+    <string name="bmi_band_obese_ii">肥胖 II 级</string>
+    <string name="bmi_band_obese_iii">肥胖 III 级</string>
+    <string-array name="bmi_keywords" translatable="false">
+        <item>bmi</item><item>体重指数</item><item>体重</item><item>身高</item><item>健康</item><item>超重</item><item>肥胖</item><item>body mass index</item><item>weight</item>
+    </string-array>
+    <string name="compound_name">复利计算器</string>
+    <string name="compound_description">估算本金与定期追加在复利下的终值、累计投入和收益，支持按月或按年复利。</string>
+    <string name="compound_params_title">投入金额</string>
+    <string name="compound_principal_label">初始本金（元）</string>
+    <string name="compound_principal_hint">例如 10000</string>
+    <string name="compound_contribution_label">每期追加（元）</string>
+    <string name="compound_contribution_hint">例如 1000，可留空</string>
+    <string name="compound_options_title">收益设置</string>
+    <string name="compound_rate_label">年化收益率（%）</string>
+    <string name="compound_rate_hint">例如 8</string>
+    <string name="compound_years_label">投资年限（年）</string>
+    <string name="compound_years_hint">例如 10</string>
+    <string name="compound_period_monthly">按月复利</string>
+    <string name="compound_period_annual">按年复利</string>
+    <string name="compound_period_note">每个周期先按余额计息，再在期末追加；追加频率与复利周期一致。</string>
+    <string name="compound_result_title">计算结果</string>
+    <string name="compound_result_fv">期末总额（元）</string>
+    <string name="compound_result_contributed">累计投入（元）</string>
+    <string name="compound_result_interest">累计收益（元）</string>
+    <string name="compound_result_multiplier">收益倍数</string>
+    <string name="compound_multiplier_format">%1$s 倍</string>
+    <string name="compound_rows_title">年度明细</string>
+    <string name="compound_row_year">第 %1$d 年</string>
+    <string name="compound_row_detail">余额 %1$s 元 · 投入 %2$s 元 · 收益 %3$s 元</string>
+    <string name="compound_empty_placeholder">输入金额、收益率和年限后自动计算…</string>
+    <string name="compound_btn_copy">复制结果</string>
+    <string name="compound_btn_clear">清空</string>
+    <string name="compound_copy_summary">复利估算：%1$s 年后约 %2$s 元；累计投入 %3$s 元，收益 %4$s 元。</string>
+    <string name="compound_error_invalid">请输入有效的数字。</string>
+    <string name="compound_error_range" formatted="false">收益率需在 -99% 到 1000%，年限需在 1–100 年。</string>
+    <string name="compound_error_limit">金额超出上限：本金 1 万亿元、单期追加 10 亿元。</string>
+    <string-array name="compound_keywords" translatable="false">
+        <item>compound</item><item>interest</item><item>复利</item><item>复利计算</item><item>理财</item><item>收益</item><item>年化</item><item>投资</item><item>investment</item>
+    </string-array>
+    <string name="mortgage_name">房贷计算</string>
+    <string name="mortgage_description">按等额本息或等额本金估算月供、总利息和逐期还款明细。</string>
+    <string name="mortgage_loan_title">贷款信息</string>
+    <string name="mortgage_amount_label">贷款金额（万元）</string>
+    <string name="mortgage_amount_hint">例如 100</string>
+    <string name="mortgage_rate_label">年利率（%）</string>
+    <string name="mortgage_rate_hint">例如 3.1</string>
+    <string name="mortgage_years_label">贷款期限（年）</string>
+    <string name="mortgage_years_hint">例如 30</string>
+    <string name="mortgage_term_title">常用期限</string>
+    <string name="mortgage_term_years">%1$d 年</string>
+    <string name="mortgage_method_title">还款方式</string>
+    <string name="mortgage_method_equal_installment">等额本息</string>
+    <string name="mortgage_method_equal_principal">等额本金</string>
+    <string name="mortgage_disclaimer">结果为估算，实际月供与利息以银行合同为准。</string>
+    <string name="mortgage_result_title">计算结果</string>
+    <string name="mortgage_result_monthly">每月月供（元）</string>
+    <string name="mortgage_result_first">首月月供（元）</string>
+    <string name="mortgage_result_last">末月月供（元）</string>
+    <string name="mortgage_result_decrease">每月递减（元）</string>
+    <string name="mortgage_result_total_interest">利息总额（元）</string>
+    <string name="mortgage_result_total_payment">还款总额（元）</string>
+    <string name="mortgage_result_months">还款期数</string>
+    <string name="mortgage_result_months_format">%1$d 期</string>
+    <string name="mortgage_schedule_title">还款明细</string>
+    <string name="mortgage_schedule_show_all">显示全部期数</string>
+    <string name="mortgage_schedule_preview_hint">当前仅显示前 %1$d 期，打开开关查看全部。</string>
+    <string name="mortgage_schedule_row">第 %1$d 期</string>
+    <string name="mortgage_schedule_detail">月供 %1$s · 本金 %2$s · 利息 %3$s · 剩余 %4$s</string>
+    <string name="mortgage_empty_placeholder">输入贷款金额、利率和期限后自动计算…</string>
+    <string name="mortgage_btn_copy">复制结果</string>
+    <string name="mortgage_btn_clear">清空</string>
+    <string name="mortgage_copy_summary">房贷估算（%1$s）：利息总额 %2$s 元，还款总额 %3$s 元。</string>
+    <string name="mortgage_error_invalid">请输入有效的数字。</string>
+    <string name="mortgage_error_range" formatted="false">年利率需在 0–24%，期限需在 1–40 年。</string>
+    <string name="mortgage_error_limit">贷款金额超出上限（100000 万元）。</string>
+    <string-array name="mortgage_keywords" translatable="false">
+        <item>mortgage</item><item>loan</item><item>房贷</item><item>贷款</item><item>月供</item><item>等额本息</item><item>等额本金</item><item>利率</item><item>还款</item>
+    </string-array>
+    <string name="fuel_name">油耗计算</string>
+    <string name="fuel_description">根据行驶里程与加油量换算百公里油耗、km/L 和 MPG，可估算油费。</string>
+    <string name="fuel_params_title">本次加油</string>
+    <string name="fuel_distance_label">行驶里程</string>
+    <string name="fuel_distance_hint">例如 520</string>
+    <string name="fuel_fuel_label">加油量</string>
+    <string name="fuel_fuel_hint">例如 38</string>
+    <string name="fuel_price_label">油价（元/升，选填）</string>
+    <string name="fuel_price_hint">例如 7.85</string>
+    <string name="fuel_unit_km">公里</string>
+    <string name="fuel_unit_mile">英里</string>
+    <string name="fuel_unit_liter">升</string>
+    <string name="fuel_unit_us_gal">美制加仑</string>
+    <string name="fuel_unit_uk_gal">英制加仑</string>
+    <string name="fuel_result_title">计算结果</string>
+    <string name="fuel_result_consumption">百公里油耗（L/100km）</string>
+    <string name="fuel_result_km_per_l">每升行驶（km/L）</string>
+    <string name="fuel_result_mpg_us">MPG（美制）</string>
+    <string name="fuel_result_mpg_uk">MPG（英制）</string>
+    <string name="fuel_result_total_cost">总油费（元）</string>
+    <string name="fuel_result_cost_per_km">每公里油费（元）</string>
+    <string name="fuel_result_cost_per_100km">每百公里油费（元）</string>
+    <string name="fuel_empty_placeholder">输入行驶里程和加油量后自动计算…</string>
+    <string name="fuel_btn_copy">复制结果</string>
+    <string name="fuel_btn_clear">清空</string>
+    <string name="fuel_copy_summary">油耗 %1$s L/100km，每升 %2$s km，MPG 美制 %3$s、英制 %4$s。</string>
+    <string name="fuel_disclaimer">按本次加满油区间的里程与加油量计算；多次记录取平均会更准确。</string>
+    <string name="fuel_error_invalid">请输入有效的数字。</string>
+    <string name="fuel_error_range">里程需在 0.1–100000 km，加油量需在 0.1–10000 L，油价需在 0–100 元/升。</string>
+    <string-array name="fuel_keywords" translatable="false">
+        <item>fuel</item><item>油耗</item><item>油费</item><item>加油</item><item>百公里油耗</item><item>mpg</item><item>l/100km</item><item>里程</item>
+    </string-array>
+    <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
+    <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>

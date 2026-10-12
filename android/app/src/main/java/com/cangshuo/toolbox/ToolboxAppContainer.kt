@@ -160,6 +160,26 @@ class ToolboxAppContainer(context: Context) {
         ),
         player = com.cangshuo.toolbox.feature.morse.data.MorseAudioPlayer(),
     )
+    private val bmiFactory = com.cangshuo.toolbox.feature.bmi.ui.BmiViewModel.factory(
+        com.cangshuo.toolbox.feature.bmi.domain.CalculateBmiUseCase(
+            com.cangshuo.toolbox.feature.bmi.data.LocalBmiRepository(),
+        ),
+    )
+    private val compoundFactory = com.cangshuo.toolbox.feature.compound.ui.CompoundViewModel.factory(
+        com.cangshuo.toolbox.feature.compound.domain.CalculateCompoundUseCase(
+            com.cangshuo.toolbox.feature.compound.data.LocalCompoundRepository(),
+        ),
+    )
+    private val mortgageFactory = com.cangshuo.toolbox.feature.mortgage.ui.MortgageViewModel.factory(
+        com.cangshuo.toolbox.feature.mortgage.domain.CalculateMortgageUseCase(
+            com.cangshuo.toolbox.feature.mortgage.data.LocalMortgageRepository(),
+        ),
+    )
+    private val fuelFactory = com.cangshuo.toolbox.feature.fuel.ui.FuelViewModel.factory(
+        com.cangshuo.toolbox.feature.fuel.domain.CalculateFuelUseCase(
+            com.cangshuo.toolbox.feature.fuel.data.LocalFuelRepository(),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -226,6 +246,10 @@ class ToolboxAppContainer(context: Context) {
             HashToolDefinition(resources, hashFactory),
             com.cangshuo.toolbox.feature.radix.RadixToolDefinition(resources, radixFactory),
             com.cangshuo.toolbox.feature.morse.MorseToolDefinition(resources, morseFactory),
+            com.cangshuo.toolbox.feature.bmi.BmiToolDefinition(resources, bmiFactory),
+            com.cangshuo.toolbox.feature.compound.CompoundInterestToolDefinition(resources, compoundFactory),
+            com.cangshuo.toolbox.feature.mortgage.MortgageToolDefinition(resources, mortgageFactory),
+            com.cangshuo.toolbox.feature.fuel.FuelToolDefinition(resources, fuelFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

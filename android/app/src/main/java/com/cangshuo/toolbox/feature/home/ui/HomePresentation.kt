@@ -86,6 +86,10 @@ fun toolIconResource(name: String?): Int = when (name) {
     "url_codec" -> R.drawable.ic_url_codec
     "hash" -> R.drawable.ic_hash
     "radix" -> R.drawable.ic_radix
+    "bmi" -> R.drawable.ic_bmi
+    "compound_interest" -> R.drawable.ic_interest
+    "mortgage" -> R.drawable.ic_mortgage
+    "fuel" -> R.drawable.ic_fuel
     "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text
