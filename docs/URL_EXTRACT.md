@@ -28,4 +28,4 @@ SavedStateHandle 保留文本、模式、去重与复制格式；结果卡显示
 
 2026-10-12：`UrlExtractTest` 6 项覆盖完整链接与尾随标点裁剪、括号配对、模糊模式的邮箱 / 版本号 / 无主机名排除、忽略大小写去重与顺序、两种复制格式、1000 条上限与截断标记；`UrlExtractViewModelTest` 2 项覆盖空输入引导、模式与格式切换（含复制文本）以及超长粘贴保留原值。本批 Android 全量 **325/325** 测试通过（60 个套件），`assembleDebug` 与 `lintDebug` 通过（0 错误、83 警告；新增文件无 lint 告警）。
 
-未连接真机或模拟器验收复制与大字号；正则未与 linkify-it 官方测试集逐条对拍，边界以本仓库测试为准。
+2026-10-12 模拟器（Android 16）对 see https://example.com/a?b=1 and http://foo.cn/x 提取出 2 条完整链接；复制与大字号仍待验收。正则未与 linkify-it 官方测试集逐条对拍，边界以本仓库测试为准。

@@ -25,4 +25,4 @@ SavedStateHandle 保留输入文本；文本为空显示引导，超长显示错
 
 2026-10-12：`TextCountTest` 6 项覆盖混合文本口径、surrogate pair 与 emoji、行 / 段落语义（含结尾换行）、连字符与撇号单词、阅读时间（含 1 秒下限）、空文本；`TextCountViewModelTest` 2 项覆盖空输入引导与统计结果、超长粘贴保留原值。本批 Android 全量 **325/325** 测试通过（60 个套件），`assembleDebug` 与 `lintDebug` 通过（0 错误、83 警告；新增文件无 lint 告警）。
 
-未连接真机或模拟器验收大段粘贴、键盘与大字号；阅读时间未与真实阅读实验校准。
+2026-10-12 模拟器（Android 16）输入 hello means world 得到 17 字符 / 3 词，与单元测试一致；大段粘贴、键盘与大字号仍待验收，阅读时间未与真实阅读实验校准。
