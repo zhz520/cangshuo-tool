@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.sync.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -70,21 +71,21 @@ fun CloudSyncRoute(factory: ViewModelProvider.Factory) {
         ToolSectionHeader(stringResource(R.string.sync_title))
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically) {
             Text(stringResource(R.string.sync_favorites),modifier=Modifier.weight(1f))
-            Switch(checked=state.context.preference.enabled,onCheckedChange=model::configure,enabled=!state.busy)
+            ToolboxSwitch(checked=state.context.preference.enabled,onCheckedChange=model::configure,enabled=!state.busy)
         }
         Text(stringResource(R.string.sync_favorites_privacy),style=MaterialTheme.typography.bodySmall,
             color=MaterialTheme.colorScheme.onSurfaceVariant)
         ToolboxDivider(startIndent=0.dp)
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically) {
             Text(stringResource(R.string.sync_recent),modifier=Modifier.weight(1f))
-            Switch(checked=state.context.preference.recentEnabled,onCheckedChange=model::recent,enabled=!state.busy)
+            ToolboxSwitch(checked=state.context.preference.recentEnabled,onCheckedChange=model::recent,enabled=!state.busy)
         }
         Text(stringResource(R.string.sync_recent_privacy),style=MaterialTheme.typography.bodySmall,
             color=MaterialTheme.colorScheme.onSurfaceVariant)
         ToolboxDivider(startIndent=0.dp)
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically) {
             Text(stringResource(R.string.sync_settings),modifier=Modifier.weight(1f))
-            Switch(checked=state.context.preference.settingsEnabled,onCheckedChange=model::settings,enabled=!state.busy)
+            ToolboxSwitch(checked=state.context.preference.settingsEnabled,onCheckedChange=model::settings,enabled=!state.busy)
         }
         Text(stringResource(R.string.sync_settings_privacy),style=MaterialTheme.typography.bodySmall,
             color=MaterialTheme.colorScheme.onSurfaceVariant)

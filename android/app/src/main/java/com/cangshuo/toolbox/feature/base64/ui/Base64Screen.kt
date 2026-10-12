@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.base64.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +20,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -107,7 +107,7 @@ fun Base64Screen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
-                            Switch(
+                            ToolboxSwitch(
                                 checked = state.isUrlSafe,
                                 onCheckedChange = onUrlSafeToggled,
                             )

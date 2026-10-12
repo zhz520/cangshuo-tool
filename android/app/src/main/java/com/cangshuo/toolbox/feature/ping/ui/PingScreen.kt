@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.ping.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -37,7 +38,7 @@ fun PingRoute(factory: ViewModelProvider.Factory) {
         Text(note,style = MaterialTheme.typography.bodySmall,color = MaterialTheme.colorScheme.onSurfaceVariant)
         ToolboxTextField(value = state.host,onValueChange = model::host,label = stringResource(R.string.ping_host),
             modifier = Modifier.fillMaxWidth(),singleLine = true,enabled = !state.running,isError = state.error == PingError.INVALID_TARGET)
-        Row { Switch(checked = state.ipv6,onCheckedChange = model::ipv6,enabled = !state.running);Text(stringResource(R.string.ping_ipv6),Modifier.padding(12.dp)) }
+        Row { ToolboxSwitch(checked = state.ipv6,onCheckedChange = model::ipv6,enabled = !state.running);Text(stringResource(R.string.ping_ipv6),Modifier.padding(12.dp)) }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(1,4,8).forEach { count -> FilterChip(selected = state.count == count,onClick = { model.count(count) },enabled = !state.running,label = { Text(stringResource(R.string.ping_count,count)) }) }
         }

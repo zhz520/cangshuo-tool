@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.qr.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,7 +35,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -339,7 +339,7 @@ fun QrScreen(
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 Text(hiddenNetworkLabel, Modifier.weight(1f))
-                                Switch(checked = state.wifiHidden, onCheckedChange = onWifiHiddenChanged, enabled = !state.isExporting,
+                                ToolboxSwitch(checked = state.wifiHidden, onCheckedChange = onWifiHiddenChanged, enabled = !state.isExporting,
                                     modifier = Modifier.semantics { contentDescription = hiddenNetworkLabel })
                             }
                             }
@@ -573,7 +573,7 @@ fun QrScreen(
                     QrCard {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(stringResource(R.string.qr_history_enabled), Modifier.weight(1f))
-                            Switch(checked = state.history.enabled, onCheckedChange = onHistoryEnabled,
+                            ToolboxSwitch(checked = state.history.enabled, onCheckedChange = onHistoryEnabled,
                                 enabled = !state.historyLoading && !state.historyBusy)
                         }
                         Text(stringResource(R.string.qr_history_notice), style = MaterialTheme.typography.bodySmall)
@@ -647,7 +647,7 @@ fun QrScreen(
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text(stringResource(R.string.qr_multi_toggle), Modifier.weight(1f))
-                            Switch(checked = state.multiDecode, onCheckedChange = onMultiDecodeChanged,
+                            ToolboxSwitch(checked = state.multiDecode, onCheckedChange = onMultiDecodeChanged,
                                 enabled = !state.isExporting && !state.cameraScanning)
                         }
                         Text(stringResource(R.string.qr_multi_hint), style = MaterialTheme.typography.bodySmall)

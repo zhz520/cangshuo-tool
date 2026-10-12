@@ -12,12 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ import com.cangshuo.toolbox.core.ui.ToolListItem
 import com.cangshuo.toolbox.core.ui.ToolSectionHeader
 import com.cangshuo.toolbox.core.ui.ToolboxTextField
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import com.cangshuo.toolbox.feature.mortgage.domain.MortgageError
 import com.cangshuo.toolbox.feature.mortgage.domain.MortgageLimits
 import com.cangshuo.toolbox.feature.mortgage.domain.MortgageMethod
@@ -213,19 +215,27 @@ fun MortgageScreen(
                 }
 
                 item(key = "schedule_header") {
+                    ToolSectionHeader(title = stringResource(R.string.mortgage_schedule_title))
+                }
+                item(key = "schedule_toggle") {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .toggleable(
+                                value = state.showAllRows,
+                                role = Role.Switch,
+                                onValueChange = onShowAllRowsChanged,
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Box(Modifier.weight(1f)) {
-                            ToolSectionHeader(title = stringResource(R.string.mortgage_schedule_title))
-                        }
                         Text(
                             text = stringResource(R.string.mortgage_schedule_show_all),
+                            modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Switch(checked = state.showAllRows, onCheckedChange = onShowAllRowsChanged)
+                        ToolboxSwitch(checked = state.showAllRows, onCheckedChange = null)
                     }
                 }
                 if (!state.showAllRows && result.rows.size > MortgageLimits.SCHEDULE_PREVIEW_ROWS) {

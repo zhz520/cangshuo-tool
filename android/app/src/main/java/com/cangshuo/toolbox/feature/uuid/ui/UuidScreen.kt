@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.uuid.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -24,7 +25,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -129,7 +129,7 @@ fun UuidScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
-                                Switch(
+                                ToolboxSwitch(
                                     checked = state.isUppercase,
                                     onCheckedChange = onUppercaseToggled,
                                 )
@@ -152,7 +152,7 @@ fun UuidScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
-                                Switch(
+                                ToolboxSwitch(
                                     checked = state.hasHyphens,
                                     onCheckedChange = onHyphensToggled,
                                 )
@@ -175,7 +175,7 @@ fun UuidScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                 }
-                                Switch(
+                                ToolboxSwitch(
                                     checked = state.isBraced,
                                     onCheckedChange = onBracedToggled,
                                 )

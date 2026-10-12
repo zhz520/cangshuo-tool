@@ -1,5 +1,6 @@
 package com.cangshuo.toolbox.feature.httpstatus.ui
 
+import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -78,7 +79,7 @@ fun HttpStatusRoute(factory: ViewModelProvider.Factory) {
                 enabled = !state.running, label = { Text(stringResource(R.string.http_status_method_get)) })
         }
         Row {
-            Switch(checked = state.followRedirects, onCheckedChange = model::followRedirects, enabled = !state.running)
+            ToolboxSwitch(checked = state.followRedirects, onCheckedChange = model::followRedirects, enabled = !state.running)
             Text(stringResource(R.string.http_status_follow), Modifier.padding(12.dp))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

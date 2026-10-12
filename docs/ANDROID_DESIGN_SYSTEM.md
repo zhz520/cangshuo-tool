@@ -47,6 +47,7 @@
 - `ToolGroupCard(title)`：分组卡（白底 + 1dp 细边 + 16dp 圆角），仅用于真正的分组。
 - `ToolboxButton` / `ToolboxOutlinedButton` / `ToolboxTextButton`：统一尺寸按钮。
 - `ToolboxTextField`：浅灰填充输入框（无边框）。
+- `ToolboxSwitch`：共享主题开关，关闭态圆点使用 `onSurfaceVariant`，与浅色轨道区分；沿用原有回调、禁用和无障碍语义。
 - `ToolboxDivider(startIndent)`：1dp 细分割线。
 - `ToolboxLoadingState` / `ToolboxLoadingIndicator`、`SystemReportCard` / `SystemReportActions`。
 - `ToolResultRow(label, value)`：计算结果的标签与数值；窄屏、大字号或长数值上下排布，完整显示结果；明细列表可通过 `ToolListItem.subtitleMaxLines` 展开全文。
@@ -80,5 +81,7 @@
 4. 交互一致：Loading/Empty/Error 用共享组件；点击/选中/禁用状态清晰。
 5. **未实现的功能必须显式提示**（如 `feature_unavailable_*` 文案），不得假装成功。
 6. 深浅色都要适配；正确处理状态栏、导航栏与 Insets。
+
+2026-10-12 开关适配依据：实际查阅 [AndroidX SwitchTokens](https://github.com/androidx/androidx/blob/androidx-main/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/tokens/SwitchTokens.kt)，blob `1fd474ec436e63b0ec54c455f32445d2d4ef5123`。默认未选中圆点使用 `outline`、轨道使用 `surfaceContainerHighest`，本主题两者均为 `#E5E5E5`，模拟器中圆点不可辨。共享包装只调整主题角色，保留 Material3 触摸、动画及状态逻辑；房贷明细开关整行可切换并合并文字标签。分支链接可变化，未复制上游源码。
 
 参考实现：`feature/home/ui/HomeScreen.kt`（骨架 + 首页 + 工具库 + 我的）、`HomeRoute.kt`（全屏子页与路由）、`feature/recent/ui/RecentScreen.kt`、`feature/settings/ui/SettingsScreen.kt`、`feature/auth/ui/AuthScreen.kt`。实现和验收记录见 [账号与设置 UI](ANDROID_ACCOUNT_SETTINGS_UI.md)。
