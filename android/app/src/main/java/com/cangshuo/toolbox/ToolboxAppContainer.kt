@@ -185,6 +185,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.datecalc.data.LocalDateCalcRepository(),
         ),
     )
+    private val colorFactory = com.cangshuo.toolbox.feature.color.ui.ColorViewModel.factory(
+        com.cangshuo.toolbox.feature.color.domain.ConvertColorUseCase(
+            com.cangshuo.toolbox.feature.color.data.LocalColorRepository(),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -256,6 +261,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.mortgage.MortgageToolDefinition(resources, mortgageFactory),
             com.cangshuo.toolbox.feature.fuel.FuelToolDefinition(resources, fuelFactory),
             com.cangshuo.toolbox.feature.datecalc.DateCalcToolDefinition(resources, dateCalcFactory),
+            com.cangshuo.toolbox.feature.color.ColorToolDefinition(resources, colorFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

@@ -17,7 +17,7 @@ def verify(check, request, sql, admin):
     strings = dict((node.get('name'), node.text) for node in resources.findall('string'))
     keywords = dict((node.get('name'), [item.text for item in node]) for node in resources.findall('string-array'))
     specs = [('bmi', 'bmi', 30), ('compound_interest', 'compound', 35), ('mortgage', 'mortgage', 40),
-             ('fuel', 'fuel', 45), ('date_calc', 'date_calc', 50)]
+             ('fuel', 'fuel', 45), ('date_calc', 'date_calc', 50), ('color_converter', 'color', 55)]
     migration = os.path.join(root, 'server/src/main/resources/db/migration/V44__seed_calc_tools.sql')
     with open(migration, 'rb') as stream:
         seed = stream.read().decode('utf-8')
@@ -43,7 +43,7 @@ def verify(check, request, sql, admin):
     for code, unused_prefix, unused_order in specs:
         check(code in ranking and ranking[code]['opens'] == 1 and ranking[code]['allTimeOpens'] == 1,
               'daily and cumulative ranking ' + code)
-    check(stats['summary']['allTimeOpens'] == 17 and stats['summary']['windowOpens'] == 17,
+    check(stats['summary']['allTimeOpens'] == 18 and stats['summary']['windowOpens'] == 18,
           'new tools participate in aggregate statistics')
 
     check(request('admin/tools/bmi/status', {'status': 'MAINTENANCE'}, token=admin, method='PATCH')[0] == 200,
@@ -57,7 +57,7 @@ def verify(check, request, sql, admin):
     check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='fuel' AND deleted_at IS NOT NULL") == '1',
           'replayed seed preserves deletion')
     check(request('admin/tools/fuel', token=admin)[0] == 404, 'deleted tool stays deleted')
-    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code IN ('bmi','compound_interest','mortgage','fuel','date_calc')") == '5',
+    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code IN ('bmi','compound_interest','mortgage','fuel','date_calc','color_converter')") == '6',
           'replayed seed introduces no duplicates')
     check(request('admin/tools/bmi/status', {'status': 'ENABLED'}, token=admin, method='PATCH')[0] == 200,
           'administrator can re-enable new tool')

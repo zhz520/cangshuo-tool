@@ -1500,6 +1500,27 @@
     <string-array name="date_calc_keywords" translatable="false">
         <item>date</item><item>日期</item><item>日期计算</item><item>日期间隔</item><item>天数</item><item>工作日</item><item>日期推算</item><item>date calculator</item><item>days between</item>
     </string-array>
+    <string name="color_name">颜色转换</string>
+    <string name="color_description">在 HEX、RGB、HSL、HSV 之间转换颜色，实时预览并复制结果。</string>
+    <string name="color_input_title">输入颜色</string>
+    <string name="color_input_label">颜色值</string>
+    <string name="color_input_hint">例如 #FF8800、rgb(255,136,0) 或 hsl(32,100%,50%)</string>
+    <string name="color_result_title">转换结果</string>
+    <string name="color_result_hex">HEX</string>
+    <string name="color_result_rgb">RGB</string>
+    <string name="color_result_hsl">HSL</string>
+    <string name="color_result_hsv">HSV</string>
+    <string name="color_result_note">HEX 为精确值；色相取整、百分比保留 1 位小数，与常见工具显示一致。</string>
+    <string name="color_btn_copy">复制结果</string>
+    <string name="color_btn_clear">清空</string>
+    <string name="color_empty_placeholder">输入颜色值后自动转换…</string>
+    <string name="color_error_invalid">无法识别该颜色格式，请使用 HEX、rgb(...)、hsl(...) 或 hsv(...)。</string>
+    <string name="color_error_range">通道数值超出范围：RGB 为 0–255，百分比为 0–100。</string>
+    <string name="color_error_alpha">暂不支持透明度，请去掉 Alpha 通道。</string>
+    <string name="color_copy_summary">%1$s · %2$s · %3$s · %4$s</string>
+    <string-array name="color_keywords" translatable="false">
+        <item>color</item><item>颜色</item><item>颜色转换</item><item>HEX</item><item>RGB</item><item>HSL</item><item>HSV</item><item>color converter</item><item>hex to rgb</item>
+    </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>
