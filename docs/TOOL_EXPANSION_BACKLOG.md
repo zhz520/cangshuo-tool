@@ -328,8 +328,8 @@
 | 文字转拼音 | ✗ | A | TinyPinyin（Android） |
 | 汉语词典 | ✗ | A | 本地词库 |
 | 中文分词 | ✗ | A | fxsjy/jieba（Android 移植） |
-| 文本相似性 | ✗ | A | SimHash/Levenshtein 本地算法 |
-| 数字转中文 | ✗ | A | 本地算法 |
+| 文本相似性 | ◐ | A | text_similarity：Levenshtein、Jaccard、前缀/子串、忽略大小写/空白；本地实现完成，V49 部署验收中，见 TEXT_SIMILARITY.md |
+| 数字转中文 | ◐ | A | number_chinese：大小写/金额双向、24 位整数、严格边界；本地实现完成，V49 部署验收中，见 NUMBER_CHINESE.md |
 | Base64编码转换 | ✅ | A | 已有 |
 | 简繁互转 | ✗ | A | BYVoid/OpenCC |
 | 摩斯电码 | ✅ | A | 本地编解码 + PARIS 时序音频播放（2026-10-11 上线，见 docs/MORSE_CODE.md） |
@@ -339,7 +339,7 @@
 | 粤语互译 | ✗ | A+S | OpenCC + 粤语词库；AI 增强 |
 | 方言翻译 | ✗ | M | aitext |
 | 兽语互译 | ✗ | A | 娱乐编码（喵呜/汪汪码） |
-| 特殊字符转换 | ✗ | A | 本地映射表 |
+| 特殊字符转换 | ◐ | A | char_convert：全半角/大小写/空白/零宽/换行，组合转换；本地实现完成，V49 部署验收中，见 CHAR_CONVERT.md |
 | 网址提取 | ◐ | A | 已实现完整链接/裸域名两种模式、去重、行与 Markdown 复制（邮箱与版本号不误报）；已上线并通过 HTTPS 与模拟器实测。见 [工具文档](URL_EXTRACT.md) |
 | MD5摘要 | ✅ | A | 已有（hash 工具） |
 

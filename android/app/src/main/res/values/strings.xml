@@ -1645,6 +1645,88 @@
     <string-array name="kinship_keywords" translatable="false">
         <item>kinship</item><item>亲戚</item><item>称呼</item><item>亲戚称呼</item><item>关系计算</item><item>辈分</item><item>kinship calculator</item><item>family title</item>
     </string-array>
+    <string name="number_chinese_name">数字转中文</string>
+    <string name="number_chinese_description">阿拉伯数字与中文数字互转：小写、大写与人民币金额，支持负数、小数与口语化「十」。</string>
+    <string name="number_chinese_input_title">输入</string>
+    <string name="number_chinese_input_label">数字或中文数字</string>
+    <string name="number_chinese_input_hint">例如 1234.5、十五、人民币壹佰元零伍分</string>
+    <string name="number_chinese_options_title">转换设置</string>
+    <string name="number_chinese_style_title">输出样式</string>
+    <string name="number_chinese_style_lower">中文小写</string>
+    <string name="number_chinese_style_upper">中文大写</string>
+    <string name="number_chinese_style_money">人民币金额</string>
+    <string name="number_chinese_direction_title">方向</string>
+    <string name="number_chinese_direction_auto">自动识别</string>
+    <string name="number_chinese_direction_to_chinese">数字 → 中文</string>
+    <string name="number_chinese_direction_to_number">中文 → 数字</string>
+    <string name="number_chinese_colloquial">口语化「十」（15 → 十五）</string>
+    <string name="number_chinese_note">支持最高 24 位整数与 8 位小数；金额最多两位小数；人民币格式输出「人民币…元…角…分…整」，不支持科学计数法。</string>
+    <string name="number_chinese_result_title">结果</string>
+    <string name="number_chinese_btn_copy">复制结果</string>
+    <string name="number_chinese_btn_clear">清空</string>
+    <string name="number_chinese_empty">输入数字或中文数字后自动转换…</string>
+    <string name="number_chinese_error_number">不是有效的数字（仅支持十进制、可选负号与小数点，最多 24 位整数）。</string>
+    <string name="number_chinese_error_chinese">无法识别的中文数字，请检查「零一二…十百千万亿」与「壹贰叁…拾佰仟」的写法。</string>
+    <string name="number_chinese_error_too_long">输入过长（最多 60 个字符），已保留原内容。</string>
+    <string name="number_chinese_error_money">人民币金额最多保留两位小数。</string>
+    <string-array name="number_chinese_keywords" translatable="false">
+        <item>number</item><item>数字转中文</item><item>大写金额</item><item>人民币大写</item><item>中文数字</item><item>number to chinese</item><item>rmb uppercase</item>
+    </string-array>
+    <string name="char_convert_name">特殊字符转换</string>
+    <string name="char_convert_description">全角/半角互转、英文大小写转换、压缩空白、移除零宽字符并统一换行符。</string>
+    <string name="char_convert_input_title">文本输入</string>
+    <string name="char_convert_input_label">原始文本</string>
+    <string name="char_convert_input_hint">粘贴包含全角字符或杂质的文本…</string>
+    <string name="char_convert_options_title">转换选项</string>
+    <string name="char_convert_width_title">全角 / 半角</string>
+    <string name="char_convert_width_none">不转换</string>
+    <string name="char_convert_width_half">转半角</string>
+    <string name="char_convert_width_full">转全角</string>
+    <string name="char_convert_case_title">英文大小写</string>
+    <string name="char_convert_case_none">不处理</string>
+    <string name="char_convert_case_upper">转大写</string>
+    <string name="char_convert_case_lower">转小写</string>
+    <string name="char_convert_collapse">压缩空白并去除行首尾空格</string>
+    <string name="char_convert_zero_width">移除零宽字符与 BOM</string>
+    <string name="char_convert_newlines">统一换行符为 LF</string>
+    <string name="char_convert_note">全角转换覆盖 Unicode Halfwidth and Fullwidth Forms 区段（FF01–FF5E，全角空格 U+3000）；英文大小写只作用于字母。</string>
+    <string name="char_convert_result_title">转换结果</string>
+    <string name="char_convert_btn_copy">复制结果</string>
+    <string name="char_convert_btn_clear">清空</string>
+    <string name="char_convert_empty">输入文本后自动转换…</string>
+    <string name="char_convert_error_too_long">文本过长（上限 20 万字符），已保留原内容。</string>
+    <string-array name="char_convert_keywords" translatable="false">
+        <item>全角</item><item>半角</item><item>特殊字符</item><item>字符转换</item><item>大写</item><item>fullwidth</item><item>halfwidth</item><item>case convert</item>
+    </string-array>
+    <string name="similarity_name">文本相似性</string>
+    <string name="similarity_description">比较两段文本的编辑距离、相似度、字符集合重合度、最长公共子串与公共前缀。</string>
+    <string name="similarity_first_title">文本 A</string>
+    <string name="similarity_first_label">第一段文本</string>
+    <string name="similarity_second_title">文本 B</string>
+    <string name="similarity_second_label">第二段文本</string>
+    <string name="similarity_input_hint">粘贴要比对的文本…</string>
+    <string name="similarity_options_title">比较选项</string>
+    <string name="similarity_ignore_case">忽略大小写</string>
+    <string name="similarity_ignore_whitespace">忽略空白字符</string>
+    <string name="similarity_result_title">比较结果</string>
+    <string name="similarity_identical">完全相同</string>
+    <string name="similarity_identical_yes">是</string>
+    <string name="similarity_identical_no">否</string>
+    <string name="similarity_distance">编辑距离</string>
+    <string name="similarity_similarity">相似度</string>
+    <string name="similarity_jaccard">字符集合重合度</string>
+    <string name="similarity_lcs">最长公共子串长度</string>
+    <string name="similarity_prefix">公共前缀长度</string>
+    <string name="similarity_percent_format">%1$s%%</string>
+    <string name="similarity_btn_copy">复制结果</string>
+    <string name="similarity_btn_clear">清空</string>
+    <string name="similarity_empty">两段文本都填写后自动比较…</string>
+    <string name="similarity_error_too_long">单段文本过长（上限 3000 字符），已保留原内容。</string>
+    <string name="similarity_copy_summary">完全相同：%1$s · 编辑距离 %2$s · 相似度 %3$s%% · 集合重合度 %4$s%% · 最长公共子串 %5$s · 公共前缀 %6$s</string>
+    <string name="similarity_note">编辑距离按 UTF-16 字符计算并与较长文本归一化为相似度；重合度为字符集合 Jaccard；单段上限 3000 字符。</string>
+    <string-array name="similarity_keywords" translatable="false">
+        <item>相似度</item><item>文本比较</item><item>编辑距离</item><item>Levenshtein</item><item>similarity</item><item>diff</item>
+    </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>

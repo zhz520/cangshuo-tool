@@ -1576,6 +1576,88 @@
     <string-array name="kinship_keywords" translatable="false">
         <item>kinship</item><item>亲戚</item><item>称呼</item><item>亲戚称呼</item><item>关系计算</item><item>辈分</item><item>kinship calculator</item><item>family title</item>
     </string-array>
+    <string name="number_chinese_name">Number to Chinese</string>
+    <string name="number_chinese_description">Convert between Arabic and Chinese numerals: lower case, upper case and RMB amounts, with negatives, decimals and the colloquial 十.</string>
+    <string name="number_chinese_input_title">Input</string>
+    <string name="number_chinese_input_label">Number or Chinese numeral</string>
+    <string name="number_chinese_input_hint">e.g. 1234.5、十五、人民币壹佰元零伍分</string>
+    <string name="number_chinese_options_title">Options</string>
+    <string name="number_chinese_style_title">Output style</string>
+    <string name="number_chinese_style_lower">Lower case</string>
+    <string name="number_chinese_style_upper">Upper case</string>
+    <string name="number_chinese_style_money">RMB amount</string>
+    <string name="number_chinese_direction_title">Direction</string>
+    <string name="number_chinese_direction_auto">Auto detect</string>
+    <string name="number_chinese_direction_to_chinese">Number → Chinese</string>
+    <string name="number_chinese_direction_to_number">Chinese → Number</string>
+    <string name="number_chinese_colloquial">Colloquial 十 (15 → 十五)</string>
+    <string name="number_chinese_note">Up to 24 integer digits and 8 decimals; money keeps two decimals; RMB output uses 人民币…元…角…分…整. Scientific notation is not supported.</string>
+    <string name="number_chinese_result_title">Result</string>
+    <string name="number_chinese_btn_copy">Copy result</string>
+    <string name="number_chinese_btn_clear">Clear</string>
+    <string name="number_chinese_empty">Enter a number or Chinese numeral to convert…</string>
+    <string name="number_chinese_error_number">Not a valid number (decimal digits, optional minus and decimal point, up to 24 integer digits).</string>
+    <string name="number_chinese_error_chinese">Unrecognised Chinese numeral; check the 零一二…十百千万亿 and 壹贰叁…拾佰仟 forms.</string>
+    <string name="number_chinese_error_too_long">Input is too long (60 characters max); the previous content was kept.</string>
+    <string name="number_chinese_error_money">RMB amounts keep at most two decimals.</string>
+    <string-array name="number_chinese_keywords" translatable="false">
+        <item>number</item><item>数字转中文</item><item>大写金额</item><item>人民币大写</item><item>中文数字</item><item>number to chinese</item><item>rmb uppercase</item>
+    </string-array>
+    <string name="char_convert_name">Character Converter</string>
+    <string name="char_convert_description">Full/half-width conversion, English case conversion, whitespace collapsing, zero-width removal and newline unification.</string>
+    <string name="char_convert_input_title">Text input</string>
+    <string name="char_convert_input_label">Original text</string>
+    <string name="char_convert_input_hint">Paste text with full-width characters or noise…</string>
+    <string name="char_convert_options_title">Options</string>
+    <string name="char_convert_width_title">Full / half width</string>
+    <string name="char_convert_width_none">Keep as is</string>
+    <string name="char_convert_width_half">To half-width</string>
+    <string name="char_convert_width_full">To full-width</string>
+    <string name="char_convert_case_title">English case</string>
+    <string name="char_convert_case_none">Keep</string>
+    <string name="char_convert_case_upper">Uppercase</string>
+    <string name="char_convert_case_lower">Lowercase</string>
+    <string name="char_convert_collapse">Collapse whitespace and trim each line</string>
+    <string name="char_convert_zero_width">Remove zero-width characters and BOM</string>
+    <string name="char_convert_newlines">Unify newlines to LF</string>
+    <string name="char_convert_note">Width conversion covers the Unicode Halfwidth and Fullwidth Forms block (FF01–FF5E and U+3000); case conversion only affects letters.</string>
+    <string name="char_convert_result_title">Converted text</string>
+    <string name="char_convert_btn_copy">Copy result</string>
+    <string name="char_convert_btn_clear">Clear</string>
+    <string name="char_convert_empty">Enter text to convert…</string>
+    <string name="char_convert_error_too_long">Text is too long (200,000 characters max); the previous content was kept.</string>
+    <string-array name="char_convert_keywords" translatable="false">
+        <item>全角</item><item>半角</item><item>特殊字符</item><item>字符转换</item><item>大写</item><item>fullwidth</item><item>halfwidth</item><item>case convert</item>
+    </string-array>
+    <string name="similarity_name">Text Similarity</string>
+    <string name="similarity_description">Compare two texts: edit distance, similarity, character-set overlap, longest common substring and common prefix.</string>
+    <string name="similarity_first_title">Text A</string>
+    <string name="similarity_first_label">First text</string>
+    <string name="similarity_second_title">Text B</string>
+    <string name="similarity_second_label">Second text</string>
+    <string name="similarity_input_hint">Paste the text to compare…</string>
+    <string name="similarity_options_title">Comparison options</string>
+    <string name="similarity_ignore_case">Ignore case</string>
+    <string name="similarity_ignore_whitespace">Ignore whitespace</string>
+    <string name="similarity_result_title">Result</string>
+    <string name="similarity_identical">Identical</string>
+    <string name="similarity_identical_yes">Yes</string>
+    <string name="similarity_identical_no">No</string>
+    <string name="similarity_distance">Edit distance</string>
+    <string name="similarity_similarity">Similarity</string>
+    <string name="similarity_jaccard">Character-set overlap</string>
+    <string name="similarity_lcs">Longest common substring</string>
+    <string name="similarity_prefix">Common prefix</string>
+    <string name="similarity_percent_format">%1$s%%</string>
+    <string name="similarity_btn_copy">Copy result</string>
+    <string name="similarity_btn_clear">Clear</string>
+    <string name="similarity_empty">Fill both texts to compare…</string>
+    <string name="similarity_error_too_long">One text is too long (3,000 characters max); the previous content was kept.</string>
+    <string name="similarity_copy_summary">Identical: %1$s · distance %2$s · similarity %3$s%% · set overlap %4$s%% · longest common substring %5$s · common prefix %6$s</string>
+    <string name="similarity_note">Distance counts UTF-16 characters and is normalised by the longer text; overlap is the character-set Jaccard index; each text is capped at 3,000 characters.</string>
+    <string-array name="similarity_keywords" translatable="false">
+        <item>相似度</item><item>文本比较</item><item>编辑距离</item><item>Levenshtein</item><item>similarity</item><item>diff</item>
+    </string-array>
     <string name="numeric_error_input_too_long">The input is too long. Enter a shorter number; the previous value was kept.</string>
     <string name="compound_error_result_limit">The projected amount exceeds the calculation limit (10¹⁸ yuan). Reduce the principal, rate or term.</string>
 </resources>

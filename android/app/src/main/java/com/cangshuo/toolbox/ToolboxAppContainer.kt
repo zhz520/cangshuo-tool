@@ -210,6 +210,21 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.kinship.data.LocalKinshipRepository(context.assets),
         ),
     )
+    private val numberChineseFactory = com.cangshuo.toolbox.feature.numberchinese.ui.NumberChineseViewModel.factory(
+        com.cangshuo.toolbox.feature.numberchinese.domain.ConvertNumberUseCase(
+            com.cangshuo.toolbox.feature.numberchinese.data.LocalNumberChineseRepository(),
+        ),
+    )
+    private val charConvertFactory = com.cangshuo.toolbox.feature.charconvert.ui.CharConvertViewModel.factory(
+        com.cangshuo.toolbox.feature.charconvert.domain.TransformCharsUseCase(
+            com.cangshuo.toolbox.feature.charconvert.data.LocalCharConvertRepository(),
+        ),
+    )
+    private val similarityFactory = com.cangshuo.toolbox.feature.similarity.ui.SimilarityViewModel.factory(
+        com.cangshuo.toolbox.feature.similarity.domain.CompareTextsUseCase(
+            com.cangshuo.toolbox.feature.similarity.data.LocalSimilarityRepository(),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -286,6 +301,9 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.textcount.TextCountToolDefinition(resources, textCountFactory),
             com.cangshuo.toolbox.feature.urlextract.UrlExtractToolDefinition(resources, urlExtractFactory),
             com.cangshuo.toolbox.feature.kinship.KinshipToolDefinition(resources, kinshipFactory),
+            com.cangshuo.toolbox.feature.numberchinese.NumberChineseToolDefinition(resources, numberChineseFactory),
+            com.cangshuo.toolbox.feature.charconvert.CharConvertToolDefinition(resources, charConvertFactory),
+            com.cangshuo.toolbox.feature.similarity.SimilarityToolDefinition(resources, similarityFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

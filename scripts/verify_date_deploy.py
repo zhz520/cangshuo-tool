@@ -56,7 +56,9 @@ def main():
     for code, prefix in [('bmi', 'bmi'), ('compound_interest', 'compound'), ('mortgage', 'mortgage'),
                          ('fuel', 'fuel'), ('date_calc', 'date_calc'), ('color_converter', 'color'),
                          ('password_gen', 'password'), ('text_counter', 'text_count'),
-                         ('url_extract', 'url_extract'), ('kinship', 'kinship')]:
+                         ('url_extract', 'url_extract'), ('kinship', 'kinship'),
+                         ('number_chinese', 'number_chinese'), ('char_convert', 'char_convert'),
+                         ('text_similarity', 'similarity')]:
         check(code in rows, 'HTTPS public catalog ' + code)
         row = rows[code]
         check(row['name'] == strings[prefix + '_name'] and row['description'] == strings[prefix + '_description']

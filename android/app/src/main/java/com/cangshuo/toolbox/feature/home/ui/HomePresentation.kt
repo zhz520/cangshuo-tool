@@ -96,6 +96,9 @@ fun toolIconResource(name: String?): Int = when (name) {
     "text_counter" -> R.drawable.ic_text_count
     "url_extract" -> R.drawable.ic_url_extract
     "kinship" -> R.drawable.ic_kinship
+    "number_chinese" -> R.drawable.ic_number_chinese
+    "char_convert" -> R.drawable.ic_char_convert
+    "text_similarity" -> R.drawable.ic_similarity
     "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text
