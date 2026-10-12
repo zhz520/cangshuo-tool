@@ -180,6 +180,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.fuel.data.LocalFuelRepository(),
         ),
     )
+    private val dateCalcFactory = com.cangshuo.toolbox.feature.datecalc.ui.DateCalcViewModel.factory(
+        com.cangshuo.toolbox.feature.datecalc.domain.CalculateDateUseCase(
+            com.cangshuo.toolbox.feature.datecalc.data.LocalDateCalcRepository(),
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -250,6 +255,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.compound.CompoundInterestToolDefinition(resources, compoundFactory),
             com.cangshuo.toolbox.feature.mortgage.MortgageToolDefinition(resources, mortgageFactory),
             com.cangshuo.toolbox.feature.fuel.FuelToolDefinition(resources, fuelFactory),
+            com.cangshuo.toolbox.feature.datecalc.DateCalcToolDefinition(resources, dateCalcFactory),
             JsonToolDefinition(resources, jsonFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),

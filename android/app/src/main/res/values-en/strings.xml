@@ -1374,6 +1374,63 @@
     <string name="fuel_disclaimer">Based on this fill-up window; averaging several records is more accurate.</string>
     <string name="fuel_error_invalid">Enter a valid number.</string>
     <string name="fuel_error_range">Distance must be 0.1–100000 km, fuel 0.1–10000 L and price 0–100 CNY per litre.</string>
+    <string name="date_calc_name">Date Calculator</string>
+    <string name="date_calc_description">Compute the difference between two dates (days, weeks, calendar breakdown, business days) or shift a date by days, weeks, months or years.</string>
+    <string name="date_diff_title">Date difference</string>
+    <string name="date_diff_first_label">Start date</string>
+    <string name="date_diff_second_label">End date</string>
+    <string name="date_diff_date_hint">e.g. 2026-10-12</string>
+    <string name="date_btn_today">Today</string>
+    <string name="date_diff_result_title">Difference</string>
+    <string name="date_diff_total_days">Total days</string>
+    <string name="date_diff_weeks">Weeks</string>
+    <string name="date_diff_weeks_format">%1$d w %2$d d</string>
+    <string name="date_diff_period">Calendar breakdown</string>
+    <string name="date_diff_period_ymd">%1$d y %2$d mo %3$d d</string>
+    <string name="date_diff_period_y">%1$d y</string>
+    <string name="date_diff_period_md">%1$d mo %2$d d</string>
+    <string name="date_diff_period_m">%1$d mo</string>
+    <string name="date_diff_period_d">%1$d d</string>
+    <string name="date_diff_business">Business days</string>
+    <string name="date_diff_weekend">Weekend days</string>
+    <string name="date_diff_business_note">Business days exclude the end date and only skip Saturdays and Sundays; public holidays and make-up workdays are not included.</string>
+    <string name="date_diff_empty">Enter both dates to see the difference…</string>
+    <string name="date_shift_title">Date shift</string>
+    <string name="date_shift_base_label">Base date</string>
+    <string name="date_shift_amount_label">Amount</string>
+    <string name="date_shift_amount_hint">e.g. 30</string>
+    <string name="date_shift_unit_title">Unit</string>
+    <string name="date_shift_unit_days">Days</string>
+    <string name="date_shift_unit_weeks">Weeks</string>
+    <string name="date_shift_unit_months">Months</string>
+    <string name="date_shift_unit_years">Years</string>
+    <string name="date_shift_direction_title">Direction</string>
+    <string name="date_shift_direction_after">After</string>
+    <string name="date_shift_direction_before">Before</string>
+    <string name="date_shift_month_note">Days and weeks add exact days; months and years follow the calendar and clamp to the last day of the target month (Jan 31 + 1 month = Feb 28, or Feb 29 in a leap year).</string>
+    <string name="date_shift_result_title">Result</string>
+    <string name="date_shift_result_format">%1$s · %2$s</string>
+    <string name="date_shift_days_label">Days moved</string>
+    <string name="date_shift_empty">Enter a base date and an amount to shift…</string>
+    <string name="date_weekday_mon">Monday</string>
+    <string name="date_weekday_tue">Tuesday</string>
+    <string name="date_weekday_wed">Wednesday</string>
+    <string name="date_weekday_thu">Thursday</string>
+    <string name="date_weekday_fri">Friday</string>
+    <string name="date_weekday_sat">Saturday</string>
+    <string name="date_weekday_sun">Sunday</string>
+    <string name="date_error_invalid_date">Invalid date. Use a full date such as 2026-10-12.</string>
+    <string name="date_error_range">Dates must fall between 1900 and 2999.</string>
+    <string name="date_error_invalid_amount">The amount must be a whole number from 0 to 100000.</string>
+    <string name="date_error_amount_range">The amount must be between 0 and 100000.</string>
+    <string name="date_error_result_range">The result falls outside the 1900–2999 range.</string>
+    <string name="date_btn_clear">Clear</string>
+    <string name="date_btn_copy">Copy result</string>
+    <string name="date_copy_diff">Between %1$s and %2$s: %3$d days (%4$d w %5$d d), %6$d business days.</string>
+    <string name="date_copy_shift">%3$d %4$s %2$s %1$s → %5$s</string>
+    <string-array name="date_calc_keywords" translatable="false">
+        <item>date</item><item>日期</item><item>日期计算</item><item>日期间隔</item><item>天数</item><item>工作日</item><item>日期推算</item><item>date calculator</item><item>days between</item>
+    </string-array>
     <string name="numeric_error_input_too_long">The input is too long. Enter a shorter number; the previous value was kept.</string>
     <string name="compound_error_result_limit">The projected amount exceeds the calculation limit (10¹⁸ yuan). Reduce the principal, rate or term.</string>
 </resources>

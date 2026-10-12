@@ -90,6 +90,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "compound_interest" -> R.drawable.ic_interest
     "mortgage" -> R.drawable.ic_mortgage
     "fuel" -> R.drawable.ic_fuel
+    "date_calc" -> R.drawable.ic_date
     "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
     "text" -> R.drawable.ic_text

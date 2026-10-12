@@ -1443,6 +1443,63 @@
     <string-array name="fuel_keywords" translatable="false">
         <item>fuel</item><item>油耗</item><item>油费</item><item>加油</item><item>百公里油耗</item><item>mpg</item><item>l/100km</item><item>里程</item>
     </string-array>
+    <string name="date_calc_name">日期计算器</string>
+    <string name="date_calc_description">计算两个日期的相差天数、周数、年月日与工作日，或按天、周、月、年推算日期。</string>
+    <string name="date_diff_title">日期差值</string>
+    <string name="date_diff_first_label">开始日期</string>
+    <string name="date_diff_second_label">结束日期</string>
+    <string name="date_diff_date_hint">例如 2026-10-12</string>
+    <string name="date_btn_today">今天</string>
+    <string name="date_diff_result_title">差值结果</string>
+    <string name="date_diff_total_days">相差天数</string>
+    <string name="date_diff_weeks">相差周数</string>
+    <string name="date_diff_weeks_format">%1$d 周 %2$d 天</string>
+    <string name="date_diff_period">相差年月日</string>
+    <string name="date_diff_period_ymd">%1$d 年 %2$d 个月 %3$d 天</string>
+    <string name="date_diff_period_y">%1$d 年</string>
+    <string name="date_diff_period_md">%1$d 个月 %2$d 天</string>
+    <string name="date_diff_period_m">%1$d 个月</string>
+    <string name="date_diff_period_d">%1$d 天</string>
+    <string name="date_diff_business">工作日</string>
+    <string name="date_diff_weekend">周末天数</string>
+    <string name="date_diff_business_note">工作日不含结束日期，仅排除周六与周日；法定节假日与调休未计入。</string>
+    <string name="date_diff_empty">填写两个日期后自动计算差值…</string>
+    <string name="date_shift_title">日期推算</string>
+    <string name="date_shift_base_label">基准日期</string>
+    <string name="date_shift_amount_label">推算数量</string>
+    <string name="date_shift_amount_hint">例如 30</string>
+    <string name="date_shift_unit_title">单位</string>
+    <string name="date_shift_unit_days">天</string>
+    <string name="date_shift_unit_weeks">周</string>
+    <string name="date_shift_unit_months">月</string>
+    <string name="date_shift_unit_years">年</string>
+    <string name="date_shift_direction_title">方向</string>
+    <string name="date_shift_direction_after">之后</string>
+    <string name="date_shift_direction_before">之前</string>
+    <string name="date_shift_month_note">按天、周为精确天数；按月、年按日历推算，遇月末自动取该月最后一天（如 1 月 31 日加 1 个月为 2 月 28 日，闰年为 2 月 29 日）。</string>
+    <string name="date_shift_result_title">推算结果</string>
+    <string name="date_shift_result_format">%1$s · %2$s</string>
+    <string name="date_shift_days_label">移动天数</string>
+    <string name="date_shift_empty">填写基准日期与数量后自动推算…</string>
+    <string name="date_weekday_mon">星期一</string>
+    <string name="date_weekday_tue">星期二</string>
+    <string name="date_weekday_wed">星期三</string>
+    <string name="date_weekday_thu">星期四</string>
+    <string name="date_weekday_fri">星期五</string>
+    <string name="date_weekday_sat">星期六</string>
+    <string name="date_weekday_sun">星期日</string>
+    <string name="date_error_invalid_date">日期格式无效，请输入如 2026-10-12 的完整日期。</string>
+    <string name="date_error_range">日期超出 1900–2999 年范围。</string>
+    <string name="date_error_invalid_amount">数量需为 0–100000 的整数。</string>
+    <string name="date_error_amount_range">数量超出 0–100000 范围。</string>
+    <string name="date_error_result_range">推算结果超出 1900–2999 年范围。</string>
+    <string name="date_btn_clear">清空</string>
+    <string name="date_btn_copy">复制结果</string>
+    <string name="date_copy_diff">%1$s 与 %2$s 相差 %3$d 天（%4$d 周 %5$d 天），工作日 %6$d 天。</string>
+    <string name="date_copy_shift">%1$s %2$s %3$d %4$s → %5$s</string>
+    <string-array name="date_calc_keywords" translatable="false">
+        <item>date</item><item>日期</item><item>日期计算</item><item>日期间隔</item><item>天数</item><item>工作日</item><item>日期推算</item><item>date calculator</item><item>days between</item>
+    </string-array>
     <string name="numeric_error_input_too_long">输入过长，请缩短数值。已保留原输入。</string>
     <string name="compound_error_result_limit">预计金额超过计算上限（10¹⁸ 元），请降低本金、收益率或年限。</string>
 </resources>
