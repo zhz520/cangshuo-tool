@@ -28,7 +28,7 @@ def verify(check, request, sql, admin):
             seeds.append(stream.read().decode('utf-8'))
     check(sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('44','45','46','47') AND success=1") == '4',
           'V44-V47 applied')
-    status, body, unused = request('tools?pageSize=200')
+    status, body, unused = request('tools?pageSize=100')
     check(status == 200, 'public tool catalog available')
     catalog = dict((row['code'], row) for row in body['data']['records'])
     for code, prefix, order, category in specs:
@@ -54,7 +54,7 @@ def verify(check, request, sql, admin):
 
     check(request('admin/tools/bmi/status', {'status': 'MAINTENANCE'}, token=admin, method='PATCH')[0] == 200,
           'administrator can maintain new tool')
-    check('bmi' not in [row['code'] for row in request('tools?pageSize=200')[1]['data']['records']],
+    check('bmi' not in [row['code'] for row in request('tools?pageSize=100')[1]['data']['records']],
           'maintenance removes public catalog entry')
     check(request('admin/tools/fuel', token=admin, method='DELETE')[0] == 200, 'administrator can soft-delete new tool')
     for seed in seeds:

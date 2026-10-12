@@ -52,7 +52,7 @@ def main():
         'password': environment['ADMIN_BOOTSTRAP_PASSWORD']})
     check(login['code'] == 0, 'HTTPS administrator login')
     token = login['data']['accessToken']
-    rows = dict((row['code'], row) for row in get('tools?pageSize=200')['data']['records'])
+    rows = dict((row['code'], row) for row in get('tools?pageSize=100')['data']['records'])
     for code, prefix in [('bmi', 'bmi'), ('compound_interest', 'compound'), ('mortgage', 'mortgage'),
                          ('fuel', 'fuel'), ('date_calc', 'date_calc'), ('color_converter', 'color'),
                          ('password_gen', 'password'), ('text_counter', 'text_count'),
