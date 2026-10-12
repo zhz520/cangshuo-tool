@@ -14,10 +14,13 @@ import java.util.concurrent.Flow;
 import javax.crypto.Cipher;
 import javax.crypto.spec.*;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Fixed Zepp/Huami origins, no redirects/cookies/retries, bounded responses and one total deadline. */
 @Component
 public class ZeppHttpProvider implements ZeppProvider {
+    private static final Logger LOG = LoggerFactory.getLogger(ZeppHttpProvider.class);
     static final URI REGISTRATION = URI.create("https://api-user.zepp.com/v2/registrations/tokens");
     static final URI CLIENT_LOGIN = URI.create("https://account.huami.com/v2/client/login");
     static final String DATA_ORIGIN = "https://api-mifit-cn.huami.com";
@@ -53,7 +56,7 @@ public class ZeppHttpProvider implements ZeppProvider {
         HttpResponse<byte[]> registration;
         try {
             registration = send(request(REGISTRATION, deadline).header("x-hm-ekv", "1")
-                    .POST(HttpRequest.BodyPublishers.ofByteArray(encrypted)).build(), deadline, false);
+                    .POST(HttpRequest.BodyPublishers.ofByteArray(encrypted)).build(), deadline, false, "registration");
         } finally { Arrays.fill(encrypted, (byte) 0); }
         String access = accessCode(registration);
 
@@ -67,17 +70,35 @@ public class ZeppHttpProvider implements ZeppProvider {
         exchange.put("lang", "zh_CN"); exchange.put("source", APP + ":6.14.0:50818");
         exchange.put("os_version", "1.5.0");
         exchange.put("dn", "account.zepp.com,api-user.zepp.com,api-mifit.zepp.com,api-watch.zepp.com,app-analytics.zepp.com,api-analytics.huami.com,auth.zepp.com");
-        JsonNode session = json(send(post(CLIENT_LOGIN, form(exchange), deadline), deadline, false).body());
+        JsonNode session = json(send(post(CLIENT_LOGIN, form(exchange), deadline), deadline, false, "exchange").body());
         exchange.clear();
-        if (!"ok".equals(session.path("result").asText())) throw authenticationError(session);
+        if (!"ok".equals(session.path("result").asText())) {
+            warn("exchange", 200, "result=" + safe(session.path("result").asText())
+                    + " error_code=" + safe(session.path("error_code").asText()));
+            throw authenticationError(session);
+        }
         String token = requiredText(session.path("token_info"), "app_token", 4096);
         String userId = session.path("token_info").path("user_id").asText();
-        if (!userId.matches("[0-9]{1,20}")) throw failure();
+        if (!userId.matches("[0-9]{1,20}")) {
+            warn("token", 200, "user_id_length=" + userId.length()
+                    + " digits=" + userId.chars().allMatch(Character::isDigit));
+            throw failure();
+        }
 
-        JsonNode bindings = json(send(request(URI.create(DATA_ORIGIN + "/v1/device/binds.json?userid=" + userId), deadline)
-                .header("apptoken", token).GET().build(), deadline, false).body());
-        if (bindings.has("message") && !"success".equals(bindings.path("message").asText())) throw failure();
-        String boundDevice = boundDevice(bindings);
+        // Device lookup is best effort, matching the reference implementation: when the endpoint
+        // errors or reports no wearable, the write still proceeds with the compatibility device id.
+        String boundDevice = null;
+        try {
+            JsonNode bindings = json(send(request(URI.create(DATA_ORIGIN + "/v1/device/binds.json?userid=" + userId), deadline)
+                    .header("apptoken", token).GET().build(), deadline, false, "bindings").body());
+            if (bindings.has("message") && !"success".equals(bindings.path("message").asText())) {
+                warn("bindings", 200, "message=" + safe(bindings.path("message").asText()));
+            } else {
+                boundDevice = boundDevice(bindings);
+            }
+        } catch (ApiException ignored) {
+            warn("bindings", -1, "device lookup skipped");
+        }
         String device = boundDevice == null ? "DA932FFFFE8816E7" : boundDevice;
         // Compute the actual upload date after login, so a login spanning midnight never writes yesterday.
         Instant now = clock.instant();
@@ -88,14 +109,18 @@ public class ZeppHttpProvider implements ZeppProvider {
         upload.put("device_type", "0"); upload.put("last_deviceid", device); upload.put("data_json", payload);
         URI uri = URI.create(DATA_ORIGIN + "/v1/data/band_data.json?t=" + now.toEpochMilli() + "&r=" + UUID.randomUUID());
         var response = send(request(uri, deadline).header("apptoken", token)
-                .POST(HttpRequest.BodyPublishers.ofString(form(upload), StandardCharsets.UTF_8)).build(), deadline, true);
+                .POST(HttpRequest.BodyPublishers.ofString(form(upload), StandardCharsets.UTF_8)).build(), deadline, true, "upload");
         JsonNode result;
         try { result = json(response.body()); }
-        catch (ApiException malformed) { throw new ApiException(ApiError.ZEPP_SUBMISSION_UNCERTAIN); }
-        if (!"success".equals(result.path("message").asText())) throw failure();
-        if (result.has("code") && (!result.path("code").isIntegralNumber()
-                || !result.path("code").canConvertToInt() || result.path("code").intValue() != 0))
+        catch (ApiException malformed) {
+            warn("upload", -1, "malformed response");
+            throw new ApiException(ApiError.ZEPP_SUBMISSION_UNCERTAIN);
+        }
+        if (!uploadAccepted(result)) {
+            warn("upload", 200, "message=" + safe(result.path("message").asText())
+                    + " code=" + safe(result.path("code").asText()));
             throw failure();
+        }
         return new Submission(date, clock.instant(), boundDevice != null);
     }
 
@@ -122,28 +147,62 @@ public class ZeppHttpProvider implements ZeppProvider {
         return request(uri, deadline).POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8)).build();
     }
 
-    private HttpResponse<byte[]> send(HttpRequest request, long deadline, boolean upload) {
+    /**
+     * The write counts as accepted when message=success. The reference implementations treat the
+     * message field as authoritative: real accounts answer with code 0 or 1, and the code value
+     * varies between app versions.
+     */
+    static boolean uploadAccepted(JsonNode result) {
+        return "success".equals(result.path("message").asText());
+    }
+
+    private HttpResponse<byte[]> send(HttpRequest request, long deadline, boolean upload, String step) {
         CompletableFuture<HttpResponse<byte[]>> future = null;
         try {
             future = client.sendAsync(request, info -> new BoundedSubscriber());
             long nanos = deadline - System.nanoTime();
-            if (nanos <= 0) throw new ApiException(upload ? ApiError.ZEPP_SUBMISSION_UNCERTAIN : ApiError.ZEPP_PROVIDER_ERROR);
+            if (nanos <= 0) {
+                warn(step, -1, "budget exhausted");
+                throw new ApiException(upload ? ApiError.ZEPP_SUBMISSION_UNCERTAIN : ApiError.ZEPP_PROVIDER_ERROR);
+            }
             HttpResponse<byte[]> response = future.get(nanos, TimeUnit.NANOSECONDS);
             int status = response.statusCode();
-            if (status == 429) throw new ApiException(ApiError.ZEPP_RATE_LIMITED);
-            if (status == 401) throw new ApiException(ApiError.ZEPP_INVALID_CREDENTIALS);
-            if (status == 403) throw new ApiException(ApiError.ZEPP_VERIFICATION_REQUIRED);
-            if (status >= 500 && upload) throw new ApiException(ApiError.ZEPP_SUBMISSION_UNCERTAIN);
-            if (status != 200 && !(request.uri().equals(REGISTRATION) && (status == 302 || status == 303)))
+            if (status == 429) { warn(step, status, "rate limited"); throw new ApiException(ApiError.ZEPP_RATE_LIMITED); }
+            if (status == 401) { warn(step, status, "unauthorized"); throw new ApiException(ApiError.ZEPP_INVALID_CREDENTIALS); }
+            if (status == 403) { warn(step, status, "verification"); throw new ApiException(ApiError.ZEPP_VERIFICATION_REQUIRED); }
+            if (status >= 500 && upload) {
+                warn(step, status, "server error");
+                throw new ApiException(ApiError.ZEPP_SUBMISSION_UNCERTAIN);
+            }
+            if (status != 200 && !(request.uri().equals(REGISTRATION) && (status == 302 || status == 303))) {
+                warn(step, status, "unexpected status");
                 throw failure();
+            }
             return response;
         } catch (ApiException error) { throw error; }
         catch (InterruptedException error) {
+            warn(step, -1, "interrupted");
             Thread.currentThread().interrupt();
             throw new ApiException(upload ? ApiError.ZEPP_SUBMISSION_UNCERTAIN : ApiError.SERVICE_UNAVAILABLE);
         } catch (Exception error) {
+            warn(step, -1, error.getClass().getSimpleName());
             throw new ApiException(upload ? ApiError.ZEPP_SUBMISSION_UNCERTAIN : ApiError.ZEPP_PROVIDER_ERROR);
         } finally { if (future != null && !future.isDone()) future.cancel(true); }
+    }
+
+    /** Bounded, ASCII-only diagnostic detail; never carries credentials, tokens or response bodies. */
+    private static void warn(String step, int status, String detail) {
+        LOG.warn("Zepp upstream failure; step={}, status={}, detail={}", step, status, safe(detail));
+    }
+
+    static String safe(String value) {
+        if (value == null) return "";
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < value.length() && builder.length() < 40; index++) {
+            char character = value.charAt(index);
+            if (character >= 0x20 && character < 0x7F) builder.append(character);
+        }
+        return builder.toString();
     }
 
     private static Duration remaining(long deadline) {
@@ -185,8 +244,12 @@ public class ZeppHttpProvider implements ZeppProvider {
                     access = value;
                 } else if (name.equals("error")) error = value;
             }
-            if (access == null || access.isBlank()) throw verification(error)
-                    ? new ApiException(ApiError.ZEPP_VERIFICATION_REQUIRED) : new ApiException(ApiError.ZEPP_INVALID_CREDENTIALS);
+            if (access == null || access.isBlank()) {
+                warn("registration", response.statusCode(), "error=" + safe(error));
+                throw verification(error)
+                        ? new ApiException(ApiError.ZEPP_VERIFICATION_REQUIRED)
+                        : new ApiException(ApiError.ZEPP_INVALID_CREDENTIALS);
+            }
             if (access.length() > 8192 || access.chars().anyMatch(Character::isISOControl)) throw failure();
             return access;
         } catch (ApiException error) { throw error; }
@@ -207,6 +270,8 @@ public class ZeppHttpProvider implements ZeppProvider {
 
     static String boundDevice(JsonNode bindings) {
         JsonNode items = bindings.path("items");
+        // New accounts may report no device list at all; uploads then use the compatibility device id.
+        if (items.isMissingNode() || items.isNull()) return null;
         if (!items.isArray() || items.size() > 100) throw failure();
         for (int pass = 0; pass < 2; pass++) for (JsonNode item : items) {
             boolean wearable = item.path("deviceType").isIntegralNumber()

@@ -131,6 +131,38 @@ class ZeppHttpProviderTest {
     @Test void deviceLookupPrefersWearablesAndRejectsUnexpectedShapes() throws Exception {
         assertEquals("ABCDEF123456",ZeppHttpProvider.boundDevice(mapper.readTree("{\"items\":[{\"deviceType\":1,\"deviceId\":\"ignored1\"},{\"deviceType\":0,\"deviceId\":\"abcdef123456\"}]}")));
         assertNull(ZeppHttpProvider.boundDevice(mapper.readTree("{\"items\":[]}")));
+        assertNull(ZeppHttpProvider.boundDevice(mapper.readTree("{\"message\":\"success\"}")));
         assertThrows(ApiException.class,()->ZeppHttpProvider.boundDevice(mapper.readTree("{\"items\":\"invalid\"}")));
+    }
+    @Test void uploadAcceptanceAcceptsNumericOrTextualZeroAndRejectsErrors() throws Exception {
+        assertTrue(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"success\",\"code\":0}")));
+        assertTrue(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"success\",\"code\":1}")));
+        assertTrue(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"success\"}")));
+        assertTrue(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"success\",\"code\":\"1\"}")));
+        assertFalse(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"fail\",\"code\":0}")));
+        assertFalse(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"code\":0}")));
+        assertFalse(ZeppHttpProvider.uploadAccepted(mapper.readTree("{\"message\":\"Success\"}")));
+    }
+    @Test void diagnosticDetailIsBoundedAndAsciiOnly() {
+        assertEquals("ok-123",ZeppHttpProvider.safe("ok-\u0007\u4e2d123"));
+        assertTrue(ZeppHttpProvider.safe("x".repeat(200)).length() <= 40);
+        assertEquals("",ZeppHttpProvider.safe(null));
+    }
+    @Test @SuppressWarnings("unchecked") void bindingLookupFailureStillUploadsWithFallbackDevice() throws Exception {
+        var client = mock(HttpClient.class);
+        List<byte[]> bodies = new ArrayList<>();
+        var replies = new ArrayDeque<>(List.of(
+                response(303,"","https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html?access=abc"),
+                response(200,"{\"result\":\"ok\",\"token_info\":{\"app_token\":\"tk\",\"user_id\":123}}",null),
+                response(500,"",null),
+                response(200,"{\"message\":\"success\",\"code\":0}",null)));
+        when(client.sendAsync(any(HttpRequest.class),any(HttpResponse.BodyHandler.class))).thenAnswer(call -> {
+            HttpRequest request = call.getArgument(0);
+            bodies.add(request.bodyPublisher().isPresent() ? requestBody(request) : new byte[0]);
+            return CompletableFuture.completedFuture(replies.remove());
+        });
+        var result = provider(client).submit("test@example.com","password",10000);
+        assertFalse(result.boundDevice());
+        assertEquals("DA932FFFFE8816E7",decode(new String(bodies.get(3),StandardCharsets.UTF_8)).get("last_deviceid"));
     }
 }
