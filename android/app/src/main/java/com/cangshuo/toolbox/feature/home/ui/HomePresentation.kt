@@ -104,6 +104,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "text_similarity" -> R.drawable.ic_similarity
     "morse" -> R.drawable.ic_morse
     "json" -> R.drawable.ic_json
+    "regex_tester" -> R.drawable.ic_regex_tester
     "text" -> R.drawable.ic_text
     "qr" -> R.drawable.ic_qr
     "pdf" -> R.drawable.ic_pdf

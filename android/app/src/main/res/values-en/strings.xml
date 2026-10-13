@@ -1803,4 +1803,97 @@
     <string name="stopwatch_error_not_running">Laps can only be added while the stopwatch is running.</string>
     <string name="stopwatch_note" formatted="false">Timing uses the device monotonic clock, so pausing or leaving the app loses nothing (the display catches up when you return); the display caps at 99:59:59.99. Records stay in this tool session and are not uploaded; they clear if the system reclaims the process. This version has no ongoing notification or background alarm.</string>
     <string name="stopwatch_error_lap_too_soon">Wait a moment before adding another lap. Each split must be greater than zero.</string>
+    <string name="regex_tester_name">Regex Tester</string>
+    <string name="regex_tester_description">Test matches, capture groups and replacements with flags, examples and copy actions.</string>
+    <string name="regex_tester_examples">Examples</string>
+    <string name="regex_tester_pattern">Expression</string>
+    <string name="regex_tester_pattern_hint">Enter an expression without / delimiters</string>
+    <string name="regex_tester_engine_note">Uses RE2 syntax with named groups and Unicode classes. Lookaround and backreferences are unsupported.</string>
+    <string name="regex_tester_global">All matches g</string>
+    <string name="regex_tester_ignore_case">Ignore case i</string>
+    <string name="regex_tester_multiline">Multiline anchors m</string>
+    <string name="regex_tester_dot_all">Dot matches newlines s</string>
+    <string name="regex_tester_flags_help">With g off, return the first match. m anchors each line; s includes newlines in dot matches.</string>
+    <string name="regex_tester_input">Text to match</string>
+    <string name="regex_tester_input_size">%1$d / %2$d UTF-16 units</string>
+    <string name="regex_tester_mode_match">Match</string>
+    <string name="regex_tester_mode_replace">Replace</string>
+    <string name="regex_tester_replacement">Replacement (empty deletes matches)</string>
+    <string name="regex_tester_expand_groups">Expand capture references</string>
+    <string name="regex_tester_group_help">$0 inserts the match, $1 etc. inserts numbered groups, and ${name} inserts a named group. A backslash escapes $ or another backslash.</string>
+    <string name="regex_tester_literal_help">Literal replacement: $ and backslashes are preserved.</string>
+    <string name="regex_tester_run">Test matches</string>
+    <string name="regex_tester_preview_replace">Preview replacement</string>
+    <string name="regex_tester_cancel">Cancel</string>
+    <string name="regex_tester_clear">Clear text</string>
+    <string name="regex_tester_loading">Testing expression…</string>
+    <string name="regex_tester_ready">Enter an expression and text, or choose an example above.</string>
+    <plurals name="regex_tester_match_count">
+        <item quantity="one">%1$d match</item>
+        <item quantity="other">%1$d matches</item>
+    </plurals>
+    <string name="regex_tester_full_match">Matches the whole text</string>
+    <string name="regex_tester_yes">Yes</string>
+    <string name="regex_tester_no">No</string>
+    <string name="regex_tester_offsets">Offsets start at 0 in UTF-16 units; the end is exclusive.</string>
+    <string name="regex_tester_no_matches">No matches. Adjust the expression or options.</string>
+    <string name="regex_tester_copy_matches">Copy all matches</string>
+    <string name="regex_tester_highlight">Match preview</string>
+    <string name="regex_tester_preview_limited">Preview shows the first 4,000 UTF-16 units. Match results and copies are complete.</string>
+    <string name="regex_tester_replaced">Replacement result</string>
+    <string name="regex_tester_copy_result">Copy replacement</string>
+    <string name="regex_tester_match_range">Match %1$d · [%2$d, %3$d)</string>
+    <string name="regex_tester_zero_width">Empty match (zero-width position)</string>
+    <string name="regex_tester_copy_match">Copy match</string>
+    <plurals name="regex_tester_show_groups">
+        <item quantity="one">Show %1$d group</item><item quantity="other">Show %1$d groups</item>
+    </plurals>
+    <plurals name="regex_tester_hide_groups">
+        <item quantity="one">Hide %1$d group</item><item quantity="other">Hide %1$d groups</item>
+    </plurals>
+    <string name="regex_tester_named_group">Group %1$d · %2$s</string>
+    <string name="regex_tester_group">Group %1$d</string>
+    <string name="regex_tester_unmatched_group">This group did not participate (null).</string>
+    <string name="regex_tester_range">Range [%1$d, %2$d)</string>
+    <string name="regex_tester_copy_group">Copy group</string>
+    <string name="regex_tester_copied">Copied</string>
+    <string name="regex_tester_copy_failed">Copy failed. Long-press to select and copy the text.</string>
+    <string name="regex_tester_help">Up to 500 matches and 32 capture groups. Limits return an error, never a partial result. Examples illustrate syntax, not full email, URL or date validation.</string>
+    <string name="regex_tester_error_empty">Enter an expression. Use ^ or $ to match an empty position.</string>
+    <string name="regex_tester_error_input">Text exceeds 100,000 UTF-16 units. Previous input was kept; shorten the text.</string>
+    <string name="regex_tester_error_pattern_size">Expression exceeds 512 UTF-16 units. Previous input was kept; simplify it.</string>
+    <string name="regex_tester_error_replacement_size">Replacement exceeds 8,192 UTF-16 units. Previous input was kept.</string>
+    <string name="regex_tester_error_unicode">Text contains incomplete Unicode characters. Check the input.</string>
+    <string name="regex_tester_error_pattern">Invalid expression or unsupported RE2 syntax. Check brackets and escapes; avoid lookaround and backreferences.</string>
+    <string name="regex_tester_error_complex">Expression nesting or repetitions are too complex. Reduce repeats or simplify it.</string>
+    <string name="regex_tester_error_replacement">Invalid capture reference or escape. Check $number and ${name}, or turn off capture expansion for literal replacement.</string>
+    <string name="regex_tester_error_matches">More than 500 matches. No partial results were returned. Shorten the input or turn off all matches.</string>
+    <string name="regex_tester_error_result">Captures or replacement exceed 200,000 UTF-16 units. No partial results were returned. Reduce the scope.</string>
+    <string name="regex_tester_error_time">Computation timed out. Simplify the expression or shorten the text.</string>
+    <string name="regex_tester_error_memory">Not enough memory. Reduce the input and retry.</string>
+    <string name="regex_tester_error_failed">Test could not be completed. Edit the input or retry.</string>
+    <string name="regex_tester_preset_email">Email</string>
+    <string name="regex_tester_preset_number">Numbers</string>
+    <string name="regex_tester_preset_url">URLs</string>
+    <string name="regex_tester_preset_date">Date groups</string>
+    <string name="regex_tester_preset_keyvalue">Key-value</string>
+    <string name="regex_tester_preset_blank">Blank lines</string>
+    <string name="regex_tester_sample_email">Contact alice@example.com or Bob@demo.org</string>
+    <string name="regex_tester_sample_number">Temperature -12.5, count 24, increase +3</string>
+    <string name="regex_tester_sample_url">Links https://example.com/a?b=1 and https://demo.org/docs</string>
+    <string name="regex_tester_sample_date" xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">Start 2026-10-13, end 2027-02-28</string>
+    <string name="regex_tester_sample_keyvalue">name=alice score=95 city=beijing</string>
+    <string name="regex_tester_sample_blank">first\n\nsecond\n   \nlast</string>
+    <string-array name="regex_tester_keywords">
+        <item>regex</item>
+        <item>regular expression</item>
+        <item>match</item>
+        <item>groups</item>
+        <item>replace</item>
+        <item>正则</item>
+        <item>正则表达式</item>
+        <item>匹配</item>
+        <item>分组</item>
+        <item>替换</item>
+    </string-array>
 </resources>

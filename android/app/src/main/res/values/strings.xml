@@ -1881,4 +1881,92 @@
     <string name="stopwatch_error_not_running">只有计时中才能添加计次。</string>
     <string name="stopwatch_note">计时基于设备单调时钟，暂停与切到后台都不会丢失已计时间（回到前台自动补算）；显示上限 99:59:59.99。记录只保留在本次工具会话，不上传；进程被系统回收后清空。本版本不提供常驻通知或后台闹钟。</string>
     <string name="stopwatch_error_lap_too_soon">请稍候再记次，每圈时间需要大于零。</string>
+    <string name="regex_tester_name">正则表达式</string>
+    <string name="regex_tester_description">测试匹配、捕获分组与替换，支持选项、常用示例和结果复制。</string>
+    <string name="regex_tester_examples">常用示例</string>
+    <string name="regex_tester_pattern">表达式</string>
+    <string name="regex_tester_pattern_hint">输入表达式，无需添加 / 分隔符</string>
+    <string name="regex_tester_engine_note">使用 RE2 语法，支持命名分组与 Unicode 字符类；不支持前后瞻、反向引用。</string>
+    <string name="regex_tester_global">全部匹配 g</string>
+    <string name="regex_tester_ignore_case">忽略大小写 i</string>
+    <string name="regex_tester_multiline">多行锚点 m</string>
+    <string name="regex_tester_dot_all">点号匹配换行 s</string>
+    <string name="regex_tester_flags_help">g 关闭时仅取第一处；m 使 ^ / $ 匹配每行；s 使点号包含换行。</string>
+    <string name="regex_tester_input">待匹配文本</string>
+    <string name="regex_tester_input_size">%1$d / %2$d 个 UTF-16 单元</string>
+    <string name="regex_tester_mode_match">匹配</string>
+    <string name="regex_tester_mode_replace">替换</string>
+    <string name="regex_tester_replacement">替换文本（留空表示删除）</string>
+    <string name="regex_tester_expand_groups">展开捕获分组引用</string>
+    <string name="regex_tester_group_help">$0 表示完整匹配，$1 等表示编号分组，${name} 表示命名分组；反斜线可转义 $ 与反斜线。</string>
+    <string name="regex_tester_literal_help">当前按字面文本替换，$ 与反斜线均按原样保留。</string>
+    <string name="regex_tester_run">测试匹配</string>
+    <string name="regex_tester_preview_replace">预览替换</string>
+    <string name="regex_tester_cancel">取消</string>
+    <string name="regex_tester_clear">清空文本</string>
+    <string name="regex_tester_loading">正在测试表达式…</string>
+    <string name="regex_tester_ready">输入表达式和文本后开始测试，或先选择上方示例。</string>
+    <plurals name="regex_tester_match_count">
+        <item quantity="other">共 %1$d 处匹配</item>
+    </plurals>
+    <string name="regex_tester_full_match">整个文本完全匹配</string>
+    <string name="regex_tester_yes">是</string>
+    <string name="regex_tester_no">否</string>
+    <string name="regex_tester_offsets">位置从 0 开始，以 UTF-16 计数；结束位置不包含在内。</string>
+    <string name="regex_tester_no_matches">没有匹配；可调整表达式或匹配选项。</string>
+    <string name="regex_tester_copy_matches">复制全部匹配</string>
+    <string name="regex_tester_highlight">匹配预览</string>
+    <string name="regex_tester_preview_limited">预览仅展示前 4,000 个 UTF-16 单元；匹配结果与复制内容完整。</string>
+    <string name="regex_tester_replaced">替换结果</string>
+    <string name="regex_tester_copy_result">复制替换结果</string>
+    <string name="regex_tester_match_range">匹配 %1$d · [%2$d, %3$d)</string>
+    <string name="regex_tester_zero_width">空匹配（零宽位置）</string>
+    <string name="regex_tester_copy_match">复制匹配</string>
+    <plurals name="regex_tester_show_groups"><item quantity="other">查看 %1$d 个分组</item></plurals>
+    <plurals name="regex_tester_hide_groups"><item quantity="other">收起 %1$d 个分组</item></plurals>
+    <string name="regex_tester_named_group">分组 %1$d · %2$s</string>
+    <string name="regex_tester_group">分组 %1$d</string>
+    <string name="regex_tester_unmatched_group">本次匹配中，该分组未参与（null）。</string>
+    <string name="regex_tester_range">位置 [%1$d, %2$d)</string>
+    <string name="regex_tester_copy_group">复制分组</string>
+    <string name="regex_tester_copied">已复制</string>
+    <string name="regex_tester_copy_failed">复制失败，请长按选择文本后复制。</string>
+    <string name="regex_tester_help">最多 500 处匹配、32 个捕获分组。超过上限时明确报错，不返回不完整结果。示例只用于演示，不承担邮箱、URL 或日期的完整业务校验。</string>
+    <string name="regex_tester_error_empty">请输入表达式；匹配空位置可使用 ^、$ 等。</string>
+    <string name="regex_tester_error_input">文本超过 100,000 个 UTF-16 单元，已保留原输入；请减少文本。</string>
+    <string name="regex_tester_error_pattern_size">表达式超过 512 个 UTF-16 单元，已保留原输入；请简化表达式。</string>
+    <string name="regex_tester_error_replacement_size">替换文本超过 8,192 个 UTF-16 单元，已保留原输入。</string>
+    <string name="regex_tester_error_unicode">文本包含不完整的 Unicode 字符，请检查输入。</string>
+    <string name="regex_tester_error_pattern">表达式无效或使用了 RE2 不支持的语法。请检查括号、转义，避免前后瞻和反向引用。</string>
+    <string name="regex_tester_error_complex">表达式嵌套或重复展开过于复杂，请缩小重复次数或简化表达式。</string>
+    <string name="regex_tester_error_replacement">分组引用或转义无效。请确认 $ 编号或 ${name} 存在，或关闭分组展开按字面替换。</string>
+    <string name="regex_tester_error_matches">匹配超过 500 处，未返回部分结果。请缩小文本范围，或关闭全部匹配。</string>
+    <string name="regex_tester_error_result">匹配分组或替换结果超过 200,000 个 UTF-16 单元，未返回部分结果。请缩小范围。</string>
+    <string name="regex_tester_error_time">本次计算超时，请简化表达式或缩短文本后重试。</string>
+    <string name="regex_tester_error_memory">当前可用内存不足，请减少输入后重试。</string>
+    <string name="regex_tester_error_failed">测试未完成，请修改输入或重试。</string>
+    <string name="regex_tester_preset_email">邮箱</string>
+    <string name="regex_tester_preset_number">数字</string>
+    <string name="regex_tester_preset_url">网址</string>
+    <string name="regex_tester_preset_date">日期分组</string>
+    <string name="regex_tester_preset_keyvalue">键值对</string>
+    <string name="regex_tester_preset_blank">空白行</string>
+    <string name="regex_tester_sample_email">联系 alice@example.com 或 Bob@demo.org</string>
+    <string name="regex_tester_sample_number">温度 -12.5，数量 24，增量 +3</string>
+    <string name="regex_tester_sample_url">链接 https://example.com/a?b=1 和 https://demo.org/docs</string>
+    <string name="regex_tester_sample_date" xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">开始 2026-10-13，结束 2027-02-28</string>
+    <string name="regex_tester_sample_keyvalue">name=alice score=95 city=beijing</string>
+    <string name="regex_tester_sample_blank">first\n\nsecond\n   \nlast</string>
+    <string-array name="regex_tester_keywords">
+        <item>正则</item>
+        <item>正则表达式</item>
+        <item>匹配</item>
+        <item>分组</item>
+        <item>替换</item>
+        <item>regex</item>
+        <item>regular expression</item>
+        <item>pattern</item>
+        <item>groups</item>
+        <item>replace</item>
+    </string-array>
 </resources>

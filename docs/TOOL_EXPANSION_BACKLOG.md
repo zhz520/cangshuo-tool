@@ -401,7 +401,7 @@
 | 网页源码获取 | ◐ | A | OkHttp GET 文本（复用网络栈） |
 | 请求测试 | ✗ | A | OkHttp 构造请求（方法/头/体） |
 | JSON格式化 | ✅ | A | 已有 |
-| 正则表达式 | ✗ | A | 本地正则测试器 |
+| 正则表达式 | ✅ | A | regex_tester：RE2/J 匹配/命名分组/替换预览、g/i/m/s 选项、示例与结果复制；Android 475/475、Lint 0 错误、隔离候选 303/303。见 [工具文档](REGEX_TESTER.md) |
 | 文本加解密 | ✗ | A | AES/DES/RSA 本地（java.security） |
 | URL编码 | ✅ | A | 已有 |
 | SSL证书查询 | ✗ | S | 证书链拉取（后台代理） |

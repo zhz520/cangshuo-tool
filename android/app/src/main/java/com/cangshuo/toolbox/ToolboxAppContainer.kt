@@ -284,6 +284,9 @@ class ToolboxAppContainer(context: Context) {
     private val stopwatchFactory = com.cangshuo.toolbox.feature.stopwatch.ui.StopwatchViewModel.factory(
         com.cangshuo.toolbox.feature.stopwatch.domain.StopwatchUseCases(
             com.cangshuo.toolbox.feature.stopwatch.data.AndroidStopwatchRepository()))
+    private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
+        com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
+            com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
     private val pingFactory=com.cangshuo.toolbox.feature.ping.ui.PingViewModel.factory(
         com.cangshuo.toolbox.feature.ping.domain.ExecutePingUseCase(
             com.cangshuo.toolbox.feature.ping.data.NativePingRepository()))
@@ -315,6 +318,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.charconvert.CharConvertToolDefinition(resources, charConvertFactory),
             com.cangshuo.toolbox.feature.similarity.SimilarityToolDefinition(resources, similarityFactory),
             JsonToolDefinition(resources, jsonFactory),
+            com.cangshuo.toolbox.feature.regextester.RegexTesterToolDefinition(resources, regexTesterFactory),
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),
             ImageCompressToolDefinition(resources, imageCompressFactory),
