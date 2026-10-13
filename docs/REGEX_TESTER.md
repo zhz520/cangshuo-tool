@@ -47,4 +47,4 @@
 - 隔离候选验收 **303/303**：中英文资源与契约字段、公开/管理读写、DISABLED 与 MAINTENANCE、软删除、热门列表、7/30/90 天统计；线上只读脚本 `scripts/verify_regex_tester_deploy.py` 不写生产用量。
 - Android 全量单元测试 **475/475**（本工具新增 53 项：Repository 35 + ViewModel 18），`assembleDebug` 与 `lintDebug` 通过（0 错误；本工具文件 0 条 Lint 发现）。
 - Android 16 模拟器实测：日期示例 2 处匹配、命名分组 year/month/day 展开、字面替换得到 `Start date, end date`、1.5 倍字号与深色正常渲染；截图 `regex-form.png`、`regex-groups.png`、`regex-replaced.png`、`regex-large-dark.png` 位于 `android/build/calc-emulator/`。
-- 生产部署：API 镜像 `sha256:79518d05fd6e778f443fc040963e4d7c762bf1a8869cb70a2b9494edc60cd5b8` 上线，回滚标签 `before-regex-v55`，五个容器健康；线上 HTTPS 只读验收 **58/58** 通过（中英文契约、公开/管理目录一致、管理守卫、7/30/90 天统计、热门列表），未写入生产用量。记录见 [路线图](../toolbox-vibe-spec/ROADMAP.md)。
+- 生产部署：API 镜像 `sha256:79518d05fd6e778f443fc040963e4d7c762bf1a8869cb70a2b9494edc60cd5b8` 上线，回滚标签 `before-regex-v55`，五个容器健康；线上 HTTPS 只读验收 **58/58** 通过（中英文契约、公开/管理目录一致、管理守卫、7/30/90 天统计、热门列表），未写入生产用量。进度与验收记录见 [REGEX_TESTER_ACCEPTANCE_2026-10-13.md](REGEX_TESTER_ACCEPTANCE_2026-10-13.md) 与 [路线图](../toolbox-vibe-spec/ROADMAP.md)。
