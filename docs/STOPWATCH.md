@@ -36,4 +36,8 @@
 
 V53 只新增工具目录 seed（LIFE / LOCAL / ENABLED、排序 620、requires_login=0），复用现有管理端与 `/tools/stopwatch/usage` 统计；不新增计时或上传接口，种子重放保留管理员编辑与软删除。
 
-2026-10-13 Android Debug 单元测试 421/421 通过（本工具新增 21 项：领域 11、ViewModel 10），覆盖显示格式与钳制、暂停/恢复累加、重复开始/暂停、单调时钟回退、重复记次、计次拆分与上限、统计阈值、CSV 结构、SavedState 编解码健壮性、恢复/重启钳制、前台/后台刷新、偏好保留。APK 构建与 Lint 通过（0 错误 / 77 条既有警告），新增文件无发现。测试结束前清理 ViewModel 的持续 ticker，防止测试时钟无限推进。模拟器与后端验收结果完成后在此补充。
+2026-10-13 Android Debug 单元测试 421/421 通过（本工具新增 21 项：领域 11、ViewModel 10），覆盖显示格式与钳制、暂停/恢复累加、重复开始/暂停、单调时钟回退、重复记次、计次拆分与上限、统计阈值、CSV 结构、SavedState 编解码健壮性、恢复/重启钳制、前台/后台刷新、偏好保留。APK 构建与 Lint 通过（0 错误 / 77 条既有警告），新增文件无发现。测试结束前清理 ViewModel 的持续 ticker，防止测试时钟无限推进。
+
+Android 16 模拟器实际验收：开始、三次记次、暂停/继续、切后台后补算、最快/最慢标记、CSV 复制、取消重置/确认清空、1.5 倍字号和深色；截图已人工查看，位于 `android/build/calc-emulator/stopwatch-{paused,laps,large-font,dark}.png`。真机安装、TalkBack 和 500 条记录设备性能未验证。
+
+V53 隔离后端/目录/统计验收 98/98；线上只读 HTTPS 验收 9/9，四个生产容器健康。生产 API 镜像 `sha256:d6e1e8afd8ecb136854993d86295057cbbb40fb41ad13f2a5ef0703427801d77`，保留 `before-stopwatch-v53` 回滚镜像。未向生产统计写入测试打开记录。
