@@ -50,6 +50,8 @@ spring:
       max-file-size: 32MB
       max-request-size: 34MB
   mvc:
+    async:
+      request-timeout: 180s
     problemdetails:
       enabled: false
 
@@ -88,6 +90,8 @@ logging:
       console: ecs
 
 toolbox:
+  media:
+    enabled: ${MEDIA_ENABLED:true}
   zepp:
     enabled: ${ZEPP_ENABLED:true}
     login-key: ${ZEPP_LOGIN_KEY:}

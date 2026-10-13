@@ -214,3 +214,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V53 秒表目录
 
 `V53__seed_stopwatch_tool.sql` 登记 `stopwatch`，LIFE/LOCAL/ENABLED，排序 620、requires_login=0。元数据与 Android 中文资源一致；复用后台管理、使用计数与排行榜，重放保留管理员编辑、维护状态与软删除。没有计时记录表，会话只存在于客户端。验证见 [秒表](STOPWATCH.md)。
+
+## V54 短视频解析网页工具
+
+`V54__seed_short_video_parse_web_tool.sql` 登记 `short_video_parse`，NETWORK/WEB/ENABLED，排序 630、requires_login=0，config_json 仅含 `/tools/short_video_parse/`。重放不覆盖管理员编辑、维护/关闭状态与软删除。解析结果只存在服务进程内存（15 分钟、最多 100 个会话），没有媒体、链接或下载明细表；计数沿用 tool_usage_* 与 API 流量统计。验证见 [短视频解析](SHORT_VIDEO_PARSE.md)。

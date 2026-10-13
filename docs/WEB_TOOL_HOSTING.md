@@ -77,3 +77,7 @@ deploy/site/tools/qr_studio/
 - `http://localhost:8088/tools/qr_studio/` 返回 200（5760 字节、含表单），`payload.js`/`app.js`/`qrcode.js` 均 200。
 - node 断言通过：文本直通、Wi-Fi 转义与开放网络、EAP 的 E/I/PH2、vCard 多值与转义、CRLF 分隔；期间修复了换行转义双反斜杠与 vCard ADR 缺尾分号两个缺陷。
 - 此时未执行浏览器自动化、真机 WebView 交互验收；客户端目录合并及自动更新在后续任务接入，见 [目录更新说明](TOOL_CATALOG_SYNC.md)。
+
+## 8. 短视频解析网页工具（2026-10-13）
+
+`deploy/site/tools/short_video_parse/`（index.html/style.css/engine.js/app.js/NOTICES.txt）与 V54 元数据一起上线。服务端新增 `/api/v1/web-tools/short_video_parse/*` 同名接口：解析在图集/视频/实况/封面四类资源上返回带 32 位会话 ID 的同源资源路径，下载与 ZIP 由服务端代理并按平台 CDN 白名单校验，客户端不能提交任意 URL。页面使用同源脚本/样式（无 CDN、无 JavaScript 桥），首次连接成功后上报一次使用量。App 内 `ToolboxWebScreen` 对 `short_video_parse` 的受控资源/图集路径把保存动作交给系统浏览器下载，并在 `WebToolNavigationPolicy.allowsMediaDownload` 中做严格路径校验。参考源码、边界与验证范围见 [SHORT_VIDEO_PARSE.md](SHORT_VIDEO_PARSE.md)。

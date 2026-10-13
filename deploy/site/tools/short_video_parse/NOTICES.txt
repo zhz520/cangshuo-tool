@@ -1,0 +1,47 @@
+Short-video parser — references and third-party notices
+Reviewed: 2026-10-13
+
+Platform metadata and extraction flows were adapted into Java from:
+https://github.com/wujunwei928/parse-video-py
+Verified reference commit: 5fcf87256edb5ffcdebf0e4aac2a5a41745da76e
+Source directory: src/parse_video_py/parser/
+Files reviewed: base.py, __init__.py, douyin.py, kuaishou.py, redbook.py,
+weibo.py, bilibili.py, pipixia.py, xigua.py and pyproject.toml.
+
+MIT License
+
+Copyright (c) 2024 wujunwei928
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+TikTok serialized-state paths and public test URLs were researched in:
+https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/tiktok.py
+Additional public test URLs:
+https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/xiaohongshu.py
+These are changing branch references. No yt-dlp library or source code is
+embedded or executed; TikTok processing is independently implemented.
+
+The server uses Apache HttpComponents Client 5 (Apache License 2.0).
+https://hc.apache.org/httpcomponents-client-5.5.x/
+Its license and upstream notices are included with the dependency in the
+server JAR. Browser assets have no external runtime or CDN dependencies.
+
+Sources being readable publicly does not grant ownership of their media.
+The tool returns the platform's available source, not a pixel-level watermark
+eraser, and does not promise to bypass login, payment or verification.

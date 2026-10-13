@@ -79,6 +79,8 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
         }
     }
     val exportMessage = stringResource(if (exportState.message == WebExportMessage.SAVED) R.string.web_export_saved else R.string.web_export_failed)
+    val browserDownloadMessage = stringResource(R.string.web_download_browser_opened)
+    val exportFailureMessage = stringResource(R.string.web_export_failed)
     LaunchedEffect(exportState.message) {
         if (exportState.message != WebExportMessage.NONE) {
             Toast.makeText(context, exportMessage, Toast.LENGTH_SHORT).show()
@@ -126,6 +128,15 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
                                 }
                             }
                             fun handleExport(target: String): Boolean {
+                                if (code == "short_video_parse" && policy.allowsMediaDownload(target) && policy.allows(this.url.orEmpty())) {
+                                    try {
+                                        context.startActivity(Intent(Intent.ACTION_VIEW, target.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                        Toast.makeText(context, browserDownloadMessage, Toast.LENGTH_SHORT).show()
+                                    } catch (_: RuntimeException) {
+                                        Toast.makeText(context, exportFailureMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                    return true
+                                }
                                 if (!target.startsWith("data:")) return false
                                 if (policy.allows(this.url.orEmpty())) exports.request(target)
                                 return true

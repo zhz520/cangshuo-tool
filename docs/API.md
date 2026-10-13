@@ -295,6 +295,18 @@ Android 的 [本地收藏](LOCAL_FAVORITES.md) 已使用 Room 保存匿名书签
 
 Controller → Service → Provider 分层；工具或分类关闭时 503/10008，缺配置为 503/60006；每账号 60 秒冷却、4 并发、30 秒总期限。复用现有 IP 限流和统计。不持久保存第三方凭据、令牌或提交明细，API 使用 no-store，正文和第三方原文不记日志。详情见 [ZEPP_STEPS.md](ZEPP_STEPS.md)。
 
+## 短视频解析网页工具
+
+匿名精确端点（`short_video_parse`；工具或分类停用、`MEDIA_ENABLED=false` 时 capabilities 返回 `available=false`，其余端点 503/10008）：
+
+- `GET /api/v1/web-tools/short_video_parse/capabilities`：data 为 `{available,platforms[{code,nameZh,nameEn,hosts}],maxTextLength:4096,maxImages:50,maxFileBytes:209715200,maxZipBytes:33554432,resultSeconds:900,timeoutSeconds:30}`。
+- `POST /api/v1/web-tools/short_video_parse/parse`（application/json）：请求 `{text}`，最长 4096；正文超过 16384 字节为 413/40001；成功 data 为 `{id,platform,platformName,sourceUrl,title,description,author,durationSeconds,expiresAt,assets[],albumPath}`，`assets` 每项含 `index,kind(VIDEO|IMAGE|LIVE|COVER),label,width,height,bitrate,source(PLATFORM_SOURCE|UNKNOWN),previewPath,downloadPath,directUrl`。
+- `GET /api/v1/web-tools/short_video_parse/assets/{id}/{index}[?download=true]`：同源代理上游资源，支持 `Range` 透传，返回 200/206；附件模式带服务端生成文件名。
+- `GET /api/v1/web-tools/short_video_parse/albums/{id}?selection=0,2,5`：把所选静态图片打包为 ZIP（≤ 50 张、≤ 32 MB），顺序与选择一致。
+- `DELETE /api/v1/web-tools/short_video_parse/results/{id}`：幂等清理内存结果。
+
+错误码：`61001` 平台不支持（400）、`61002` 作品不可用/需验证（422）、`61003` 上游失败（502）、`61004` 结果过期（410）、`61005` 超过资源上限（413）、`61006` 上游超时（504）、`61007` 格式不支持（422）。所有响应 `no-store`；上游正文与用户链接不写日志。解析 12 次/分钟、打包 3 次/分钟（IP 维度），并发解析 3/传输 8/打包 1。详情见 [短视频解析](SHORT_VIDEO_PARSE.md)。
+
 ## 客户端缓存和离线行为
 
 首页和搜索先用内置元数据，后台还原经过来源/版本/checksum/严格校验的 Room v3 WEB 快照，再请求完整网络目录。启动、前台（5 分钟）和手动（2 秒防连点）共享在途请求，失败/取消保留当前目录，成功空结果才移除旧远程项。网络预算仍为 3 页/300 条、每页 1,000,000 字节、合计 3,000,000 字节、20 秒；拒绝非 200、重定向、错误业务码、非法 trace/UTF-8/JSON/字段和不完整分页，不改变服务端契约。API 无跨页快照 token，同总数且满足顺序/唯一性的跨页变化仍无法完全识别。LOCAL 不请求服务端执行；SERVER 需要连接；HYBRID 按具体任务处理；WEB 页面必须联网，目录缓存不缓存网页或用户输入。V15/V16 已登记 qr_studio。实现及实际验证见 [请求校验](TOOL_CATALOG_SYNC.md)、[持久缓存](TOOL_CATALOG_CACHE.md)、[刷新策略](TOOL_CATALOG_REFRESH.md)和[本轮记录](WEB_TOOL_ACCEPTANCE_2026-10-05.md)。

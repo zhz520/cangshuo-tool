@@ -1,4 +1,5 @@
 <resources>
+    <string name="web_download_browser_opened">Download opened in your browser. Check the browser for the saved file.</string>
     <string name="app_name">Cangshuo Toolbox</string>
     <string name="home_subtitle">Small tasks, made simpler.</string>
     <string name="home_greeting">What would you like to do?</string>

@@ -38,6 +38,10 @@ public class SecurityConfiguration {
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/tools", "/api/v1/tools/popular").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/web-tools/zepp_steps/capabilities").permitAll();
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/zepp_steps/submit").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/web-tools/short_video_parse/capabilities",
+                            "/api/v1/web-tools/short_video_parse/assets/*/*", "/api/v1/web-tools/short_video_parse/albums/*").permitAll();
+                    requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/short_video_parse/parse").permitAll();
+                    requests.requestMatchers(HttpMethod.DELETE, "/api/v1/web-tools/short_video_parse/results/*").permitAll();
                     // Anonymous aggregate counting for tool opens.
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/tools/*/usage").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/app/version").permitAll();
