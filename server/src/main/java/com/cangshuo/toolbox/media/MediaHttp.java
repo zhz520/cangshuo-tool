@@ -65,8 +65,9 @@ public class MediaHttp {
                     current = next; form = null;
                     continue;
                 }
-                if (status == 401 || status == 403 || status == 404 || status == 410 || status == 412 || status == 429)
-                    throw new ApiException(ApiError.MEDIA_UNAVAILABLE);
+                if (status == 401 || status == 403 || status == 412 || status == 429)
+                    throw new ApiException(ApiError.MEDIA_PLATFORM_RESTRICTED);
+                if (status == 404 || status == 410) throw new ApiException(ApiError.MEDIA_LINK_EXPIRED);
                 if (status != 200 || response.getEntity() == null) throw provider();
                 if (response.getEntity().getContentLength() > MAX_DOCUMENT_BYTES) throw tooLarge();
                 try (InputStream stream = response.getEntity().getContent()) {
@@ -100,7 +101,8 @@ public class MediaHttp {
                     response.close();
                     continue;
                 }
-                if (status == 403 || status == 404 || status == 410) throw new ApiException(ApiError.MEDIA_UNAVAILABLE);
+                if (status == 403 || status == 412 || status == 429) throw new ApiException(ApiError.MEDIA_PLATFORM_RESTRICTED);
+                if (status == 404 || status == 410) throw new ApiException(ApiError.MEDIA_UNAVAILABLE);
                 if (status == 416) throw new ApiException(ApiError.INVALID_ARGUMENT);
                 if (status != 200 && status != 206 || response.getEntity() == null) throw provider();
                 long length = response.getEntity().getContentLength();

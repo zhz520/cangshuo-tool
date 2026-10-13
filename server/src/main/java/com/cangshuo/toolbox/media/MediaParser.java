@@ -11,12 +11,23 @@ import org.springframework.stereotype.Component;
 /** Platform field mapping adapted from parse-video-py (MIT); see docs/SHORT_VIDEO_PARSE.md and NOTICES. */
 @Component
 public class MediaParser {
-    public record Candidate(String kind, String label, URI uri, int width, int height, long bitrate, String source) {}
+    public record Candidate(String kind, String label, URI uri, int width, int height, long bitrate, String source,
+                            List<URI> fallbacks) {
+        public Candidate(String kind, String label, URI uri, int width, int height, long bitrate, String source) {
+            this(kind, label, uri, width, height, bitrate, source, List.of());
+        }
+        public Candidate { fallbacks = List.copyOf(fallbacks); }
+    }
     public record Parsed(MediaPlatform platform, URI sourceUrl, String title, String description,
                          String author, long durationSeconds, List<Candidate> assets) {}
     private final MediaHttp http;
     private final MediaJson json;
-    public MediaParser(MediaHttp http, MediaJson json) { this.http = http; this.json = json; }
+    private final MediaBrowser browser;
+    @org.springframework.beans.factory.annotation.Autowired
+    public MediaParser(MediaHttp http, MediaJson json, MediaBrowser browser) {
+        this.http = http; this.json = json; this.browser = browser;
+    }
+    MediaParser(MediaHttp http, MediaJson json) { this(http, json, new MediaBrowser("", json)); }
 
     public Parsed parse(MediaInput input) {
         long deadline = MediaHttp.deadline(30);
@@ -47,35 +58,58 @@ public class MediaParser {
         MediaHttp.Document initial = null;
         if (id.isEmpty()) { initial = page(input, input.uri(), false, deadline); id = numericId(initial.uri()); }
         if (id.isEmpty()) throw unavailable();
+        boolean note = isNote(initial == null ? input.uri() : initial.uri());
         JsonNode data = null;
-        for (String extra : List.of("", "&request_source=200")) {
-            try {
-                JsonNode api = get(input, "https://www.iesdouyin.com/web/api/v2/aweme/slidesinfo/?aweme_ids=%5B" + id + "%5D" + extra, deadline);
-                if (api.path("aweme_details").isArray() && !api.path("aweme_details").isEmpty()) { data = api.path("aweme_details").get(0); break; }
-            } catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+        ApiException failure = null;
+        // Reuse the document already fetched to resolve the short link, before making more upstream requests.
+        if (initial != null) {
+            try { data = matchingItem(json.assignment(initial.text(), "_ROUTER_DATA"), id); }
+            catch (ApiException error) { failure = error; }
         }
-        // Image posts are missing from the slides API, but the mobile feed node still carries them.
-        if (data == null) data = mobileFeed(input, id, deadline);
+        if (data != null) return byteDance(input, data);
+        // Both publicly documented hosts expose this API, but can return different edge responses.
+        for (String host : List.of("www.douyin.com", "www.iesdouyin.com")) {
+            for (String extra : note ? List.of("&request_source=200", "") : List.of("", "&request_source=200")) {
+                try {
+                    JsonNode api = json.json(page(input, URI.create("https://" + host
+                            + "/web/api/v2/aweme/slidesinfo/?aweme_ids=%5B" + id + "%5D" + extra), false, deadline).text());
+                    data = matchingItem(api, id);
+                    if (data != null) break;
+                    // Anonymous image posts are filtered with reason 8. This is not evidence of deletion.
+                    if (api.path("filter_list").isArray() && !api.path("filter_list").isEmpty()) {
+                        failure = new ApiException(ApiError.MEDIA_PLATFORM_RESTRICTED);
+                        if (note) break;
+                    }
+                } catch (ApiException error) { fatalFallback(error, deadline); failure = preferFailure(failure, error); }
+            }
+            if (data != null) break;
+        }
+        if (data == null && !note) data = mobileFeed(input, id, deadline);
         if (data == null) {
-            // Share pages are SSR-rendered per work type: notes under /share/note/, videos under /share/video/.
-            for (String kind : isNote(input.uri()) ? List.of("note", "video") : List.of("video", "note")) {
-                String html = initial != null ? initial.text()
-                        : page(input, URI.create("https://www.iesdouyin.com/share/" + kind + "/" + id + "/"), false, deadline).text();
-                initial = null;
-                try { data = routerItem(json.assignment(html, "_ROUTER_DATA")); break; }
-                catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+            for (String kind : note ? List.of("note", "video") : List.of("video", "note")) {
+                try {
+                    URI uri = URI.create("https://www.iesdouyin.com/share/" + kind + "/" + id + "/");
+                    // A failed first route must not abort the alternative. Do not refetch identical documents.
+                    if (initial != null && initial.uri().equals(uri)) continue;
+                    data = matchingItem(json.assignment(page(input, uri, false, deadline).text(), "_ROUTER_DATA"), id);
+                    if (data != null) break;
+                } catch (ApiException error) { fatalFallback(error, deadline); failure = preferFailure(failure, error); }
             }
         }
-        if (data == null) throw unavailable();
+        if (data == null && browser.enabled()) data = browser.douyin(id, deadline);
+        if (data == null) throw failure == null ? unavailable() : failure;
         return byteDance(input, data);
+    }
+    private static ApiException preferFailure(ApiException previous, ApiException current) {
+        return previous != null && previous.error() == ApiError.MEDIA_PLATFORM_RESTRICTED ? previous : current;
     }
     private JsonNode mobileFeed(MediaInput input, String id, long deadline) {
         for (String host : List.of("https://api5-normal-c-hl.amemv.com", "https://aweme.snssdk.com")) {
             try {
                 JsonNode response = getApp(input, host + "/aweme/v1/feed/?aweme_id=" + id + "&aid=1128", deadline);
                 for (JsonNode item : response.path("aweme_list"))
-                    if (id.equals(item.path("aweme_id").asText(""))) return item;
-            } catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+                    if (id.equals(item.path("aweme_id").asText("")) && hasByteDanceMedia(item)) return item;
+            } catch (ApiException error) { fatalFallback(error, deadline); }
         }
         return null;
     }
@@ -86,13 +120,18 @@ public class MediaParser {
     private Parsed byteDance(MediaInput input, JsonNode data) {
         var assets = new ArrayList<Candidate>();
         JsonNode video = data.path("video");
-        JsonNode images = data.path("images");
+        JsonNode images = byteDanceImages(data);
         if (images.isArray() && !images.isEmpty()) {
             checkImages(images.size());
             for (JsonNode image : images) {
-                add(assets, input, "IMAGE", "", firstUrl(image.path("url_list")), image.path("width").asInt(0), image.path("height").asInt(0), 0, "PLATFORM_SOURCE");
-                String live = firstUrl(image.at("/video/play_addr/url_list"));
-                if (!live.isBlank()) add(assets, input, "LIVE", "", noPlayWatermark(live), 0, 0, 0, "PLATFORM_SOURCE");
+                var urls = urls(image.path("url_list"));
+                if (urls.isEmpty()) urls = urls(image.path("urlList"));
+                // url_list is the clean display source; download_url_list contains official watermarks.
+                Collections.reverse(urls);
+                addUrls(assets, input, "IMAGE", "", urls, image.path("width").asInt(0), image.path("height").asInt(0), 0, "PLATFORM_SOURCE");
+                var lives = urls(image.at("/video/play_addr/url_list"));
+                if (lives.isEmpty()) lives = urls(image.at("/video/playAddr"));
+                if (!lives.isEmpty()) addUrls(assets, input, "LIVE", "", lives.stream().map(MediaParser::noPlayWatermark).toList(), 0, 0, 0, "PLATFORM_SOURCE");
             }
         } else {
             JsonNode rates = video.path("bit_rate");
@@ -100,16 +139,16 @@ public class MediaParser {
             var videos = new ArrayList<Candidate>();
             for (JsonNode rate : rates) {
                 JsonNode address = rate.path("play_addr");
-                String url = firstUrl(address.path("url_list"));
-                if (!url.isBlank()) add(videos, input, "VIDEO", "", noPlayWatermark(url), address.path("width").asInt(0), address.path("height").asInt(0), rate.path("bit_rate").asLong(0), "PLATFORM_SOURCE");
+                var urls = urls(address.path("url_list"));
+                if (!urls.isEmpty()) addUrls(videos, input, "VIDEO", "", urls.stream().map(MediaParser::noPlayWatermark).toList(), address.path("width").asInt(0), address.path("height").asInt(0), rate.path("bit_rate").asLong(0), "PLATFORM_SOURCE");
             }
             videos.sort(Comparator.comparingLong(Candidate::bitrate).reversed());
             assets.addAll(videos);
             String play = firstUrl(video.at("/play_addr/url_list"));
             if (!play.isBlank()) add(assets, input, "VIDEO", "", noPlayWatermark(play), video.path("width").asInt(0), video.path("height").asInt(0), 0, "PLATFORM_SOURCE");
         }
-        String cover = firstUrl(video.at("/origin_cover/url_list"));
-        if (cover.isBlank()) cover = firstUrl(video.at("/cover/url_list"));
+        var cover = urls(video.at("/origin_cover/url_list"));
+        if (cover.isEmpty()) cover = urls(video.at("/cover/url_list"));
         addCover(assets, input, cover);
         return result(input, data.path("desc").asText(""), data.path("desc").asText(""),
                 data.at("/author/nickname").asText(""), video.path("duration").asLong(0) / 1000, assets);
@@ -119,20 +158,40 @@ public class MediaParser {
         return raw.replace("/playwm/", "/play/");
     }
     private Parsed kuaishou(MediaInput input, long deadline) {
-        var doc = page(input, input.uri(), false, deadline);
-        JsonNode state = json.assignment(doc.text(), "INIT_STATE");
-        JsonNode photo = null;
-        for (JsonNode row : state) if (row.path("result").asInt(0) == 1 && row.path("photo").isObject()) { photo = row.path("photo"); break; }
-        if (photo == null) throw unavailable();
+        MediaHttp.Document doc = page(input, input.uri(), false, deadline);
+        String id = KuaishouMetadata.photoId(doc.uri());
+        ApiException failure;
+        try { return kuaishouDocument(input, doc, id); }
+        catch (ApiException error) { fatalFallback(error, deadline); failure = error; }
+        if (!id.isEmpty()) {
+            for (String url : List.of("https://v.m.chenzhongtech.com/fw/photo/" + id,
+                    "https://www.kuaishou.com/short-video/" + id)) {
+                try {
+                    URI uri = URI.create(url);
+                    if (uri.equals(doc.uri())) continue;
+                    return kuaishouDocument(input, page(input, uri, url.contains("short-video"), deadline), id);
+                } catch (ApiException error) { fatalFallback(error, deadline); failure = error; }
+            }
+        }
+        throw failure;
+    }
+    private Parsed kuaishouDocument(MediaInput input, MediaHttp.Document doc, String id) {
+        JsonNode state;
+        try { state = json.assignment(doc.text(), "INIT_STATE"); }
+        catch (ApiException absent) { state = json.assignment(doc.text(), "__APOLLO_STATE__"); }
+        var payload = KuaishouMetadata.extract(state, id, json);
+        JsonNode photo = payload.photo();
         var assets = new ArrayList<Candidate>();
-        JsonNode atlas = photo.at("/ext_params/atlas");
-        if (atlas.path("list").isArray() && !atlas.path("list").isEmpty()) {
-            checkImages(atlas.path("list").size());
-            String cdn = atlas.path("cdn").path(0).asText("");
-            for (JsonNode image : atlas.path("list")) add(assets, input, "IMAGE", "", "https://" + cdn + "/" + image.asText(), 0, 0, 0, "PLATFORM_SOURCE");
-        } else for (JsonNode mv : photo.path("mainMvUrls")) add(assets, input, "VIDEO", "", mv.path("url").asText(""), 0, 0, 0, "PLATFORM_SOURCE");
-        addCover(assets, input, photo.path("coverUrls").path(0).path("url").asText(""));
-        return result(input, photo.path("caption").asText(""), "", photo.path("userName").asText(""), photo.path("duration").asLong(0) / 1000, assets);
+        var images = KuaishouMetadata.images(payload, json);
+        if (!images.isEmpty()) {
+            checkImages(images.size());
+            for (var image : images) addUrls(assets, input, "IMAGE", "", image, 0, 0, 0, "PLATFORM_SOURCE");
+        } else {
+            for (var video : KuaishouMetadata.videos(payload, json))
+                addUrls(assets, input, "VIDEO", "", video.urls(), video.width(), video.height(), video.bitrate(), "PLATFORM_SOURCE");
+        }
+        addCover(assets, input, urls(photo.path("coverUrls")));
+        return result(input, photo.path("caption").asText(""), "", payload.author(), photo.path("duration").asLong(0) / 1000, assets);
     }
     private Parsed xiaohongshu(MediaInput input, long deadline) {
         // Desktop long links carry the richest state; app share short links render the mobile H5 structure instead.
@@ -248,7 +307,8 @@ public class MediaParser {
     /** The platform answers stale or removed shares with /404 or /login instead of the note state. */
     static ApiException expiredOrUnavailable(URI finalUri, ApiException failure) {
         String value = finalUri == null ? "" : finalUri.toString();
-        if (value.contains("/404") || value.contains("error_code=300031") || value.contains("undertake_note_error"))
+        if (value.contains("error_code=300031")) return new ApiException(ApiError.MEDIA_PLATFORM_RESTRICTED);
+        if (value.contains("/404") || value.contains("undertake_note_error"))
             return new ApiException(ApiError.MEDIA_LINK_EXPIRED);
         return failure == null ? new ApiException(ApiError.MEDIA_UNAVAILABLE) : failure;
     }
@@ -380,6 +440,41 @@ public class MediaParser {
         }
         throw unavailable();
     }
+    private static JsonNode matchingItem(JsonNode root, String id) {
+        var lists = new ArrayList<JsonNode>();
+        lists.add(root.path("aweme_details"));
+        for (JsonNode loader : root.path("loaderData")) lists.add(loader.at("/videoInfoRes/item_list"));
+        for (JsonNode list : lists) for (JsonNode item : list) {
+            String actual = item.path("aweme_id").asText("");
+            if ((actual.isEmpty() || actual.equals(id)) && hasByteDanceMedia(item)) return item;
+        }
+        return null;
+    }
+    static JsonNode byteDanceImages(JsonNode item) {
+        for (String path : List.of("/image_post_info/images", "/image_post_info/image_list", "/images", "/image_list", "/image_infos", "/original_images")) {
+            JsonNode images = item.at(path);
+            if (images.isArray() && !images.isEmpty()) return images;
+        }
+        return item.path("images");
+    }
+    private static boolean hasByteDanceMedia(JsonNode item) {
+        return !byteDanceImages(item).isEmpty() || !firstUrl(item.at("/video/play_addr/url_list")).isBlank()
+                || !item.at("/video/bit_rate").isEmpty();
+    }
+    private static void fatalFallback(ApiException error, long deadline) {
+        if (error.error() == ApiError.MEDIA_TOO_LARGE || error.error() == ApiError.INVALID_ARGUMENT) throw error;
+        MediaHttp.checkDeadline(deadline);
+    }
+    static ArrayList<String> urls(JsonNode node) {
+        var result = new ArrayList<String>();
+        if (node.isTextual() && !node.asText().isBlank()) result.add(node.asText());
+        else if (node.isArray()) for (JsonNode row : node) {
+            String value = row.isTextual() ? row.asText() : row.path("url").asText(row.path("src").asText(""));
+            if (!value.isBlank()) result.add(value);
+            if (result.size() >= 8) break;
+        }
+        return result;
+    }
     static String firstUrl(JsonNode list) {
         if (list.isTextual()) return list.asText();
         for (JsonNode row : list) {
@@ -409,9 +504,29 @@ public class MediaParser {
         if (list.size() >= 120) throw large();
         list.add(new Candidate(kind, clean(label, 100), uri, Math.max(0, width), Math.max(0, height), Math.max(0, bitrate), source));
     }
+    private static void addUrls(List<Candidate> list, MediaInput input, String kind, String label, List<String> urls, int width, int height, long bitrate, String source) {
+        if (urls.isEmpty()) throw unavailable();
+        var owned = urls.stream().limit(8).map(input.platform()::mediaUri).distinct().toList();
+        int before = list.size();
+        add(list, input, kind, label, owned.get(0).toString(), width, height, bitrate, source);
+        if (list.size() > before) {
+            Candidate asset = list.remove(list.size() - 1);
+            list.add(new Candidate(asset.kind(), asset.label(), asset.uri(), asset.width(), asset.height(), asset.bitrate(), asset.source(), owned.subList(1, Math.min(4, owned.size()))));
+        }
+    }
     private static void addCover(List<Candidate> list, MediaInput input, String url) {
-        if (url.isBlank()) url = list.stream().filter(a -> a.kind().equals("IMAGE")).findFirst().map(a -> a.uri().toString()).orElse("");
-        if (!url.isBlank()) add(list, input, "COVER", "", url, 0, 0, 0, "UNKNOWN");
+        addCover(list, input, url.isBlank() ? List.of() : List.of(url));
+    }
+    private static void addCover(List<Candidate> list, MediaInput input, List<String> urls) {
+        if (urls.isEmpty()) {
+            var first = list.stream().filter(a -> a.kind().equals("IMAGE")).findFirst();
+            if (first.isEmpty()) return;
+            var addresses = new ArrayList<String>();
+            addresses.add(first.get().uri().toString());
+            first.get().fallbacks().forEach(uri -> addresses.add(uri.toString()));
+            urls = addresses;
+        }
+        addUrls(list, input, "COVER", "", urls, 0, 0, 0, "UNKNOWN");
     }
     private static Parsed result(MediaInput input, String title, String description, String author, long duration, List<Candidate> assets) {
         if (assets.stream().noneMatch(a -> a.kind().equals("VIDEO") || a.kind().equals("IMAGE"))) throw unavailable();

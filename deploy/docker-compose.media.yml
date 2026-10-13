@@ -1,0 +1,41 @@
+# Optional, private browser fallback. Enable with MEDIA_BROWSER_URL=http://media-browser:8080
+# and add -f docker-compose.media.yml. No host port, data volume, CDP or interactive browser is published.
+services:
+  server:
+    environment:
+      MEDIA_BROWSER_URL: ${MEDIA_BROWSER_URL:-http://media-browser:8080}
+    networks: [backend, edge, media]
+  media-browser:
+    image: ${MEDIA_BROWSER_IMAGE:-${COMPOSE_PROJECT_NAME:-cangshuo-toolbox}-media-browser:${RELEASE_TAG:-0.1.0}}
+    build:
+      context: ..
+      dockerfile: deploy/media-browser/Dockerfile
+    init: true
+    environment:
+      MEDIA_BROWSER_SANDBOX: ${MEDIA_BROWSER_SANDBOX:-true}
+    restart: unless-stopped
+    read_only: true
+    # Docker's default tmpfs is mode 1777 with half of the container memory;
+    # compose mangles the comma-separated option form, so keep the short form.
+    tmpfs: [/tmp]
+    shm_size: 256mb
+    mem_limit: 1024m
+    cpus: 1
+    pids_limit: 256
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=./media-browser/seccomp_profile.json
+    networks: [media]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:8080/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 4
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+networks:
+  media:
+    driver: bridge

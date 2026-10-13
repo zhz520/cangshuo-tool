@@ -22,6 +22,7 @@ public class MediaService {
     private final RateLimitService limiter;
     private final boolean enabled;
     private final Clock clock;
+    private final MediaParseCache parseCache;
     private final Semaphore parsing = new Semaphore(3), transfers = new Semaphore(8), archives = new Semaphore(1);
     private final Map<String, Session> sessions = new LinkedHashMap<>();
 
@@ -32,6 +33,7 @@ public class MediaService {
     }
     MediaService(MediaParser parser, MediaHttp http, ToolUsageRepository catalog, RateLimitService limiter, boolean enabled, Clock clock) {
         this.parser = parser; this.http = http; this.catalog = catalog; this.limiter = limiter; this.enabled = enabled; this.clock = clock;
+        this.parseCache = new MediaParseCache(clock);
     }
     public record PlatformInfo(String code, String nameZh, String nameEn, List<String> hosts) {}
     public record Capabilities(boolean available, List<PlatformInfo> platforms, int maxTextLength, int maxImages,
@@ -52,27 +54,28 @@ public class MediaService {
         ready();
         MediaInput input = MediaInput.parse(text);
         if (!limiter.check("toolbox:rate:media:parse:" + clientIdentity, 12, 60).allowed()) throw new ApiException(ApiError.TOO_MANY_REQUESTS);
-        if (!parsing.tryAcquire()) throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
-        try {
-            MediaParser.Parsed parsed = parser.parse(input);
-            String id = UUID.randomUUID().toString().replace("-", "");
-            Instant expires = clock.instant().plusSeconds(RESULT_SECONDS);
-            synchronized (sessions) {
-                prune();
-                while (sessions.size() >= MAX_SESSIONS) sessions.remove(sessions.keySet().iterator().next());
-                sessions.put(id, new Session(parsed, expires));
-            }
-            var assets = new ArrayList<Asset>();
-            for (int i = 0; i < parsed.assets().size(); i++) {
-                var source = parsed.assets().get(i);
-                String path = BASE + "/assets/" + id + "/" + i;
-                assets.add(new Asset(i, source.kind(), source.label(), source.width(), source.height(), source.bitrate(),
-                        source.source(), path, path + "?download=true", source.uri().toString()));
-            }
-            return new Result(id, parsed.platform().code(), parsed.platform().nameZh(), parsed.sourceUrl().toString(),
-                    parsed.title(), parsed.description(), parsed.author(), parsed.durationSeconds(), expires,
-                    List.copyOf(assets), BASE + "/albums/" + id);
-        } finally { parsing.release(); }
+        MediaParser.Parsed parsed = parseCache.load(input.platform().code() + ":" + input.uri().toASCIIString(), () -> {
+            if (!parsing.tryAcquire()) throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
+            try { return parser.parse(input); }
+            finally { parsing.release(); }
+        });
+        String id = UUID.randomUUID().toString().replace("-", "");
+        Instant expires = clock.instant().plusSeconds(RESULT_SECONDS);
+        synchronized (sessions) {
+            prune();
+            while (sessions.size() >= MAX_SESSIONS) sessions.remove(sessions.keySet().iterator().next());
+            sessions.put(id, new Session(parsed, expires));
+        }
+        var assets = new ArrayList<Asset>();
+        for (int i = 0; i < parsed.assets().size(); i++) {
+            var source = parsed.assets().get(i);
+            String path = BASE + "/assets/" + id + "/" + i;
+            assets.add(new Asset(i, source.kind(), source.label(), source.width(), source.height(), source.bitrate(),
+                    source.source(), path, path + "?download=true", source.uri().toString()));
+        }
+        return new Result(id, parsed.platform().code(), parsed.platform().nameZh(), parsed.sourceUrl().toString(),
+                parsed.title(), parsed.description(), parsed.author(), parsed.durationSeconds(), expires,
+                List.copyOf(assets), BASE + "/albums/" + id);
     }
     public PreparedTransfer transfer(String id, int index, String range) {
         ready();
@@ -82,9 +85,7 @@ public class MediaService {
         if (!transfers.tryAcquire()) throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
         try {
             var asset = session.media().assets().get(index);
-            var download = http.open(session.media().platform(), asset.uri(), range, MediaHttp.deadline(150));
-            String expected = List.of("VIDEO", "LIVE").contains(asset.kind()) ? "video/" : "image/";
-            if (!download.contentType().startsWith(expected)) { download.close(); throw new ApiException(ApiError.MEDIA_FORMAT_UNSUPPORTED); }
+            var download = openAsset(session.media().platform(), asset, range, MediaHttp.deadline(150));
             return new PreparedTransfer(download, session.media().platform().code() + "_" + asset.kind().toLowerCase(Locale.ROOT)
                     + "_" + (index + 1) + "." + download.extension(), transfers);
         } catch (ApiException error) { transfers.release(); throw error; }
@@ -122,7 +123,7 @@ public class MediaService {
                 int position = 0;
                 for (int index : indices) {
                     var asset = session.media().assets().get(index);
-                    try (var download = http.open(session.media().platform(), asset.uri(), null, deadline)) {
+                    try (var download = openAsset(session.media().platform(), asset, null, deadline)) {
                         if (!download.contentType().startsWith("image/")) throw new ApiException(ApiError.MEDIA_FORMAT_UNSUPPORTED);
                         if (download.length() > MAX_ZIP_BYTES - rawBytes) throw new ApiException(ApiError.MEDIA_TOO_LARGE);
                         byte[] image = MediaHttp.readLimited(download.input(), (int) (MAX_ZIP_BYTES - rawBytes), deadline);
@@ -143,6 +144,26 @@ public class MediaService {
             this(bytes, fileName, slots, new java.util.concurrent.atomic.AtomicBoolean());
         }
         @Override public void close() { if (closed.compareAndSet(false, true)) slots.release(); }
+    }
+    private MediaHttp.Download openAsset(MediaPlatform platform, MediaParser.Candidate asset, String range, long deadline) throws IOException {
+        var candidates = new ArrayList<java.net.URI>();
+        candidates.add(asset.uri()); candidates.addAll(asset.fallbacks());
+        ApiException failure = null;
+        for (var uri : candidates) {
+            MediaHttp.checkDeadline(deadline);
+            try {
+                var source = http.open(platform, uri, range, deadline);
+                String expected = List.of("VIDEO", "LIVE").contains(asset.kind()) ? "video/" : "image/";
+                if (!source.contentType().startsWith(expected)) {
+                    source.close(); throw new ApiException(ApiError.MEDIA_FORMAT_UNSUPPORTED);
+                }
+                return source;
+            } catch (ApiException error) {
+                if (error.error() == ApiError.INVALID_ARGUMENT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error;
+                failure = error;
+            }
+        }
+        throw failure == null ? new ApiException(ApiError.MEDIA_PROVIDER_ERROR) : failure;
     }
     static List<Integer> selections(String selection, MediaParser.Parsed media) {
         if (selection == null || !selection.matches("[0-9]{1,3}(?:,[0-9]{1,3}){0,49}")) throw new ApiException(ApiError.INVALID_ARGUMENT);

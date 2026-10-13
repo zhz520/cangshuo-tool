@@ -94,6 +94,7 @@ toolbox:
     enabled: ${MEDIA_ENABLED:true}
     # Optional Xiaohongshu cookie (a1 / webId / web_session) for hosts whose IP is risk-controlled.
     xhs-cookie: ${MEDIA_XHS_COOKIE:}
+    browser-url: ${MEDIA_BROWSER_URL:}
   zepp:
     enabled: ${ZEPP_ENABLED:true}
     login-key: ${ZEPP_LOGIN_KEY:}

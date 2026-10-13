@@ -14,7 +14,7 @@ public enum MediaPlatform {
     KUAISHOU("快手", "Kuaishou", "https://www.kuaishou.com/",
             List.of("v.kuaishou.com", "www.kuaishou.com", "www.gifshow.com", "v.m.chenzhongtech.com"),
             List.of("kuaishou.com", "gifshow.com", "chenzhongtech.com"),
-            List.of("kwaicdn.com", "ksapisrv.com", "gifshow.com", "ksyuncdn.com", "yximgs.com", "kwai.net", "kuaishou.com")),
+            List.of("kwaicdn.com", "ksapisrv.com", "gifshow.com", "ksyuncdn.com", "yximgs.com", "kwimgs.com", "kwai.net", "kuaishou.com")),
     XIAOHONGSHU("小红书", "Xiaohongshu", "https://www.xiaohongshu.com/",
             List.of("www.xiaohongshu.com", "xiaohongshu.com", "xhslink.com", "xhslink.cn"),
             List.of("xiaohongshu.com", "xhslink.com", "xhslink.cn"),

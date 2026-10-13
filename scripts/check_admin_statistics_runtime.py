@@ -36,7 +36,7 @@ def sql(statement):
         'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --batch --skip-column-names'], statement)
 
 
-def run(image, extra_checks=None, candidate_environment=None):
+def run(image, extra_checks=None, candidate_environment=None, candidate_networks=(), request_timeout=15):
     suffix = uuid.uuid4().hex[:12]
     database = 'codex_stats_' + suffix
     user = 'stats_' + suffix
@@ -73,6 +73,8 @@ def run(image, extra_checks=None, candidate_environment=None):
         args.append(image)
         command(args)
         command(['docker', 'network', 'connect', network, container])
+        for extra_network in candidate_networks:
+            command(['docker', 'network', 'connect', extra_network, container])
         command(['docker', 'start', container])
         port = None
         for attempt in range(20):
@@ -104,7 +106,7 @@ def run(image, extra_checks=None, candidate_environment=None):
             if method:
                 req.get_method = lambda: method
             try:
-                response = urlopen(req, timeout=15)
+                response = urlopen(req, timeout=request_timeout)
             except HTTPError as error:
                 response = error
             body = json.loads(response.read().decode('utf-8'))

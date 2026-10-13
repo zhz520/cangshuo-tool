@@ -86,6 +86,28 @@ class MediaServiceTest {
             assertEquals("002.png",zip.getNextEntry().getName()); assertArrayEquals(second,zip.readAllBytes()); assertNull(zip.getNextEntry());
         }
     }
+    @Test void sharedMetadataCacheKeepsResultHandlesIndependent() throws Exception {
+        String first = result().id(), second = result().id();
+        assertNotEquals(first, second);
+        verify(parser, times(1)).parse(any());
+        service.clear(first);
+        rejects(ApiError.MEDIA_RESULT_EXPIRED, () -> service.transfer(first, 0, null));
+        when(http.open(any(), any(), any(), anyLong())).thenAnswer(call -> download(new byte[]{1}, "image/jpeg", 1));
+        try (var transfer = service.transfer(second, 0, null)) { assertEquals(1, transfer.download().length()); }
+    }
+    @Test void unavailableOrWrongTypeCdnFallsBackBeforeStreamingAndKeepsRange() throws Exception {
+        var primary = URI.create("https://p1.douyinpic.com/a.jpg");
+        var backup = URI.create("https://p2.douyinpic.com/a.jpg");
+        var asset = new MediaParser.Candidate("IMAGE", "", primary, 100, 200, 0, "PLATFORM_SOURCE", List.of(backup));
+        when(parser.parse(any())).thenReturn(new MediaParser.Parsed(MediaPlatform.DOUYIN, fixture.sourceUrl(), "", "", "", 0, List.of(asset)));
+        when(http.open(any(), eq(primary), any(), anyLong())).thenThrow(new ApiException(ApiError.MEDIA_PLATFORM_RESTRICTED));
+        when(http.open(any(), eq(backup), any(), anyLong())).thenAnswer(call -> download(new byte[]{1,2}, "image/jpeg", 2));
+        String id = result().id();
+        try (var transfer = service.transfer(id, 0, "bytes=0-1")) { assertEquals("image/jpeg", transfer.download().contentType()); }
+        verify(http).open(eq(MediaPlatform.DOUYIN), eq(backup), eq("bytes=0-1"), anyLong());
+        when(http.open(any(), eq(primary), any(), anyLong())).thenAnswer(call -> download(new byte[]{1}, "video/mp4", 1));
+        try (var archive = service.album(id, "0", "client")) { assertTrue(archive.bytes().length > 0); }
+    }
     @Test void failedAndOversizedArchivesDoNotReturnPartialZipAndReleaseTheirSlot() {
         String id = result().id();
         when(http.open(any(),any(),any(),anyLong())).thenAnswer(call -> download(new byte[0],"image/jpeg",MediaService.MAX_ZIP_BYTES + 1L));

@@ -12,6 +12,8 @@
 | [yt-dlp/yt-dlp 的 tiktok.py](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/tiktok.py) 与 [xiaohongshu.py](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/xiaohongshu.py)（master 分支，可变链接） | 查阅 TikTok `__UNIVERSAL_DATA_FOR_REHYDRATION__`/`SIGI_STATE` 路径、图集 `imagePost` 结构，以及小红书笔记页 `__INITIAL_STATE__`/`noteDetailMap` 与公开测试 URL 形态。未嵌入或执行 yt-dlp 代码，TikTok 处理为独立实现。 |
 | [Apache HttpComponents Client 5.5.2](https://hc.apache.org/httpcomponents-client-5.5.x/)（Apache-2.0） | 有界 HTTP 客户端：显式连接/读取超时、连接池上限、禁自动重试、禁用 Cookie 容器、自定义 DNS 解析器校验公网地址。 |
 | [ucmao/media-parser 小红书逆向指南](https://github.com/ucmao/media-parser/blob/main/docs/parsers/xiaohongshu.md) 与 [douyin 指南](https://github.com/ucmao/media-parser/blob/main/docs/parsers/douyin.md)（main 分支，可变链接） | 第二轮图集修复直接依据这两份文档与其源码：小红书短链重定向必须保留 `xsec_token`/`xsec_source`/`source` 等参数、PC 长链与 App 分享短链需要 PC/Mobile 双 UA 自适应、`noteData.data.noteData`（移动端）与 `note.noteDetailMap`（PC）两套状态结构、`fileId` 无水印 1920 图与 `video.consumer.originVideoKey` 原画视频，以及服务器 IP 会被风控、配置 `a1`/`webId`/`web_session` Cookie 可把成功率提到 99%+ 的运维建议；抖音侧参考其图文优先分享页 SSR、常规视频走移动端 Feed 免签名通道、图文与 LivePhoto 需要 Cookie 的分级策略。未引入其 Python 代码。 |
+| [hiyufan/shizhen 的 douyin.py](https://github.com/hiyufan/shizhen/blob/fe6c698de4111a1511258d6054f9a5efe5efa48d/src/parse_video_py/parser/douyin.py)（MIT，固定提交） | 第三轮图集修复参考其浏览器路线：匿名读取播放器 React props 的 `awemeInfo.images`（`urlList` 为无水印 JPEG，`video.playAddr` 为 LivePhoto）、`note-detail`/`player-container` 定位、首页 warmup 与轮询重试的取舍。该仓库同为 MIT；未引入其 Python 代码或依赖，Java 侧只把浏览器返回当作平台数据源。 |
+| [ucmao/media-parser 的 kuaishou_parser.py](https://github.com/ucmao/media-parser/blob/36e57ff489d23e1037050c9de7f0a39598f8caee/src/parsers/kuaishou_parser.py)（MIT，固定提交） | 快手 CDN 域名与 atlas/manifest 结构对照，确认 `kwimgs.com` 是常规资源域、`/fw/photo/` 与 H5 页面的字段差异。未引入其代码。 |
 
 ## 功能与边界
 
@@ -83,6 +85,16 @@
 - 同时修复上一轮遗留缺陷：媒体下载在新增 UA 参数后误传布尔值（编译期即发现）、小红书图片改写后来源标记失真（现在只有真正重写过的地址才是 `PLATFORM_SOURCE`）。
 - 新增错误码 `61008`（HTTP 410）：链接失效或平台要求验证；`/404`、`error_code=300031`、`undertake_note_error` 都归类到该码，页面中英文文案已同步，不再把需要重新复制链接误报成作品已删除。
 - 服务端全量测试 **208/208**（Linux 容器内运行；新增 5 项覆盖小红书移动端结构、PC/Mobile/无状态分支、失效链接分类、抖音图文分享页与移动端 Feed、`withoutToken`/`xhsImage`/Cookie 白名单）。隔离候选 **120/120**；生产 HTTPS 验收 **21/21**。真实链接抽查：抖音视频 200（3 路视频 + 封面）；小红书两条链接修复后返回 61008——同一链接在风控生效前的首次探测曾成功返回 `noteDetailMap`，连续请求后被平台统一 302 到 `/404`，与参考文档中服务器 IP 会被风控的描述一致。
+2026-10-13（第三轮：抖音图集匿名受限、快手 CDN 白名单、可选浏览器回退）：
+
+- 用户提供的三条链接在线上全部失败，定位到两类根因。抖音图集：短链解析已经拿到分享页文档却再次请求；`slidesinfo` 在匿名条件下返回 `filter_list` reason 8；分享页 SSR 与移动端 Feed 都不返回图集；无头浏览器实测页面停在 `Please wait`，因为 WAF 脚本域名 `lf-waf-js.byted-static.com` 不在白名单，页面永远不进入作品页。快手：`mainMvUrls` 落在 `kwimgs.com`，解析成功但下载被媒体白名单拒绝成 61003。
+- 服务端修复：复用短链已解析的 `_ROUTER_DATA`；`www.douyin.com`/`www.iesdouyin.com` 双 host、带/不带 `request_source=200` 的 slidesinfo 轮询；note 输入跳过移动端 Feed；`/share/note/` 与 `/share/video/` 双路径回退；失败分类保留 61009 而不是「作品已删除」。新增 `KuaishouMetadata`（`INIT_STATE`/`__APOLLO_STATE__`、atlas、manifest 码率、`/fw/photo/` 回退）。`MediaHttp` 把 401/403/412/429 归入 61009，404/410 归入 61008/61002。下载与 ZIP 按候选地址回退，封面保留备用地址，相同链接的并发解析合并（成功 180 秒、失败 30 秒窗口）。
+- 可选私有浏览器回退（`deploy/docker-compose.media.yml` + `MEDIA_BROWSER_URL`）：Playwright 1.64.0 固定版本；loopback CONNECT 代理同时校验域名与解析出的公网地址，仅允许 HTTPS/443，拦截 media/WebSocket，只暴露 `GET /health` 与 `GET /douyin/<id>`；不登录、不处理验证码、不接受任意 URL，Cookie 只存在进程内存。宿主内核对 unprivileged user namespaces 的差异用 `MEDIA_BROWSER_SANDBOX` 显式声明。
+- 页面：新增 61009（平台暂时限制匿名访问，不代表作品被删除）中英文案；61008 文案改为「链接失效或作品已移除」。
+- 验证：服务端 **226/226**（Linux 容器；新增 `MediaBrowserTest` 3、`MediaParseCacheTest` 4、`MediaAlbumRegressionTest` 9）；页面与浏览器策略 `node --test` **14/14**；隔离候选 **139/139**，其中三条真实链接分别为抖音图集 1 张 + 封面、快手 3 路视频 + 封面、抖音图集 20 张 + 封面；生产 HTTPS 验收 **21/21**，另复验图集 20 张 + 封面、图片下载 `200 image/jpeg`、ZIP `200 application/zip` 305,885 字节。
+- 部署：生产 API/Web/media-browser 三个镜像重建，compose 命令加入 `-f docker-compose.media.yml`；`.env.production` 增加 `MEDIA_BROWSER_URL=http://media-browser:8080` 与 `MEDIA_BROWSER_SANDBOX=false`（当前宿主内核 3.10 没有 unprivileged user namespaces，容器仍是只读根、丢弃能力、no-new-privileges + seccomp；升级宿主后应改回 true）；回滚标签 `before-sv-v5402`；五个容器健康，`nginx -s reload` 后 API 正常。
+- 已知边界：图集回退依赖抖音匿名页面结构，平台改版需要重新验证；浏览器侧没有验证码处理与住宅代理，风控环境下仍可能返回 61009。
+
 - 第二轮部署：生产 API `sha256:68236e5c5ca8b39b107d619a1136de137ff3ff64fe6012314f20469ae9a757b7`，Web `sha256:a6bde0752dccb623383fe1f11cf36ed11e96f0244c94a987d395464c164b968e`，回滚标签 `before-media-fix`，四个容器健康。
 
 ## 后续验收清单

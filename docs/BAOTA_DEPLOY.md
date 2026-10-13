@@ -209,10 +209,13 @@ curl -sS -H 'Host: toolapi.zhzgo.cn' http://127.0.0.1:18080/api/v1/health
 ```sh
 cd /www/wwwroot/cangshuo-toolbox && git pull
 cd deploy
-docker compose --env-file ../.env.production -f docker-compose.yml -f docker-compose.baota.yml build server admin
-docker compose --env-file ../.env.production -f docker-compose.yml -f docker-compose.baota.yml up -d --wait --wait-timeout 300
+docker compose --env-file ../.env.production -f docker-compose.yml -f docker-compose.baota.yml -f docker-compose.media.yml build server admin media-browser
+docker compose --env-file ../.env.production -f docker-compose.yml -f docker-compose.baota.yml -f docker-compose.media.yml up -d --wait --wait-timeout 300
+docker compose --env-file ../.env.production -f docker-compose.yml -f docker-compose.baota.yml -f docker-compose.media.yml exec -T admin nginx -s reload
 python3 ../scripts/smoke_release.py --base-url https://toolapi.zhzgo.cn/api/v1 --web-url https://tool.zhzgo.cn --origin https://tool.zhzgo.cn
 ```
+
+`docker-compose.media.yml` 才会启动 `short_video_parse` 的可选匿名图集浏览器 sidecar（无宿主端口、无 CDP，仅内部网络）；`.env.production` 中的 `MEDIA_BROWSER_URL=http://media-browser:8080` 与 `MEDIA_BROWSER_SANDBOX=false`（老内核宿主没有 unprivileged user namespaces 时的降级开关，详见 `deploy/media-browser/README.md`）应一并保留。`admin` 的 `proxy_pass http://server:8080` 在启动时解析，重建 `server` 后需要 `nginx -s reload`。
 
 Flyway 迁移只向前执行：如果新版本包含不兼容的数据库变更，出问题要配合备份恢复（§9），不要手改 schema 回退。
 

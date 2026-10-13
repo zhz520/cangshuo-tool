@@ -120,7 +120,7 @@ class MediaParserTest {
                 return new MediaHttp.Document(URI.create("https://www.xiaohongshu.com/404?error_code=300031&error_msg=x"),"<html>404</html>",List.of());
             return new MediaHttp.Document(uri,"<html>no state</html>",List.of());
         });
-        assertEquals(ApiError.MEDIA_LINK_EXPIRED,assertThrows(ApiException.class,
+        assertEquals(ApiError.MEDIA_PLATFORM_RESTRICTED,assertThrows(ApiException.class,
                 () -> parse("https://www.xiaohongshu.com/explore/expired674051740000000007027a15")).error());
         assertEquals(ApiError.MEDIA_UNAVAILABLE,assertThrows(ApiException.class,
                 () -> parse("https://www.xiaohongshu.com/discovery/item/674051740000000007027a15")).error());
