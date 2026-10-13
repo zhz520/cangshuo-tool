@@ -41,6 +41,8 @@ class MediaParserTest {
             URI uri = call.getArgument(1); if (uri.getPath().contains("slidesinfo")) return new MediaHttp.Document(uri,"{}",List.of());
             return new MediaHttp.Document(uri,"<script>window._ROUTER_DATA={\"loaderData\":{\"video_(id)/page\":{\"videoInfoRes\":{\"item_list\":[{\"video\":{\"play_addr\":{\"url_list\":[\"https://v.douyinvod.com/play/a\"]}}}]}}}};</script>",List.of());
         });
+        when(http.document(any(),any(),any(),anyString(),anyLong())).thenAnswer(call ->
+                new MediaHttp.Document(call.getArgument(1), "{\"aweme_list\":[]}", List.of()));
         assertEquals(1,count(parse("https://www.douyin.com/video/1234567890"),"VIDEO"));
     }
     @Test void kuaishouSupportsBothVideoAndAtlas() {
@@ -98,5 +100,62 @@ class MediaParserTest {
         assertThrows(ApiException.class,() -> parse("https://www.douyin.com/video/1234567890"));
         response("{\"aweme_details\":[{\"video\":{\"play_addr\":{\"url_list\":[\"https://evil.example/video.mp4\"]}}}]}");
         assertEquals(ApiError.MEDIA_PROVIDER_ERROR,assertThrows(ApiException.class,() -> parse("https://www.douyin.com/video/1234567890")).error());
+    }
+    @Test void xiaohongshuReadsMobileH5StateAndBuildsWatermarkFreeSources() {
+        when(http.document(any(),any(),any(),anyBoolean(),anyLong())).thenAnswer(call -> {
+            URI uri = call.getArgument(1);
+            if (Boolean.TRUE.equals(call.getArgument(3)) || uri.getPath().contains("/404"))
+                return new MediaHttp.Document(uri,"<script>window.__INITIAL_STATE__={\"note\":{\"currentNoteId\":\"undefined\",\"noteDetailMap\":{}}}</script>",List.of());
+            return new MediaHttp.Document(uri,"<script>window.__INITIAL_STATE__={\"noteData\":{\"data\":{\"noteData\":{\"title\":\"mobile\",\"desc\":\"desc\",\"user\":{\"nickName\":\"m-user\"},\"imageList\":[{\"fileId\":\"abcdefgh1234567890\",\"url\":\"https://sns-webpic-qc.xhscdn.com/2024/img!nd_dft_wlteh_webp_3\",\"width\":1080,\"height\":1440,\"livePhoto\":true,\"stream\":{\"h264\":[{\"masterUrl\":\"https://sns-video-bd.xhscdn.com/live.mp4\"}]}}]}}}}</script>",List.of());
+        });
+        var result = parse("https://www.xiaohongshu.com/explore/674051740000000007027a15?xsec_token=abc");
+        assertEquals("mobile",result.title()); assertEquals("m-user",result.author());
+        assertEquals("https://sns-img-qc.xhscdn.com/abcdefgh1234567890?imageView2/2/w/1920/format/jpg",result.assets().get(0).uri().toString());
+        assertEquals(List.of("IMAGE","LIVE","COVER"),result.assets().stream().map(MediaParser.Candidate::kind).toList());
+    }
+    @Test void xiaohongshuDistinguishesExpiredSharesFromUnavailableNotes() {
+        when(http.document(any(),any(),any(),anyBoolean(),anyLong())).thenAnswer(call -> {
+            URI uri = (URI) call.getArgument(1);
+            if (uri.toString().contains("expired"))
+                return new MediaHttp.Document(URI.create("https://www.xiaohongshu.com/404?error_code=300031&error_msg=x"),"<html>404</html>",List.of());
+            return new MediaHttp.Document(uri,"<html>no state</html>",List.of());
+        });
+        assertEquals(ApiError.MEDIA_LINK_EXPIRED,assertThrows(ApiException.class,
+                () -> parse("https://www.xiaohongshu.com/explore/expired674051740000000007027a15")).error());
+        assertEquals(ApiError.MEDIA_UNAVAILABLE,assertThrows(ApiException.class,
+                () -> parse("https://www.xiaohongshu.com/discovery/item/674051740000000007027a15")).error());
+    }
+    @Test void douyinNotesUseMobileFeedThenTheNoteSharePage() {
+        when(http.document(any(),any(),any(),anyString(),anyLong())).thenAnswer(call -> {
+            URI uri = call.getArgument(1);
+            return new MediaHttp.Document(uri,"{\"aweme_list\":[{\"aweme_id\":\"111\"}]}",List.of());
+        });
+        response("{\"aweme_details\":[]}");
+        when(http.document(any(),any(),any(),anyBoolean(),anyLong())).thenAnswer(call -> {
+            URI uri = call.getArgument(1);
+            if (uri.getPath().contains("/share/note/"))
+                return new MediaHttp.Document(uri,"<script>window._ROUTER_DATA={\"loaderData\":{\"note_(id)/page\":{\"videoInfoRes\":{\"item_list\":[{\"desc\":\"note\",\"images\":[{\"url_list\":[\"https://p.douyinpic.com/1.jpg\"]}]}]}}}};</script>",List.of());
+            return new MediaHttp.Document(uri,"<html></html>",List.of());
+        });
+        var result = parse("https://www.douyin.com/note/7285559250619813155");
+        assertEquals(List.of("IMAGE","COVER"),result.assets().stream().map(MediaParser.Candidate::kind).toList());
+    }
+    @Test void noteAndImageSourceHelpersCoverBothPlatformShapes() {
+        assertEquals("674051740000000007027a15",MediaParser.noteId(URI.create("https://www.xiaohongshu.com/discovery/item/674051740000000007027a15?xsec_token=x")));
+        assertEquals("",MediaParser.noteId(URI.create("https://xhslink.com/a/abcdef")));
+        assertEquals("https://sns-img-qc.xhscdn.com/abcdefgh1234567890?imageView2/2/w/1920/format/jpg",
+                MediaParser.xhsImage("https://sns-webpic-qc.xhscdn.com/x!webp","abcdefgh1234567890"));
+        assertEquals("https://ci.xiaohongshu.com/notes_pre_post/spectrum/abcdefgh123?imageView2/format/jpg",
+                MediaParser.xhsImage("https://sns-webpic-qc.xhscdn.com/notes_pre_post/spectrum/abcdefgh123!webp",""));
+        assertEquals("https://sns-webpic-qc.xhscdn.com/a/b.jpg?imageView2/2/w/1080",
+                MediaParser.xhsImage("https://sns-webpic-qc.xhscdn.com/a/b.jpg?imageView2/2/w/1080",""));
+        assertEquals("",MediaParser.xhsImage("",""));
+        assertEquals("https://www.xiaohongshu.com/explore/674051740000000007027a15?source=webshare",
+                MediaParser.withoutToken(URI.create("https://www.xiaohongshu.com/explore/674051740000000007027a15?xsec_token=abc&xsec_source=pc_share&source=webshare")).toString());
+        assertNull(MediaParser.withoutToken(URI.create("https://www.xiaohongshu.com/explore/674051740000000007027a15?source=webshare")));
+        assertNull(MediaParser.withoutToken(URI.create("https://www.xiaohongshu.com/explore/674051740000000007027a15")));
+        assertTrue(MediaParser.isNote(URI.create("https://www.douyin.com/note/1")));
+        assertTrue(MediaParser.isNote(URI.create("https://www.iesdouyin.com/share/note/1/")));
+        assertFalse(MediaParser.isNote(URI.create("https://www.douyin.com/video/1")));
     }
 }

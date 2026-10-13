@@ -8,7 +8,8 @@ import java.util.*;
 public enum MediaPlatform {
     DOUYIN("抖音", "Douyin", "https://www.douyin.com/",
             List.of("v.douyin.com", "www.douyin.com", "www.iesdouyin.com", "iesdouyin.com"),
-            List.of("douyin.com", "iesdouyin.com", "amemv.com"),
+            // snssdk.com hosts the fallback mobile feed node used when the primary node misses a work.
+            List.of("douyin.com", "iesdouyin.com", "amemv.com", "snssdk.com"),
             List.of("douyinvod.com", "bytecdn.cn", "byteimg.com", "douyinpic.com", "douyinstatic.com", "pstatp.com", "snssdk.com", "amemv.com", "ibytedtos.com", "bytedance.com", "bytegecko.com", "365yg.com", "toutiaoimg.com", "zjcdn.com")),
     KUAISHOU("快手", "Kuaishou", "https://www.kuaishou.com/",
             List.of("v.kuaishou.com", "www.kuaishou.com", "www.gifshow.com", "v.m.chenzhongtech.com"),

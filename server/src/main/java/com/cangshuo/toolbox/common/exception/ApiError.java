@@ -34,6 +34,7 @@ public enum ApiError {
     MEDIA_TOO_LARGE(61005, "Media exceeds the processing budget", HttpStatus.PAYLOAD_TOO_LARGE),
     MEDIA_TIMEOUT(61006, "Media provider timed out", HttpStatus.GATEWAY_TIMEOUT),
     MEDIA_FORMAT_UNSUPPORTED(61007, "Media format not supported", HttpStatus.UNPROCESSABLE_ENTITY),
+    MEDIA_LINK_EXPIRED(61008, "Share link expired or note unavailable; copy a fresh link", HttpStatus.GONE),
     FORBIDDEN(10005, "Access denied", HttpStatus.FORBIDDEN),
     NOT_FOUND(10006, "Resource not found", HttpStatus.NOT_FOUND),
     TOO_MANY_REQUESTS(10007, "Too many requests", HttpStatus.TOO_MANY_REQUESTS),

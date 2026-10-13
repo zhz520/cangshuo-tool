@@ -42,6 +42,7 @@ def verify(check, request, sql, admin):
         examples = [
             ('douyin', 'https://www.douyin.com/video/6961737553342991651'),
             ('xiaohongshu', 'https://www.xiaohongshu.com/explore/6411cf99000000001300b6d9'),
+('xiaohongshu_token', 'https://www.xiaohongshu.com/discovery/item/674051740000000007027a15?xsec_token=CBgeL8Dxd1ZWBhwqRd568gAZ_iwG-9JIf9tnApNmteU2E='),
             ('bilibili', 'https://www.bilibili.com/video/BV1xx411c7mD'),
             ('tiktok', 'https://www.tiktok.com/@leenabhushan/video/6748451240264420610'),
         ]

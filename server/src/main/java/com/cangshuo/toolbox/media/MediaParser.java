@@ -38,6 +38,10 @@ public class MediaParser {
         return http.document(input.platform(), uri, null, desktop, deadline);
     }
     private JsonNode get(MediaInput input, String url, long deadline) { return json.json(page(input, URI.create(url), true, deadline).text()); }
+    /** Mobile app channel: that node rejects browser user agents and needs no signature. */
+    private JsonNode getApp(MediaInput input, String url, long deadline) {
+        return json.json(http.document(input.platform(), URI.create(url), null, MediaHttp.APP_UA, deadline).text());
+    }
     private Parsed douyin(MediaInput input, long deadline) {
         String id = numericId(input.uri());
         MediaHttp.Document initial = null;
@@ -50,11 +54,34 @@ public class MediaParser {
                 if (api.path("aweme_details").isArray() && !api.path("aweme_details").isEmpty()) { data = api.path("aweme_details").get(0); break; }
             } catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
         }
+        // Image posts are missing from the slides API, but the mobile feed node still carries them.
+        if (data == null) data = mobileFeed(input, id, deadline);
         if (data == null) {
-            String html = initial == null ? page(input, URI.create("https://www.iesdouyin.com/share/video/" + id + "/"), false, deadline).text() : initial.text();
-            data = routerItem(json.assignment(html, "_ROUTER_DATA"));
+            // Share pages are SSR-rendered per work type: notes under /share/note/, videos under /share/video/.
+            for (String kind : isNote(input.uri()) ? List.of("note", "video") : List.of("video", "note")) {
+                String html = initial != null ? initial.text()
+                        : page(input, URI.create("https://www.iesdouyin.com/share/" + kind + "/" + id + "/"), false, deadline).text();
+                initial = null;
+                try { data = routerItem(json.assignment(html, "_ROUTER_DATA")); break; }
+                catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+            }
         }
+        if (data == null) throw unavailable();
         return byteDance(input, data);
+    }
+    private JsonNode mobileFeed(MediaInput input, String id, long deadline) {
+        for (String host : List.of("https://api5-normal-c-hl.amemv.com", "https://aweme.snssdk.com")) {
+            try {
+                JsonNode response = getApp(input, host + "/aweme/v1/feed/?aweme_id=" + id + "&aid=1128", deadline);
+                for (JsonNode item : response.path("aweme_list"))
+                    if (id.equals(item.path("aweme_id").asText(""))) return item;
+            } catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+        }
+        return null;
+    }
+    static boolean isNote(URI uri) {
+        String path = uri.getPath() == null ? "" : uri.getPath();
+        return path.contains("/note/") || path.contains("/slides/") || path.contains("/share/note/");
     }
     private Parsed byteDance(MediaInput input, JsonNode data) {
         var assets = new ArrayList<Candidate>();
@@ -108,39 +135,122 @@ public class MediaParser {
         return result(input, photo.path("caption").asText(""), "", photo.path("userName").asText(""), photo.path("duration").asLong(0) / 1000, assets);
     }
     private Parsed xiaohongshu(MediaInput input, long deadline) {
-        var doc = page(input, input.uri(), true, deadline);
-        JsonNode state = json.assignment(doc.text(), "__INITIAL_STATE__").path("note");
-        String id = state.path("currentNoteId").asText("");
-        if (id.isBlank() || id.equals("undefined")) throw unavailable();
-        JsonNode note = state.path("noteDetailMap").path(id).path("note");
+        // Desktop long links carry the richest state; app share short links render the mobile H5 structure instead.
+        String displayId = noteId(input.uri());
+        JsonNode note = null;
+        URI finalUri = input.uri();
+        ApiException failure = null;
+        // A stale xsec_token is itself answered with /404, so retry the same path without the share signature.
+        var candidates = new ArrayList<URI>();
+        candidates.add(input.uri());
+        URI unsigned = withoutToken(input.uri());
+        if (unsigned != null) candidates.add(unsigned);
+        for (URI candidate : candidates) {
+            for (boolean desktop : List.of(true, false)) {
+                try {
+                    var doc = page(input, candidate, desktop, deadline);
+                    finalUri = doc.uri();
+                    note = noteState(json.assignment(doc.text(), "__INITIAL_STATE__"), displayId);
+                    if (note != null) break;
+                } catch (ApiException error) {
+                    if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error;
+                    failure = error;
+                }
+                // /404 is the platform's answer to rate limiting as well; other user agents will not change it.
+                if (note == null && finalUri.toString().contains("/404")) break;
+            }
+            if (note != null) break;
+        }
+        if (note == null) throw expiredOrUnavailable(finalUri, failure);
         var assets = new ArrayList<Candidate>();
+        var streams = new ArrayList<Candidate>();
         for (JsonNode stream : note.at("/video/media/stream/h264")) {
             String master = stream.path("masterUrl").asText("");
-            if (!master.isBlank()) add(assets, input, "VIDEO", "", master, stream.path("width").asInt(0), stream.path("height").asInt(0), stream.path("avgBitrate").asLong(0), "PLATFORM_SOURCE");
+            if (!master.isBlank()) add(streams, input, "VIDEO", "", master, stream.path("width").asInt(0), stream.path("height").asInt(0), stream.path("avgBitrate").asLong(0), "PLATFORM_SOURCE");
         }
-        assets.sort(Comparator.comparingLong(Candidate::bitrate).reversed());
+        streams.sort(Comparator.comparingLong(Candidate::bitrate).reversed());
+        // The author's original upload key is the watermark-free source, so it leads the quality list.
+        String origin = note.at("/video/consumer/originVideoKey").asText(note.path("video").path("originVideoKey").asText(""));
+        if (!origin.isBlank()) {
+            String url = origin.startsWith("http") ? origin : "https://sns-video-bd.xhscdn.com/" + origin.replaceAll("^/+", "");
+            try { add(assets, input, "VIDEO", "", url, 0, 0, 0, "PLATFORM_SOURCE"); }
+            catch (ApiException error) { if (error.error() == ApiError.MEDIA_TIMEOUT || error.error() == ApiError.MEDIA_TOO_LARGE) throw error; }
+        }
+        assets.addAll(streams);
         JsonNode images = note.path("imageList");
         if (assets.isEmpty()) {
             checkImages(images.size());
             for (JsonNode image : images) {
-                String url = image.path("urlDefault").asText("");
-                String source = "UNKNOWN";
-                if (url.contains("/notes_pre_post/")) {
-                    URI owned = input.platform().mediaUri(url);
-                    String imageId = owned.getPath().substring(owned.getPath().lastIndexOf('/') + 1).split("!", 2)[0];
-                    if (!imageId.matches("[A-Za-z0-9_-]{8,200}")) throw unavailable();
-                    url = "https://ci.xiaohongshu.com/notes_pre_post/" + (url.contains("/spectrum/") ? "spectrum/" : "") + imageId + "?imageView2/format/jpg";
-                    source = "PLATFORM_SOURCE";
+                String raw = image.path("urlDefault").asText(image.path("url").asText(""));
+                if (raw.isBlank()) {
+                    JsonNode info = image.path("infoList");
+                    if (info.isArray() && !info.isEmpty()) raw = info.get(info.size() - 1).path("url").asText("");
                 }
-                add(assets, input, "IMAGE", "", url, image.path("width").asInt(0), image.path("height").asInt(0), 0, source);
+                String url = xhsImage(raw, image.path("fileId").asText(""));
+                if (url.isBlank()) throw unavailable();
+                // Only a rewritten address is known to be the platform's clean source; raw ones may carry a watermark.
+                boolean clean = url.startsWith("https://sns-img-qc.xhscdn.com/") || url.contains("ci.xiaohongshu.com/notes_pre_post/");
+                add(assets, input, "IMAGE", "", url, image.path("width").asInt(0), image.path("height").asInt(0), 0,
+                        clean ? "PLATFORM_SOURCE" : "UNKNOWN");
                 if (image.path("livePhoto").asBoolean(false)) {
                     String live = image.at("/stream/h264/0/masterUrl").asText("");
                     if (!live.isBlank()) add(assets, input, "LIVE", "", live, 0, 0, 0, "PLATFORM_SOURCE");
                 }
             }
         }
-        addCover(assets, input, images.path(0).path("urlDefault").asText(""));
-        return result(input, note.path("title").asText(""), note.path("desc").asText(""), note.at("/user/nickname").asText(""), note.at("/video/capa/duration").asLong(0), assets);
+        addCover(assets, input, xhsImage(images.path(0).path("urlDefault").asText(images.path(0).path("url").asText("")), images.path(0).path("fileId").asText("")));
+        return result(input, note.path("title").asText(""), note.path("desc").asText(""), note.at("/user/nickname").asText(note.at("/user/nickName").asText("")), note.at("/video/capa/duration").asLong(0), assets);
+    }
+    static String noteId(URI uri) {
+        Matcher matcher = Pattern.compile("/(?:explore|discovery/item)/([0-9a-f]{16,32})").matcher(uri.getPath() == null ? "" : uri.getPath());
+        return matcher.find() ? matcher.group(1) : "";
+    }
+    /** Drops the share signature parameters, keeping every other query value intact. */
+    static URI withoutToken(URI uri) {
+        String query = uri.getRawQuery();
+        if (query == null || !query.contains("xsec_token")) return null;
+        StringBuilder kept = new StringBuilder();
+        for (String part : query.split("&")) {
+            String name = part.split("=", 2)[0];
+            if (name.startsWith("xsec_")) continue;
+            if (kept.length() > 0) kept.append('&');
+            kept.append(part);
+        }
+        try {
+            return new URI(uri.getScheme(), uri.getRawAuthority(), uri.getPath(),
+                    kept.length() == 0 ? null : kept.toString(), null);
+        } catch (URISyntaxException invalid) { return null; }
+    }
+    /** Desktop state (note.noteDetailMap) and mobile H5 state (noteData.data.noteData) are both in the wild. */
+    static JsonNode noteState(JsonNode root, String displayId) {
+        JsonNode note = root.path("note");
+        for (String key : List.of(displayId, note.path("firstNoteId").asText(""), note.path("currentNoteId").asText(""))) {
+            if (key == null || key.isBlank() || key.equals("undefined")) continue;
+            JsonNode candidate = note.path("noteDetailMap").path(key).path("note");
+            if (candidate.isObject() && candidate.size() > 0) return candidate;
+        }
+        JsonNode mobile = root.path("noteData").path("data").path("noteData");
+        return mobile.isObject() && mobile.size() > 0 ? mobile : null;
+    }
+    /** Prefer the file id (1920px watermark-free jpg), then the notes_pre_post rewrite, then the raw URL. */
+    static String xhsImage(String raw, String fileId) {
+        if (fileId != null && fileId.matches("[A-Za-z0-9_-]{8,200}"))
+            return "https://sns-img-qc.xhscdn.com/" + fileId + "?imageView2/2/w/1920/format/jpg";
+        String url = raw == null ? "" : raw.replace("\\u002F", "/").strip();
+        if (url.isBlank()) return "";
+        if (url.contains("/notes_pre_post/")) {
+            String imageId = url.substring(url.lastIndexOf('/') + 1).split("!", 2)[0];
+            if (imageId.matches("[A-Za-z0-9_-]{8,200}"))
+                return "https://ci.xiaohongshu.com/notes_pre_post/" + (url.contains("/spectrum/") ? "spectrum/" : "") + imageId + "?imageView2/format/jpg";
+        }
+        return url.replaceAll("![^?]*", "");
+    }
+    /** The platform answers stale or removed shares with /404 or /login instead of the note state. */
+    static ApiException expiredOrUnavailable(URI finalUri, ApiException failure) {
+        String value = finalUri == null ? "" : finalUri.toString();
+        if (value.contains("/404") || value.contains("error_code=300031") || value.contains("undertake_note_error"))
+            return new ApiException(ApiError.MEDIA_LINK_EXPIRED);
+        return failure == null ? new ApiException(ApiError.MEDIA_UNAVAILABLE) : failure;
     }
     private Parsed bilibili(MediaInput input, long deadline) {
         URI uri = input.uri();

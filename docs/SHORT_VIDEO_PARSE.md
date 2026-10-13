@@ -11,12 +11,15 @@
 | [wujunwei928/parse-video-py](https://github.com/wujunwei928/parse-video-py)（MIT），固定提交 `5fcf87256edb5ffcdebf0e4aac2a5a41745da76e`，阅读 `src/parse_video_py/parser/` 的 `base.py`、`__init__.py`、`douyin.py`、`kuaishou.py`、`redbook.py`、`weibo.py`、`bilibili.py`、`pipixia.py`、`xigua.py` 与 `pyproject.toml` | 借用平台清单、分享页数据来源（抖音 `_ROUTER_DATA` 与 slidesinfo、快手 `INIT_STATE`、小红书 `__INITIAL_STATE__`、微博 h5 component 接口、B 站 view/playurl、西瓜与皮皮虾的公开结构），以及优先原始播放地址、封面单独返回的组织方式。服务端用 Java 独立重写，未引入 Python 运行时；不复制其 CLI/Web 服务、代理配置与批量功能，并主动去掉无边界重试。 |
 | [yt-dlp/yt-dlp 的 tiktok.py](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/tiktok.py) 与 [xiaohongshu.py](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/extractor/xiaohongshu.py)（master 分支，可变链接） | 查阅 TikTok `__UNIVERSAL_DATA_FOR_REHYDRATION__`/`SIGI_STATE` 路径、图集 `imagePost` 结构，以及小红书笔记页 `__INITIAL_STATE__`/`noteDetailMap` 与公开测试 URL 形态。未嵌入或执行 yt-dlp 代码，TikTok 处理为独立实现。 |
 | [Apache HttpComponents Client 5.5.2](https://hc.apache.org/httpcomponents-client-5.5.x/)（Apache-2.0） | 有界 HTTP 客户端：显式连接/读取超时、连接池上限、禁自动重试、禁用 Cookie 容器、自定义 DNS 解析器校验公网地址。 |
+| [ucmao/media-parser 小红书逆向指南](https://github.com/ucmao/media-parser/blob/main/docs/parsers/xiaohongshu.md) 与 [douyin 指南](https://github.com/ucmao/media-parser/blob/main/docs/parsers/douyin.md)（main 分支，可变链接） | 第二轮图集修复直接依据这两份文档与其源码：小红书短链重定向必须保留 `xsec_token`/`xsec_source`/`source` 等参数、PC 长链与 App 分享短链需要 PC/Mobile 双 UA 自适应、`noteData.data.noteData`（移动端）与 `note.noteDetailMap`（PC）两套状态结构、`fileId` 无水印 1920 图与 `video.consumer.originVideoKey` 原画视频，以及服务器 IP 会被风控、配置 `a1`/`webId`/`web_session` Cookie 可把成功率提到 99%+ 的运维建议；抖音侧参考其图文优先分享页 SSR、常规视频走移动端 Feed 免签名通道、图文与 LivePhoto 需要 Cookie 的分级策略。未引入其 Python 代码。 |
 
 ## 功能与边界
 
 - 支持平台（Host 精确匹配，识别分享链接或包含唯一链接的整段分享文案）：抖音、快手、小红书、哔哩哔哩（含 b23.tv）、微博（含 t.cn、h5.video.weibo.com）、西瓜视频、皮皮虾、TikTok。
 - 视频：返回平台提供的播放资源，抖音把 `/playwm/` 换成 `/play/` 指向无水印播放路径（只替换该固定路径段，不改写签名参数）；返回多个码率时按码率降序排列并可切换。B 站仅接受 `durl` 单文件，遇到 DASH/分段或 `m3u8`/`mpd` 返回 61007。
-- 图集：抖音/快手/小红书/微博/皮皮虾/TikTok 图文作品逐张返回原图；小红书 `notes_pre_post` 图片改写为 `ci.xiaohongshu.com` 原图；抖音与小红书的实况照片（Live Photo）同时返回配对的 `LIVE` 视频，可与图片一起预览、单独保存。
+- 图集：抖音/快手/小红书/微博/皮皮虾/TikTok 图文作品逐张返回原图。小红书优先用 `fileId` 拼 `sns-img-qc.xhscdn.com` 无水印 1920 JPG，其次把 `notes_pre_post` 改写为 `ci.xiaohongshu.com` 原图，两者都拿不到时才回退原始地址（此类地址标记 `UNKNOWN`，因为可能仍带水印）；抖音与小红书的实况照片（Live Photo）同时返回配对的 `LIVE` 视频，可与图片一起预览、单独保存。
+- 小红书页面状态同时支持 PC（`note.noteDetailMap`，键依次取链接里的笔记 ID、`firstNoteId`、`currentNoteId`）与移动端 H5（`noteData.data.noteData`）两种结构，并按链接形态先用 PC UA、再用 Mobile UA 重试；带失效 `xsec_token` 的链接会被平台重定向到 `/404`，解析器会自动去掉 `xsec_*` 参数重试一次。视频优先返回 `video.consumer.originVideoKey` 对应的 `sns-video-bd.xhscdn.com` 原画流，其后才是各码率 h264 流。
+- 抖音新增免签名的移动端 Feed 通道（`api5-normal-c-hl.amemv.com` / `aweme.snssdk.com`，需要 App UA）作为图文与冷门作品的补充，分享页按作品类型选择 `/share/note/` 或 `/share/video/`；该通道只采纳 `aweme_id` 完全匹配的作品，不会把返回的推荐流内容错当成目标作品。
 - 封面：每个作品返回一张 `COVER`。封面只作为附带资源，作品没有任何可下载的视频/图片时返回 61002，不把只有封面的结果当成解析成功。
 - 结果字段：作品标题/描述/作者/时长、平台、原始链接，每个资源含序号、类型、尺寸、码率、来源标记（`PLATFORM_SOURCE`/`UNKNOWN`）、受控预览路径、下载路径与平台直链（供复制）。
 - 不支持范围：私密、付费、直播、需要登录或触发平台验证的作品；DASH 音视频合并、分段下载与转码；已烧进画面的水印移除；验证码或风控绕过；主页批量解析、作品列表、下载历史与断点续传。
@@ -42,6 +45,7 @@
 
 - 无数据库表：只有 `tool_definition` 元数据（V54）。结果、计数与受限状态都在内存或既有统计表。
 - 开关：环境变量 `MEDIA_ENABLED`（默认 true）与后台工具状态/分类状态共同生效；停用后 capabilities 返回 `available=false`，解析与下载均返回 503/10008。
+- 小红书在机房 IP 上会被风控（连续请求后统一 302 到 `/404?error_code=300031`）。可选的 `MEDIA_XHS_COOKIE` 只对小红书主机发送，值需匹配 `a1`/`webId`/`web_session` 形态的字符集（8–1024 字符），非法值直接忽略；该值不写日志、不落库、不下发客户端。上游失败诊断日志只记录主机名与异常类型。
 - 后台复用现有工具管理、维护/关闭、分类控制、使用量与排行榜；网页首次连接成功后上报一次 `/api/v1/tools/short_video_parse/usage`，App 内 WebView 不重复计数。
 - 页面自持脚本与样式（无 CDN、无第三方统计、无 JavaScript 桥），CSP 限制 `default-src 'self'`，图片仅同源与 blob。
 
@@ -54,7 +58,7 @@
 
 ## 实际验证
 
-2026-10-13：
+2026-10-13（第一轮）：
 
 - Server 全量测试 **203/203** 通过（Linux 容器内 `mvn test`，与 CI 同环境），打包成功。其中 `com.cangshuo.toolbox.media` 新增 **30** 项测试（`MediaBoundaryTest` 5、`MediaParserTest` 10、`MediaServiceTest` 9、`MediaControllerTest` 4、`MediaHttpBoundaryTest` 2），覆盖：链接解析与伪装 Host、DNS 私网拒绝、JSON 状态解析（不执行 JS、不接受 NaN/尾随内容）、八平台样例结构、抖音码率排序与图集上限、小红书原图改写与实况配对、B 站分页与 DASH 拒绝、ZIP 选择与超限、Range 校验、下载魔数嗅探、并发信号量释放与幂等关闭、控制器 null 存储与二进制边界。
 - Android `:app:testDebugUnitTest :app:assembleDebug :app:lintDebug` 通过：单元测试 **422/422**，APK 构建成功，Lint 0 error、85 warning（均为既有告警）；新增 `WebMediaDownloadPolicyTest` 覆盖受控下载路径与越权 URL 拒绝。
@@ -73,8 +77,16 @@
 
 部署：生产 API 镜像 `sha256:8e36c19108b49017cc059017734bcffabef09afb1199f017f485ab5c712b92c0`，Web（含本页静态资源）镜像 `sha256:dc296a9c2fc7bedcb99f898b23d7e1ae592b254eb54f2a92c6ce27e08cb2c6b7`，回滚标签 `before-short-video-v54`，四个容器健康。当前生产 compose 仍是旧版本（`MEDIA_ENABLED` 透传随下次同步生效），容器使用默认值 `true`。
 
+2026-10-13（第二轮：图集修复，按 GitHub 参考实现对照）：
+
+- 定位到结构缺口：小红书 App 分享链接返回的是移动端 H5 状态（`noteData.data.noteData`），第一轮只解析 PC 结构（`noteDetailMap`）因此必然失败；本轮补上 `firstNoteId`/链接 ID 索引、PC→Mobile 双 UA 重试、失效 `xsec_token` 去参重试、`fileId` 无水印原图与 `originVideoKey` 原画视频。抖音补上移动端 Feed 免签名通道与 `/share/note/` 分享页路径，修正图文作品在 slides 接口为空时错误落到 `/share/video/` 的选择问题。
+- 同时修复上一轮遗留缺陷：媒体下载在新增 UA 参数后误传布尔值（编译期即发现）、小红书图片改写后来源标记失真（现在只有真正重写过的地址才是 `PLATFORM_SOURCE`）。
+- 新增错误码 `61008`（HTTP 410）：链接失效或平台要求验证；`/404`、`error_code=300031`、`undertake_note_error` 都归类到该码，页面中英文文案已同步，不再把需要重新复制链接误报成作品已删除。
+- 服务端全量测试 **208/208**（Linux 容器内运行；新增 5 项覆盖小红书移动端结构、PC/Mobile/无状态分支、失效链接分类、抖音图文分享页与移动端 Feed、`withoutToken`/`xhsImage`/Cookie 白名单）。隔离候选 **120/120**；生产 HTTPS 验收 **21/21**。真实链接抽查：抖音视频 200（3 路视频 + 封面）；小红书两条链接修复后返回 61008——同一链接在风控生效前的首次探测曾成功返回 `noteDetailMap`，连续请求后被平台统一 302 到 `/404`，与参考文档中服务器 IP 会被风控的描述一致。
+- 第二轮部署：生产 API `sha256:68236e5c5ca8b39b107d619a1136de137ff3ff64fe6012314f20469ae9a757b7`，Web `sha256:a6bde0752dccb623383fe1f11cf36ed11e96f0244c94a987d395464c164b968e`，回滚标签 `before-media-fix`，四个容器健康。
+
 ## 后续验收清单
 
 - 真机 WebView 打开、系统浏览器下载落地与返回键行为确认（本轮未执行）。
-- 小红书与 TikTok 需要用户在手机端复制的当日分享链接；本轮旧链接在数据中心 IP 上被平台风控拦截，未做正向验证。
+- 小红书在机房 IP 上会被风控：需在部署环境配置 `MEDIA_XHS_COOKIE`（`a1`/`webId`/`web_session`），或使用手机端刚复制的分享链接；TikTok 同样需要住宅网络或 Cookie。未配置前的 61008/61002 属于平台侧限制，不是解析器故障。
 - 浏览器内的自动化复检（生产页面截图）因本机审批通道超时未完成。

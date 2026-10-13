@@ -45,4 +45,11 @@ class MediaBoundaryTest {
         for (String html : new String[]{"DATA=alert(1)", "DATA={\"a\":undefinedFunction()}", "DATA={\"a\":1", "DATA={a:1}"})
             rejects(ApiError.MEDIA_UNAVAILABLE, () -> json.assignment(html, "DATA"));
     }
+    @Test void operatorCookieIsScopedToXiaohongshuAndRejectsMalformedValues() {
+        assertEquals("a1=abc; webId=def", MediaHttp.platformCookie(MediaPlatform.XIAOHONGSHU, " a1=abc; webId=def "));
+        for (String value : new String[]{"", "   ", "short", "a1=abc\r\nHost: evil", "a1=abc\u0000", "a".repeat(1025)})
+            assertEquals("", MediaHttp.platformCookie(MediaPlatform.XIAOHONGSHU, value), value);
+        assertEquals("", MediaHttp.platformCookie(MediaPlatform.DOUYIN, "a1=abc; webId=def"));
+        assertEquals("", MediaHttp.platformCookie(MediaPlatform.XIAOHONGSHU, null));
+    }
 }

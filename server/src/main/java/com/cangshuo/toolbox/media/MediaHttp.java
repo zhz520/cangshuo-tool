@@ -20,10 +20,15 @@ import org.springframework.stereotype.Component;
 public class MediaHttp {
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(MediaHttp.class);
     private static final java.util.concurrent.atomic.AtomicLong LAST_FAILURE_LOG = new java.util.concurrent.atomic.AtomicLong();
+    /** Optional operator cookie for Xiaohongshu only; that platform risk-controls shared hosting addresses. */
+    @org.springframework.beans.factory.annotation.Value("${toolbox.media.xhs-cookie:}")
+    private String xhsCookie = "";
     static final int MAX_DOCUMENT_BYTES = 6 * 1024 * 1024;
     static final long MAX_FILE_BYTES = 200L * 1024 * 1024;
     static final String MOBILE_UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Version/17.0 Mobile/15E148 Safari/604.1";
     static final String DESKTOP_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
+    /** Douyin mobile feed client; that endpoint rejects browser user agents. */
+    static final String APP_UA = "com.ss.android.ugc.aweme/300401 (Linux; U; Android 13; zh_CN; Pixel 6; Build/TQ3A.230805.001; Cronet/58.0.2991.0)";
     private final CloseableHttpClient client = HttpClients.custom()
             .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create().setDnsResolver(new PublicMediaDns())
                     .setMaxConnTotal(16).setMaxConnPerRoute(8)
@@ -36,13 +41,18 @@ public class MediaHttp {
     @PreDestroy public void close() throws IOException { client.close(); }
     public record Document(URI uri, String text, List<String> cookies) {}
     public Document document(MediaPlatform platform, URI uri, String form, boolean desktop, long deadline) {
+        return document(platform, uri, form, desktop ? DESKTOP_UA : MOBILE_UA, deadline);
+    }
+    public Document document(MediaPlatform platform, URI uri, String form, String userAgent, long deadline) {
         URI current = uri;
         String cookie = "";
         for (int redirect = 0; redirect <= 5; redirect++) {
             platform.validatePage(current);
             checkDeadline(deadline);
-            var request = request(current, platform, desktop, form);
-            if (!cookie.isEmpty()) request.setHeader("Cookie", cookie);
+            var request = request(current, platform, userAgent, form);
+            String operatorCookie = platformCookie(platform, xhsCookie);
+            if (!operatorCookie.isEmpty()) request.setHeader("Cookie", operatorCookie);
+            else if (!cookie.isEmpty()) request.setHeader("Cookie", cookie);
             try (ClassicHttpResponse response = client.executeOpen(null, request, null)) {
                 int status = response.getCode();
                 if (isRedirect(status)) {
@@ -75,7 +85,8 @@ public class MediaHttp {
         for (int redirect = 0; redirect <= 5; redirect++) {
             platform.validateMedia(current);
             checkDeadline(deadline);
-            var request = request(current, platform, true, null);
+            // Media downloads use the desktop browser profile so CDNs see a normal player request.
+            var request = request(current, platform, DESKTOP_UA, null);
             request.setHeader("Accept-Encoding", "identity");
             if (range != null) request.setHeader("Range", range);
             ClassicHttpResponse response = null;
@@ -118,13 +129,19 @@ public class MediaHttp {
         throw provider();
     }
 
-    private static HttpUriRequestBase request(URI uri, MediaPlatform platform, boolean desktop, String form) {
+    private static HttpUriRequestBase request(URI uri, MediaPlatform platform, String userAgent, String form) {
         HttpUriRequestBase request = form == null ? new HttpGet(uri) : new HttpPost(uri);
         if (form != null) ((HttpPost) request).setEntity(new StringEntity(form, ContentType.APPLICATION_FORM_URLENCODED));
-        request.setHeader("User-Agent", desktop ? DESKTOP_UA : MOBILE_UA);
+        request.setHeader("User-Agent", userAgent);
         request.setHeader("Referer", platform.referer());
         request.setHeader("Accept", "*/*");
         return request;
+    }
+    /** Only a well-formed cookie is ever attached, and only to the Xiaohongshu hosts. */
+    static String platformCookie(MediaPlatform platform, String cookie) {
+        if (platform != MediaPlatform.XIAOHONGSHU || cookie == null) return "";
+        String value = cookie.strip();
+        return value.matches("[A-Za-z0-9_\\-=.%; ]{8,1024}") ? value : "";
     }
     private static String cookieHeader(ClassicHttpResponse response) {
         var values = new ArrayList<String>();
