@@ -1839,4 +1839,45 @@
     <string name="coin_error_failed">随机投掷未完成，请重试；本次没有计入统计。</string>
     <string name="coin_error_interrupted">投掷中断，本次没有计入统计，可以重新投掷。</string>
     <string name="coin_note" formatted="false">每次由设备 SecureRandom 独立生成，正反面理论概率各 50%；短期次数不保证相等，也不强制交替。结果与统计只留在当前工具会话，不上传；进程退出后清空。每批最多 100 次、会话最多 100 万次，最近 100 条历史保留投掷时的文字。</string>
+    <string name="stopwatch_name">秒表</string>
+    <string name="stopwatch_description">毫秒级计时，支持暂停继续、计次对比、保持屏幕常亮与 CSV 分享。</string>
+    <string-array name="stopwatch_keywords" translatable="false">
+        <item>秒表</item><item>计时</item><item>计次</item><item>计时器</item><item>stopwatch</item><item>timer</item><item>laps</item>
+    </string-array>
+    <string name="stopwatch_ready">准备就绪</string>
+    <string name="stopwatch_running">计时中 · 点击暂停</string>
+    <string name="stopwatch_paused">已暂停 · 点击继续</string>
+    <string name="stopwatch_start">开始</string>
+    <string name="stopwatch_pause">暂停</string>
+    <string name="stopwatch_resume">继续</string>
+    <string name="stopwatch_lap">记次</string>
+    <string name="stopwatch_reset">重置</string>
+    <string name="stopwatch_reset_confirm">重置将清空当前计时与全部计次记录，且无法恢复。</string>
+    <string name="stopwatch_reset_action">重置</string>
+    <string name="stopwatch_cancel">取消</string>
+    <string name="stopwatch_stats">本组统计</string>
+    <string name="stopwatch_total">总时间</string>
+    <string name="stopwatch_lap_count">计次数量</string>
+    <string name="stopwatch_fastest">最快单圈</string>
+    <string name="stopwatch_slowest">最慢单圈</string>
+    <string name="stopwatch_average">平均单圈</string>
+    <string name="stopwatch_none">暂无</string>
+    <string name="stopwatch_laps">计次记录</string>
+    <string name="stopwatch_lap_empty">还没有计次记录，计时中点击“记次”添加。</string>
+    <string name="stopwatch_lap_number">第 %1$d 次</string>
+    <string name="stopwatch_lap_value">单圈 %1$s · 总 %2$s</string>
+    <string name="stopwatch_fastest_badge">最快</string>
+    <string name="stopwatch_slowest_badge">最慢</string>
+    <string name="stopwatch_history_note">共 %1$d 条计次，最多保留 %2$d 条；CSV 导出保留的记录。</string>
+    <string name="stopwatch_show_all">展开保留的全部记录</string>
+    <string name="stopwatch_show_less">收起为最近 20 条</string>
+    <string name="stopwatch_keep_screen">计时中保持屏幕常亮</string>
+    <string name="stopwatch_report">复制与分享</string>
+    <string name="stopwatch_summary">统计摘要</string>
+    <string name="stopwatch_csv">计次 CSV</string>
+    <string name="stopwatch_status_label">状态</string>
+    <string name="stopwatch_error_lap_limit">计次已达上限（500 条），请重置后再继续。</string>
+    <string name="stopwatch_error_not_running">只有计时中才能添加计次。</string>
+    <string name="stopwatch_note">计时基于设备单调时钟，暂停与切到后台都不会丢失已计时间（回到前台自动补算）；显示上限 99:59:59.99。记录只保留在本次工具会话，不上传；进程被系统回收后清空。本版本不提供常驻通知或后台闹钟。</string>
+    <string name="stopwatch_error_lap_too_soon">请稍候再记次，每圈时间需要大于零。</string>
 </resources>

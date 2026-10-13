@@ -281,6 +281,9 @@ class ToolboxAppContainer(context: Context) {
     private val coinFlipFactory = com.cangshuo.toolbox.feature.coinflip.ui.CoinFlipViewModel.factory(
         com.cangshuo.toolbox.feature.coinflip.domain.FlipCoinsUseCase(
             com.cangshuo.toolbox.feature.coinflip.data.LocalCoinRepository()))
+    private val stopwatchFactory = com.cangshuo.toolbox.feature.stopwatch.ui.StopwatchViewModel.factory(
+        com.cangshuo.toolbox.feature.stopwatch.domain.StopwatchUseCases(
+            com.cangshuo.toolbox.feature.stopwatch.data.AndroidStopwatchRepository()))
     private val pingFactory=com.cangshuo.toolbox.feature.ping.ui.PingViewModel.factory(
         com.cangshuo.toolbox.feature.ping.domain.ExecutePingUseCase(
             com.cangshuo.toolbox.feature.ping.data.NativePingRepository()))
@@ -326,6 +329,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.level.LevelToolDefinition(resources,levelFactory),
             com.cangshuo.toolbox.feature.lightmeter.LightMeterToolDefinition(resources,lightMeterFactory),
             com.cangshuo.toolbox.feature.coinflip.CoinFlipToolDefinition(resources,coinFlipFactory),
+            com.cangshuo.toolbox.feature.stopwatch.StopwatchToolDefinition(resources,stopwatchFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

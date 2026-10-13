@@ -210,3 +210,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V52 抛硬币目录
 
 `V52__seed_coin_flip_tool.sql` 登记 `coin_flip`，OTHER/LOCAL/ENABLED，排序 600、requires_login=0。元数据与 Android 中文资源一致，复用后台管理、使用计数和排行榜；重放不会覆盖管理员编辑、维护状态或软删除。没有投掷记录表，结果和文字只保留在客户端会话。验证见 [抛硬币](COIN_FLIP.md)。
+
+## V53 秒表目录
+
+`V53__seed_stopwatch_tool.sql` 登记 `stopwatch`，LIFE/LOCAL/ENABLED，排序 620、requires_login=0。元数据与 Android 中文资源一致；复用后台管理、使用计数与排行榜，重放保留管理员编辑、维护状态与软删除。没有计时记录表，会话只存在于客户端。验证见 [秒表](STOPWATCH.md)。

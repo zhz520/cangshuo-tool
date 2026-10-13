@@ -168,6 +168,8 @@ Android 已建立 `ToolMetadata` 领域模型、`ToolDefinition` 本地执行契
 
 `coin_flip`（V52，OTHER/LOCAL）复用工具目录、后台管理与使用统计；随机投掷、文字与历史仅在 Android 本机处理。无需新投掷接口，不上传投掷结果。实现与验收见 [抛硬币](COIN_FLIP.md)。
 
+`stopwatch`（V53，LIFE/LOCAL）复用工具目录、后台管理与使用统计；计时、计次与偏好仅在 Android 本机处理。无需新计时接口，不上传计时记录。实现与验收见 [秒表](STOPWATCH.md)。
+
 | 方法与路径 | 规划认证 | 用途 | 当前状态 |
 | --- | --- | --- | --- |
 | `GET /api/v1/tools` | 无 | 分页获取启用的工具，可按分类筛选 | 已实现，验证范围见目录接口说明 |
