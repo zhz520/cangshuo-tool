@@ -1202,7 +1202,7 @@
     <string name="popular_use_count">%1$d 次使用</string>
     <string name="popular_empty">暂无使用数据，先去打开几个工具吧。</string>
     <string name="licenses_info_title">开源许可</string>
-    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库。</string>
+    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\npinyin-data —— MIT（汉字拼音数据表）\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库。</string>
     <string name="profile_my_favorites">我的收藏</string>
     <string name="profile_recent">最近使用</string>
     <string name="profile_stats">使用统计</string>
@@ -1968,5 +1968,72 @@
         <item>pattern</item>
         <item>groups</item>
         <item>replace</item>
+    </string-array>
+    <string name="pinyin_name">汉字转拼音</string>
+    <string name="pinyin_description">支持声调符号、声调数字、无声调、首字母与多音字查询，离线字库覆盖四万余个汉字，并识别常用多音字词组。</string>
+    <string name="pinyin_input_title">输入汉字</string>
+    <string name="pinyin_input_label">汉字文本</string>
+    <string name="pinyin_input_hint">请输入要转换的汉字文本…</string>
+    <string name="pinyin_btn_clear">清空</string>
+    <string name="pinyin_btn_copy">复制结果</string>
+    <string name="pinyin_options_title">转换设置</string>
+    <string name="pinyin_mode_title">转换模式</string>
+    <string name="pinyin_mode_full">完整拼音</string>
+    <string name="pinyin_mode_initials">仅首字母</string>
+    <string name="pinyin_mode_polyphone">多音字查询</string>
+    <string name="pinyin_tone_title">声调标注</string>
+    <string name="pinyin_tone_mark">符号声调（pīnyīn）</string>
+    <string name="pinyin_tone_number">数字声调（pin1yin1）</string>
+    <string name="pinyin_tone_none">无声调（pinyin）</string>
+    <string name="pinyin_case_title">字母大小写</string>
+    <string name="pinyin_case_lower">小写（lower）</string>
+    <string name="pinyin_case_upper">大写（UPPER）</string>
+    <string name="pinyin_case_capitalize">首字母大写（Capitalize）</string>
+    <string name="pinyin_separator_title">拼音间隔</string>
+    <string name="pinyin_separator_space">空格（\" \"）</string>
+    <string name="pinyin_separator_hyphen">连字符（\"-\"）</string>
+    <string name="pinyin_separator_none">无间隔</string>
+    <string name="pinyin_vchar_title">ü 字符形式</string>
+    <string name="pinyin_vchar_unicode">Unicode (ü)</string>
+    <string name="pinyin_vchar_v">字母 v</string>
+    <string name="pinyin_vchar_colon">u:</string>
+    <string name="pinyin_keep_non_chinese">保留英文字母、数字和标点</string>
+    <string name="pinyin_stats_title">文本统计</string>
+    <string name="pinyin_stats_chinese">汉字</string>
+    <string name="pinyin_stats_non_chinese">非汉字</string>
+    <string name="pinyin_stats_total">总字符数</string>
+    <string name="pinyin_result_title">拼音结果</string>
+    <string name="pinyin_empty">请在上方输入汉字文本…</string>
+    <string name="pinyin_error_too_long">输入文本过长（上限 10 万字符），请缩短后重试。</string>
+    <string name="pinyin_error_unicode">文本包含不完整的 Unicode 字符，请修改后重试。</string>
+    <string name="pinyin_error_output_too_long">转换结果超过上限，已停止。请缩短输入后重试。</string>
+    <string name="pinyin_error_time_limit">转换超时，已停止。请缩短输入后重试。</string>
+    <string name="pinyin_error_failed">转换失败，请重试。</string>
+    <string name="pinyin_processing">正在转换…</string>
+    <string name="pinyin_btn_cancel">取消</string>
+    <string name="pinyin_btn_retry">重试</string>
+    <string name="pinyin_cancelled">已取消本次转换，可重试或修改输入。</string>
+    <string name="pinyin_copied">已复制完整结果</string>
+    <string name="pinyin_copy_failed">复制失败，请重试</string>
+    <string name="pinyin_preview_notice">结果较长，仅显示部分内容；复制的内容始终是完整结果。</string>
+    <string name="pinyin_unsupported_notice">未收录读音的汉字已按原样保留，不会被过滤。</string>
+    <string name="pinyin_stats_unsupported">未收录读音</string>
+    <string name="pinyin_polyphone_empty">输入中没有可查询读音的汉字。</string>
+    <string name="pinyin_empty_result">输入中没有汉字，结果为空。</string>
+    <string name="pinyin_usage_note">声调数字 5 代表轻声，输出与无声调相同；符号声调固定使用 ü。</string>
+    <string name="pinyin_phrase_note">常用词组优先确定读音，其余按单字处理；复杂句子中的多音字读音请结合语境确认。</string>
+    <string name="pinyin_examples_title">示例</string>
+    <string name="pinyin_example_polyphone" translatable="false">重庆银行便宜音乐</string>
+    <string name="pinyin_example_vchar" translatable="false">绿色女旅行</string>
+    <string name="pinyin_example_separator" translatable="false">阿姨有空调</string>
+    <string name="pinyin_example_unsupported" translatable="false">𠮷测试汉字</string>
+    <string-array name="pinyin_keywords" translatable="false">
+        <item>拼音</item>
+        <item>汉字转拼音</item>
+        <item>pinyin</item>
+        <item>声调</item>
+        <item>首字母</item>
+        <item>多音字</item>
+        <item>pinyin converter</item>
     </string-array>
 </resources>

@@ -67,3 +67,5 @@
 - [生产备份与恢复](BACKUP.md)
 - [灰度发布与回滚](STAGED_RELEASE.md)
 - [宝塔服务器正式部署教程](BAOTA_DEPLOY.md)
+- [汉字转拼音](PINYIN.md)
+- [拼音实现与验收进度](PINYIN_ACCEPTANCE_2026-10-14.md)

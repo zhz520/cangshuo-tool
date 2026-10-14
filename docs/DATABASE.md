@@ -218,3 +218,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V54 短视频解析网页工具
 
 `V54__seed_short_video_parse_web_tool.sql` 登记 `short_video_parse`，NETWORK/WEB/ENABLED，排序 630、requires_login=0，config_json 仅含 `/tools/short_video_parse/`。重放不覆盖管理员编辑、维护/关闭状态与软删除。解析结果只存在服务进程内存（15 分钟、最多 100 个会话），没有媒体、链接或下载明细表；计数沿用 tool_usage_* 与 API 流量统计。验证见 [短视频解析](SHORT_VIDEO_PARSE.md)。
+
+## V56 汉字转拼音目录
+
+`V56__seed_pinyin_tool.sql` 登记 `pinyin`，TEXT/LOCAL/ENABLED，排序 95、requires_login=0、is_featured=0。客户端使用离线字库和词组表，不新增执行 API、不上传文字、不新增用户输入表。公开目录与后台共用该记录，使用统计沿用 `tool_usage_*`；重放保留人工编辑、状态和软删除。验证见 [拼音工具](PINYIN.md) 与 [验收记录](PINYIN_ACCEPTANCE_2026-10-14.md)。

@@ -225,6 +225,13 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.similarity.data.LocalSimilarityRepository(),
         ),
     )
+    private val pinyinFactory = com.cangshuo.toolbox.feature.pinyin.ui.PinyinViewModel.factory(
+        com.cangshuo.toolbox.feature.pinyin.domain.ConvertToPinyinUseCase(
+            com.cangshuo.toolbox.feature.pinyin.data.LocalPinyinRepository {
+                applicationContext.assets.open("pinyin/readings.tsv")
+            },
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -317,6 +324,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.numberchinese.NumberChineseToolDefinition(resources, numberChineseFactory),
             com.cangshuo.toolbox.feature.charconvert.CharConvertToolDefinition(resources, charConvertFactory),
             com.cangshuo.toolbox.feature.similarity.SimilarityToolDefinition(resources, similarityFactory),
+            com.cangshuo.toolbox.feature.pinyin.PinyinToolDefinition(resources, pinyinFactory),
             JsonToolDefinition(resources, jsonFactory),
             com.cangshuo.toolbox.feature.regextester.RegexTesterToolDefinition(resources, regexTesterFactory),
             TextToolDefinition(resources, textFactory),

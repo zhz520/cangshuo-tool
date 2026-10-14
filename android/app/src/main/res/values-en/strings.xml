@@ -1145,7 +1145,7 @@
     <string name="popular_use_count">Used %1$d times</string>
     <string name="popular_empty">No usage data yet. Open a few tools first.</string>
     <string name="licenses_info_title">Open source licenses</string>
-    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull license texts are available in the repository of each project.</string>
+    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\npinyin-data — MIT (Chinese pinyin table)\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull license texts are available in the repository of each project.</string>
     <string name="profile_my_favorites">My favorites</string>
     <string name="profile_recent">Recently used</string>
     <string name="profile_stats">Usage statistics</string>
@@ -1895,5 +1895,68 @@
         <item>匹配</item>
         <item>分组</item>
         <item>替换</item>
+    </string-array>
+    <string name="pinyin_name">Pinyin Converter</string>
+    <string name="pinyin_description">Convert Chinese characters to Pinyin with tone marks, tone numbers, initials and polyphone queries; the offline table covers over 40,000 characters and common polyphone phrases.</string>
+    <string name="pinyin_input_title">Input Chinese Text</string>
+    <string name="pinyin_input_label">Chinese text</string>
+    <string name="pinyin_input_hint">Enter Chinese characters to convert…</string>
+    <string name="pinyin_btn_clear">Clear</string>
+    <string name="pinyin_btn_copy">Copy Result</string>
+    <string name="pinyin_options_title">Conversion Settings</string>
+    <string name="pinyin_mode_title">Conversion Mode</string>
+    <string name="pinyin_mode_full">Full Pinyin</string>
+    <string name="pinyin_mode_initials">Initials Only</string>
+    <string name="pinyin_mode_polyphone">Polyphone Query</string>
+    <string name="pinyin_tone_title">Tone Style</string>
+    <string name="pinyin_tone_mark">Tone Marks (pīnyīn)</string>
+    <string name="pinyin_tone_number">Tone Numbers (pin1yin1)</string>
+    <string name="pinyin_tone_none">No Tone (pinyin)</string>
+    <string name="pinyin_case_title">Letter Case</string>
+    <string name="pinyin_case_lower">Lowercase</string>
+    <string name="pinyin_case_upper">Uppercase</string>
+    <string name="pinyin_case_capitalize">Capitalize</string>
+    <string name="pinyin_separator_title">Syllable Separator</string>
+    <string name="pinyin_separator_space">Space (\" \")</string>
+    <string name="pinyin_separator_hyphen">Hyphen (\"-\")</string>
+    <string name="pinyin_separator_none">None</string>
+    <string name="pinyin_vchar_title">ü Representation</string>
+    <string name="pinyin_vchar_unicode">Unicode (ü)</string>
+    <string name="pinyin_vchar_v">Letter v</string>
+    <string name="pinyin_vchar_colon">u:</string>
+    <string name="pinyin_keep_non_chinese">Keep letters, numbers and punctuation</string>
+    <string name="pinyin_stats_title">Text Statistics</string>
+    <string name="pinyin_stats_chinese">Chinese characters</string>
+    <string name="pinyin_stats_non_chinese">Other characters</string>
+    <string name="pinyin_stats_total">Total characters</string>
+    <string name="pinyin_result_title">Pinyin Result</string>
+    <string name="pinyin_empty">Enter Chinese characters above to convert…</string>
+    <string name="pinyin_error_too_long">Input too long (limit 100,000 characters). Shorten it and try again.</string>
+    <string name="pinyin_error_unicode">The text contains an incomplete Unicode character. Edit it and try again.</string>
+    <string name="pinyin_error_output_too_long">The result passed the size limit and was stopped. Shorten the input and try again.</string>
+    <string name="pinyin_error_time_limit">Conversion timed out and was stopped. Shorten the input and try again.</string>
+    <string name="pinyin_error_failed">Conversion failed. Try again.</string>
+    <string name="pinyin_processing">Converting…</string>
+    <string name="pinyin_btn_cancel">Cancel</string>
+    <string name="pinyin_btn_retry">Try again</string>
+    <string name="pinyin_cancelled">This conversion was cancelled. Try again or edit the input.</string>
+    <string name="pinyin_copied">Full result copied</string>
+    <string name="pinyin_copy_failed">Copy failed. Try again.</string>
+    <string name="pinyin_preview_notice">Only part of this long result is shown; copying always uses the full result.</string>
+    <string name="pinyin_unsupported_notice">Characters with no reading data were kept unchanged and are never filtered out.</string>
+    <string name="pinyin_stats_unsupported">No reading data</string>
+    <string name="pinyin_polyphone_empty">There is no Chinese character to look up in the input.</string>
+    <string name="pinyin_empty_result">The input has no Chinese character, so the result is empty.</string>
+    <string name="pinyin_usage_note">Tone number 5 marks the neutral tone and prints like the no-tone style; the tone-mark style always uses ü.</string>
+    <string name="pinyin_phrase_note">Common phrases determine readings first, followed by individual characters. Confirm polyphone readings in complex sentences using their context.</string>
+    <string name="pinyin_examples_title">Examples</string>
+    <string-array name="pinyin_keywords" translatable="false">
+        <item>pinyin</item>
+        <item>chinese pinyin</item>
+        <item>pinyin converter</item>
+        <item>tone</item>
+        <item>initials</item>
+        <item>polyphone</item>
+        <item>hanzi to pinyin</item>
     </string-array>
 </resources>

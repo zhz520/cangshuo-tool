@@ -1,3 +1,6 @@
 *.sh text eol=lf
 **/mvnw text eol=lf
 **/gradlew text eol=lf
+# Keep the reproducible pinyin assets identical on Windows and Linux checkouts.
+android/app/src/main/assets/pinyin/readings.tsv text eol=lf
+android/app/src/main/assets/licenses/pinyin-data.txt text eol=lf
