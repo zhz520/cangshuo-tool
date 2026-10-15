@@ -232,6 +232,13 @@ class ToolboxAppContainer(context: Context) {
             },
         ),
     )
+    private val chineseConversionFactory = com.cangshuo.toolbox.feature.chineseconvert.ui.ChineseConversionViewModel.factory(
+        com.cangshuo.toolbox.feature.chineseconvert.domain.ConvertChineseUseCase(
+            com.cangshuo.toolbox.feature.chineseconvert.data.LocalChineseConversionRepository { name ->
+                applicationContext.assets.open("opencc/$name.tsv")
+            },
+        ),
+    )
     private val jsonRepository = LocalJsonRepository()
     private val jsonFactory = JsonViewModel.factory(
         formatJsonUseCase = FormatJsonUseCase(jsonRepository),
@@ -325,6 +332,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.charconvert.CharConvertToolDefinition(resources, charConvertFactory),
             com.cangshuo.toolbox.feature.similarity.SimilarityToolDefinition(resources, similarityFactory),
             com.cangshuo.toolbox.feature.pinyin.PinyinToolDefinition(resources, pinyinFactory),
+            com.cangshuo.toolbox.feature.chineseconvert.ChineseConversionToolDefinition(resources, chineseConversionFactory),
             JsonToolDefinition(resources, jsonFactory),
             com.cangshuo.toolbox.feature.regextester.RegexTesterToolDefinition(resources, regexTesterFactory),
             TextToolDefinition(resources, textFactory),

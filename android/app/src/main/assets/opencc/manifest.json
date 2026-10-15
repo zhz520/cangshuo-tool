@@ -1,0 +1,81 @@
+{
+  "commit": "556ed22496d650bd0b13b6c163be9814637970ae",
+  "dictionaries": {
+    "HKVariants": {
+      "bytes": 504,
+      "entries": 63,
+      "sha256": "bebc74ecf90d6f250e67e9f18bdea2753ee9e525df9a8dc9791cfe5d730abef7"
+    },
+    "HKVariantsRev": {
+      "bytes": 560,
+      "entries": 70,
+      "sha256": "1b9d1a6bae833245d547ba7299d53d99cb22ed22477241c6f5d16df1c0182404"
+    },
+    "HKVariantsRevPhrases": {
+      "bytes": 2688,
+      "entries": 156,
+      "sha256": "3da1d42168bf87a3fb6f4f9280b46ff70a554d4f68e6356cb5e0698300ac8a88"
+    },
+    "STCharacters": {
+      "bytes": 33333,
+      "entries": 3980,
+      "sha256": "5f030b6ec68074b26b9b8816fbcb7887f7e518a68174327ea6310aecc489e977"
+    },
+    "STPhrases": {
+      "bytes": 1004369,
+      "entries": 49096,
+      "sha256": "76559d352bd3ac0bb1024cc80ed1b776efa8034b950c1bdf14784c97c07e081d"
+    },
+    "TSCharacters": {
+      "bytes": 34378,
+      "entries": 4113,
+      "sha256": "479a998eb07c19d9ccbadbb7e737843a3528f096cddd54fcdaf2ca118873784d"
+    },
+    "TSPhrases": {
+      "bytes": 5141,
+      "entries": 278,
+      "sha256": "5b76ff04a507a472bc5cb5366a405cd3a8976a5598226fdc22ecd6296aa73eff"
+    },
+    "TWPhrases": {
+      "bytes": 10185,
+      "entries": 512,
+      "sha256": "f6d68e00a98fed36a9dd172271df27ca45849654efc937faa676fe4c21ff3da4"
+    },
+    "TWPhrasesRev": {
+      "bytes": 10280,
+      "entries": 522,
+      "sha256": "d61e2bb021535748e36901ee723cbabd5fccd22a3d9f97dde2225eaaac5d6399"
+    },
+    "TWVariants": {
+      "bytes": 312,
+      "entries": 39,
+      "sha256": "30e6f8395edbfdd74e293fd8b9c62105d787c849fbb208d2a7832eac696734d7"
+    },
+    "TWVariantsRev": {
+      "bytes": 312,
+      "entries": 39,
+      "sha256": "aed256cd515db700cbd96fae5d2158d6a98c9628ee51e14ac1e1c182f6041c90"
+    },
+    "TWVariantsRevPhrases": {
+      "bytes": 1054,
+      "entries": 68,
+      "sha256": "2f9145fce55f1f10ff6e401dc34a8e6cbf892d30d3392f52ce385f9a0018d281"
+    }
+  },
+  "license": "Apache-2.0",
+  "project": "BYVoid/OpenCC",
+  "sourceSha256": {
+    "HKVariants": "c3c93c35885902ba2b12a3235a7761b00fb2b027f36aa8314db2f6b6ad51d374",
+    "HKVariantsRevPhrases": "c2da309afa7fdd9061f204664039d33b000a4dca0ecae4e7480dcbf9e20f658e",
+    "STCharacters": "ed1d268e0ad028511dcf5b0089faed0a980ad332449ec11d481ceefde6879f41",
+    "STPhrases": "17fece21a28f3db2dc32397abd73d21ae73261c3f295fa6a3fe64b5e8d8b554b",
+    "TSCharacters": "6b5a0a799bea2bb22c001f635eaa3fc2904310f0c08addbff275477a80ecf09a",
+    "TSPhrases": "504169029c43f7f234b8e2ae470720af3657675c5574ff8aa0feb257e1dc5ce2",
+    "TWPhrasesIT": "3a4a2ad207f3a9442eb8f399630cf982c2ffc561df9c58b2ee352cfa023915c1",
+    "TWPhrasesName": "76e643569a30ea54e7ab6e52621fd4c396e01ee6dc2d15b7d25bf23addf4438a",
+    "TWPhrasesOther": "6d0365fd180283f3e14b44f63d19d1aca045d60b0e000765902ad889a90d7a33",
+    "TWVariants": "30e6f8395edbfdd74e293fd8b9c62105d787c849fbb208d2a7832eac696734d7",
+    "TWVariantsRevPhrases": "bef60ceb4e57b6b062351406cb5d4644875574231d64787e03711317b7e773f3"
+  },
+  "version": "1.1.9"
+}

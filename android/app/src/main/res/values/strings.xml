@@ -1202,7 +1202,7 @@
     <string name="popular_use_count">%1$d 次使用</string>
     <string name="popular_empty">暂无使用数据，先去打开几个工具吧。</string>
     <string name="licenses_info_title">开源许可</string>
-    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\npinyin-data —— MIT（汉字拼音数据表）\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库。</string>
+    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\npinyin-data —— MIT（汉字拼音数据表）\nOpenCC 1.1.9 —— Apache-2.0（简繁转换字库，Carbo Kuo 及贡献者）\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库；OpenCC 许可随应用打包于 assets/licenses/opencc.txt。</string>
     <string name="profile_my_favorites">我的收藏</string>
     <string name="profile_recent">最近使用</string>
     <string name="profile_stats">使用统计</string>
@@ -2035,5 +2035,49 @@
         <item>首字母</item>
         <item>多音字</item>
         <item>pinyin converter</item>
+    </string-array>
+    <string name="chinese_convert_name">简繁互转</string>
+    <string name="chinese_convert_description">按词组转换简繁体，支持台湾与香港字形和地区用词。</string>
+    <string name="chinese_convert_mode">转换方式</string>
+    <string name="chinese_convert_s2t">简体 → 繁体</string>
+    <string name="chinese_convert_t2s">繁体 → 简体</string>
+    <string name="chinese_convert_s2tw">简体 → 台湾正体</string>
+    <string name="chinese_convert_tw2s">台湾正体 → 简体</string>
+    <string name="chinese_convert_s2twp">简体 → 台湾用词</string>
+    <string name="chinese_convert_tw2sp">台湾用词 → 简体</string>
+    <string name="chinese_convert_s2hk">简体 → 香港繁体</string>
+    <string name="chinese_convert_hk2s">香港繁体 → 简体</string>
+    <string name="chinese_convert_mode_note">正体模式调整字形；台湾用词模式同时转换“软件／软体”等地区词汇。繁简转换存在一对多关系，反向转换不保证还原原文。</string>
+    <string name="chinese_convert_input">输入文本</string>
+    <string name="chinese_convert_input_label">待转换内容</string>
+    <string name="chinese_convert_input_hint">输入或粘贴中文，保留英文、符号、空格与换行</string>
+    <string name="chinese_convert_example_button">示例 %1$d</string>
+    <string name="chinese_convert_example_phrase" translatable="false">头发发展，皇后在后台喝干杯酒。</string>
+    <string name="chinese_convert_example_taiwan" translatable="false">鼠标、软件、内存和打印机。</string>
+    <string name="chinese_convert_example_hongkong" translatable="false">里面有群峰，吃面看着海。</string>
+    <string name="chinese_convert_clear">清空</string>
+    <string name="chinese_convert_result">转换结果</string>
+    <string name="chinese_convert_processing">正在转换…</string>
+    <string name="chinese_convert_cancel">取消</string>
+    <string name="chinese_convert_cancelled">已取消，可修改输入或重试。</string>
+    <string name="chinese_convert_retry">重试</string>
+    <string name="chinese_convert_input_count">输入字符</string>
+    <string name="chinese_convert_output_count">输出字符</string>
+    <string name="chinese_convert_changed">变化分段</string>
+    <string name="chinese_convert_preview">结果较长，仅预览部分内容；复制、分享和反向转换使用完整结果。</string>
+    <string name="chinese_convert_copy">复制结果</string>
+    <string name="chinese_convert_share">分享</string>
+    <string name="chinese_convert_reverse">用结果反向转换</string>
+    <string name="chinese_convert_result_note">变化分段按原文分词比较，表示至少有一处转换的片段数，并非改字数。词组以 OpenCC 1.1.9 词库为准，专有名词请核对。</string>
+    <string name="chinese_convert_empty">输入文字或选择示例，转换结果会显示在这里。</string>
+    <string name="chinese_convert_copied">已复制完整结果</string>
+    <string name="chinese_convert_action_error">操作未完成，请重试。</string>
+    <string name="chinese_convert_error_input">最多输入 100,000 个字符，已保留上一次输入。</string>
+    <string name="chinese_convert_error_unicode">文本含不完整字符，请检查并重新输入。</string>
+    <string name="chinese_convert_error_output">转换结果超过上限，请分段处理。</string>
+    <string name="chinese_convert_error_time">转换用时过长，请缩短内容后重试。</string>
+    <string name="chinese_convert_error_failed">暂时无法转换，请重试。</string>
+    <string-array name="chinese_convert_keywords" translatable="false">
+        <item>简繁</item><item>简体</item><item>繁体</item><item>台湾</item><item>香港</item><item>OpenCC</item><item>汉字</item>
     </string-array>
 </resources>

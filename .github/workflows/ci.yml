@@ -48,6 +48,10 @@ jobs:
         run: python3 ../scripts/check_android_catalog_cache.py
       - name: Verify QR scan history migration and bounds
         run: python3 ../scripts/check_qr_history.py
+      - name: Verify Chinese conversion assets and catalog contract
+        run: |
+          python3 ../scripts/build_chinese_conversion_data.py --check
+          python3 ../scripts/check_chinese_convert_runtime.py --static
       - name: Verify sync migrations and conditional queue acknowledgements
         run: python3 ../scripts/check_sync_sqlite.py
       - name: Upload debug APK

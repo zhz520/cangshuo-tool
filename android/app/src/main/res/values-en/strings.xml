@@ -1145,7 +1145,7 @@
     <string name="popular_use_count">Used %1$d times</string>
     <string name="popular_empty">No usage data yet. Open a few tools first.</string>
     <string name="licenses_info_title">Open source licenses</string>
-    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\npinyin-data — MIT (Chinese pinyin table)\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull license texts are available in the repository of each project.</string>
+    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\npinyin-data — MIT (Chinese pinyin table)\nOpenCC 1.1.9 — Apache-2.0 (conversion dictionaries, Carbo Kuo and contributors)\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull texts are available in each project repository. OpenCC is also bundled at assets/licenses/opencc.txt.</string>
     <string name="profile_my_favorites">My favorites</string>
     <string name="profile_recent">Recently used</string>
     <string name="profile_stats">Usage statistics</string>
@@ -1958,5 +1958,46 @@
         <item>initials</item>
         <item>polyphone</item>
         <item>hanzi to pinyin</item>
+    </string-array>
+    <string name="chinese_convert_name">Chinese Script Converter</string>
+    <string name="chinese_convert_description">Convert Chinese by phrase, with Taiwan and Hong Kong forms and regional vocabulary.</string>
+    <string name="chinese_convert_mode">Conversion</string>
+    <string name="chinese_convert_s2t">Simplified → Traditional</string>
+    <string name="chinese_convert_t2s">Traditional → Simplified</string>
+    <string name="chinese_convert_s2tw">Simplified → Taiwan</string>
+    <string name="chinese_convert_tw2s">Taiwan → Simplified</string>
+    <string name="chinese_convert_s2twp">Simplified → Taiwan vocabulary</string>
+    <string name="chinese_convert_tw2sp">Taiwan vocabulary → Simplified</string>
+    <string name="chinese_convert_s2hk">Simplified → Hong Kong</string>
+    <string name="chinese_convert_hk2s">Hong Kong → Simplified</string>
+    <string name="chinese_convert_mode_note">Taiwan form mode adjusts characters. Taiwan vocabulary mode also changes regional terms, such as those for software. Some mappings are ambiguous, so reverse conversion may not restore the original.</string>
+    <string name="chinese_convert_input">Input</string>
+    <string name="chinese_convert_input_label">Text to convert</string>
+    <string name="chinese_convert_input_hint">Enter or paste Chinese; other characters, spacing and line breaks are preserved</string>
+    <string name="chinese_convert_example_button">Example %1$d</string>
+    <string name="chinese_convert_clear">Clear</string>
+    <string name="chinese_convert_result">Result</string>
+    <string name="chinese_convert_processing">Converting…</string>
+    <string name="chinese_convert_cancel">Cancel</string>
+    <string name="chinese_convert_cancelled">Cancelled. Edit the text or retry.</string>
+    <string name="chinese_convert_retry">Retry</string>
+    <string name="chinese_convert_input_count">Input characters</string>
+    <string name="chinese_convert_output_count">Output characters</string>
+    <string name="chinese_convert_changed">Changed segments</string>
+    <string name="chinese_convert_preview">Only part of this long result is shown. Copy, share and reverse conversion use the full text.</string>
+    <string name="chinese_convert_copy">Copy result</string>
+    <string name="chinese_convert_share">Share</string>
+    <string name="chinese_convert_reverse">Reverse this result</string>
+    <string name="chinese_convert_result_note">Changed segments counts original segmentation chunks with any change, rather than individual characters. Conversions use the OpenCC 1.1.9 dictionaries; check proper names.</string>
+    <string name="chinese_convert_empty">Enter text or choose an example to see the result.</string>
+    <string name="chinese_convert_copied">Full result copied</string>
+    <string name="chinese_convert_action_error">Action could not be completed. Please retry.</string>
+    <string name="chinese_convert_error_input">The input limit is 100,000 characters. Your previous input was kept.</string>
+    <string name="chinese_convert_error_unicode">The text contains an incomplete character. Check the input.</string>
+    <string name="chinese_convert_error_output">The result is too long. Convert smaller sections.</string>
+    <string name="chinese_convert_error_time">Conversion took too long. Try a shorter text.</string>
+    <string name="chinese_convert_error_failed">Conversion is unavailable. Please retry.</string>
+    <string-array name="chinese_convert_keywords" translatable="false">
+        <item>Chinese conversion</item><item>simplified</item><item>traditional</item><item>Taiwan</item><item>Hong Kong</item><item>OpenCC</item><item>Chinese</item>
     </string-array>
 </resources>

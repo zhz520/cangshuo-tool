@@ -106,6 +106,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "json" -> R.drawable.ic_json
     "regex_tester" -> R.drawable.ic_regex_tester
     "pinyin" -> R.drawable.ic_pinyin
+    "chinese_convert" -> R.drawable.ic_chinese_convert
     "text" -> R.drawable.ic_text
     "qr" -> R.drawable.ic_qr
     "pdf" -> R.drawable.ic_pdf

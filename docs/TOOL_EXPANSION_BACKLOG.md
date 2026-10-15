@@ -331,7 +331,7 @@
 | 文本相似性 | ◐ | A | text_similarity：Levenshtein、Jaccard、前缀/子串、忽略大小写/空白；本地实现完成，V49 部署验收中，见 TEXT_SIMILARITY.md |
 | 数字转中文 | ◐ | A | number_chinese：大小写/金额双向、24 位整数、严格边界；本地实现完成，V49 部署验收中，见 NUMBER_CHINESE.md |
 | Base64编码转换 | ✅ | A | 已有 |
-| 简繁互转 | ✗ | A | BYVoid/OpenCC |
+| 简繁互转 | ◐ | A | chinese_convert：OpenCC 1.1.9 词组/台湾用词/香港字形等 8 模式，完整复制/分享/反向转换；541 项 Android 测试含 952 组差分、226 项服务端测试、450 项隔离目录/管理/统计检查通过；发布验收进行中，见 [工具说明](CHINESE_CONVERT.md) |
 | 摩斯电码 | ✅ | A | 本地编解码 + PARIS 时序音频播放（2026-10-11 上线，见 docs/MORSE_CODE.md） |
 | 随机密码生成 | ◐ | A | 已实现安全随机、字符集/易混淆/不重复选项、批量生成与熵值强度评估（参考 generate-password 的字符集与严格规则）；已上线并通过 HTTPS 与模拟器实测。见 [工具文档](PASSWORD_GENERATOR.md) |
 | 字数统计 | ◐ | A | 已实现码点级统计：字符/中文/英文单词/行/段落/UTF-8 体积与阅读时间（CJK 按字、西文按词）；已上线并通过 HTTPS 与模拟器实测。见 [工具文档](TEXT_COUNT.md) |
