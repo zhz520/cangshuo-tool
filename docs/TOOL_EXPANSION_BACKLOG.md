@@ -325,7 +325,7 @@
 | 语音转文本 | ✗ | S | ggerganov/whisper.cpp、alphacep/vosk-android-demo |
 | 魔法文案 | ◐ | M | 扩展已有 aitext（预置文案模板） |
 | 文字编辑器 | ✗ | A | 本地编辑+字号排版 |
-| 文字转拼音 | ◐ | A | 离线 pinyin-data（MIT，44,435 码点）+ 326 条词组消歧；已实现，V56 联调与发布验收中，见 [PINYIN.md](PINYIN.md) |
+| 文字转拼音 | ✓ | A | 离线 pinyin-data（MIT，44,435 码点）+ 326 条词组消歧；V56 已部署，Android 513/513、候选 309/309、生产 HTTPS 64/64；真机/TalkBack 待验，见 [PINYIN.md](PINYIN.md) |
 | 汉语词典 | ✗ | A | 本地词库 |
 | 中文分词 | ✗ | A | fxsjy/jieba（Android 移植） |
 | 文本相似性 | ◐ | A | text_similarity：Levenshtein、Jaccard、前缀/子串、忽略大小写/空白；本地实现完成，V49 部署验收中，见 TEXT_SIMILARITY.md |
