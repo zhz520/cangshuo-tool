@@ -20,6 +20,12 @@
 
 ## 发布与设备
 
-发布前生产只读检查：仓库 `7ce8905`，V56 共 56 条成功迁移、失败 0，API 镜像 `sha256:f63bea6cbd529eef613f7c026ddb9eb1cad5dd9bf6de3037e48245b25c8492bb`，5 个容器 healthy。尚未应用 V57。
+发布前生产只读检查：仓库 `7ce8905`，V56 共 56 条成功迁移、失败 0，API 镜像 `sha256:f63bea6cbd529eef613f7c026ddb9eb1cad5dd9bf6de3037e48245b25c8492bb`，5 个容器 healthy。
 
-模拟器交互与正式发布结果待本轮后续更新；用户真机、TalkBack、低端硬件耗时和最大结果分享不视为已验证。调试 APK 路径为 `android/app/build/outputs/apk/debug/app-debug.apk`，部署不自动更新手机应用。
+实现提交 `32e9024` 已推送 GitHub，并在生产仓库通过 fast-forward 同步；已验证候选镜像直接推广，未重新构建来源。
+
+- 生产 API 镜像 `sha256:b7a04ed8d00a166a2844b48340523317d74c43fa9daa5698af13dc839ad3e068`，旧 API 保留为 `before-chinese-v57` 回滚标签；Flyway **57 条成功、失败 0**，`chinese_convert` 为 `ENABLED / LOCAL / sort 100`。
+- 线上 HTTPS 只读验收 **119/119**：资产/许可/双语契约 71 项、公开目录与后台权限/筛选/编辑选项、7/30/90 天统计一致；未写入合成使用记录、未修改线上配置。5 个生产容器 healthy。
+- 独立候选目录与冗余镜像标签已清理；`before-chinese-v57` 回滚镜像保留。
+
+模拟器已确认工具出现在工具库（43 个工具）、页面可打开、8 种模式以单选下拉呈现、输入与示例区可见；逐项词组/复制/反向结果与 1.5 倍字体深色布局的最终交互复核随本轮继续。用户真机、TalkBack、低端硬件耗时和最大结果分享不视为已验证。调试 APK 路径为 `android/app/build/outputs/apk/debug/app-debug.apk`，部署不自动更新手机应用。
