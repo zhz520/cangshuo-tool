@@ -2591,4 +2591,45 @@
     <string name="decision_wheel_history_report_line">%1$d. %2$s · %3$s</string>
     <string name="decision_wheel_list_separator">, </string>
     <string name="decision_wheel_note" formatted="false">Random results are generated on this device. Drag the wheel to rotate it, then tap the center button to draw. Weights change the actual probability of each option.</string>
+    <string name="drawing_board_name">Drawing Board</string>
+    <string name="drawing_board_description">Sketch freely with multiple colors, adjustable brush sizes, an eraser, undo and redo, plus PNG save and share.</string>
+    <string-array name="drawing_board_keywords">
+        <item>drawing board</item><item>draw</item><item>sketch</item><item>doodle</item><item>canvas</item><item>paint</item><item>brush</item><item>eraser</item><item>画板</item><item>画画</item><item>涂鸦</item><item>画笔</item>
+    </string-array>
+    <string name="drawing_board_canvas_title">Canvas</string>
+    <string name="drawing_board_empty_hint">Tap or drag here to draw</string>
+    <string name="drawing_board_accessibility">Drawing area, %1$d strokes</string>
+    <string name="drawing_board_undo">Undo</string>
+    <string name="drawing_board_redo">Redo</string>
+    <string name="drawing_board_eraser">Eraser</string>
+    <string name="drawing_board_clear">Clear canvas</string>
+    <string name="drawing_board_brush_title">Brush</string>
+    <string name="drawing_board_colors">Color</string>
+    <string name="drawing_board_brush_size">Size</string>
+    <string name="drawing_board_brush_value">%1$d dp</string>
+    <string name="drawing_board_brush_accessibility">Brush size, %1$d dp</string>
+    <string name="drawing_board_grid_mode">Accessible grid drawing</string>
+    <string name="drawing_board_grid_hint">Choose one of 25 cells to place a point, for screen-reader and keyboard use.</string>
+    <string name="drawing_board_grid_cell">Row %1$d, column %2$d, place a point</string>
+    <string name="drawing_board_color_ink">Ink black</string>
+    <string name="drawing_board_color_blue">Blue</string>
+    <string name="drawing_board_color_green">Green</string>
+    <string name="drawing_board_color_red">Red</string>
+    <string name="drawing_board_color_orange">Orange</string>
+    <string name="drawing_board_color_violet">Violet</string>
+    <string name="drawing_board_color_pink">Pink</string>
+    <string name="drawing_board_color_teal">Teal</string>
+    <string name="drawing_board_export_title">Export artwork</string>
+    <string name="drawing_board_export_hint">Exports a 1200 × 1600 white-background PNG.</string>
+    <string name="drawing_board_save">Save PNG</string>
+    <string name="drawing_board_saving">Saving…</string>
+    <string name="drawing_board_share">Share</string>
+    <string name="drawing_board_sharing">Preparing…</string>
+    <string name="drawing_board_working">Generating image</string>
+    <string name="drawing_board_share_title">Share drawing</string>
+    <string name="drawing_board_saved">Drawing saved.</string>
+    <string name="drawing_board_save_failed">Could not save the drawing. Try again.</string>
+    <string name="drawing_board_share_failed">No app accepted the drawing.</string>
+    <string name="drawing_board_too_large">This drawing has too many strokes. Undo some strokes and try again.</string>
+    <string name="drawing_board_note" formatted="false">The canvas keeps up to 80 strokes and 8,000 sampled points, with 30 undo steps for this session. The current drawing is stored in local saved state; clearing can still be undone. Export contains only the white background and strokes, not interface elements.</string>
 </resources>

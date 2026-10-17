@@ -360,6 +360,9 @@ class ToolboxAppContainer(context: Context) {
             decisionWheelRepository,
         ),
     )
+    private val drawingBoardFactory = com.cangshuo.toolbox.feature.drawboard.ui.DrawingBoardViewModel.factory(
+        com.cangshuo.toolbox.feature.drawboard.data.LocalDrawingBoardRepository(applicationContext),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -423,6 +426,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.banner.HandheldBannerToolDefinition(resources,handheldBannerFactory),
             com.cangshuo.toolbox.feature.timescreen.TimeScreenToolDefinition(resources,timeScreenFactory),
             com.cangshuo.toolbox.feature.decisionwheel.DecisionWheelToolDefinition(resources,decisionWheelFactory),
+            com.cangshuo.toolbox.feature.drawboard.DrawingBoardToolDefinition(resources,drawingBoardFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

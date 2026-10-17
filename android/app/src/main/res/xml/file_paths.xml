@@ -4,4 +4,5 @@
     <cache-path name="shared_qr" path="qr_exports/" />
     <cache-path name="shared_text" path="image_base64_share/" />
     <cache-path name="shared_solid_color" path="solid_color_share/" />
+    <cache-path name="shared_drawing_board" path="drawing_board_share/" />
 </paths>

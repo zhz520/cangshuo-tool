@@ -2671,4 +2671,45 @@
     <string name="decision_wheel_history_report_line">%1$d. %2$s · %3$s</string>
     <string name="decision_wheel_list_separator">、</string>
     <string name="decision_wheel_note" formatted="false">转盘只在本机生成随机结果。拖动转盘可以调整方向，点按中央按钮开始；权重会改变每个选项的真实概率。</string>
+    <string name="drawing_board_name">画板</string>
+    <string name="drawing_board_description">在空白画布上自由绘制，支持多色画笔、粗细调节、橡皮擦、撤销重做和 PNG 保存分享。</string>
+    <string-array name="drawing_board_keywords">
+        <item>画板</item><item>画画</item><item>涂鸦</item><item>手绘</item><item>绘图</item><item>画笔</item><item>橡皮擦</item><item>drawing</item><item>draw</item><item>sketch</item><item>canvas</item><item>paint</item>
+    </string-array>
+    <string name="drawing_board_canvas_title">画布</string>
+    <string name="drawing_board_empty_hint">轻点或拖动开始绘制</string>
+    <string name="drawing_board_accessibility">绘图区，当前 %1$d 笔</string>
+    <string name="drawing_board_undo">撤销</string>
+    <string name="drawing_board_redo">重做</string>
+    <string name="drawing_board_eraser">橡皮擦</string>
+    <string name="drawing_board_clear">清空画布</string>
+    <string name="drawing_board_brush_title">画笔</string>
+    <string name="drawing_board_colors">颜色</string>
+    <string name="drawing_board_brush_size">粗细</string>
+    <string name="drawing_board_brush_value">%1$d dp</string>
+    <string name="drawing_board_brush_accessibility">画笔粗细，%1$d dp</string>
+    <string name="drawing_board_grid_mode">无障碍网格绘制</string>
+    <string name="drawing_board_grid_hint">在 5×5 网格中选择位置放置笔点，便于读屏和键盘操作。</string>
+    <string name="drawing_board_grid_cell">第 %1$d 行，第 %2$d 列，放置笔点</string>
+    <string name="drawing_board_color_ink">墨黑</string>
+    <string name="drawing_board_color_blue">蓝色</string>
+    <string name="drawing_board_color_green">绿色</string>
+    <string name="drawing_board_color_red">红色</string>
+    <string name="drawing_board_color_orange">橙色</string>
+    <string name="drawing_board_color_violet">紫色</string>
+    <string name="drawing_board_color_pink">粉色</string>
+    <string name="drawing_board_color_teal">青绿色</string>
+    <string name="drawing_board_export_title">导出作品</string>
+    <string name="drawing_board_export_hint">导出为白底 PNG，尺寸 1200 × 1600。</string>
+    <string name="drawing_board_save">保存 PNG</string>
+    <string name="drawing_board_saving">正在保存…</string>
+    <string name="drawing_board_share">分享</string>
+    <string name="drawing_board_sharing">正在准备…</string>
+    <string name="drawing_board_working">正在生成图片</string>
+    <string name="drawing_board_share_title">分享画板作品</string>
+    <string name="drawing_board_saved">画板作品已保存。</string>
+    <string name="drawing_board_save_failed">保存失败，请重试。</string>
+    <string name="drawing_board_share_failed">无法打开分享目标。</string>
+    <string name="drawing_board_too_large">画笔数据过多，请撤销部分笔画后再试。</string>
+    <string name="drawing_board_note" formatted="false">画布最多保留 80 笔、8000 个采样点，支持撤销最近 30 次操作。当前会话中的画作保存在本机状态中；清空后仍可用撤销恢复。导出只包含白色背景与笔画，不包含界面元素。</string>
 </resources>
