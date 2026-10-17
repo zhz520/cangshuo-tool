@@ -13,19 +13,50 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CalendarViewModelTest {
+    private val dispatcher = StandardTestDispatcher()
     private val today = LocalDate.of(2026, 10, 18)
     private val clock = Clock.fixed(
         Instant.parse("2026-10-18T04:00:00Z"),
         ZoneId.of("UTC"),
     )
 
+    @Before
+    fun before() {
+        Dispatchers.setMain(dispatcher)
+    }
+
+    @After
+    fun after() {
+        Dispatchers.resetMain()
+    }
+
+    private class MutableClock(var current: Instant) : Clock() {
+        override fun getZone(): ZoneId = ZoneId.of("UTC")
+        override fun withZone(zone: ZoneId): Clock = this
+        override fun instant(): Instant = current
+    }
+
     private fun useCases(repository: LunarCalendarRepository = LocalLunarCalendarRepository()) =
+        LunarCalendarUseCases(repository, clock) { ZoneId.of("Asia/Shanghai") }
+
+    private fun useCases(clock: Clock, repository: LunarCalendarRepository = LocalLunarCalendarRepository()) =
         LunarCalendarUseCases(repository, clock) { ZoneId.of("Asia/Shanghai") }
 
     private fun model(
@@ -127,5 +158,22 @@ class CalendarViewModelTest {
         assertEquals(CalendarError.CALCULATION_FAILED, viewModel.state.value.error)
         viewModel.refresh()
         assertEquals(CalendarError.CALCULATION_FAILED, viewModel.state.value.error)
+    }
+
+    @Test
+    fun lifecycleTickerRefreshesTodayAfterBeijingMidnight() = runTest {
+        val clock = MutableClock(Instant.parse("2026-10-17T15:59:59.500Z"))
+        val viewModel = CalendarViewModel(useCases(clock), SavedStateHandle())
+        assertEquals(LocalDate.of(2026, 10, 17), viewModel.state.value.today)
+        try {
+            viewModel.start()
+            runCurrent()
+            clock.current = Instant.parse("2026-10-17T16:00:00Z")
+            advanceTimeBy(500)
+            runCurrent()
+            assertEquals(LocalDate.of(2026, 10, 18), viewModel.state.value.today)
+        } finally {
+            viewModel.stop()
+        }
     }
 }

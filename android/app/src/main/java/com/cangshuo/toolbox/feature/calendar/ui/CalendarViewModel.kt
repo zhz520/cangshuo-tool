@@ -6,19 +6,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.cangshuo.toolbox.feature.calendar.domain.LunarCalendarUseCases
+import java.time.Duration
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeParseException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import androidx.lifecycle.viewModelScope
 import kotlin.math.min
 
 class CalendarViewModel(
     private val useCases: LunarCalendarUseCases,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val today = useCases.today()
+    private var today = useCases.today()
     private var visibleMonth = parseMonth(savedStateHandle.get<String>(KEY_MONTH))
         ?: YearMonth.from(today)
     private var selectedDate = parseDate(savedStateHandle.get<String>(KEY_DATE))
@@ -26,9 +32,24 @@ class CalendarViewModel(
         ?: minDateInMonth(visibleMonth, today.dayOfMonth)
     private val mutable = MutableStateFlow(CalendarUiState())
     val state: StateFlow<CalendarUiState> = mutable.asStateFlow()
+    private var foreground = false
+    private var dateTicker: Job? = null
 
     init {
         rebuild()
+    }
+
+    fun start() {
+        foreground = true
+        today = useCases.today()
+        rebuild()
+        runDateTicker()
+    }
+
+    fun stop() {
+        foreground = false
+        dateTicker?.cancel()
+        dateTicker = null
     }
 
     fun selectDate(date: LocalDate) {
@@ -50,6 +71,7 @@ class CalendarViewModel(
     }
 
     fun goToday() {
+        today = useCases.today()
         visibleMonth = YearMonth.from(today)
         selectedDate = today
         persist()
@@ -57,6 +79,7 @@ class CalendarViewModel(
     }
 
     fun refresh() {
+        today = useCases.today()
         rebuild()
     }
 
@@ -113,6 +136,26 @@ class CalendarViewModel(
 
     private fun minDateInMonth(month: YearMonth, day: Int): LocalDate =
         month.atDay(day.coerceIn(1, month.lengthOfMonth()))
+
+    private fun runDateTicker() {
+        dateTicker?.cancel()
+        dateTicker = null
+        if (!foreground) return
+        dateTicker = viewModelScope.launch {
+            while (isActive && foreground) {
+                val now = useCases.now()
+                val zone = useCases.zone()
+                val nextMidnight = now.atZone(zone).toLocalDate().plusDays(1).atStartOfDay(zone).toInstant()
+                val waitMs = Duration.between(now, nextMidnight).toMillis().coerceIn(1L, 86_400_000L)
+                delay(waitMs)
+                val current = useCases.today()
+                if (current != today) {
+                    today = current
+                    rebuild()
+                }
+            }
+        }
+    }
 
     companion object {
         private const val KEY_MONTH = "calendarMonth"

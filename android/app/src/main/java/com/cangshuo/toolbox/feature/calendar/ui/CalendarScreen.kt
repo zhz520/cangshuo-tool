@@ -31,6 +31,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -194,11 +197,25 @@ private fun CalendarDayCell(
         today -> MaterialTheme.colorScheme.surfaceVariant
         else -> Color.Transparent
     }
+    val description = if (day.festivals.isEmpty()) {
+        stringResource(R.string.calendar_day_description, day.date.toString(), day.lunarLabel)
+    } else {
+        stringResource(
+            R.string.calendar_day_festival_description,
+            day.date.toString(),
+            day.lunarLabel,
+            day.festivals.joinToString(", "),
+        )
+    }
     Column(
         modifier = modifier
             .height(54.dp)
             .clip(MaterialTheme.shapes.medium)
             .background(background)
+            .semantics {
+                contentDescription = description
+                this.selected = selected
+            }
             .clickable(onClick = onClick)
             .padding(vertical = 4.dp, horizontal = 2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

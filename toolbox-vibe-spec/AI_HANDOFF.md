@@ -8,7 +8,7 @@
 
 ## 最新增量（2026-10-17 第八批）
 
-万年历 `lunar_calendar`（LIFE/LOCAL、排序 623、V70）已完成并上线：固定六周周一开头月历、前后月补位与选择、1900–2100 边界、北京时间今天、农历/闰月、干支、生肖、节气、节日、每日宜忌、SavedState、月份切换日号收敛、重试和复制分享。使用 MIT lunar-java 1.7.7，参考 kizitonwose/Calendar 固定 commit 的月份/日期位置建模但未新增依赖。Android 633/633、APK/Lint 0 错误/80 既有警告，服务端 226/226；Android 16 模拟器验证 2026 年 10 月网格、重阳节详情、11 月切换和 11 日选择。提交 `6578844`、验收脚本 `8ca2efc` 已推送；隔离候选 189/189、HTTPS 130/130，生产镜像 `sha256:c2bda17d…`，回滚标签 `before-calendar-v70`，Flyway 70/70、五容器 healthy、官网/后台 200。详见 `../docs/LUNAR_CALENDAR.md`。
+万年历 `lunar_calendar`（LIFE/LOCAL、排序 623、V70）已完成并上线：固定六周周一开头月历、前后月补位与选择、1900–2100 边界、北京时间今天与午夜自动刷新、农历/闰月、干支、生肖、节气、节日、每日宜忌、无障碍日期描述、SavedState、月份切换日号收敛、重试和复制分享。使用 MIT lunar-java 1.7.7，参考 kizitonwose/Calendar 固定 commit 的月份/日期位置建模但未新增依赖。Android 634/634、APK/Lint 0 错误/80 既有警告，服务端 226/226；Android 16 模拟器验证 2026 年 10 月网格、重阳节详情、11 月切换和 11 日选择。提交 `6578844`、验收脚本 `8ca2efc` 已推送；隔离候选 189/189、HTTPS 130/130，生产镜像 `sha256:c2bda17d…`，回滚标签 `before-calendar-v70`，Flyway 70/70、五容器 healthy、官网/后台 200。详见 `../docs/LUNAR_CALENDAR.md`。
 
 ## 最新增量（2026-10-17 第七批）
 

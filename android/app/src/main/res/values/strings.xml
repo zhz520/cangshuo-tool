@@ -2373,6 +2373,8 @@
     </string-array>
     <string name="calendar_selected_title">已选日期</string>
     <string name="calendar_today_badge">今天</string>
+    <string name="calendar_day_description">%1$s，农历或节气：%2$s</string>
+    <string name="calendar_day_festival_description">%1$s，农历或节气：%2$s，节日：%3$s</string>
     <string name="calendar_lunar_value">农历 %1$s月%2$s</string>
     <string name="calendar_ganzhi_label">干支</string>
     <string name="calendar_ganzhi_value">%1$s年 · %2$s月 · %3$s日</string>

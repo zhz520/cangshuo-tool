@@ -2293,6 +2293,8 @@
     </string-array>
     <string name="calendar_selected_title">Selected date</string>
     <string name="calendar_today_badge">Today</string>
+    <string name="calendar_day_description">%1$s, lunar or solar term: %2$s</string>
+    <string name="calendar_day_festival_description">%1$s, lunar or solar term: %2$s, festivals: %3$s</string>
     <string name="calendar_lunar_value">Lunar month %1$s, day %2$s</string>
     <string name="calendar_ganzhi_label">Ganzhi</string>
     <string name="calendar_ganzhi_value">Year %1$s · Month %2$s · Day %3$s</string>

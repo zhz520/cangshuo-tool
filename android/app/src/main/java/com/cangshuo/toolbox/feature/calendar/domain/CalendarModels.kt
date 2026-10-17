@@ -1,6 +1,7 @@
 package com.cangshuo.toolbox.feature.calendar.domain
 
 import java.time.Clock
+import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
@@ -44,6 +45,10 @@ class LunarCalendarUseCases(
     private val clock: Clock = Clock.systemUTC(),
     private val zoneProvider: () -> ZoneId = { ZoneId.of("Asia/Shanghai") },
 ) {
+    fun now(): Instant = clock.instant()
+
+    fun zone(): ZoneId = zoneProvider()
+
     fun today(): LocalDate = clock.instant().atZone(zoneProvider()).toLocalDate()
 
     fun month(month: YearMonth): CalendarMonth {
