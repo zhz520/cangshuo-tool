@@ -58,4 +58,4 @@
 
 本地门禁：Android 全量 **699/699**，`assembleDebug` 成功，Lint **0 错误 / 87 条警告**（新增做个决定源码与资源无 finding）；服务端 **226/226**；V75 离线静态契约 **79/79**；后台类型检查与生产构建通过。APK 为 **24,101,642** 字节。
 
-候选后端与生产部署验收待发布步骤完成后补充。
+2026-10-17 发布验收：严格隔离候选 **251/251** 通过，使用一次性 Docker 网络，仅连接生产 MySQL 容器与临时 Redis；未继承生产应用网络或第三方凭据。生产只读 HTTPS 验收 **150/150**；生产镜像 `sha256:b4420c6627f7589083d98a3a387fc3ff73b121b6073820db844e48ab4c00babb`，Git 回滚标签 `before-decision-wheel-v75`，上一镜像保留为 Docker 标签 `cangshuo-toolbox-production-api:before-decision-wheel-v75`。Flyway 为 **75/75** 且全部成功，五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。
