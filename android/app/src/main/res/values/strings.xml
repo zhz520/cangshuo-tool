@@ -2187,4 +2187,34 @@
     <string-array name="image_base64_keywords" translatable="false">
         <item>图片</item><item>Base64</item><item>Data URL</item><item>编码</item><item>解码</item><item>image</item><item>data url</item><item>base64 image</item>
     </string-array>
+    <string name="pure_color_name">纯色图制作</string>
+    <string name="pure_color_description">选择颜色与尺寸，生成透明或纯色 PNG，并保存或分享。</string>
+    <string name="pure_color_color_title">颜色</string>
+    <string name="pure_color_hex">颜色值</string>
+    <string name="pure_color_invalid_color">请输入 #RGB、#RRGGBB 或 #RRGGBBAA。</string>
+    <string name="pure_color_size_title">尺寸</string>
+    <string name="pure_color_width">宽度</string>
+    <string name="pure_color_height">高度</string>
+    <string name="pure_color_size_hint">每边最大 %1$d 像素，总像素不超过 %2$d 百万。</string>
+    <string name="pure_color_invalid_size">宽高必须在 1–4,096 像素之间。</string>
+    <string name="pure_color_too_large">总像素超过 800 万，请缩小尺寸。</string>
+    <string name="pure_color_preview_title">预览与导出</string>
+    <string name="pure_color_alpha_hint">颜色含透明度，将以透明 PNG 保存；棋盘格仅用于预览。</string>
+    <string name="pure_color_hex_value">颜色</string>
+    <string name="pure_color_dimensions">尺寸</string>
+    <string name="pure_color_dimensions_value">%1$s × %2$s 像素</string>
+    <string name="pure_color_format">格式</string>
+    <string name="pure_color_file">文件名</string>
+    <string name="pure_color_save">保存图片</string>
+    <string name="pure_color_saving">保存中…</string>
+    <string name="pure_color_saved">纯色图已保存。</string>
+    <string name="pure_color_save_failed">保存失败，请检查尺寸或存储权限后重试。</string>
+    <string name="pure_color_share">分享图片</string>
+    <string name="pure_color_sharing">准备分享…</string>
+    <string name="pure_color_share_failed">分享失败，请先保存图片。</string>
+    <string name="pure_color_share_title">分享纯色图</string>
+    <string name="pure_color_working">正在生成 PNG…</string>
+    <string-array name="pure_color_keywords" translatable="false">
+        <item>纯色</item><item>纯色图</item><item>颜色</item><item>背景图</item><item>PNG</item><item>生成</item><item>图片</item>
+    </string-array>
 </resources>

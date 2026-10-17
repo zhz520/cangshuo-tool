@@ -286,7 +286,7 @@
 | 图片信息编辑 | ✗ | A | EXIF 读写（exiftool 思路） |
 | 取色器 | ◐ | A | color_picker：图片点击/拖动/逐像素微调、透明色值与色板、复制分享，V58；557 项 Android/226 项服务端/608 项隔离验收通过，发布中；相机取色待开发。见 [工具说明](COLOR_PICKER.md) |
 | 图片水印 | ✗ | A | 本地贴图/文字水印 |
-| 纯色图制作 | ✗ | A | 本地生成 |
+| 纯色图制作 | ◐ | A | `pure_color_image`：十六进制颜色、1–4096 尺寸、800 万像素预算、透明 PNG、棋盘格预览、保存分享，V60；Android 580/580，生产候选待授权。见 [工具说明](PURE_COLOR_IMAGE.md) |
 | 图片转Base64 | ✅ | A | `image_base64`：图片/Data URL 双向转换、magic 类型校验、EXIF 预览、URL-safe/换行、复制保存分享，V59；Android 572/572、候选 185/185、线上 HTTPS 114/114，见 [工具说明](IMAGE_BASE64.md) |
 | 圆角图片制作 | ✗ | A | 本地 Canvas |
 | 图片模糊处理 | ✗ | A | 本地高斯模糊 |

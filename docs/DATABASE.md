@@ -226,3 +226,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V59 图片 Base64 目录
 
 `V59__seed_image_base64_tool.sql` 登记 `image_base64`，IMAGE/LOCAL/ENABLED，排序 106、requires_login=0、is_featured=0。只写既有 `tool_definition` 目录列，分类按 `IMAGE` code 解析；`ON DUPLICATE KEY UPDATE tool_code=tool_code` 重放时不覆盖后台人工编辑、配置、状态、时间戳或软删除。图片、Base64 文本和导出内容只在 Android 临时状态/私有缓存中处理，没有新增数据表、公开 API 或服务端内容存储。说明与验证范围见 [图片 Base64](IMAGE_BASE64.md)。
+
+## V60 纯色图目录
+
+`V60__seed_pure_color_image_tool.sql` 登记 `pure_color_image`，IMAGE/LOCAL/ENABLED，排序 107、requires_login=0、is_featured=0。只写既有工具目录列，不保存颜色、尺寸或生成图片。重复执行保留后台编辑、配置、状态、时间戳与软删除。详见 [纯色图制作](PURE_COLOR_IMAGE.md)。

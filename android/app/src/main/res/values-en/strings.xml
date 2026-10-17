@@ -2107,4 +2107,34 @@
     <string-array name="image_base64_keywords" translatable="false">
         <item>image</item><item>base64</item><item>data url</item><item>encode</item><item>decode</item><item>picture</item><item>image base64</item><item>base64 image</item>
     </string-array>
+    <string name="pure_color_name">Pure Colour Image</string>
+    <string name="pure_color_description">Create a solid or transparent PNG at a custom size, then save or share it.</string>
+    <string name="pure_color_color_title">Colour</string>
+    <string name="pure_color_hex">Colour value</string>
+    <string name="pure_color_invalid_color">Enter #RGB, #RRGGBB or #RRGGBBAA.</string>
+    <string name="pure_color_size_title">Size</string>
+    <string name="pure_color_width">Width</string>
+    <string name="pure_color_height">Height</string>
+    <string name="pure_color_size_hint">Maximum per side: %1$d · total: %2$dM.</string>
+    <string name="pure_color_invalid_size">Width and height must be between 1 and 4,096 pixels.</string>
+    <string name="pure_color_too_large">The image exceeds 8 million pixels. Reduce the dimensions.</string>
+    <string name="pure_color_preview_title">Preview and export</string>
+    <string name="pure_color_alpha_hint">This colour has transparency and will be saved as a transparent PNG. The checkerboard is preview only.</string>
+    <string name="pure_color_hex_value">Colour</string>
+    <string name="pure_color_dimensions">Dimensions</string>
+    <string name="pure_color_dimensions_value">%1$s × %2$s pixels</string>
+    <string name="pure_color_format">Format</string>
+    <string name="pure_color_file">File name</string>
+    <string name="pure_color_save">Save image</string>
+    <string name="pure_color_saving">Saving…</string>
+    <string name="pure_color_saved">Pure-colour image saved.</string>
+    <string name="pure_color_save_failed">Save failed. Check the size or storage access and retry.</string>
+    <string name="pure_color_share">Share image</string>
+    <string name="pure_color_sharing">Preparing share…</string>
+    <string name="pure_color_share_failed">Share failed. Save the image first.</string>
+    <string name="pure_color_share_title">Share pure-colour image</string>
+    <string name="pure_color_working">Generating PNG…</string>
+    <string-array name="pure_color_keywords" translatable="false">
+        <item>solid color</item><item>pure color</item><item>background</item><item>image</item><item>png</item><item>generate</item><item>blank</item>
+    </string-array>
 </resources>

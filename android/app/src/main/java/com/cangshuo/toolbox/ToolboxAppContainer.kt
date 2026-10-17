@@ -282,6 +282,11 @@ class ToolboxAppContainer(context: Context) {
         com.cangshuo.toolbox.feature.imagebase64.domain.SaveImageBase64TextUseCase(imageBase64Repository),
         com.cangshuo.toolbox.feature.imagebase64.domain.PrepareImageBase64ShareUseCase(imageBase64Repository),
     )
+    private val pureColorRepository = com.cangshuo.toolbox.feature.purecolor.data.LocalPureColorRepository(applicationContext)
+    private val pureColorFactory = com.cangshuo.toolbox.feature.purecolor.ui.PureColorViewModel.factory(
+        com.cangshuo.toolbox.feature.purecolor.domain.SavePureColorUseCase(pureColorRepository),
+        com.cangshuo.toolbox.feature.purecolor.domain.SharePureColorUseCase(pureColorRepository),
+    )
     private val deviceInfoFactory=com.cangshuo.toolbox.feature.deviceinfo.ui.DeviceInfoViewModel.factory(
         com.cangshuo.toolbox.feature.deviceinfo.domain.ReadDeviceInfoUseCase(
             com.cangshuo.toolbox.feature.deviceinfo.data.AndroidDeviceInfoRepository(applicationContext)))
@@ -352,6 +357,7 @@ class ToolboxAppContainer(context: Context) {
             ImageCompressToolDefinition(resources, imageCompressFactory),
             com.cangshuo.toolbox.feature.colorpicker.ColorPickerToolDefinition(resources, colorPickerFactory),
             com.cangshuo.toolbox.feature.imagebase64.ImageBase64ToolDefinition(resources, imageBase64Factory),
+            com.cangshuo.toolbox.feature.purecolor.PureColorToolDefinition(resources, pureColorFactory),
             QrStudioToolDefinition(resources),
             com.cangshuo.toolbox.feature.webtools.PdfStudioToolDefinition(resources),
             com.cangshuo.toolbox.feature.aitext.AiTextToolDefinition(resources) { aiTextViewModelFactory },

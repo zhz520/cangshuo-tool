@@ -2,6 +2,10 @@
 
 本文件给新的 AI 会话使用：新开窗口或切换模型时，把下面「开场消息」整段发给 AI，让它从仓库读取现状，不依赖人复述。
 
+## 最新增量（2026-10-17 第三批，优先于下方历史记录）
+
+Wave 1 batch 13 `pure_color_image` 的本地实现已完成但尚未上线：Android 支持 `#RGB/#RRGGBB/#RRGGBBAA`、1–4096 边长与 800 万像素/堆预算、透明棋盘格预览、PNG、MediaStore/文档保存和 FileProvider 分享；V60 与 45/45 静态检查已加入。Android 580/580、APK/Lint 0 错误/81 既有警告，服务端 226/226；模拟器实测 1080×1080 半透明蓝输出像素 `(22,120,255,128)`、保存与分享成功。远端候选构建和生产部署被自动审批策略拒绝，原因是缺少本轮对远程源码上传/部署副作用的明确授权；V60 仍未上线。详见 `../docs/PURE_COLOR_IMAGE.md` 与 `../docs/PURE_COLOR_IMAGE_ACCEPTANCE_2026-10-17.md`。
+
 ## 最新增量（2026-10-17 第二批，优先于下方历史记录）
 
 Wave 1 batch 12 `image_base64` 已完成并上线：Android 图片/Data URL 双向转换、magic bytes 校验、PNG/JPEG/WebP/GIF 有界 EXIF 预览、标准/URL-safe/76 字符换行、复制、系统文档保存与 FileProvider 分享；V59 已上线。独立复核的内存峰值、导出竞态、旧保存/分享任务和超长粘贴问题已修复。Android 572/572、APK/Lint 0 错误/81 既有警告；服务端 226/226，隔离候选 185/185，生产镜像 `sha256:369b3672…`，回滚标签 `before-image-base64-v59`，Flyway 59/59、HTTPS 114/114、五个容器 healthy。Android 16 模拟器已验证编解码、选项、复制、保存和分享；真机/TalkBack/低内存/全部 codec 未验收。详见 `../docs/IMAGE_BASE64.md` 与 `../docs/IMAGE_BASE64_ACCEPTANCE_2026-10-17.md`。下一步按 ROADMAP 继续独立单项，不等待重复“继续”。
