@@ -293,4 +293,4 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 
 ## V76 画板目录
 
-`V76__seed_drawing_board_tool.sql` 登记 `drawing_board`，LIFE/LOCAL/ENABLED，排序 628、requires_login=0、is_featured=0。关键词覆盖画板、画画、涂鸦、手绘、绘图、画笔、橡皮擦及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。笔画、颜色、粗细和保存状态只存在于 Android，不上传也不新增表。实现与边界见 [画板](DRAWING_BOARD.md)。
+`V76__seed_drawing_board_tool.sql` 登记 `drawing_board`，LIFE/LOCAL/ENABLED，排序 628、requires_login=0、is_featured=0。关键词覆盖画板、画画、涂鸦、手绘、绘图、画笔、橡皮擦及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。笔画、颜色、粗细和保存状态只存在于 Android，不上传也不新增表。实现与边界见 [画板](DRAWING_BOARD.md)。生产已执行 V76，Flyway 历史 76/76 且全部成功。
