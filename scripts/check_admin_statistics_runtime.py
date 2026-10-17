@@ -113,7 +113,7 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
             command(['docker', 'network', 'connect', extra_network, container])
         command(['docker', 'start', container])
         port = None
-        for attempt in range(20):
+        for attempt in range(45):
             state = inspect(container)
             ports = state['NetworkSettings'].get('Ports') or {}
             if ports.get('8080/tcp'):
@@ -128,6 +128,14 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
                 print(logs[-6000:])
                 raise RuntimeError('candidate exited before port binding')
             time.sleep(1)
+        if port is None:
+            process = subprocess.Popen(['docker', 'logs', '--tail', '40', container],
+                                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            logs = process.communicate()[0].decode('utf-8', 'replace')
+            for key, value in environment.items():
+                if any(word in key for word in ('PASSWORD', 'SECRET', 'TOKEN', 'KEY')) and value:
+                    logs = logs.replace(value, '[redacted]')
+            print(logs[-8000:])
         check(port is not None, 'isolated HTTP port available')
         base = 'http://127.0.0.1:' + port + '/api/v1/'
         def request(path, payload=None, token=None, method=None):
