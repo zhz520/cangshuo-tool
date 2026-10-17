@@ -95,4 +95,6 @@ python -B scripts/check_pure_color_image_runtime.py <candidate-image>
 
 该模式预期验证 V60 成功执行、目录中只有一条 `pure_color_image`、公开/后台 DTO 字段一致、IMAGE 筛选和编辑可用、迁移重放保留配置文件与时间戳、使用计数和 7 天统计可参与排名。本轮**未构建候选镜像，也未运行该模式**。
 
-服务端完整 Maven 测试 **226/226**。远端候选构建和生产部署被自动审批策略拦截，原因是上传项目源码到远程服务器并执行候选/生产操作缺少本轮明确授权；因此 V60 尚未上线，不能把本地 Android/静态结果视为生产完成。
+服务端完整 Maven 测试 **226/226**。在用户明确授权后，V60 候选镜像 `sha256:f0bb74580be3a9802c09f24f1454f87099b1d6f5884d68745167e451ad1cea13` 完成真实隔离 MySQL/API **188/188**；首次因临时容器启动超时未就绪，原样重试通过。
+
+提交 `1b60f6d` 已推送并由部署仓库同步；生产 API 直接推广同一候选镜像，回滚标签 `before-pure-color-v60`。Flyway **60/60、失败 0**，`pure_color_image` 为 `ENABLED / LOCAL / sort 107`；线上 HTTPS 只读验收 **117/117**，五个容器 healthy。
