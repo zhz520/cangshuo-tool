@@ -10,6 +10,8 @@
 
 圆角处理已上线：集成到 `image_compress`，支持 0–50% 短边透明圆角；PNG/WebP 保留透明角，JPEG 白底。Android 582/582、Lint 0 错误/81 警告，服务端 226/226、隔离候选 188/188。提交 `1442650` 已推送，生产镜像 `sha256:b410b147…`，回滚标签 `before-rounded-v62`，Flyway 62/62、HTTPS 117/117、五个容器 healthy。真机像素回读/TalkBack 未验收。
 
+马赛克处理已实现但未发布：`image_compress` 增加 0–50% 短边像素块，无插值缩小/放大，在缩放后、圆角前执行；V63 只在未人工编辑的目录上追加 mosaic 关键词。Android 583/583、Lint 0 错误/81 警告，服务端 226/226；候选和生产待完成。
+
 ## 最新增量（2026-10-17 第四批）
 
 图片镜像已完成并上线：集成到 `image_compress`，提供不翻转/水平/垂直/双向选项，顺序为 EXIF 校正→镜像→缩放→PNG/JPEG/WebP 编码；V61 在描述仍为原种子时追加镜像关键词并保留人工编辑。轴缩放因子已提取为纯函数并有 4 模式回归；Android 581/581、APK/Lint 0 错误/81 警告，服务端 226/226、隔离候选 188/188；提交 `b4d8bea` 已推送，生产镜像 `sha256:311daf4b…`，回滚标签 `before-mirror-v61`，Flyway 61/61、HTTPS 117/117、五个容器 healthy。设备像素回读/TalkBack仍未验收。详见 `../docs/IMAGE_COMPRESS.md`。

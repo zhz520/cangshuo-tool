@@ -21,6 +21,7 @@ fun ImageCompressRoute(factory: ViewModelProvider.Factory) {
         onFormatChanged = viewModel::onFormatChanged,
         onFlipModeChanged = viewModel::onFlipModeChanged,
         onCornerRadiusChanged = viewModel::onCornerRadiusChanged,
+        onMosaicChanged = viewModel::onMosaicChanged,
         onSaveRequested = viewModel::onSaveRequested,
         onDocumentCreated = viewModel::onDocumentCreated,
         onExportUnavailable = viewModel::onExportUnavailable,

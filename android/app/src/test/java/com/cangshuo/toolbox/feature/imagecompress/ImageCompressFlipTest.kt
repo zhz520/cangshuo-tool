@@ -3,6 +3,7 @@ package com.cangshuo.toolbox.feature.imagecompress
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
 import com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx
+import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -20,5 +21,12 @@ class ImageCompressFlipTest {
         assertEquals(400f, cornerRadiusPx(50, 1000, 800), 0f)
         assertEquals(400f, cornerRadiusPx(99, 1000, 800), 0f)
         assertEquals(0f, cornerRadiusPx(-1, 1000, 800), 0f)
+    }
+
+    @Test fun mosaicCellUsesShortEdgeAndNeverReturnsZero() {
+        assertEquals(1, mosaicCellSize(0, 1000, 800))
+        assertEquals(40, mosaicCellSize(5, 1000, 800))
+        assertEquals(160, mosaicCellSize(20, 1000, 800))
+        assertEquals(400, mosaicCellSize(99, 1000, 800))
     }
 }

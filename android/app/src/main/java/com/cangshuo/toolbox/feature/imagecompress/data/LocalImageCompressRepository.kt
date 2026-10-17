@@ -22,6 +22,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
+import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageCompressRepository
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFailure
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
@@ -92,6 +93,15 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     currentCoroutineContext().ensureActive()
                     if (working.width != width || working.height != height) {
                         working = replace(working, working.scale(width, height, filter = true))
+                    }
+                    if (params.mosaicPercent > 0) {
+                        val cell = mosaicCellSize(params.mosaicPercent, width, height)
+                        val smallWidth = ((width + cell - 1) / cell).coerceAtLeast(1)
+                        val smallHeight = ((height + cell - 1) / cell).coerceAtLeast(1)
+                        val small = working.scale(smallWidth, smallHeight, filter = false)
+                        val mosaic = small.scale(width, height, filter = false)
+                        small.recycle()
+                        working = replace(working, mosaic)
                     }
                     if (params.cornerRadiusPercent > 0) {
                         val radius = com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx(
