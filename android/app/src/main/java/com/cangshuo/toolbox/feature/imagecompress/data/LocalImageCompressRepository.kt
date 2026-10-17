@@ -34,6 +34,8 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingExceptio
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingLimits
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
 import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.CropRatio
+import com.cangshuo.toolbox.feature.imagecompress.domain.centerCrop
 import com.cangshuo.toolbox.feature.imagecompress.domain.OutputImageFormat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -102,6 +104,13 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     if (params.rotation != RotationMode.NONE) {
                         val rotate = Matrix().apply { postRotate(params.rotation.degrees.toFloat()) }
                         working = replace(working, Bitmap.createBitmap(working, 0, 0, working.width, working.height, rotate, false))
+                    }
+                    currentCoroutineContext().ensureActive()
+                    if (params.cropRatio != CropRatio.ORIGINAL) {
+                        val crop = centerCrop(working.width, working.height, params.cropRatio)
+                        if (crop[2] != working.width || crop[3] != working.height) {
+                            working = replace(working, Bitmap.createBitmap(working, crop[0], crop[1], crop[2], crop[3]))
+                        }
                     }
                     currentCoroutineContext().ensureActive()
                     if (working.width != width || working.height != height) {

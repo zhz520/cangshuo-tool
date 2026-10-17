@@ -25,6 +25,7 @@ fun ImageCompressRoute(factory: ViewModelProvider.Factory) {
         onBlurChanged = viewModel::onBlurChanged,
         onFilterChanged = viewModel::onFilterChanged,
         onRotationChanged = viewModel::onRotationChanged,
+        onCropRatioChanged = viewModel::onCropRatioChanged,
         onSaveRequested = viewModel::onSaveRequested,
         onDocumentCreated = viewModel::onDocumentCreated,
         onExportUnavailable = viewModel::onExportUnavailable,

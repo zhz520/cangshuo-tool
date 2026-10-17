@@ -62,6 +62,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
 import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.CropRatio
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -84,6 +85,7 @@ fun ImageCompressScreen(
     onBlurChanged: (Int) -> Unit,
     onFilterChanged: (ImageFilter) -> Unit,
     onRotationChanged: (RotationMode) -> Unit,
+    onCropRatioChanged: (CropRatio) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -298,6 +300,7 @@ fun ImageCompressScreen(
                     onBlurChanged = onBlurChanged,
                     onFilterChanged = onFilterChanged,
                     onRotationChanged = onRotationChanged,
+                    onCropRatioChanged = onCropRatioChanged,
                 )
             }
 
@@ -551,6 +554,7 @@ private fun SettingsCard(
     onBlurChanged: (Int) -> Unit,
     onFilterChanged: (ImageFilter) -> Unit,
     onRotationChanged: (RotationMode) -> Unit,
+    onCropRatioChanged: (CropRatio) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -821,6 +825,23 @@ private fun SettingsCard(
                         RotationMode.ROTATE_270 to R.string.image_compress_rotation_270).forEach { (rotation, label) ->
                         FilterChip(enabled = enabled, selected = params.rotation == rotation,
                             onClick = { onRotationChanged(rotation) }, label = { Text(stringResource(label)) })
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.image_compress_crop_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(CropRatio.ORIGINAL to R.string.image_compress_crop_original,
+                        CropRatio.SQUARE to R.string.image_compress_crop_square,
+                        CropRatio.WIDE to R.string.image_compress_crop_wide,
+                        CropRatio.PORTRAIT to R.string.image_compress_crop_portrait,
+                        CropRatio.CLASSIC to R.string.image_compress_crop_classic,
+                        CropRatio.PORTRAIT_CLASSIC to R.string.image_compress_crop_portrait_classic).forEach { (ratio, label) ->
+                        FilterChip(enabled = enabled, selected = params.cropRatio == ratio,
+                            onClick = { onCropRatioChanged(ratio) }, label = { Text(stringResource(label)) })
                     }
                 }
             }

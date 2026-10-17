@@ -564,7 +564,7 @@
         <item>二维码</item><item>QR</item><item>qrcode</item><item>扫码</item><item>生成器</item><item>解析</item><item>识别</item><item>wifi</item><item>条码</item>
     </string-array>
     <string name="image_compress_name">图片压缩</string>
-    <string name="image_compress_description">图片压缩、缩放、旋转、镜像、圆角、马赛克、模糊、滤镜与格式转换，实时预览效果与体积对比。</string>
+    <string name="image_compress_description">图片压缩、缩放、裁剪、旋转、镜像、圆角、马赛克、模糊、滤镜与格式转换，实时预览效果与体积对比。</string>
     <string name="image_compress_pick_title">选择图片</string>
     <string name="image_compress_pick_desc">从本地相册选择需要压缩或调整的图片（支持 JPEG、PNG、WEBP）</string>
     <string name="image_compress_btn_pick">选择图片</string>
@@ -598,6 +598,13 @@
     <string name="image_compress_rotation_90">顺时针 90°</string>
     <string name="image_compress_rotation_180">180°</string>
     <string name="image_compress_rotation_270">顺时针 270°</string>
+    <string name="image_compress_crop_title">居中裁剪</string>
+    <string name="image_compress_crop_original">原比例</string>
+    <string name="image_compress_crop_square">1:1</string>
+    <string name="image_compress_crop_wide">16:9</string>
+    <string name="image_compress_crop_portrait">9:16</string>
+    <string name="image_compress_crop_classic">4:3</string>
+    <string name="image_compress_crop_portrait_classic">3:4</string>
     <string name="image_compress_format_source">保持原格式</string>
     <string name="image_compress_format_jpeg">JPEG (高压缩率)</string>
     <string name="image_compress_format_png">PNG (无损保真)</string>

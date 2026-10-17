@@ -6,6 +6,8 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx
 import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
 import com.cangshuo.toolbox.feature.imagecompress.domain.blurScaleFactor
 import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.CropRatio
+import com.cangshuo.toolbox.feature.imagecompress.domain.centerCrop
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -45,5 +47,12 @@ class ImageCompressFlipTest {
         assertEquals(90, RotationMode.ROTATE_90.degrees)
         assertEquals(180, RotationMode.ROTATE_180.degrees)
         assertEquals(270, RotationMode.ROTATE_270.degrees)
+    }
+
+    @Test fun centerCropProducesRequestedAspectAndClampsEdges() {
+        assertEquals(listOf(0, 87, 400, 225), centerCrop(400, 400, CropRatio.WIDE).toList())
+        assertEquals(listOf(87, 0, 225, 400), centerCrop(400, 400, CropRatio.PORTRAIT).toList())
+        assertEquals(listOf(0, 0, 400, 400), centerCrop(400, 400, CropRatio.ORIGINAL).toList())
+        assertEquals(listOf(0, 150, 400, 300), centerCrop(400, 600, CropRatio.CLASSIC).toList())
     }
 }

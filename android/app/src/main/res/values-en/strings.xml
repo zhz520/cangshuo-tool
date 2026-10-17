@@ -514,7 +514,7 @@
     <string name="qr_btn_pick_image">Choose Image to Decode</string>
     <string name="qr_decode_result_title">Decoded Content</string>
     <string name="image_compress_name">Image Compression</string>
-    <string name="image_compress_description">Image compression, resizing, rotation, mirroring, rounded corners, mosaic, blur, filters, and format conversion with live preview and size comparison.</string>
+    <string name="image_compress_description">Image compression, resizing, cropping, rotation, mirroring, rounded corners, mosaic, blur, filters, and format conversion with live preview and size comparison.</string>
     <string name="image_compress_pick_title">Select Image</string>
     <string name="image_compress_pick_desc">Choose an image from your gallery to compress or resize (supports JPEG, PNG, WEBP)</string>
     <string name="image_compress_btn_pick">Choose Image</string>
@@ -548,6 +548,13 @@
     <string name="image_compress_rotation_90">90° clockwise</string>
     <string name="image_compress_rotation_180">180°</string>
     <string name="image_compress_rotation_270">270° clockwise</string>
+    <string name="image_compress_crop_title">Centre crop</string>
+    <string name="image_compress_crop_original">Original</string>
+    <string name="image_compress_crop_square">1:1</string>
+    <string name="image_compress_crop_wide">16:9</string>
+    <string name="image_compress_crop_portrait">9:16</string>
+    <string name="image_compress_crop_classic">4:3</string>
+    <string name="image_compress_crop_portrait_classic">3:4</string>
     <string name="image_compress_format_source">Keep Source Format</string>
     <string name="image_compress_format_jpeg">JPEG (High Compression)</string>
     <string name="image_compress_format_png">PNG (Lossless)</string>

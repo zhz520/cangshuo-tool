@@ -254,3 +254,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V66 图片旋转发现性
 
 `V66__update_image_compress_rotation.sql` 仅在描述仍为 V65 内容时加入旋转与 `rotate/rotation` 关键词，保留人工编辑；不新增表或接口。
+
+## V67 图片裁剪发现性
+
+`V67__update_image_compress_crop.sql` 仅在描述仍为 V66 内容时加入居中裁剪与 `crop` 关键词，保留人工编辑。

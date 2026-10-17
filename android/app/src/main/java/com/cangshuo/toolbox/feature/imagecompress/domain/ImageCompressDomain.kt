@@ -24,6 +24,10 @@ enum class ImageFilter { NONE, GRAYSCALE, WARM, COOL, HIGH_CONTRAST }
 
 enum class RotationMode(val degrees: Int) { NONE(0), ROTATE_90(90), ROTATE_180(180), ROTATE_270(270) }
 
+enum class CropRatio(val width: Int, val height: Int) {
+    ORIGINAL(0, 0), SQUARE(1, 1), WIDE(16, 9), PORTRAIT(9, 16), CLASSIC(4, 3), PORTRAIT_CLASSIC(3, 4)
+}
+
 fun FlipMode.scaleFactors(): Pair<Float, Float> = when (this) {
     FlipMode.NONE -> 1f to 1f
     FlipMode.HORIZONTAL -> -1f to 1f
@@ -44,6 +48,7 @@ data class CompressParams(
     val blurPercent: Int = 0,
     val filter: ImageFilter = ImageFilter.NONE,
     val rotation: RotationMode = RotationMode.NONE,
+    val cropRatio: CropRatio = CropRatio.ORIGINAL,
 )
 
 fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =
@@ -53,6 +58,19 @@ fun mosaicCellSize(percent: Int, width: Int, height: Int): Int =
     (minOf(width, height) * percent.coerceIn(0, 50) / 100).coerceAtLeast(1)
 
 fun blurScaleFactor(percent: Int): Int = 1 + percent.coerceIn(0, 20) / 4
+
+fun centerCrop(width: Int, height: Int, ratio: CropRatio): IntArray {
+    if (ratio == CropRatio.ORIGINAL || width <= 0 || height <= 0) return intArrayOf(0, 0, width, height)
+    val target = ratio.width.toDouble() / ratio.height
+    val current = width.toDouble() / height
+    return if (current > target) {
+        val cropWidth = (height * target).toInt().coerceIn(1, width)
+        intArrayOf((width - cropWidth) / 2, 0, cropWidth, height)
+    } else {
+        val cropHeight = (width / target).toInt().coerceIn(1, height)
+        intArrayOf(0, (height - cropHeight) / 2, width, cropHeight)
+    }
+}
 
 /** Basic metadata describing dimensions, size, and type of an image. */
 data class ImageMetadata(
