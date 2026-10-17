@@ -299,4 +299,4 @@ Room v8 为本地待办新增 `todo_task`，使用自增主键、标题/备注�
 
 ## V77 待办事项目录
 
-`V77__seed_todo_list_tool.sql` 登记 `todo_list`，LIFE/LOCAL/ENABLED，排序 629、requires_login=0、is_featured=0。关键词覆盖待办、任务、清单、计划、截止日期、优先级及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。任务、完成状态和备注只保存在 Android Room，不上传、不同步也不新增服务端业务表。实现与边界见 [待办事项](TODO_LIST.md)。
+`V77__seed_todo_list_tool.sql` 登记 `todo_list`，LIFE/LOCAL/ENABLED，排序 629、requires_login=0、is_featured=0。关键词覆盖待办、任务、清单、计划、截止日期、优先级及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。任务、完成状态和备注只保存在 Android Room，不上传、不同步也不新增服务端业务表。实现与边界见 [待办事项](TODO_LIST.md)。生产已执行 V77，Flyway 历史 77/77 且全部成功。

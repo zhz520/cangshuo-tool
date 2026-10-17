@@ -50,3 +50,5 @@
 同一模拟器从真实 **Room v7** 数据库升级到 **v8**：升级前 12 条最近使用记录保留，升级后 `PRAGMA user_version=8`，`todo_task` 的 9 个列和 3 个索引与导出 schema 一致，原有目录缓存与其他同步表未被删除。
 
 本地门禁：Android 全量 **725/725**，107 个测试套件，`assembleDebug` 成功；APK 为 **24,166,476** 字节；Lint **0 错误 / 91 条警告**，待办源码、资源、测试与 schema 无 finding。服务端 **226/226**；V77 离线静态契约 **86/86**；后台 `vue-tsc --noEmit` 与生产构建通过。
+
+2026-10-17 发布验收：严格隔离候选 **258/258** 通过，使用一次性 Docker 网络，仅连接生产 MySQL 容器与临时 Redis；未继承生产应用网络或第三方凭据。生产只读 HTTPS 验收 **157/157**；生产镜像 `sha256:dc94c9ec269859c5523e4f2a0ce773352c4e47713ed3392674dbc6185b243440`，Git/Docker 回滚标签 `before-todo-list-v77`，上一镜像保留为 Docker 标签 `cangshuo-toolbox-production-api:before-todo-list-v77`。Flyway **77/77** 且全部成功，五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。
