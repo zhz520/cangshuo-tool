@@ -19,6 +19,7 @@ import androidx.core.graphics.scale
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageCompressRepository
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFailure
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
@@ -80,11 +81,9 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     working = orient(working, source.orientation)
                     currentCoroutineContext().ensureActive()
                     if (params.flipMode != FlipMode.NONE) {
+                        val (scaleX, scaleY) = params.flipMode.scaleFactors()
                         val flip = Matrix().apply {
-                            setScale(
-                                if (params.flipMode == FlipMode.HORIZONTAL || params.flipMode == FlipMode.BOTH) -1f else 1f,
-                                if (params.flipMode == FlipMode.VERTICAL || params.flipMode == FlipMode.BOTH) -1f else 1f,
-                            )
+                            setScale(scaleX, scaleY)
                         }
                         working = replace(working, Bitmap.createBitmap(working, 0, 0, working.width, working.height, flip, false))
                     }

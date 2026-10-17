@@ -4,7 +4,7 @@
 
 ## 2026-10-17 镜像增强
 
-镜像在 EXIF 方向校正之后、缩放/编码之前应用，尺寸与透明通道保持不变；`FlipMode.NONE/HORIZONTAL/VERTICAL/BOTH` 复用现有预览、保存和分享链路。实现依据 ImageMagick `MagickCore/transform.c` 的 FlipImage/FlopImage 语义，未复制源码或增加依赖。V61 仅当目录描述仍等于 V13 种子时更新说明并追加 `镜像/翻转/flip/mirror` 关键词，保留后台人工编辑。Android 580/580、APK/Lint 0 错误/81 警告，服务端 226/226；隔离候选 188/188（健康检查重试排除临时容器超时），生产 API `sha256:311daf4b…`，回滚标签 `before-mirror-v61`，Flyway 61/61、线上只读验收 117/117、五个容器 healthy。
+镜像在 EXIF 方向校正之后、缩放/编码之前应用，尺寸与透明通道保持不变；`FlipMode.NONE/HORIZONTAL/VERTICAL/BOTH` 复用现有预览、保存和分享链路。矩阵缩放因子提取为纯函数并有 4 模式回归，实现依据 ImageMagick `MagickCore/transform.c` 的 FlipImage/FlopImage 语义，未复制源码或增加依赖。V61 仅当目录描述仍等于 V13 种子时更新说明并追加 `镜像/翻转/flip/mirror` 关键词，保留后台人工编辑。Android **581/581**、APK/Lint 0 错误/81 警告，服务端 226/226；隔离候选 188/188，生产 API `sha256:311daf4b…`，回滚标签 `before-mirror-v61`，Flyway 61/61、线上只读验收 117/117、五个容器 healthy。
 
 ## 开源参考与适配
 

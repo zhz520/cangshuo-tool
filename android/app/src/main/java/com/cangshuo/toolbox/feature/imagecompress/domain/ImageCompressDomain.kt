@@ -20,6 +20,13 @@ enum class ResizeMode {
 
 enum class FlipMode { NONE, HORIZONTAL, VERTICAL, BOTH }
 
+fun FlipMode.scaleFactors(): Pair<Float, Float> = when (this) {
+    FlipMode.NONE -> 1f to 1f
+    FlipMode.HORIZONTAL -> -1f to 1f
+    FlipMode.VERTICAL -> 1f to -1f
+    FlipMode.BOTH -> -1f to -1f
+}
+
 /** Compression parameters selected by the user. */
 data class CompressParams(
     val quality: Int = 80,
