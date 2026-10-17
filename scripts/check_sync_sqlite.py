@@ -54,7 +54,7 @@ def main():
             expected={f["columnName"]:(f["affinity"],f.get("notNull",False),f["columnName"] in e["primaryKey"]["columnNames"]) for f in e["fields"]}
             assert actual==expected,e["tableName"]
             checks+=1
-        migration7=source.split("val MIGRATION_6_7 =",1)[1]
+        migration7=source.split("val MIGRATION_6_7 =",1)[1].split("val MIGRATION_7_8 =",1)[0]
         sql7=[json.loads(s) for s in re.findall(r'db\.execSQL\(("(?:[^"\\]|\\.)*")\)',migration7)]
         for statement in sql7: db.execute(statement)
         assert db.execute("SELECT * FROM sync_preference").fetchone()==(1,1,1,'cursor',0,0,0,0)
