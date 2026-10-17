@@ -305,4 +305,4 @@ Room v9 为习惯打卡新增 `habit` 与 `habit_entry`。习惯保存名称、�
 
 ## V78 习惯打卡目录
 
-`V78__seed_habit_tracker_tool.sql` 登记 `habit_tracker`，LIFE/LOCAL/ENABLED，排序 630、requires_login=0、is_featured=0。关键词覆盖习惯、打卡、连续、坚持、目标、日程及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。习惯定义和打卡历史只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [习惯打卡](HABIT_TRACKER.md)。
+`V78__seed_habit_tracker_tool.sql` 登记 `habit_tracker`，LIFE/LOCAL/ENABLED，排序 630、requires_login=0、is_featured=0。关键词覆盖习惯、打卡、连续、坚持、目标、日程及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。习惯定义和打卡历史只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [习惯打卡](HABIT_TRACKER.md)。生产已执行 V78，Flyway 历史 78/78 且全部成功。
