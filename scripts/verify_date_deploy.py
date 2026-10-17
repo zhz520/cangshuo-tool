@@ -10,6 +10,11 @@ import json
 import os
 import subprocess
 import xml.etree.ElementTree as ET
+try:
+    from urllib.request import Request, urlopen
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import Request, urlopen, HTTPError
 
 
 def command(args):
@@ -21,13 +26,22 @@ def command(args):
 
 
 def get(path, token=None, payload=None):
-    args = ['curl', '--silent', '--show-error', '--max-time', '20',
-            'https://toolapi.zhzgo.cn/api/v1/' + path]
+    headers = {'Accept': 'application/json'}
     if token:
-        args.extend(['-H', 'Authorization: Bearer ' + token])
+        headers['Authorization'] = 'Bearer ' + token
+    data = None
     if payload is not None:
-        args.extend(['-H', 'Content-Type: application/json', '--data-binary', json.dumps(payload)])
-    return json.loads(command(args))
+        headers['Content-Type'] = 'application/json'
+        data = json.dumps(payload).encode('utf-8')
+    request = Request('https://toolapi.zhzgo.cn/api/v1/' + path, data=data, headers=headers)
+    try:
+        response = urlopen(request, timeout=20)
+    except HTTPError as error:
+        response = error
+    try:
+        return json.loads(response.read().decode('utf-8'))
+    finally:
+        response.close()
 
 
 def main():

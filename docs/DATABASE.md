@@ -274,3 +274,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V71 工作性价比目录
 
 `V71__seed_work_value_tool.sql` 登记 `work_value`，CALC/LOCAL/ENABLED，排序 58、requires_login=0、is_featured=0。关键词覆盖工作性价比、时薪、工资、月薪、通勤、年收入及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。薪资、工时和通勤只在 Android 本地计算，不上传也不新增表。实现与边界见 [工作性价比](WORK_VALUE.md)。生产已执行 V71，Flyway 历史 71/71 且全部成功。
+
+## V72 记分牌目录
+
+`V72__seed_scoreboard_tool.sql` 登记 `scoreboard`，LIFE/LOCAL/ENABLED，排序 624、requires_login=0、is_featured=0。关键词覆盖记分牌、计分、比分、两队、计时、比赛、裁判及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。比分、队名、节次、计时和撤销历史只保存在 Android 本地，不上传也不新增表。实现与边界见 [记分牌](SCOREBOARD.md)。

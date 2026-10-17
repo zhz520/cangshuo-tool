@@ -36,7 +36,8 @@ def sql(statement):
         'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysql -uroot --batch --skip-column-names'], statement)
 
 
-def run(image, extra_checks=None, candidate_environment=None, candidate_networks=(), request_timeout=15):
+def run(image, extra_checks=None, candidate_environment=None, candidate_networks=(), request_timeout=15,
+        strict_isolation=False):
     suffix = uuid.uuid4().hex[:12]
     database = 'codex_stats_' + suffix
     user = 'stats_' + suffix
@@ -44,6 +45,7 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
     password = uuid.uuid4().hex + uuid.uuid4().hex
     admin_password = uuid.uuid4().hex
     created_db = False
+    redis_container = None
     checks = [0]
     check_lock = threading.Lock()
     def check(condition, name):
@@ -54,25 +56,59 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
             print('PASS', checks[0], name)
     try:
         source = inspect('cangshuo-toolbox-production-server-1')
-        environment = dict(pair.split('=', 1) for pair in source['Config']['Env'] if '=' in pair)
+        source_environment = dict(pair.split('=', 1) for pair in source['Config']['Env'] if '=' in pair)
         network = next(name for name in source['NetworkSettings']['Networks'] if name.endswith('_backend'))
         edge = next(name for name in source['NetworkSettings']['Networks'] if name.endswith('_edge'))
         sql("CREATE DATABASE `%s`; CREATE USER '%s'@'%%' IDENTIFIED BY '%s'; GRANT ALL ON `%s`.* TO '%s'@'%%';" %
             (database, user, password, database, user))
         created_db = True
-        environment.update(DB_NAME=database, DB_USERNAME=user, DB_PASSWORD=password,
-            JWT_SECRET=uuid.uuid4().hex + uuid.uuid4().hex, ADMIN_BOOTSTRAP_ENABLED='true',
-            ADMIN_BOOTSTRAP_USERNAME='stats_check', ADMIN_BOOTSTRAP_PASSWORD=admin_password,
-            RATE_LIMIT_ENABLED='false', AI_ENABLED='false', STORAGE_ENABLED='false')
+        if strict_isolation:
+            # The strict candidate never receives production API, mail, storage
+            # or third-party credentials and is attached only to its database
+            # network. A disposable Redis instance supplies rate-limit storage.
+            redis_image = inspect('cangshuo-toolbox-production-redis-1')['Config']['Image']
+            redis_container = 'codex-stats-redis-' + suffix
+            command(['docker', 'create', '--name', redis_container, '--network', network,
+                     redis_image, 'redis-server', '--save', '', '--appendonly', 'no'])
+            command(['docker', 'start', redis_container])
+            inherited = (
+                'DB_HOST', 'DB_PORT', 'DB_SSL_MODE', 'SPRING_PROFILES_ACTIVE',
+                'SERVER_FORWARD_HEADERS_STRATEGY', 'ADMIN_TOKEN_TTL_SECONDS',
+                'RATE_LIMIT_WINDOW_SECONDS', 'RATE_LIMIT_MAX_ANONYMOUS',
+                'RATE_LIMIT_MAX_AUTHENTICATED', 'RATE_LIMIT_MAX_AUTH_ATTEMPTS',
+            )
+            environment = dict((key, source_environment[key]) for key in inherited
+                               if key in source_environment)
+            environment.update(
+                DB_NAME=database, DB_USERNAME=user, DB_PASSWORD=password,
+                REDIS_HOST=redis_container, REDIS_PORT='6379', REDIS_PASSWORD='',
+                REDIS_USERNAME='', REDIS_DATABASE='0', REDIS_SSL_ENABLED='false',
+                SERVER_PORT='8080', CORS_ALLOWED_ORIGINS='',
+                JWT_SECRET=uuid.uuid4().hex + uuid.uuid4().hex,
+                ADMIN_BOOTSTRAP_ENABLED='true', ADMIN_BOOTSTRAP_USERNAME='stats_check',
+                ADMIN_BOOTSTRAP_PASSWORD=admin_password, RATE_LIMIT_ENABLED='false',
+                AI_ENABLED='false', STORAGE_ENABLED='false', STORAGE_QUOTA_ENABLED='false',
+                MEDIA_ENABLED='false', ZEPP_ENABLED='false',
+                LANG='C.UTF-8', LANGUAGE='C.UTF-8', LC_ALL='C.UTF-8',
+            )
+        else:
+            environment = dict(source_environment)
+            environment.update(DB_NAME=database, DB_USERNAME=user, DB_PASSWORD=password,
+                JWT_SECRET=uuid.uuid4().hex + uuid.uuid4().hex, ADMIN_BOOTSTRAP_ENABLED='true',
+                ADMIN_BOOTSTRAP_USERNAME='stats_check', ADMIN_BOOTSTRAP_PASSWORD=admin_password,
+                RATE_LIMIT_ENABLED='false', AI_ENABLED='false', STORAGE_ENABLED='false')
         if candidate_environment:
             environment.update(candidate_environment)
         # An internal-only Docker network does not publish a host port. Mirror both app networks.
-        args = ['docker', 'create', '--name', container, '--network', edge, '-p', '127.0.0.1::8080']
+        exposed_network = network if strict_isolation else edge
+        args = ['docker', 'create', '--name', container, '--network', exposed_network,
+                '-p', '127.0.0.1::8080']
         for key, value in environment.items():
             args.extend(['-e', key + '=' + value])
         args.append(image)
         command(args)
-        command(['docker', 'network', 'connect', network, container])
+        if not strict_isolation:
+            command(['docker', 'network', 'connect', network, container])
         for extra_network in candidate_networks:
             command(['docker', 'network', 'connect', extra_network, container])
         command(['docker', 'start', container])
@@ -189,6 +225,8 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
         print('Isolated statistics acceptance:', checks[0], 'checks passed')
     finally:
         subprocess.call(['docker', 'rm', '-f', container], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if redis_container is not None:
+            subprocess.call(['docker', 'rm', '-f', redis_container], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if created_db:
             sql("DROP DATABASE `%s`; DROP USER '%s'@'%%';" % (database, user))
         print('Isolated container/database/user cleanup finished')
