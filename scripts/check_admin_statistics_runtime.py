@@ -100,15 +100,15 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
         if candidate_environment:
             environment.update(candidate_environment)
         # An internal-only Docker network does not publish a host port. Mirror both app networks.
-        exposed_network = network if strict_isolation else edge
-        args = ['docker', 'create', '--name', container, '--network', exposed_network,
-                '-p', '127.0.0.1::8080']
+        args = ['docker', 'create', '--name', container]
+        if not strict_isolation:
+            args.extend(['--network', edge])
+        args.extend(['-p', '127.0.0.1::8080'])
         for key, value in environment.items():
             args.extend(['-e', key + '=' + value])
         args.append(image)
         command(args)
-        if not strict_isolation:
-            command(['docker', 'network', 'connect', network, container])
+        command(['docker', 'network', 'connect', network, container])
         for extra_network in candidate_networks:
             command(['docker', 'network', 'connect', extra_network, container])
         command(['docker', 'start', container])

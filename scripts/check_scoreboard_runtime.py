@@ -229,7 +229,8 @@ def check_candidate_isolation(check):
           'scoreboard candidate opts into credential-stripped isolation')
     check('codex-stats-redis-' in harness and "'redis-server', '--save', '', '--appendonly', 'no'" in harness,
           'strict candidate uses disposable Redis instead of production credentials')
-    check('exposed_network = network if strict_isolation else edge' in harness,
+    check("if not strict_isolation:\n            args.extend(['--network', edge])" in harness
+          and "command(['docker', 'network', 'connect', network, container])" in harness,
           'strict candidate stays off the production edge network')
     check("MEDIA_ENABLED='false'" in harness and "ZEPP_ENABLED='false'" in harness
           and "STORAGE_ENABLED='false'" in harness,
