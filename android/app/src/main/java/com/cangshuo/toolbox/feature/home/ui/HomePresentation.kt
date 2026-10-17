@@ -112,6 +112,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "pdf" -> R.drawable.ic_pdf
     "image_compress" -> R.drawable.ic_image_compress
     "image" -> R.drawable.ic_image_compress
+    "color_picker" -> R.drawable.ic_color_picker
     "toolbox" -> R.drawable.ic_toolbox
     "tools" -> R.drawable.ic_tools
     else -> R.drawable.ic_tools

@@ -2080,4 +2080,51 @@
     <string-array name="chinese_convert_keywords" translatable="false">
         <item>简繁</item><item>简体</item><item>繁体</item><item>台湾</item><item>香港</item><item>OpenCC</item><item>汉字</item>
     </string-array>
+    <string name="color_picker_name">取色器</string>
+    <string name="color_picker_description">从图片中取色，点击或拖动取样并复制 HEX、RGB、HSL 颜色值。</string>
+    <string name="color_picker_image_title">图片</string>
+    <string name="color_picker_pick">选择图片</string>
+    <string name="color_picker_change">更换图片</string>
+    <string name="color_picker_remove">移除</string>
+    <string name="color_picker_empty">选择一张图片后，点击或拖动即可取色。</string>
+    <string name="color_picker_hint">支持 JPG、PNG、WebP 等常见格式；超大图片会先缩小再取样。</string>
+    <string name="color_picker_loading">正在读取图片…</string>
+    <string name="color_picker_sample_title">取色结果</string>
+    <string name="color_picker_sample_hint">点击或拖动图片进行取色。</string>
+    <string name="color_picker_sample_swatch">当前颜色</string>
+    <string name="color_picker_sample_position">取样位置</string>
+    <string name="color_picker_sample_position_value">x %1$d · y %2$d</string>
+    <string name="color_picker_alpha">透明度 %1$d%%</string>
+    <string name="color_picker_copy_hex">复制 HEX</string>
+    <string name="color_picker_copy_rgb">复制 RGB</string>
+    <string name="color_picker_copy_hsl">复制 HSL</string>
+    <string name="color_picker_copied">已复制 %1$s</string>
+    <string name="color_picker_copy_failed">复制失败，请重试。</string>
+    <string name="color_picker_palette_title">取样记录</string>
+    <string name="color_picker_palette_empty">取样后的颜色会显示在这里。</string>
+    <string name="color_picker_palette_clear">清空记录</string>
+    <string name="color_picker_palette_hint">点击色块可重新查看颜色。</string>
+    <string name="color_picker_note">取样使用 sRGB 像素；透明 HEX 为 #RRGGBBAA，RGB/HSL 保留 Alpha。色相取整，百分比保留 1 位小数；动画仅取首帧。</string>
+    <string name="color_picker_error_invalid">无法读取该图片，请换一张再试。</string>
+    <string name="color_picker_error_large">图片尺寸过大，请先缩小后再取色。</string>
+    <string name="color_picker_error_memory">图片占用内存过高，请换一张或先压缩。</string>
+    <string name="color_picker_error_load">图片读取失败，请重试。</string>
+    <string name="color_picker_error_unsupported">仅支持 JPG、PNG、WebP 图片；动画仅取首帧。</string>
+    <string name="color_picker_error_picker">无法打开图片选择器，请检查设备的文件管理应用。</string>
+    <string name="color_picker_cancel">取消读取</string>
+    <string name="color_picker_retry">重试读取</string>
+    <string name="color_picker_cancelled">已取消读取，可重试或选择其他图片。</string>
+    <string name="color_picker_share">分享颜色</string>
+    <string name="color_picker_copy_palette">复制色板</string>
+    <string name="color_picker_dimensions">原图 %1$d × %2$d · 取样图 %3$d × %4$d</string>
+    <string name="color_picker_scaled">此图已缩小，取色基于缩小后的 sRGB 像素，细小区域颜色可能有差异。</string>
+    <string name="color_picker_image_accessible">取色图片，点击或拖动取样，可使用下方方向按钮逐像素调整。</string>
+    <string name="color_picker_center">取图片中心颜色</string>
+    <string name="color_picker_left">左移 1 像素</string>
+    <string name="color_picker_right">右移 1 像素</string>
+    <string name="color_picker_up">上移 1 像素</string>
+    <string name="color_picker_down">下移 1 像素</string>
+    <string-array name="color_picker_keywords" translatable="false">
+        <item>取色</item><item>吸管</item><item>取色器</item><item>颜色</item><item>图片</item><item>color picker</item><item>eyedropper</item><item>hex</item>
+    </string-array>
 </resources>

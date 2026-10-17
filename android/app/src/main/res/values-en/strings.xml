@@ -2000,4 +2000,51 @@
     <string-array name="chinese_convert_keywords" translatable="false">
         <item>Chinese conversion</item><item>simplified</item><item>traditional</item><item>Taiwan</item><item>Hong Kong</item><item>OpenCC</item><item>Chinese</item>
     </string-array>
+    <string name="color_picker_name">Colour Picker</string>
+    <string name="color_picker_description">Pick colours from an image and copy HEX, RGB or HSL values.</string>
+    <string name="color_picker_image_title">Image</string>
+    <string name="color_picker_pick">Choose image</string>
+    <string name="color_picker_change">Change image</string>
+    <string name="color_picker_remove">Remove</string>
+    <string name="color_picker_empty">Choose an image, then tap or drag it to pick a colour.</string>
+    <string name="color_picker_hint">Supports JPG, PNG and WebP; very large images are scaled down before sampling.</string>
+    <string name="color_picker_loading">Reading image…</string>
+    <string name="color_picker_sample_title">Picked colour</string>
+    <string name="color_picker_sample_hint">Tap or drag the image to pick a colour.</string>
+    <string name="color_picker_sample_swatch">Current colour</string>
+    <string name="color_picker_sample_position">Sample position</string>
+    <string name="color_picker_sample_position_value">x %1$d · y %2$d</string>
+    <string name="color_picker_alpha">Alpha %1$d%%</string>
+    <string name="color_picker_copy_hex">Copy HEX</string>
+    <string name="color_picker_copy_rgb">Copy RGB</string>
+    <string name="color_picker_copy_hsl">Copy HSL</string>
+    <string name="color_picker_copied">Copied %1$s</string>
+    <string name="color_picker_copy_failed">Could not copy. Please retry.</string>
+    <string name="color_picker_palette_title">Recent samples</string>
+    <string name="color_picker_palette_empty">Sampled colours appear here.</string>
+    <string name="color_picker_palette_clear">Clear</string>
+    <string name="color_picker_palette_hint">Tap a swatch to review that colour.</string>
+    <string name="color_picker_note">Samples use sRGB pixels. Transparent HEX is #RRGGBBAA; RGB/HSL keep alpha. Hue is rounded; percentages keep one decimal. Animations use the first frame.</string>
+    <string name="color_picker_error_invalid">This image could not be read. Try another one.</string>
+    <string name="color_picker_error_large">The image is too large. Scale it down and try again.</string>
+    <string name="color_picker_error_memory">The image needs too much memory. Try a smaller or compressed image.</string>
+    <string name="color_picker_error_load">Reading the image failed. Please retry.</string>
+    <string name="color_picker_error_unsupported">Use a JPG, PNG or WebP image. Only the first animation frame is sampled.</string>
+    <string name="color_picker_error_picker">The image picker could not open. Check the file manager on this device.</string>
+    <string name="color_picker_cancel">Cancel reading</string>
+    <string name="color_picker_retry">Retry reading</string>
+    <string name="color_picker_cancelled">Reading was cancelled. Retry or choose another image.</string>
+    <string name="color_picker_share">Share colour</string>
+    <string name="color_picker_copy_palette">Copy palette</string>
+    <string name="color_picker_dimensions">Original %1$d × %2$d · Sample %3$d × %4$d</string>
+    <string name="color_picker_scaled">This image was scaled down. Samples use the smaller sRGB pixels; fine details may differ.</string>
+    <string name="color_picker_image_accessible">Colour sampling image. Tap or drag to sample, then use direction buttons for one-pixel adjustments.</string>
+    <string name="color_picker_center">Sample image centre</string>
+    <string name="color_picker_left">Left 1 pixel</string>
+    <string name="color_picker_right">Right 1 pixel</string>
+    <string name="color_picker_up">Up 1 pixel</string>
+    <string name="color_picker_down">Down 1 pixel</string>
+    <string-array name="color_picker_keywords" translatable="false">
+        <item>colour picker</item><item>color picker</item><item>eyedropper</item><item>image</item><item>pixel</item><item>hex</item><item>rgb</item><item>hsl</item>
+    </string-array>
 </resources>

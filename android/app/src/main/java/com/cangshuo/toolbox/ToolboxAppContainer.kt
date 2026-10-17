@@ -270,6 +270,11 @@ class ToolboxAppContainer(context: Context) {
         prepareShareUseCase = PrepareImageShareUseCase(imageCompressRepository),
         discardImageUseCase = DiscardImageUseCase(imageCompressRepository),
     )
+    private val colorPickerRepository = com.cangshuo.toolbox.feature.colorpicker.data.LocalColorPickerRepository(applicationContext)
+    private val colorPickerFactory = com.cangshuo.toolbox.feature.colorpicker.ui.ColorPickerViewModel.factory(
+        com.cangshuo.toolbox.feature.colorpicker.domain.LoadImageUseCase(colorPickerRepository),
+        com.cangshuo.toolbox.feature.colorpicker.domain.SampleColorUseCase(colorPickerRepository),
+    )
     private val deviceInfoFactory=com.cangshuo.toolbox.feature.deviceinfo.ui.DeviceInfoViewModel.factory(
         com.cangshuo.toolbox.feature.deviceinfo.domain.ReadDeviceInfoUseCase(
             com.cangshuo.toolbox.feature.deviceinfo.data.AndroidDeviceInfoRepository(applicationContext)))
@@ -338,6 +343,7 @@ class ToolboxAppContainer(context: Context) {
             TextToolDefinition(resources, textFactory),
             QrToolDefinition(resources, qrFactory),
             ImageCompressToolDefinition(resources, imageCompressFactory),
+            com.cangshuo.toolbox.feature.colorpicker.ColorPickerToolDefinition(resources, colorPickerFactory),
             QrStudioToolDefinition(resources),
             com.cangshuo.toolbox.feature.webtools.PdfStudioToolDefinition(resources),
             com.cangshuo.toolbox.feature.aitext.AiTextToolDefinition(resources) { aiTextViewModelFactory },
