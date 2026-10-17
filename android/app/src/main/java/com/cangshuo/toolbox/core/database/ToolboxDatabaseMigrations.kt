@@ -69,3 +69,24 @@ val MIGRATION_7_8 = object : Migration(7, 8) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_todo_task_created_at ON todo_task (created_at)")
     }
 }
+
+/** Version 9 adds habit definitions and daily check-ins without touching existing data. */
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS habit (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "name TEXT NOT NULL, description TEXT NOT NULL, weekdays_mask INTEGER NOT NULL, " +
+                "archived INTEGER NOT NULL, archived_day INTEGER, position INTEGER NOT NULL, created_day INTEGER NOT NULL, " +
+                "created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_habit_archived ON habit (archived)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_habit_position ON habit (position)")
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS habit_entry (habit_id INTEGER NOT NULL, " +
+                "date_epoch_day INTEGER NOT NULL, checked_at INTEGER NOT NULL, " +
+                "PRIMARY KEY(habit_id, date_epoch_day), " +
+                "FOREIGN KEY(habit_id) REFERENCES habit(id) ON UPDATE NO ACTION ON DELETE CASCADE)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_habit_entry_date_epoch_day ON habit_entry (date_epoch_day)")
+    }
+}

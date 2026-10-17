@@ -2774,4 +2774,104 @@
     <string name="todo_error_notes">备注最多 2000 个字符。</string>
     <string name="todo_error_limit">最多保存 500 项待办。</string>
     <string name="todo_note" formatted="false">待办只保存在本机数据库中，不上传、不同步。截止日期按设备当前日期计算；不提供系统通知、重复任务、附件或多清单。</string>
+    <string name="habit_name">习惯打卡</string>
+    <string name="habit_description">在本机建立习惯并按星期安排打卡，查看连续天数、完成率与最近 28 天记录。</string>
+    <string-array name="habit_keywords">
+        <item>习惯</item><item>打卡</item><item>连续</item><item>坚持</item><item>目标</item><item>日程</item><item>habit</item><item>streak</item><item>routine</item>
+    </string-array>
+    <string name="habit_search">搜索习惯</string>
+    <string name="habit_search_hint">搜索名称或说明</string>
+    <string name="habit_clear_search">清除</string>
+    <string name="habit_filter_all">全部</string>
+    <string name="habit_filter_today">今日</string>
+    <string name="habit_filter_archived">归档</string>
+    <string name="habit_sort_label">排序</string>
+    <string name="habit_sort_today">今日优先</string>
+    <string name="habit_sort_streak">连续天数</string>
+    <string name="habit_sort_newest">最近创建</string>
+    <string name="habit_sort_name">名称</string>
+    <string name="habit_visible_count">当前显示 %1$d 项</string>
+    <string name="habit_add">新建习惯</string>
+    <string name="habit_loading">正在读取本机习惯…</string>
+    <string name="habit_empty_title">还没有符合条件的习惯</string>
+    <string name="habit_empty_hint">新建一个习惯，或调整筛选和搜索。</string>
+    <string name="habit_no_matches">没有匹配的名称或说明。</string>
+    <string name="habit_created">习惯已创建。</string>
+    <string name="habit_updated">习惯已更新。</string>
+    <string name="habit_checked">打卡已记录。</string>
+    <string name="habit_unchecked">打卡记录已撤销。</string>
+    <string name="habit_archived_message">习惯已归档。</string>
+    <string name="habit_restored">习惯已恢复。</string>
+    <string name="habit_deleted">习惯已删除。</string>
+    <string name="habit_history_cleared">打卡记录已清除。</string>
+    <string name="habit_entry_limit">最多保存 10000 条打卡记录，请先删除不再需要的习惯。</string>
+    <string name="habit_storage_failed">习惯保存失败，请重试。</string>
+    <string name="habit_delete_title">删除这个习惯？</string>
+    <string name="habit_delete_message">习惯及其全部打卡记录都会删除，且无法恢复。</string>
+    <string name="habit_delete_confirm">删除</string>
+    <string name="habit_clear_history_title">清除全部打卡记录？</string>
+    <string name="habit_clear_history_message">习惯本身和安排会保留，历史记录无法恢复。</string>
+    <string name="habit_clear_history_confirm">清除记录</string>
+    <string name="habit_stat_active">活跃习惯</string>
+    <string name="habit_stat_due">今日待打卡</string>
+    <string name="habit_stat_done">今日已打卡</string>
+    <string name="habit_stat_streak">最长当前连续</string>
+    <string name="habit_due_today">今日待打卡</string>
+    <string name="habit_done_today">今日已打卡</string>
+    <string name="habit_check_today">今日打卡</string>
+    <string name="habit_checkbox_description">%1$s，%2$s</string>
+    <string name="habit_not_scheduled">今日非计划日</string>
+    <string name="habit_archived_badge">已归档</string>
+    <string name="habit_week_progress">本周 %1$d/%2$d</string>
+    <string name="habit_rate_30d">近 30 天 %1$d%%</string>
+    <string name="habit_details">详情</string>
+    <string name="habit_edit">编辑</string>
+    <string name="habit_delete">删除</string>
+    <string name="habit_archive">归档</string>
+    <string name="habit_restore">恢复</string>
+    <string name="habit_clear_history">清除记录</string>
+    <string name="habit_detail_title">习惯详情</string>
+    <string name="habit_history_title">最近 28 天</string>
+    <string name="habit_history_help">点按日期可补记或撤销习惯创建后至今天（归档前）的打卡。</string>
+    <string name="habit_history_cell">%1$s，%2$s</string>
+    <string name="habit_day_completed">已完成</string>
+    <string name="habit_day_scheduled">计划日，未完成</string>
+    <string name="habit_day_unscheduled">非计划日</string>
+    <string name="habit_day_before_start">习惯创建前</string>
+    <string name="habit_edit_title">编辑习惯</string>
+    <string name="habit_name_label">习惯名称</string>
+    <string name="habit_name_count">字符：%1$d / %2$d</string>
+    <string name="habit_description_label">说明（可选）</string>
+    <string name="habit_description_hint">写下想坚持的原因或完成标准</string>
+    <string name="habit_choose_weekdays">选择每周打卡日</string>
+    <string name="habit_save">保存</string>
+    <string name="habit_saving">保存中…</string>
+    <string name="habit_cancel">取消</string>
+    <string name="habit_error_name">名称不能为空，且最多 80 个字符。</string>
+    <string name="habit_error_description">说明最多 500 个字符。</string>
+    <string name="habit_error_weekdays">至少选择一个打卡日。</string>
+    <string name="habit_error_limit">最多保存 100 个习惯。</string>
+    <string name="habit_error_archived">归档习惯需要先恢复后才能编辑。</string>
+    <string name="habit_completed_mark">✓</string>
+    <string name="habit_action_busy">正在保存，请稍候</string>
+    <string name="habit_note" formatted="false">习惯与打卡记录只保存在本机数据库中，不上传、不同步。系统提醒、重复通知、量化目标和云端备份暂不提供。</string>
+    <string-array name="habit_weekdays">
+        <item>一</item><item>二</item><item>三</item><item>四</item><item>五</item><item>六</item><item>日</item>
+    </string-array>
+    <plurals name="habit_current_streak">
+        <item quantity="one">连续 %1$d 天</item>
+        <item quantity="other">连续 %1$d 天</item>
+    </plurals>
+    <plurals name="habit_best_streak">
+        <item quantity="one">最佳连续 %1$d 天</item>
+        <item quantity="other">最佳连续 %1$d 天</item>
+    </plurals>
+    <plurals name="habit_checked_total">
+        <item quantity="one">累计完成 %1$d 次</item>
+        <item quantity="other">累计完成 %1$d 次</item>
+    </plurals>
+    <plurals name="habit_schedule_summary">
+        <item quantity="one">每周 %1$d 天</item>
+        <item quantity="other">每周 %1$d 天</item>
+    </plurals>
 </resources>

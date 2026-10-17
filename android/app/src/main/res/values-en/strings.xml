@@ -2694,4 +2694,104 @@
     <string name="todo_error_notes">Notes are limited to 2,000 characters.</string>
     <string name="todo_error_limit">Up to 500 tasks can be stored.</string>
     <string name="todo_note" formatted="false">Tasks are stored only in the local database and are not uploaded or synchronized. Due dates follow the device date. System notifications, recurring tasks, attachments and multiple lists are not included.</string>
+    <string name="habit_name">Habits</string>
+    <string name="habit_description">Build local habits with weekday schedules, streaks, completion rates and 28-day history.</string>
+    <string-array name="habit_keywords">
+        <item>habit</item><item>check-in</item><item>streak</item><item>routine</item><item>goal</item><item>schedule</item><item>习惯</item><item>打卡</item><item>连续</item>
+    </string-array>
+    <string name="habit_search">Search habits</string>
+    <string name="habit_search_hint">Search name or description</string>
+    <string name="habit_clear_search">Clear</string>
+    <string name="habit_filter_all">All</string>
+    <string name="habit_filter_today">Today</string>
+    <string name="habit_filter_archived">Archived</string>
+    <string name="habit_sort_label">Sort</string>
+    <string name="habit_sort_today">Due first</string>
+    <string name="habit_sort_streak">Streak</string>
+    <string name="habit_sort_newest">Newest</string>
+    <string name="habit_sort_name">Name</string>
+    <string name="habit_visible_count">Showing %1$d</string>
+    <string name="habit_add">New habit</string>
+    <string name="habit_loading">Loading local habits…</string>
+    <string name="habit_empty_title">No matching habits</string>
+    <string name="habit_empty_hint">Create a habit or adjust the filters and search.</string>
+    <string name="habit_no_matches">No name or description matches this search.</string>
+    <string name="habit_created">Habit created.</string>
+    <string name="habit_updated">Habit updated.</string>
+    <string name="habit_checked">Check-in saved.</string>
+    <string name="habit_unchecked">The check-in was removed.</string>
+    <string name="habit_archived_message">Habit archived.</string>
+    <string name="habit_restored">Habit restored.</string>
+    <string name="habit_deleted">Habit deleted.</string>
+    <string name="habit_history_cleared">Check-in history cleared.</string>
+    <string name="habit_entry_limit">Up to 10,000 check-ins can be stored. Remove unused habits first.</string>
+    <string name="habit_storage_failed">Could not save the habit. Try again.</string>
+    <string name="habit_delete_title">Delete this habit?</string>
+    <string name="habit_delete_message">The habit and every check-in will be deleted permanently.</string>
+    <string name="habit_delete_confirm">Delete</string>
+    <string name="habit_clear_history_title">Clear all check-ins?</string>
+    <string name="habit_clear_history_message">The habit and schedule stay, but the history cannot be recovered.</string>
+    <string name="habit_clear_history_confirm">Clear history</string>
+    <string name="habit_stat_active">Active habits</string>
+    <string name="habit_stat_due">Due today</string>
+    <string name="habit_stat_done">Done today</string>
+    <string name="habit_stat_streak">Best current streak</string>
+    <string name="habit_due_today">Due today</string>
+    <string name="habit_done_today">Done today</string>
+    <string name="habit_check_today">Check in today</string>
+    <string name="habit_checkbox_description">%1$s, %2$s</string>
+    <string name="habit_not_scheduled">Not scheduled today</string>
+    <string name="habit_archived_badge">Archived</string>
+    <string name="habit_week_progress">This week %1$d/%2$d</string>
+    <string name="habit_rate_30d">Last 30 days %1$d%%</string>
+    <string name="habit_details">Details</string>
+    <string name="habit_edit">Edit</string>
+    <string name="habit_delete">Delete</string>
+    <string name="habit_archive">Archive</string>
+    <string name="habit_restore">Restore</string>
+    <string name="habit_clear_history">Clear history</string>
+    <string name="habit_detail_title">Habit details</string>
+    <string name="habit_history_title">Last 28 days</string>
+    <string name="habit_history_help">Tap a date to backfill or remove a check-in from the habit start date through today or its archive date.</string>
+    <string name="habit_history_cell">%1$s, %2$s</string>
+    <string name="habit_day_completed">completed</string>
+    <string name="habit_day_scheduled">scheduled, not completed</string>
+    <string name="habit_day_unscheduled">not scheduled</string>
+    <string name="habit_day_before_start">before the habit started</string>
+    <string name="habit_edit_title">Edit habit</string>
+    <string name="habit_name_label">Habit name</string>
+    <string name="habit_name_count">Characters: %1$d / %2$d</string>
+    <string name="habit_description_label">Description (optional)</string>
+    <string name="habit_description_hint">Write why it matters or how you will complete it</string>
+    <string name="habit_choose_weekdays">Choose check-in days</string>
+    <string name="habit_save">Save</string>
+    <string name="habit_saving">Saving…</string>
+    <string name="habit_cancel">Cancel</string>
+    <string name="habit_error_name">A name is required and limited to 80 characters.</string>
+    <string name="habit_error_description">The description is limited to 500 characters.</string>
+    <string name="habit_error_weekdays">Choose at least one check-in day.</string>
+    <string name="habit_error_limit">Up to 100 habits can be stored.</string>
+    <string name="habit_error_archived">Restore this habit before editing it.</string>
+    <string name="habit_completed_mark">✓</string>
+    <string name="habit_action_busy">Saving, please wait</string>
+    <string name="habit_note" formatted="false">Habits and check-ins stay only in the local database and are not uploaded or synchronized. System reminders, recurring notifications, numerical targets and cloud backup are not included.</string>
+    <string-array name="habit_weekdays">
+        <item>M</item><item>T</item><item>W</item><item>T</item><item>F</item><item>S</item><item>S</item>
+    </string-array>
+    <plurals name="habit_current_streak">
+        <item quantity="one">Streak %1$d day</item>
+        <item quantity="other">Streak %1$d days</item>
+    </plurals>
+    <plurals name="habit_best_streak">
+        <item quantity="one">Best streak %1$d day</item>
+        <item quantity="other">Best streak %1$d days</item>
+    </plurals>
+    <plurals name="habit_checked_total">
+        <item quantity="one">%1$d check-in</item>
+        <item quantity="other">%1$d check-ins</item>
+    </plurals>
+    <plurals name="habit_schedule_summary">
+        <item quantity="one">%1$d day each week</item>
+        <item quantity="other">%1$d days each week</item>
+    </plurals>
 </resources>

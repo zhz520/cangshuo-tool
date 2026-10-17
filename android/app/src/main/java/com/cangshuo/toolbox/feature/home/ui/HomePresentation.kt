@@ -92,6 +92,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "decision_wheel" -> R.drawable.ic_decision_wheel
     "drawing_board" -> R.drawable.ic_drawing_board
     "todo_list" -> R.drawable.ic_todo_list
+    "habit_tracker" -> R.drawable.ic_habit_tracker
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info
