@@ -79,6 +79,7 @@ fun ImageCompressScreen(
     onFlipModeChanged: (FlipMode) -> Unit,
     onCornerRadiusChanged: (Int) -> Unit,
     onMosaicChanged: (Int) -> Unit,
+    onBlurChanged: (Int) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -290,6 +291,7 @@ fun ImageCompressScreen(
                     onFlipModeChanged = onFlipModeChanged,
                     onCornerRadiusChanged = onCornerRadiusChanged,
                     onMosaicChanged = onMosaicChanged,
+                    onBlurChanged = onBlurChanged,
                 )
             }
 
@@ -540,6 +542,7 @@ private fun SettingsCard(
     onFlipModeChanged: (FlipMode) -> Unit,
     onCornerRadiusChanged: (Int) -> Unit,
     onMosaicChanged: (Int) -> Unit,
+    onBlurChanged: (Int) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -762,6 +765,23 @@ private fun SettingsCard(
                     listOf(0, 5, 10, 20, 30).forEach { value ->
                         FilterChip(enabled = enabled, selected = params.mosaicPercent == value,
                             onClick = { onMosaicChanged(value) }, label = { Text("$value%") })
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(R.string.image_compress_blur_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text("${params.blurPercent}%", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+                }
+                Slider(value = params.blurPercent.toFloat(), onValueChange = { onBlurChanged(it.toInt()) },
+                    valueRange = 0f..20f, enabled = enabled)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(0, 5, 10, 15, 20).forEach { value ->
+                        FilterChip(enabled = enabled, selected = params.blurPercent == value,
+                            onClick = { onBlurChanged(value) }, label = { Text("$value%") })
                     }
                 }
             }

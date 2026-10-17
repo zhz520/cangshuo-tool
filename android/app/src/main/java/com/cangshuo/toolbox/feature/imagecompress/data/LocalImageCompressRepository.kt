@@ -23,6 +23,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
 import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
+import com.cangshuo.toolbox.feature.imagecompress.domain.blurScaleFactor
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageCompressRepository
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFailure
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
@@ -93,6 +94,17 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     currentCoroutineContext().ensureActive()
                     if (working.width != width || working.height != height) {
                         working = replace(working, working.scale(width, height, filter = true))
+                    }
+                    if (params.blurPercent > 0) {
+                        val factor = blurScaleFactor(params.blurPercent)
+                        val small = working.scale(
+                            (width / factor).coerceAtLeast(1),
+                            (height / factor).coerceAtLeast(1),
+                            filter = true,
+                        )
+                        val blurred = small.scale(width, height, filter = true)
+                        small.recycle()
+                        working = replace(working, blurred)
                     }
                     if (params.mosaicPercent > 0) {
                         val cell = mosaicCellSize(params.mosaicPercent, width, height)

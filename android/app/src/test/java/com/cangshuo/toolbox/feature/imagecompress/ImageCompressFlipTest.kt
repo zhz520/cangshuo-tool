@@ -4,6 +4,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
 import com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx
 import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
+import com.cangshuo.toolbox.feature.imagecompress.domain.blurScaleFactor
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -28,5 +29,13 @@ class ImageCompressFlipTest {
         assertEquals(40, mosaicCellSize(5, 1000, 800))
         assertEquals(160, mosaicCellSize(20, 1000, 800))
         assertEquals(400, mosaicCellSize(99, 1000, 800))
+    }
+
+    @Test fun blurFactorClampsToFiveDownsampleSteps() {
+        assertEquals(1, blurScaleFactor(0))
+        assertEquals(2, blurScaleFactor(4))
+        assertEquals(3, blurScaleFactor(8))
+        assertEquals(6, blurScaleFactor(20))
+        assertEquals(6, blurScaleFactor(99))
     }
 }

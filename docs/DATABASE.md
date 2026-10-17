@@ -242,3 +242,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V63 图片马赛克发现性
 
 `V63__update_image_compress_mosaic.sql` 仅在描述仍为 V62 内容时加入马赛克与 `mosaic` 关键词，保留人工编辑；不新增表或接口。
+
+## V64 图片模糊发现性
+
+`V64__update_image_compress_blur.sql` 仅在描述仍为 V63 内容时加入模糊与 `blur` 关键词，保留人工编辑；不新增表或接口。

@@ -69,6 +69,7 @@ class ImageCompressViewModel(
     fun onFlipModeChanged(mode: FlipMode) = updateParams(_uiState.value.compressParams.copy(flipMode = mode))
     fun onCornerRadiusChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(cornerRadiusPercent = percent.coerceIn(0, 50)))
     fun onMosaicChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(mosaicPercent = percent.coerceIn(0, 50)))
+    fun onBlurChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(blurPercent = percent.coerceIn(0, 20)))
 
     private fun updateParams(params: CompressParams) {
         if (isExporting || params == _uiState.value.compressParams) return

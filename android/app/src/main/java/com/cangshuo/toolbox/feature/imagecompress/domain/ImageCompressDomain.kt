@@ -37,6 +37,7 @@ data class CompressParams(
     val flipMode: FlipMode = FlipMode.NONE,
     val cornerRadiusPercent: Int = 0,
     val mosaicPercent: Int = 0,
+    val blurPercent: Int = 0,
 )
 
 fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =
@@ -44,6 +45,8 @@ fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =
 
 fun mosaicCellSize(percent: Int, width: Int, height: Int): Int =
     (minOf(width, height) * percent.coerceIn(0, 50) / 100).coerceAtLeast(1)
+
+fun blurScaleFactor(percent: Int): Int = 1 + percent.coerceIn(0, 20) / 4
 
 /** Basic metadata describing dimensions, size, and type of an image. */
 data class ImageMetadata(
