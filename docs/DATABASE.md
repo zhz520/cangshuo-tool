@@ -222,3 +222,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V56 汉字转拼音目录
 
 `V56__seed_pinyin_tool.sql` 登记 `pinyin`，TEXT/LOCAL/ENABLED，排序 95、requires_login=0、is_featured=0。客户端使用离线字库和词组表，不新增执行 API、不上传文字、不新增用户输入表。公开目录与后台共用该记录，使用统计沿用 `tool_usage_*`；重放保留人工编辑、状态和软删除。验证见 [拼音工具](PINYIN.md) 与 [验收记录](PINYIN_ACCEPTANCE_2026-10-14.md)。
+
+## V59 图片 Base64 目录
+
+`V59__seed_image_base64_tool.sql` 登记 `image_base64`，IMAGE/LOCAL/ENABLED，排序 106、requires_login=0、is_featured=0。只写既有 `tool_definition` 目录列，分类按 `IMAGE` code 解析；`ON DUPLICATE KEY UPDATE tool_code=tool_code` 重放时不覆盖后台人工编辑、配置、状态、时间戳或软删除。图片、Base64 文本和导出内容只在 Android 临时状态/私有缓存中处理，没有新增数据表、公开 API 或服务端内容存储。说明与验证范围见 [图片 Base64](IMAGE_BASE64.md)。

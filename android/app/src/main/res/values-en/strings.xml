@@ -2047,4 +2047,64 @@
     <string-array name="color_picker_keywords" translatable="false">
         <item>colour picker</item><item>color picker</item><item>eyedropper</item><item>image</item><item>pixel</item><item>hex</item><item>rgb</item><item>hsl</item>
     </string-array>
+    <string name="image_base64_name">Image Base64</string>
+    <string name="image_base64_description">Convert images to Base64 or Data URLs and preview decoded Base64 images.</string>
+    <string name="image_base64_mode_encode">Image → Base64</string>
+    <string name="image_base64_mode_decode">Base64 → Image</string>
+    <string name="image_base64_input_title">Input</string>
+    <string name="image_base64_encode_empty">Choose an image to create Base64 or a Data URL.</string>
+    <string name="image_base64_hint">Supports PNG, JPEG, WebP and GIF up to 4 MiB. Previews are sampled within a memory budget; encoding keeps the original file bytes.</string>
+    <string name="image_base64_pick">Choose image</string>
+    <string name="image_base64_change">Change image</string>
+    <string name="image_base64_remove">Remove result</string>
+    <string name="image_base64_decode_label">Base64 or Data URL</string>
+    <string name="image_base64_decode_placeholder">Paste data:image/…;base64,… or Base64 characters…</string>
+    <string name="image_base64_input_count">Char count: %1$d / %2$d</string>
+    <string name="image_base64_paste">Paste</string>
+    <string name="image_base64_clear">Clear</string>
+    <string name="image_base64_decode_action">Preview image</string>
+    <string name="image_base64_loading">Converting image…</string>
+    <string name="image_base64_cancel">Cancel</string>
+    <string name="image_base64_retry">Retry</string>
+    <string name="image_base64_cancelled">Conversion was cancelled. Retry or change the input.</string>
+    <string name="image_base64_options_title">Output options</string>
+    <string name="image_base64_data_url">Data URL prefix</string>
+    <string name="image_base64_url_safe">URL-safe characters</string>
+    <string name="image_base64_wrap">Wrap every 76 characters</string>
+    <string name="image_base64_options_hint">Data URLs use one line of standard characters. Turn it off to choose URL-safe characters or line wrapping.</string>
+    <string name="image_base64_preview_title">Image preview</string>
+    <string name="image_base64_preview_description">Base64 image preview</string>
+    <string name="image_base64_file">File name</string>
+    <string name="image_base64_mime">Detected type</string>
+    <string name="image_base64_dimensions">Image dimensions</string>
+    <string name="image_base64_dimensions_value">Original %1$d × %2$d · Preview %3$d × %4$d</string>
+    <string name="image_base64_bytes">Original size</string>
+    <string name="image_base64_bytes_value">Original bytes: %1$d</string>
+    <string name="image_base64_output_chars">Output length</string>
+    <string name="image_base64_chars_value">Output chars: %1$d</string>
+    <string name="image_base64_scaled_hint">The preview is scaled to fit the memory budget. The copied encoding still contains the original image bytes.</string>
+    <string name="image_base64_output_title">Base64 output</string>
+    <string name="image_base64_preview_partial">Only the first 1,024 characters are shown. Copy, save and share use the complete content.</string>
+    <string name="image_base64_updating">Updating output format…</string>
+    <string name="image_base64_copy">Copy complete result</string>
+    <string name="image_base64_copied">Copied the complete Base64 result</string>
+    <string name="image_base64_copy_failed">Copy failed; the content may exceed a device limit. Use Save instead.</string>
+    <string name="image_base64_save">Save text</string>
+    <string name="image_base64_saving">Saving…</string>
+    <string name="image_base64_save_succeeded">Base64 text saved.</string>
+    <string name="image_base64_save_failed">Save failed. Choose a location again.</string>
+    <string name="image_base64_share">Share text</string>
+    <string name="image_base64_sharing">Preparing share…</string>
+    <string name="image_base64_share_failed">Share failed. Save the text first.</string>
+    <string name="image_base64_share_title">Share Base64 text</string>
+    <string name="image_base64_error_invalid">The input is not valid Base64 or a Data URL. Check characters, padding and prefix.</string>
+    <string name="image_base64_error_unsupported">Only PNG, JPEG, WebP and GIF images are supported.</string>
+    <string name="image_base64_error_mismatch">The Data URL image type does not match the actual file content.</string>
+    <string name="image_base64_error_large">The image or input exceeds the 4 MiB / 6 million character limit.</string>
+    <string name="image_base64_error_memory">The image needs too much memory. Try a smaller image.</string>
+    <string name="image_base64_error_load">The image could not be read. Please retry.</string>
+    <string name="image_base64_error_picker">The image picker could not open. Check the file manager on this device.</string>
+    <string-array name="image_base64_keywords" translatable="false">
+        <item>image</item><item>base64</item><item>data url</item><item>encode</item><item>decode</item><item>picture</item><item>image base64</item><item>base64 image</item>
+    </string-array>
 </resources>
