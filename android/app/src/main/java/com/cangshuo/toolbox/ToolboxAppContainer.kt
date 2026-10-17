@@ -112,7 +112,8 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.diagnostics.data.LocalDiagnosticsRepository(applicationContext)))
     private val database = Room.databaseBuilder(applicationContext, ToolboxDatabase::class.java, "toolbox.db")
         .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, com.cangshuo.toolbox.core.database.MIGRATION_4_5,
-            com.cangshuo.toolbox.core.database.MIGRATION_5_6, com.cangshuo.toolbox.core.database.MIGRATION_6_7)
+            com.cangshuo.toolbox.core.database.MIGRATION_5_6, com.cangshuo.toolbox.core.database.MIGRATION_6_7,
+            com.cangshuo.toolbox.core.database.MIGRATION_7_8)
         .build()
     private val calculatorFactory = CalculatorViewModel.factory(
         CalculateExpressionUseCase(LocalCalculatorRepository()),
@@ -363,6 +364,11 @@ class ToolboxAppContainer(context: Context) {
     private val drawingBoardFactory = com.cangshuo.toolbox.feature.drawboard.ui.DrawingBoardViewModel.factory(
         com.cangshuo.toolbox.feature.drawboard.data.LocalDrawingBoardRepository(applicationContext),
     )
+    private val todoFactory = com.cangshuo.toolbox.feature.todo.ui.TodoViewModel.factory(
+        com.cangshuo.toolbox.feature.todo.domain.TodoUseCases(
+            com.cangshuo.toolbox.feature.todo.data.RoomTodoRepository(database.todoTaskDao()),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -427,6 +433,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.timescreen.TimeScreenToolDefinition(resources,timeScreenFactory),
             com.cangshuo.toolbox.feature.decisionwheel.DecisionWheelToolDefinition(resources,decisionWheelFactory),
             com.cangshuo.toolbox.feature.drawboard.DrawingBoardToolDefinition(resources,drawingBoardFactory),
+            com.cangshuo.toolbox.feature.todo.TodoToolDefinition(resources,todoFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

@@ -54,3 +54,18 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
         db.execSQL("ALTER TABLE sync_preference ADD COLUMN settings_enrolled INTEGER NOT NULL DEFAULT 0")
     }
 }
+
+/** Version 8 adds the local-only task list without touching existing data. */
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS todo_task (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "title TEXT NOT NULL, notes TEXT NOT NULL, due_date INTEGER, priority INTEGER NOT NULL, " +
+                "completed INTEGER NOT NULL, completed_at INTEGER, created_at INTEGER NOT NULL, " +
+                "updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_todo_task_completed ON todo_task (completed)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_todo_task_due_date ON todo_task (due_date)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_todo_task_created_at ON todo_task (created_at)")
+    }
+}

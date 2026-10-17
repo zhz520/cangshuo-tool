@@ -195,6 +195,8 @@ V20 创建 user_sync_state 和 user_sync_entity，用户 FK 级联删除，账�
 
 Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收藏、游标和全部旧表保留；4→5→6→7 实际 SQL/schema 与队列条件更新在主机 SQLite 30 项通过，schema 5/6/7 已导出。Server 复用 V20，不修改已应用迁移。
 
+Room v8 为本地待办新增 `todo_task`，使用自增主键、标题/备注、可选截止日期和完成时间、优先级、完成状态及创建/更新时间，并建立完成状态、截止日期和创建时间索引。`MIGRATION_7_8` 只创建新表与索引；真实模拟器从 v7 升级后 12 条最近使用记录保留，`PRAGMA user_version=8`，列与索引和导出的 schema 8 一致。见 [待办事项](TODO_LIST.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -294,3 +296,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V76 画板目录
 
 `V76__seed_drawing_board_tool.sql` 登记 `drawing_board`，LIFE/LOCAL/ENABLED，排序 628、requires_login=0、is_featured=0。关键词覆盖画板、画画、涂鸦、手绘、绘图、画笔、橡皮擦及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。笔画、颜色、粗细和保存状态只存在于 Android，不上传也不新增表。实现与边界见 [画板](DRAWING_BOARD.md)。生产已执行 V76，Flyway 历史 76/76 且全部成功。
+
+## V77 待办事项目录
+
+`V77__seed_todo_list_tool.sql` 登记 `todo_list`，LIFE/LOCAL/ENABLED，排序 629、requires_login=0、is_featured=0。关键词覆盖待办、任务、清单、计划、截止日期、优先级及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。任务、完成状态和备注只保存在 Android Room，不上传、不同步也不新增服务端业务表。实现与边界见 [待办事项](TODO_LIST.md)。

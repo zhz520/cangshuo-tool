@@ -2632,4 +2632,66 @@
     <string name="drawing_board_share_failed">No app accepted the drawing.</string>
     <string name="drawing_board_too_large">This drawing has too many strokes. Undo some strokes and try again.</string>
     <string name="drawing_board_note" formatted="false">The canvas keeps up to 80 strokes and 8,000 sampled points, with 30 undo steps for this session. The current drawing is stored in local saved state; clearing can still be undone. Export contains only the white background and strokes, not interface elements.</string>
+    <string name="todo_name">Tasks</string>
+    <string name="todo_description">Manage local tasks with completion, priority, due dates, search, filters, sorting and completed-task cleanup.</string>
+    <string-array name="todo_keywords">
+        <item>tasks</item><item>todo</item><item>checklist</item><item>planner</item><item>to-do</item><item>due date</item><item>priority</item><item>待办</item><item>任务</item><item>清单</item><item>计划</item>
+    </string-array>
+    <string name="todo_search">Search tasks</string>
+    <string name="todo_search_hint">Search title or notes</string>
+    <string name="todo_clear_search">Clear</string>
+    <string name="todo_filter_all">All</string>
+    <string name="todo_filter_active">Active</string>
+    <string name="todo_filter_completed">Completed</string>
+    <string name="todo_sort_label">Sort</string>
+    <string name="todo_sort_active">Active first</string>
+    <string name="todo_sort_due">Due date</string>
+    <string name="todo_sort_priority">Priority</string>
+    <string name="todo_sort_created">Newest</string>
+    <string name="todo_visible_count">Showing %1$d</string>
+    <string name="todo_add">Add task</string>
+    <string name="todo_loading">Loading local tasks…</string>
+    <string name="todo_empty_title">No matching tasks</string>
+    <string name="todo_empty_hint">Add a task or adjust the filters and search.</string>
+    <string name="todo_no_matches">No title or note matches this search.</string>
+    <string name="todo_clear_completed">Clear %1$d completed</string>
+    <string name="todo_added">Task added.</string>
+    <string name="todo_updated">Task updated.</string>
+    <string name="todo_deleted">Task deleted.</string>
+    <string name="todo_cleared">Completed tasks cleared.</string>
+    <string name="todo_storage_failed">Could not save the task. Try again.</string>
+    <string name="todo_delete_title">Delete this task?</string>
+    <string name="todo_delete_message">This cannot be undone.</string>
+    <string name="todo_delete_confirm">Delete</string>
+    <string name="todo_clear_title">Clear all completed tasks?</string>
+    <string name="todo_clear_message">Only completed tasks are removed. Active tasks are unchanged.</string>
+    <string name="todo_clear_confirm">Clear</string>
+    <string name="todo_stat_active">Active</string>
+    <string name="todo_stat_overdue">Overdue</string>
+    <string name="todo_stat_today">Due today</string>
+    <string name="todo_stat_completed">Done</string>
+    <string name="todo_edit">Edit</string>
+    <string name="todo_delete">Delete</string>
+    <string name="todo_priority_high">High</string>
+    <string name="todo_priority_normal">Normal</string>
+    <string name="todo_priority_low">Low</string>
+    <string name="todo_due_overdue_one">1 day overdue · %1$s</string>
+    <string name="todo_due_overdue">%1$d days overdue · %2$s</string>
+    <string name="todo_due_today">Due today · %1$s</string>
+    <string name="todo_due_tomorrow">Due tomorrow · %1$s</string>
+    <string name="todo_due_date">Due %1$s</string>
+    <string name="todo_edit_title">Edit task</string>
+    <string name="todo_title_label">Title</string>
+    <string name="todo_title_count">%1$d / %2$d characters</string>
+    <string name="todo_notes_label">Notes (optional)</string>
+    <string name="todo_notes_hint">Add a place, materials or next steps</string>
+    <string name="todo_priority">Priority</string>
+    <string name="todo_pick_date">Choose due date</string>
+    <string name="todo_clear_date">Clear date</string>
+    <string name="todo_save">Save</string>
+    <string name="todo_cancel">Cancel</string>
+    <string name="todo_error_title">A title is required and limited to 120 characters.</string>
+    <string name="todo_error_notes">Notes are limited to 2,000 characters.</string>
+    <string name="todo_error_limit">Up to 500 tasks can be stored.</string>
+    <string name="todo_note" formatted="false">Tasks are stored only in the local database and are not uploaded or synchronized. Due dates follow the device date. System notifications, recurring tasks, attachments and multiple lists are not included.</string>
 </resources>

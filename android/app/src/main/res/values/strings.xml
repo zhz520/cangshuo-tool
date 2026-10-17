@@ -2712,4 +2712,66 @@
     <string name="drawing_board_share_failed">无法打开分享目标。</string>
     <string name="drawing_board_too_large">画笔数据过多，请撤销部分笔画后再试。</string>
     <string name="drawing_board_note" formatted="false">画布最多保留 80 笔、8000 个采样点，支持撤销最近 30 次操作。当前会话中的画作保存在本机状态中；清空后仍可用撤销恢复。导出只包含白色背景与笔画，不包含界面元素。</string>
+    <string name="todo_name">待办事项</string>
+    <string name="todo_description">在本机管理待办任务，支持完成状态、优先级、截止日期、搜索、筛选、排序和清除已完成事项。</string>
+    <string-array name="todo_keywords">
+        <item>待办</item><item>待办事项</item><item>任务</item><item>清单</item><item>计划</item><item>截止日期</item><item>优先级</item><item>todo</item><item>task</item><item>checklist</item><item>planner</item>
+    </string-array>
+    <string name="todo_search">搜索待办</string>
+    <string name="todo_search_hint">搜索标题或备注</string>
+    <string name="todo_clear_search">清除</string>
+    <string name="todo_filter_all">全部</string>
+    <string name="todo_filter_active">进行中</string>
+    <string name="todo_filter_completed">已完成</string>
+    <string name="todo_sort_label">排序</string>
+    <string name="todo_sort_active">进行中优先</string>
+    <string name="todo_sort_due">截止日期</string>
+    <string name="todo_sort_priority">优先级</string>
+    <string name="todo_sort_created">最近创建</string>
+    <string name="todo_visible_count">当前显示 %1$d 项</string>
+    <string name="todo_add">添加待办</string>
+    <string name="todo_loading">正在读取本机待办…</string>
+    <string name="todo_empty_title">还没有符合条件的待办</string>
+    <string name="todo_empty_hint">添加一项任务，或调整筛选和搜索条件。</string>
+    <string name="todo_no_matches">没有匹配的标题或备注。</string>
+    <string name="todo_clear_completed">清除 %1$d 项已完成</string>
+    <string name="todo_added">待办已添加。</string>
+    <string name="todo_updated">待办已更新。</string>
+    <string name="todo_deleted">待办已删除。</string>
+    <string name="todo_cleared">已完成事项已清除。</string>
+    <string name="todo_storage_failed">待办保存失败，请重试。</string>
+    <string name="todo_delete_title">删除这项待办？</string>
+    <string name="todo_delete_message">删除后无法恢复。</string>
+    <string name="todo_delete_confirm">删除</string>
+    <string name="todo_clear_title">清除全部已完成？</string>
+    <string name="todo_clear_message">只删除已完成事项，进行中的待办不受影响。</string>
+    <string name="todo_clear_confirm">清除</string>
+    <string name="todo_stat_active">进行中</string>
+    <string name="todo_stat_overdue">已逾期</string>
+    <string name="todo_stat_today">今天到期</string>
+    <string name="todo_stat_completed">已完成</string>
+    <string name="todo_edit">编辑</string>
+    <string name="todo_delete">删除</string>
+    <string name="todo_priority_high">高优先级</string>
+    <string name="todo_priority_normal">普通</string>
+    <string name="todo_priority_low">低优先级</string>
+    <string name="todo_due_overdue_one">逾期 1 天 · %1$s</string>
+    <string name="todo_due_overdue">逾期 %1$d 天 · %2$s</string>
+    <string name="todo_due_today">今天到期 · %1$s</string>
+    <string name="todo_due_tomorrow">明天到期 · %1$s</string>
+    <string name="todo_due_date">截止 %1$s</string>
+    <string name="todo_edit_title">编辑待办</string>
+    <string name="todo_title_label">标题</string>
+    <string name="todo_title_count">%1$d / %2$d 个字符</string>
+    <string name="todo_notes_label">备注（可选）</string>
+    <string name="todo_notes_hint">补充地点、材料或执行步骤</string>
+    <string name="todo_priority">优先级</string>
+    <string name="todo_pick_date">选择截止日期</string>
+    <string name="todo_clear_date">清除日期</string>
+    <string name="todo_save">保存</string>
+    <string name="todo_cancel">取消</string>
+    <string name="todo_error_title">标题不能为空，且最多 120 个字符。</string>
+    <string name="todo_error_notes">备注最多 2000 个字符。</string>
+    <string name="todo_error_limit">最多保存 500 项待办。</string>
+    <string name="todo_note" formatted="false">待办只保存在本机数据库中，不上传、不同步。截止日期按设备当前日期计算；不提供系统通知、重复任务、附件或多清单。</string>
 </resources>
