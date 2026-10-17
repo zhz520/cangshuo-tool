@@ -82,6 +82,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "light_meter" -> R.drawable.ic_light_meter
     "coin_flip" -> R.drawable.ic_coin_flip
     "stopwatch" -> R.drawable.ic_stopwatch
+    "world_clock" -> R.drawable.ic_world_clock
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info

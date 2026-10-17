@@ -2244,4 +2244,55 @@
     <string-array name="pure_color_keywords" translatable="false">
         <item>纯色</item><item>纯色图</item><item>颜色</item><item>背景图</item><item>PNG</item><item>生成</item><item>图片</item>
     </string-array>
+    <string name="world_clock_name">世界时间</string>
+    <string name="world_clock_description">查看多时区实时时间、日期日差、UTC 偏移与夏令时，支持城市搜索、12/24 小时制和分享。</string>
+    <string-array name="world_clock_keywords" translatable="false">
+        <item>世界时间</item><item>时区</item><item>城市时间</item><item>世界时钟</item><item>UTC</item><item>换算</item><item>夏令时</item><item>world clock</item><item>timezone</item><item>clock</item>
+    </string-array>
+    <string name="world_clock_device_zone">设备时区</string>
+    <string name="world_clock_add_city">添加城市或时区</string>
+    <string name="world_clock_add_title">添加城市或时区</string>
+    <string name="world_clock_search_label">搜索城市或时区</string>
+    <string name="world_clock_search_hint">输入城市、地区或 IANA 时区</string>
+    <string name="world_clock_clear_search">清除搜索</string>
+    <string name="world_clock_done">完成</string>
+    <string name="world_clock_add">添加</string>
+    <string name="world_clock_already_added">已添加</string>
+    <string name="world_clock_24_hour">24 小时</string>
+    <string name="world_clock_12_hour">12 小时</string>
+    <string name="world_clock_live_caption">每秒刷新 · 时间来自设备时钟</string>
+    <string name="world_clock_zones_title">其他城市</string>
+    <string name="world_clock_zone_count">%1$d / %2$d</string>
+    <string name="world_clock_empty_title">还没有其他城市</string>
+    <string name="world_clock_empty_body">设备时区始终显示；添加城市后可同时比较日期、偏移与夏令时。</string>
+    <string name="world_clock_remove_zone">移除 %1$s</string>
+    <string name="world_clock_date_weekday">%1$s · %2$s</string>
+    <string name="world_clock_same_day">同日</string>
+    <string name="world_clock_next_day">后一天</string>
+    <string name="world_clock_previous_day">前一天</string>
+    <plurals name="world_clock_days_ahead">
+        <item quantity="one">+%1$d 天</item>
+        <item quantity="other">+%1$d 天</item>
+    </plurals>
+    <plurals name="world_clock_days_behind">
+        <item quantity="one">-%1$d 天</item>
+        <item quantity="other">-%1$d 天</item>
+    </plurals>
+    <string name="world_clock_dst_daylight">夏令时生效</string>
+    <string name="world_clock_dst_standard">标准时间</string>
+    <string name="world_clock_dst_fixed">固定偏移</string>
+    <string name="world_clock_next_change">下一次偏移变更：%1$s（%2$s）</string>
+    <string name="world_clock_fixed_offset">该时区当前按固定 UTC 偏移运行。</string>
+    <string name="world_clock_search_count">匹配 %1$d / 全部 %2$d</string>
+    <string name="world_clock_search_empty">没有匹配的城市或时区。</string>
+    <string name="world_clock_error_duplicate">该时区已添加。</string>
+    <string name="world_clock_error_limit">最多可添加 23 个其他城市，连同设备时区共 24 个。</string>
+    <string name="world_clock_error_invalid">无法识别该时区。</string>
+    <string name="world_clock_error_query">搜索词最多 80 个字符。</string>
+    <string name="world_clock_error_read">部分时区读取失败，请检查系统时区设置。</string>
+    <string name="world_clock_dismiss">知道了</string>
+    <string name="world_clock_report">复制与分享</string>
+    <string name="world_clock_report_title">世界时间</string>
+    <string name="world_clock_report_line">%1$s：%2$s，%3$s（%4$s）</string>
+    <string name="world_clock_note">时间与时区规则来自设备时钟及 Android 系统时区数据库。已添加城市、显示格式和搜索词会在页面恢复时保留，不参与云同步。</string>
 </resources>

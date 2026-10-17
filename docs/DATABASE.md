@@ -258,3 +258,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V67 图片裁剪发现性
 
 `V67__update_image_compress_crop.sql` 仅在描述仍为 V66 内容时加入居中裁剪与 `crop` 关键词，保留人工编辑。
+
+## V68 世界时间目录
+
+`V68__seed_world_clock_tool.sql` 登记 `world_clock`，LIFE/LOCAL/ENABLED，排序 621、requires_login=0、is_featured=0。关键词覆盖世界时间、时区、城市时间、UTC、夏令时和中英文检索词；`ON DUPLICATE KEY UPDATE tool_code=tool_code` 重放时保留管理员编辑、配置、状态、时间戳与软删除。工具只使用设备时区和系统 IANA 规则，没有新增表、公开 API 或服务端时间记录。实现与边界见 [世界时间](WORLD_CLOCK.md)。

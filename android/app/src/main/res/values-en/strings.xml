@@ -2164,4 +2164,55 @@
     <string-array name="pure_color_keywords" translatable="false">
         <item>solid color</item><item>pure color</item><item>background</item><item>image</item><item>png</item><item>generate</item><item>blank</item>
     </string-array>
+    <string name="world_clock_name">World Clock</string>
+    <string name="world_clock_description">Compare live times across time zones with date differences, UTC offsets, daylight saving, city search, a 12/24-hour switch and sharing.</string>
+    <string-array name="world_clock_keywords" translatable="false">
+        <item>world clock</item><item>timezone</item><item>time zone</item><item>utc</item><item>clock</item><item>daylight saving</item><item>city time</item><item>世界时间</item><item>世界时钟</item><item>换算</item>
+    </string-array>
+    <string name="world_clock_device_zone">Device time zone</string>
+    <string name="world_clock_add_city">Add city or time zone</string>
+    <string name="world_clock_add_title">Add city or time zone</string>
+    <string name="world_clock_search_label">Search city or time zone</string>
+    <string name="world_clock_search_hint">City, region or IANA time zone</string>
+    <string name="world_clock_clear_search">Clear search</string>
+    <string name="world_clock_done">Done</string>
+    <string name="world_clock_add">Add</string>
+    <string name="world_clock_already_added">Added</string>
+    <string name="world_clock_24_hour">24-hour</string>
+    <string name="world_clock_12_hour">12-hour</string>
+    <string name="world_clock_live_caption">Updates every second · Time from the device clock</string>
+    <string name="world_clock_zones_title">Other cities</string>
+    <string name="world_clock_zone_count">%1$d / %2$d</string>
+    <string name="world_clock_empty_title">No other cities yet</string>
+    <string name="world_clock_empty_body">Your device time zone always stays visible. Add cities to compare dates, offsets and daylight saving.</string>
+    <string name="world_clock_remove_zone">Remove %1$s</string>
+    <string name="world_clock_date_weekday">%1$s · %2$s</string>
+    <string name="world_clock_same_day">Same day</string>
+    <string name="world_clock_next_day">Next day</string>
+    <string name="world_clock_previous_day">Previous day</string>
+    <plurals name="world_clock_days_ahead">
+        <item quantity="one">+%1$d day</item>
+        <item quantity="other">+%1$d days</item>
+    </plurals>
+    <plurals name="world_clock_days_behind">
+        <item quantity="one">-%1$d day</item>
+        <item quantity="other">-%1$d days</item>
+    </plurals>
+    <string name="world_clock_dst_daylight">Daylight saving</string>
+    <string name="world_clock_dst_standard">Standard time</string>
+    <string name="world_clock_dst_fixed">Fixed offset</string>
+    <string name="world_clock_next_change">Next offset change: %1$s (%2$s)</string>
+    <string name="world_clock_fixed_offset">This time zone currently uses a fixed UTC offset.</string>
+    <string name="world_clock_search_count">Matches %1$d / all %2$d</string>
+    <string name="world_clock_search_empty">No matching city or time zone.</string>
+    <string name="world_clock_error_duplicate">That time zone is already added.</string>
+    <string name="world_clock_error_limit">You can add up to 23 other cities, for 24 including the device time zone.</string>
+    <string name="world_clock_error_invalid">That time zone could not be recognized.</string>
+    <string name="world_clock_error_query">Search text is limited to 80 characters.</string>
+    <string name="world_clock_error_read">Some time zones could not be read. Check the device time-zone setting.</string>
+    <string name="world_clock_dismiss">Dismiss</string>
+    <string name="world_clock_report">Copy and share</string>
+    <string name="world_clock_report_title">World Clock</string>
+    <string name="world_clock_report_line">%1$s: %2$s, %3$s (%4$s)</string>
+    <string name="world_clock_note">Times and zone rules come from the device clock and the Android system time-zone database. Added cities, display format and search text are restored on this screen and are not cloud-synchronized.</string>
 </resources>

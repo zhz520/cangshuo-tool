@@ -315,6 +315,15 @@ class ToolboxAppContainer(context: Context) {
     private val stopwatchFactory = com.cangshuo.toolbox.feature.stopwatch.ui.StopwatchViewModel.factory(
         com.cangshuo.toolbox.feature.stopwatch.domain.StopwatchUseCases(
             com.cangshuo.toolbox.feature.stopwatch.data.AndroidStopwatchRepository()))
+    private val worldClockFactory = com.cangshuo.toolbox.feature.worldclock.ui.WorldClockViewModel.factory(
+        com.cangshuo.toolbox.feature.worldclock.domain.WorldClockUseCases(
+            com.cangshuo.toolbox.feature.worldclock.data.LocalWorldClockRepository()),
+        localeProvider = {
+            resources.configuration.locales.let { locales ->
+                if (locales.isEmpty) java.util.Locale.getDefault() else locales[0]
+            }
+        },
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -370,6 +379,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.lightmeter.LightMeterToolDefinition(resources,lightMeterFactory),
             com.cangshuo.toolbox.feature.coinflip.CoinFlipToolDefinition(resources,coinFlipFactory),
             com.cangshuo.toolbox.feature.stopwatch.StopwatchToolDefinition(resources,stopwatchFactory),
+            com.cangshuo.toolbox.feature.worldclock.WorldClockToolDefinition(resources,worldClockFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
