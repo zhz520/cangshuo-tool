@@ -6,7 +6,7 @@
 
 镜像在 EXIF 方向校正之后、缩放/编码之前应用，尺寸与透明通道保持不变；`FlipMode.NONE/HORIZONTAL/VERTICAL/BOTH` 复用现有预览、保存和分享链路。矩阵缩放因子提取为纯函数并有 4 模式回归，实现依据 ImageMagick `MagickCore/transform.c` 的 FlipImage/FlopImage 语义，未复制源码或增加依赖。V61 仅当目录描述仍等于 V13 种子时更新说明并追加 `镜像/翻转/flip/mirror` 关键词，保留后台人工编辑。Android **582/582**、APK/Lint 0 错误/81 警告，服务端 226/226；隔离候选 188/188，生产 API `sha256:311daf4b…`，回滚标签 `before-mirror-v61`，Flyway 61/61、线上只读验收 117/117、五个容器 healthy。
 
-圆角比例可在 0–50% 调整，半径按图片短边计算，通过透明裁剪生成；PNG/WebP 保留透明角，JPEG 的透明角落按既有规则合成白色。V62 在目录说明仍等于 V61 时追加“圆角/rounded”关键词；人工编辑不会被覆盖。半径边界已有回归，完整 Android 为 **582/582**、Lint 0 错误/81 警告。
+圆角比例可在 0–50% 调整，半径按图片短边计算，通过透明裁剪生成；PNG/WebP 保留透明角，JPEG 的透明角落按既有规则合成白色。V62 在目录说明仍等于 V61 时追加“圆角/rounded”关键词；人工编辑不会被覆盖。半径边界已有回归，完整 Android **582/582**、Lint 0 错误/81 警告；提交 `1442650`，V62 隔离候选 **188/188**，生产 API `sha256:b410b147…`，回滚标签 `before-rounded-v62`，Flyway 62/62、HTTPS 117/117、五个容器 healthy。
 
 ## 开源参考与适配
 
