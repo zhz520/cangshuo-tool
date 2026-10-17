@@ -283,7 +283,7 @@ def verify(check, request, sql, admin):
 
     check(sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='73' AND success=1") == '1',
           'V73 applied')
-    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='%s'") % CODE == '1',
+    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='%s'" % CODE) == '1',
           'V73 creates one handheld banner row')
     check(CODE in records(), 'public LIFE catalog includes handheld_banner')
     check_tool_metadata(check, records()[CODE], 'public handheld banner', expected=defaults, public=True)
@@ -308,8 +308,8 @@ def verify(check, request, sql, admin):
                   configJson='{"acceptance":"handheld_banner"}')
     check_tool_metadata(check, call(ADMIN_PATH, edited, token=admin, method='PUT'),
                         'edited handheld banner metadata', edited)
-    check(sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_daily WHERE tool_code='%s'") % CODE == '0'
-          and sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_stat WHERE tool_code='%s'") % CODE == '0',
+    check(sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_daily WHERE tool_code='%s'" % CODE) == '0'
+          and sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_stat WHERE tool_code='%s'" % CODE) == '0',
           'fresh handheld banner starts with zero usage')
     for unused in range(2):
         call('tools/' + CODE + '/usage', method='POST')
@@ -325,18 +325,18 @@ def verify(check, request, sql, admin):
     sql(source)
     check([sql(query) for query in queries] == snapshot,
           'V73 replay preserves operator edits, configuration, timestamps and usage')
-    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='%s'") % CODE == '1',
+    check(sql("SELECT COUNT(*) FROM tool_definition WHERE tool_code='%s'" % CODE) == '1',
           'V73 replay keeps one handheld banner row')
     check_tool_metadata(check, call(ADMIN_PATH, token=admin),
                         'seed replay preserves edited handheld banner', edited)
     check_tool_metadata(check, call(ADMIN_PATH, defaults, token=admin, method='PUT'),
                         'restored handheld banner metadata', defaults)
 
-    daily = sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_daily WHERE tool_code='%s'") % CODE
-    total = sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_stat WHERE tool_code='%s'") % CODE
+    daily = sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_daily WHERE tool_code='%s'" % CODE)
+    total = sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_stat WHERE tool_code='%s'" % CODE)
     check(daily == total == '2', 'handheld banner increments daily and all-time usage')
     beijing_daily = sql("SELECT COALESCE(SUM(use_count),0) FROM tool_usage_daily "
-                        "WHERE tool_code='%s' AND usage_date=DATE(UTC_TIMESTAMP(3)+INTERVAL 8 HOUR)") % CODE
+                        "WHERE tool_code='%s' AND usage_date=DATE(UTC_TIMESTAMP(3)+INTERVAL 8 HOUR)" % CODE)
     check(beijing_daily == '2', 'handheld banner daily opens use the Beijing date')
     popular_rows = call('tools/popular?limit=50')
     check(len(popular_rows) <= 50 and len(set(row['code'] for row in popular_rows)) == len(popular_rows)
