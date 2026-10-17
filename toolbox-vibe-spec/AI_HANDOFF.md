@@ -8,7 +8,7 @@
 
 ## 最新增量（2026-10-17 第六批）
 
-本地世界时间 `world_clock`（LIFE/LOCAL、排序 621、V68）已完成：设备时区、23 个其他城市、635 个系统时区中英文检索、常用优先、增删/重复/上限反馈、12/24 小时制、日期线 ±2 天差、秒级偏移、DST/下一次偏移变更、SavedState 与整秒生命周期 ticker，以及复制/分享。参考 depau/wearos-world-clock-tile、PranshulGG/ClockMaster、jclllycf/best-mates-world-clock 的固定源码 commit；未复制 GPL 文件。Android 604/604、APK/Lint 0 错误/80 既有警告且新文件无 finding，服务端 226/226；Android 16 模拟器验证中文日期、12 小时制、635 项搜索、添加东京、重开恢复和删除。当前检查点尚未提交/部署，下一步提交、推送、V68 候选和生产 HTTPS 验收后回填。详见 `../docs/WORLD_CLOCK.md`。
+世界时间 `world_clock`（LIFE/LOCAL、排序 621、V68）已完成并上线：设备时区、23 个其他城市、635 个系统时区中英文检索、常用优先、增删/重复/上限反馈、12/24 小时制、日期线 ±2 天差、秒级偏移、DST/下一次偏移变更、SavedState 与整秒生命周期 ticker，以及复制/分享。参考 depau/wearos-world-clock-tile、PranshulGG/ClockMaster、jclllycf/best-mates-world-clock 的固定源码 commit；未复制 GPL 文件。Android 604/604、APK/Lint 0 错误/80 既有警告且新文件无 finding，服务端 226/226；Android 16 模拟器验证中文日期、12 小时制、635 项搜索、添加东京、重开恢复和删除。提交 `7c740ec`、验收脚本 `0afe068` 已推送；隔离候选 `186/186`、HTTPS `115/115`，生产镜像 `sha256:9f72d0f3…`，回滚标签 `before-world-clock-v68`，Flyway `68/68`、五容器 healthy、官网/后台 200。详见 `../docs/WORLD_CLOCK.md`。下一步继续路线图下一项，不等待重复“继续”。
 
 ## 最新增量（2026-10-17 第五批）
 
