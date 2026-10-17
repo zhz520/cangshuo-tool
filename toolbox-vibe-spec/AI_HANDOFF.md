@@ -8,7 +8,7 @@
 
 ## 最新增量（2026-10-17 第七批）
 
-本地节日倒数 `holiday_countdown`（LIFE/LOCAL、排序 622、V69）已完成：22 个公历/农历/节气节日、下一次发生日、当天语义、未来三次、北京时间午夜倒计时、农历/闰月显示、全部/传统/公历筛选、选择与 SavedState、整秒生命周期 ticker、重试和复制分享。使用 MIT 许可的 lunar-java 1.7.7 并打包许可证；官方法定放假/调休明确不支持且不推算。参考 6tail/lunar-java、mark216tw/anniversary-countdown-android、NateScarlet/holiday-cn 固定源码。Android 621/621、APK/Lint 0 错误/80 既有警告，服务端 226/226；Android 16 模拟器验证重阳节默认倒计时、22/11 项筛选、明天倒计时、行选择和未来三次。当前检查点尚未提交/部署，下一步提交、V69 候选和生产 HTTPS 验收后回填。详见 `../docs/HOLIDAY_COUNTDOWN.md`。
+节日倒数 `holiday_countdown`（LIFE/LOCAL、排序 622、V69）已完成并上线：22 个公历/农历/节气节日、下一次发生日、当天语义、未来三次、北京时间午夜倒计时、农历/闰月显示、全部/传统/公历筛选、选择与 SavedState、整秒生命周期 ticker、重试和复制分享。使用 MIT 许可的 lunar-java 1.7.7 并打包许可证；官方法定放假/调休明确不支持且不推算。参考 6tail/lunar-java、mark216tw/anniversary-countdown-android、NateScarlet/holiday-cn 固定源码。Android 621/621、APK/Lint 0 错误/80 既有警告，服务端 226/226；Android 16 模拟器验证重阳节默认倒计时、22/11 项筛选、明天倒计时、行选择和未来三次。提交 `2425c25`、验收脚本 `3a2a59b` 已推送；隔离候选 197/197、HTTPS 127/127，生产镜像 `sha256:beb5d799…`，回滚标签 `before-holiday-v69`，Flyway 69/69、五容器 healthy、官网/后台 200。详见 `../docs/HOLIDAY_COUNTDOWN.md`。下一步继续路线图新工具。
 
 ## 最新增量（2026-10-17 第六批）
 
