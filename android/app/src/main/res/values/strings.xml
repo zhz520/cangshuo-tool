@@ -2591,4 +2591,84 @@
     <string name="time_screen_toggle_controls">显示或隐藏控制</string>
     <string name="time_screen_hide_seconds">隐藏秒</string>
     <string name="time_screen_exit">退出</string>
+    <string name="decision_wheel_name">做个决定</string>
+    <string name="decision_wheel_description">在可自定义的权重转盘中随机选择结果，支持快捷主题、历史记录、复制与分享。</string>
+    <string-array name="decision_wheel_keywords">
+        <item>做个决定</item><item>随机选择</item><item>转盘</item><item>抽签</item><item>抉择</item><item>选择困难</item><item>权重</item><item>decision</item><item>wheel</item><item>spinner</item><item>random</item><item>picker</item>
+    </string-array>
+    <string-array name="decision_wheel_default_options">
+        <item>火锅</item><item>日式料理</item><item>家常菜</item><item>面食</item><item>快餐</item><item>轻食</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_meals">
+        <item>火锅</item><item>烧烤</item><item>日式料理</item><item>家常菜</item><item>面食</item><item>快餐</item><item>轻食</item><item>再想想</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_yes_no">
+        <item>可以</item><item>不可以</item><item>再想想</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_activities">
+        <item>散步</item><item>读几页书</item><item>休息一下</item><item>整理房间</item><item>联系朋友</item><item>自由安排</item>
+    </string-array>
+    <string name="decision_wheel_wheel_title">转盘</string>
+    <string name="decision_wheel_spin">开始</string>
+    <string name="decision_wheel_spinning">旋转中</string>
+    <string name="decision_wheel_presets_title">快捷主题</string>
+    <string name="decision_wheel_presets_hint">替换当前选项，历史记录不受影响。</string>
+    <string name="decision_wheel_preset_meals">今天吃什么</string>
+    <string name="decision_wheel_preset_yes_no">是、否、再想想</string>
+    <string name="decision_wheel_preset_activities">现在做什么</string>
+    <string name="decision_wheel_options_title">选项与权重</string>
+    <string name="decision_wheel_option_count">已添加 %1$d / %2$d 个选项</string>
+    <string name="decision_wheel_restore_defaults">恢复默认</string>
+    <string name="decision_wheel_add_option">添加选项</string>
+    <string name="decision_wheel_behavior_title">抽签行为</string>
+    <string name="decision_wheel_avoid_repeat">避免连续重复</string>
+    <string name="decision_wheel_avoid_repeat_hint">连续抽签时，优先排除上一次的结果。</string>
+    <string name="decision_wheel_haptics">转盘触感反馈</string>
+    <string name="decision_wheel_haptics_hint">开始与停稳时提供轻柔触感，可在系统设置中关闭触感。</string>
+    <string name="decision_wheel_history_title">最近结果</string>
+    <string name="decision_wheel_history_empty">还没有结果。拖动可调整转盘方向，点按中央的“开始”后抽签。</string>
+    <string name="decision_wheel_show_all">显示全部</string>
+    <string name="decision_wheel_show_less">收起记录</string>
+    <string name="decision_wheel_clear_history">清空历史</string>
+    <string name="decision_wheel_clear_history_title">清空选择历史？</string>
+    <string name="decision_wheel_clear_history_message">已保存的最近结果会被删除，当前选项与权重不受影响。</string>
+    <string name="decision_wheel_clear_history_confirm">清空</string>
+    <string name="decision_wheel_report_title">复制与分享</string>
+    <string name="decision_wheel_result_title">本次结果</string>
+    <string name="decision_wheel_dismiss_result">收起</string>
+    <string name="decision_wheel_result_time">选择于 %1$s</string>
+    <string name="decision_wheel_weight_and_share">权重 %1$d · 基础占比 %2$d%%</string>
+    <string name="decision_wheel_option_indexed_label">%1$d · %2$s</string>
+    <string name="decision_wheel_accessibility">做个决定转盘：%1$s</string>
+    <string name="decision_wheel_edit_option_accessibility">编辑选项 %1$s</string>
+    <string name="decision_wheel_delete_option_accessibility">删除选项 %1$s</string>
+    <string name="decision_wheel_edit">编辑</string>
+    <string name="decision_wheel_delete">删除</string>
+    <string name="decision_wheel_add_title">添加选项</string>
+    <string name="decision_wheel_edit_title">编辑选项</string>
+    <string name="decision_wheel_label">选项名称</string>
+    <string name="decision_wheel_label_hint">例如：火锅</string>
+    <string name="decision_wheel_label_count">%1$d / %2$d 个字符</string>
+    <string name="decision_wheel_weight">中签权重</string>
+    <string name="decision_wheel_weight_value">%1$d ×</string>
+    <string name="decision_wheel_weight_decrease">−</string>
+    <string name="decision_wheel_weight_increase">+</string>
+    <string name="decision_wheel_weight_decrease_description">减少权重</string>
+    <string name="decision_wheel_weight_increase_description">增加权重</string>
+    <string name="decision_wheel_weight_hint">权重越高，中签概率越大；可设为 1–10。</string>
+    <string name="decision_wheel_save">保存</string>
+    <string name="decision_wheel_cancel">取消</string>
+    <string name="decision_wheel_restore_title">恢复默认选项？</string>
+    <string name="decision_wheel_restore_message">当前自定义选项将被默认主题替换，历史记录会保留。</string>
+    <string name="decision_wheel_restore_confirm">恢复默认</string>
+    <string name="decision_wheel_error_empty">选项名称不能为空。</string>
+    <string name="decision_wheel_error_length">选项名称最多 24 个字符。</string>
+    <string name="decision_wheel_error_duplicate">已经存在同名选项。</string>
+    <string name="decision_wheel_error_weight">权重必须为 1–10 的整数。</string>
+    <string name="decision_wheel_error_limit">最多只能添加 12 个选项。</string>
+    <string name="decision_wheel_error_not_enough">至少需要两个有效选项才能开始。</string>
+    <string name="decision_wheel_history_report_title">做个决定 · 最近结果</string>
+    <string name="decision_wheel_history_report_line">%1$d. %2$s · %3$s</string>
+    <string name="decision_wheel_list_separator">、</string>
+    <string name="decision_wheel_note" formatted="false">转盘只在本机生成随机结果。拖动转盘可以调整方向，点按中央按钮开始；权重会改变每个选项的真实概率。</string>
 </resources>

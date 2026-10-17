@@ -354,6 +354,12 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.timescreen.data.LocalTimeScreenRepository(resources),
         ),
     )
+    private val decisionWheelRepository = com.cangshuo.toolbox.feature.decisionwheel.data.LocalDecisionWheelRepository(resources)
+    private val decisionWheelFactory = com.cangshuo.toolbox.feature.decisionwheel.ui.DecisionWheelViewModel.factory(
+        com.cangshuo.toolbox.feature.decisionwheel.domain.DecisionWheelUseCases(
+            decisionWheelRepository,
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -416,6 +422,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.scoreboard.ScoreboardToolDefinition(resources,scoreboardFactory),
             com.cangshuo.toolbox.feature.banner.HandheldBannerToolDefinition(resources,handheldBannerFactory),
             com.cangshuo.toolbox.feature.timescreen.TimeScreenToolDefinition(resources,timeScreenFactory),
+            com.cangshuo.toolbox.feature.decisionwheel.DecisionWheelToolDefinition(resources,decisionWheelFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
@@ -424,7 +431,10 @@ class ToolboxAppContainer(context: Context) {
     val homeExtrasViewModelFactory = com.cangshuo.toolbox.feature.home.ui.HomeExtrasViewModel.factory(
         com.cangshuo.toolbox.feature.home.domain.HomeExtrasUseCases(
             com.cangshuo.toolbox.feature.home.data.RemoteHomeExtrasRepository(BuildConfig.API_BASE_URL)), registryStore)
-    fun updateLocale(resources: android.content.res.Resources) { registryStore.replaceBundled(bundledRegistry(resources)) }
+    fun updateLocale(resources: android.content.res.Resources) {
+        decisionWheelRepository.updateResources(resources)
+        registryStore.replaceBundled(bundledRegistry(resources))
+    }
     private val toolUsage = com.cangshuo.toolbox.feature.popular.data.RemoteToolUsageRepository(BuildConfig.API_BASE_URL)
     private val repository = RegistryHomeRepository(registryStore) {
         toolUsage.popular(20).map { com.cangshuo.toolbox.feature.home.domain.PopularTool(it.code, it.useCount) }

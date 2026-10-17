@@ -2511,4 +2511,84 @@
     <string name="time_screen_toggle_controls">Show or hide controls</string>
     <string name="time_screen_hide_seconds">Hide seconds</string>
     <string name="time_screen_exit">Exit</string>
+    <string name="decision_wheel_name">Decision Wheel</string>
+    <string name="decision_wheel_description">Pick a random result on a customizable weighted wheel, with quick themes, history and shareable results.</string>
+    <string-array name="decision_wheel_keywords">
+        <item>decision wheel</item><item>random picker</item><item>spinner</item><item>wheel</item><item>weighted choice</item><item>what to eat</item><item>choose</item><item>决定</item><item>转盘</item><item>抽签</item><item>随机</item><item>选择</item>
+    </string-array>
+    <string-array name="decision_wheel_default_options">
+        <item>Hot pot</item><item>Japanese food</item><item>Home cooking</item><item>Noodles</item><item>Fast food</item><item>Light meal</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_meals">
+        <item>Hot pot</item><item>Barbecue</item><item>Japanese food</item><item>Home cooking</item><item>Noodles</item><item>Fast food</item><item>Light meal</item><item>Think again</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_yes_no">
+        <item>Yes</item><item>No</item><item>Think again</item>
+    </string-array>
+    <string-array name="decision_wheel_preset_activities">
+        <item>Take a walk</item><item>Read a few pages</item><item>Take a break</item><item>Tidy the room</item><item>Contact a friend</item><item>Choose freely</item>
+    </string-array>
+    <string name="decision_wheel_wheel_title">Wheel</string>
+    <string name="decision_wheel_spin">Spin</string>
+    <string name="decision_wheel_spinning">Spinning</string>
+    <string name="decision_wheel_presets_title">Quick themes</string>
+    <string name="decision_wheel_presets_hint">Replace the current options without affecting history.</string>
+    <string name="decision_wheel_preset_meals">What to eat</string>
+    <string name="decision_wheel_preset_yes_no">Yes, no, rethink</string>
+    <string name="decision_wheel_preset_activities">What to do now</string>
+    <string name="decision_wheel_options_title">Options and weights</string>
+    <string name="decision_wheel_option_count">%1$d of %2$d options</string>
+    <string name="decision_wheel_restore_defaults">Restore defaults</string>
+    <string name="decision_wheel_add_option">Add option</string>
+    <string name="decision_wheel_behavior_title">Draw behavior</string>
+    <string name="decision_wheel_avoid_repeat">Avoid consecutive repeats</string>
+    <string name="decision_wheel_avoid_repeat_hint">Prefer excluding the previous result when another result is available.</string>
+    <string name="decision_wheel_haptics">Wheel haptics</string>
+    <string name="decision_wheel_haptics_hint">Use a subtle confirmation at the start and stop. System haptics can also be disabled.</string>
+    <string name="decision_wheel_history_title">Recent results</string>
+    <string name="decision_wheel_history_empty">No results yet. Drag to turn the wheel, then tap Start in the center to draw.</string>
+    <string name="decision_wheel_show_all">Show all</string>
+    <string name="decision_wheel_show_less">Show less</string>
+    <string name="decision_wheel_clear_history">Clear history</string>
+    <string name="decision_wheel_clear_history_title">Clear result history?</string>
+    <string name="decision_wheel_clear_history_message">Recent results will be removed. Current options and weights are unchanged.</string>
+    <string name="decision_wheel_clear_history_confirm">Clear</string>
+    <string name="decision_wheel_report_title">Copy and share</string>
+    <string name="decision_wheel_result_title">Current result</string>
+    <string name="decision_wheel_dismiss_result">Hide</string>
+    <string name="decision_wheel_result_time">Selected at %1$s</string>
+    <string name="decision_wheel_weight_and_share">Weight %1$d · base share %2$d%%</string>
+    <string name="decision_wheel_option_indexed_label">%1$d · %2$s</string>
+    <string name="decision_wheel_accessibility">Decision wheel: %1$s</string>
+    <string name="decision_wheel_edit_option_accessibility">Edit option %1$s</string>
+    <string name="decision_wheel_delete_option_accessibility">Delete option %1$s</string>
+    <string name="decision_wheel_edit">Edit</string>
+    <string name="decision_wheel_delete">Delete</string>
+    <string name="decision_wheel_add_title">Add option</string>
+    <string name="decision_wheel_edit_title">Edit option</string>
+    <string name="decision_wheel_label">Option name</string>
+    <string name="decision_wheel_label_hint">For example: Hot pot</string>
+    <string name="decision_wheel_label_count">%1$d of %2$d characters</string>
+    <string name="decision_wheel_weight">Draw weight</string>
+    <string name="decision_wheel_weight_value">%1$d ×</string>
+    <string name="decision_wheel_weight_decrease">−</string>
+    <string name="decision_wheel_weight_increase">+</string>
+    <string name="decision_wheel_weight_decrease_description">Decrease weight</string>
+    <string name="decision_wheel_weight_increase_description">Increase weight</string>
+    <string name="decision_wheel_weight_hint">Higher weights increase the chance of selection. Range: 1–10.</string>
+    <string name="decision_wheel_save">Save</string>
+    <string name="decision_wheel_cancel">Cancel</string>
+    <string name="decision_wheel_restore_title">Restore default options?</string>
+    <string name="decision_wheel_restore_message">Current custom options will be replaced by the default theme. History will remain.</string>
+    <string name="decision_wheel_restore_confirm">Restore defaults</string>
+    <string name="decision_wheel_error_empty">An option name is required.</string>
+    <string name="decision_wheel_error_length">Option names can contain up to 24 characters.</string>
+    <string name="decision_wheel_error_duplicate">An option with this name already exists.</string>
+    <string name="decision_wheel_error_weight">Weight must be an integer from 1 to 10.</string>
+    <string name="decision_wheel_error_limit">A wheel can contain at most 12 options.</string>
+    <string name="decision_wheel_error_not_enough">At least two options are required.</string>
+    <string name="decision_wheel_history_report_title">Decision Wheel · Recent results</string>
+    <string name="decision_wheel_history_report_line">%1$d. %2$s · %3$s</string>
+    <string name="decision_wheel_list_separator">, </string>
+    <string name="decision_wheel_note" formatted="false">Random results are generated on this device. Drag the wheel to rotate it, then tap the center button to draw. Weights change the actual probability of each option.</string>
 </resources>
