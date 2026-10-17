@@ -61,6 +61,7 @@ import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
+import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -82,6 +83,7 @@ fun ImageCompressScreen(
     onMosaicChanged: (Int) -> Unit,
     onBlurChanged: (Int) -> Unit,
     onFilterChanged: (ImageFilter) -> Unit,
+    onRotationChanged: (RotationMode) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -295,6 +297,7 @@ fun ImageCompressScreen(
                     onMosaicChanged = onMosaicChanged,
                     onBlurChanged = onBlurChanged,
                     onFilterChanged = onFilterChanged,
+                    onRotationChanged = onRotationChanged,
                 )
             }
 
@@ -547,6 +550,7 @@ private fun SettingsCard(
     onMosaicChanged: (Int) -> Unit,
     onBlurChanged: (Int) -> Unit,
     onFilterChanged: (ImageFilter) -> Unit,
+    onRotationChanged: (RotationMode) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -802,6 +806,21 @@ private fun SettingsCard(
                         ImageFilter.HIGH_CONTRAST to R.string.image_compress_filter_contrast).forEach { (filter, label) ->
                         FilterChip(enabled = enabled, selected = params.filter == filter,
                             onClick = { onFilterChanged(filter) }, label = { Text(stringResource(label)) })
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.image_compress_rotation_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(RotationMode.NONE to R.string.image_compress_rotation_none,
+                        RotationMode.ROTATE_90 to R.string.image_compress_rotation_90,
+                        RotationMode.ROTATE_180 to R.string.image_compress_rotation_180,
+                        RotationMode.ROTATE_270 to R.string.image_compress_rotation_270).forEach { (rotation, label) ->
+                        FilterChip(enabled = enabled, selected = params.rotation == rotation,
+                            onClick = { onRotationChanged(rotation) }, label = { Text(stringResource(label)) })
                     }
                 }
             }

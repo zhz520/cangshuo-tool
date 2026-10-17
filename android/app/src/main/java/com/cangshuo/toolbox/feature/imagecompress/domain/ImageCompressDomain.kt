@@ -22,6 +22,8 @@ enum class FlipMode { NONE, HORIZONTAL, VERTICAL, BOTH }
 
 enum class ImageFilter { NONE, GRAYSCALE, WARM, COOL, HIGH_CONTRAST }
 
+enum class RotationMode(val degrees: Int) { NONE(0), ROTATE_90(90), ROTATE_180(180), ROTATE_270(270) }
+
 fun FlipMode.scaleFactors(): Pair<Float, Float> = when (this) {
     FlipMode.NONE -> 1f to 1f
     FlipMode.HORIZONTAL -> -1f to 1f
@@ -41,6 +43,7 @@ data class CompressParams(
     val mosaicPercent: Int = 0,
     val blurPercent: Int = 0,
     val filter: ImageFilter = ImageFilter.NONE,
+    val rotation: RotationMode = RotationMode.NONE,
 )
 
 fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =

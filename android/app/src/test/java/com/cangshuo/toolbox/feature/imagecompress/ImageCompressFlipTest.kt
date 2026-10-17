@@ -5,6 +5,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.scaleFactors
 import com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx
 import com.cangshuo.toolbox.feature.imagecompress.domain.mosaicCellSize
 import com.cangshuo.toolbox.feature.imagecompress.domain.blurScaleFactor
+import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -37,5 +38,12 @@ class ImageCompressFlipTest {
         assertEquals(3, blurScaleFactor(8))
         assertEquals(6, blurScaleFactor(20))
         assertEquals(6, blurScaleFactor(99))
+    }
+
+    @Test fun rotationModesExposeClockwiseDegrees() {
+        assertEquals(0, RotationMode.NONE.degrees)
+        assertEquals(90, RotationMode.ROTATE_90.degrees)
+        assertEquals(180, RotationMode.ROTATE_180.degrees)
+        assertEquals(270, RotationMode.ROTATE_270.degrees)
     }
 }

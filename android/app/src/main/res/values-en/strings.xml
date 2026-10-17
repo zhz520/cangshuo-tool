@@ -514,7 +514,7 @@
     <string name="qr_btn_pick_image">Choose Image to Decode</string>
     <string name="qr_decode_result_title">Decoded Content</string>
     <string name="image_compress_name">Image Compression</string>
-    <string name="image_compress_description">Image compression, resizing, mirroring, rounded corners, mosaic, blur, filters, and format conversion with real-time preview and size comparison.</string>
+    <string name="image_compress_description">Image compression, resizing, rotation, mirroring, rounded corners, mosaic, blur, filters, and format conversion with live preview and size comparison.</string>
     <string name="image_compress_pick_title">Select Image</string>
     <string name="image_compress_pick_desc">Choose an image from your gallery to compress or resize (supports JPEG, PNG, WEBP)</string>
     <string name="image_compress_btn_pick">Choose Image</string>
@@ -543,6 +543,11 @@
     <string name="image_compress_filter_warm">Warm</string>
     <string name="image_compress_filter_cool">Cool</string>
     <string name="image_compress_filter_contrast">High contrast</string>
+    <string name="image_compress_rotation_title">Rotation</string>
+    <string name="image_compress_rotation_none">None</string>
+    <string name="image_compress_rotation_90">90° clockwise</string>
+    <string name="image_compress_rotation_180">180°</string>
+    <string name="image_compress_rotation_270">270° clockwise</string>
     <string name="image_compress_format_source">Keep Source Format</string>
     <string name="image_compress_format_jpeg">JPEG (High Compression)</string>
     <string name="image_compress_format_png">PNG (Lossless)</string>

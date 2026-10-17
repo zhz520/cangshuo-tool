@@ -33,6 +33,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingException
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingLimits
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
+import com.cangshuo.toolbox.feature.imagecompress.domain.RotationMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.OutputImageFormat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +84,8 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                 val (format, mime) = resolveFormat(params.outputFormat, source.metadata.mimeType, params.quality)
                 val file = File(outputDirectory, "${UUID.randomUUID()}${extension(mime)}")
                 output = file
+                var finalWidth = width
+                var finalHeight = height
                 var working = decode(uri, sample)
                 try {
                     currentCoroutineContext().ensureActive()
@@ -94,6 +97,11 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                             setScale(scaleX, scaleY)
                         }
                         working = replace(working, Bitmap.createBitmap(working, 0, 0, working.width, working.height, flip, false))
+                    }
+                    currentCoroutineContext().ensureActive()
+                    if (params.rotation != RotationMode.NONE) {
+                        val rotate = Matrix().apply { postRotate(params.rotation.degrees.toFloat()) }
+                        working = replace(working, Bitmap.createBitmap(working, 0, 0, working.width, working.height, rotate, false))
                     }
                     currentCoroutineContext().ensureActive()
                     if (working.width != width || working.height != height) {
@@ -154,6 +162,8 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                         working = replace(working, opaque)
                     }
                     currentCoroutineContext().ensureActive()
+                    finalWidth = working.width
+                    finalHeight = working.height
                     file.outputStream().buffered().use { stream ->
                         if (!working.compress(format, params.quality.coerceIn(1, 100), LimitedOutputStream(stream))) {
                             throw ImageProcessingException(ImageFailure.COMPRESS_FAILED)
@@ -177,7 +187,7 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     previewBitmap = preview,
                     outputId = file.name,
                     originalMetadata = source.metadata,
-                    compressedMetadata = ImageMetadata(width, height, outputSize, mime, exportName(source.metadata.fileName, mime)),
+                    compressedMetadata = ImageMetadata(finalWidth, finalHeight, outputSize, mime, exportName(source.metadata.fileName, mime)),
                     compressionRatio = if (originalSize > 0) ((outputSize - originalSize).toDouble() / originalSize * 100).toFloat() else null,
                     savedBytes = if (originalSize > 0) max(0L, originalSize - outputSize) else 0L,
                 )
