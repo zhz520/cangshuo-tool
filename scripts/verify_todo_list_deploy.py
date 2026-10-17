@@ -34,7 +34,7 @@ class ReadOnlyApi(object):
 
 
 def administrator_credentials():
-    source = json.loads(command(['docker', 'inspect', 'cangshuo-toolbox-production-server-1']))
+    source = json.loads(command(['docker', 'inspect', 'cangshuo-toolbox-production-server-1']))[0]
     environment = dict(pair.split('=', 1) for pair in source['Config']['Env'] if '=' in pair)
     username = environment.get('ADMIN_BOOTSTRAP_USERNAME')
     password = environment.get('ADMIN_BOOTSTRAP_PASSWORD')
