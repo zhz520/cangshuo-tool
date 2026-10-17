@@ -329,6 +329,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.holiday.data.LunarHolidayRepository(),
         ),
     )
+    private val lunarCalendarFactory = com.cangshuo.toolbox.feature.calendar.ui.CalendarViewModel.factory(
+        com.cangshuo.toolbox.feature.calendar.domain.LunarCalendarUseCases(
+            com.cangshuo.toolbox.feature.calendar.data.LocalLunarCalendarRepository(),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -386,6 +391,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.stopwatch.StopwatchToolDefinition(resources,stopwatchFactory),
             com.cangshuo.toolbox.feature.worldclock.WorldClockToolDefinition(resources,worldClockFactory),
             com.cangshuo.toolbox.feature.holiday.HolidayCountdownToolDefinition(resources,holidayCountdownFactory),
+            com.cangshuo.toolbox.feature.calendar.LunarCalendarToolDefinition(resources,lunarCalendarFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

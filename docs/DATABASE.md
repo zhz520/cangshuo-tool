@@ -266,3 +266,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V69 节日倒数目录
 
 `V69__seed_holiday_countdown_tool.sql` 登记 `holiday_countdown`，LIFE/LOCAL/ENABLED，排序 622、requires_login=0、is_featured=0。关键词覆盖节日、倒数、农历、春节、中秋和中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。农历算法和内置节日只存在于 Android，不新增表、公开 API、远程执行代码或用户节日记录。实现与边界见 [节日倒数](HOLIDAY_COUNTDOWN.md)。生产已执行 V69，Flyway 历史 69/69 且全部成功。
+
+## V70 万年历目录
+
+`V70__seed_lunar_calendar_tool.sql` 登记 `lunar_calendar`，LIFE/LOCAL/ENABLED，排序 623、requires_login=0、is_featured=0。关键词覆盖万年历、公历、农历、黄历、干支、生肖、节气、宜忌及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。历法与宜忌只存在于 Android，不新增表、公开 API、远程执行代码或用户日程记录。实现与边界见 [万年历](LUNAR_CALENDAR.md)。

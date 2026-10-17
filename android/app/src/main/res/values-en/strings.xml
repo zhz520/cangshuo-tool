@@ -2279,4 +2279,36 @@
     <string name="holiday_singles_day">Singles’ Day</string>
     <string name="holiday_christmas_eve">Christmas Eve</string>
     <string name="holiday_christmas">Christmas</string>
+    <string name="calendar_name">Perpetual Calendar</string>
+    <string name="calendar_description">Browse Gregorian months with lunar dates, ganzhi and zodiac, solar terms, festivals and daily almanac notes.</string>
+    <string-array name="calendar_keywords" translatable="false">
+        <item>calendar</item><item>lunar</item><item>almanac</item><item>ganzhi</item><item>zodiac</item><item>solar term</item><item>festival</item><item>perpetual</item><item>万年历</item><item>农历</item><item>黄历</item><item>宜忌</item>
+    </string-array>
+    <string name="calendar_previous_month">Previous</string>
+    <string name="calendar_next_month">Next</string>
+    <string name="calendar_month_hint">Tap a date for lunar, solar-term, festival and almanac details</string>
+    <string name="calendar_today">Today</string>
+    <string-array name="calendar_weekdays">
+        <item>Mon</item><item>Tue</item><item>Wed</item><item>Thu</item><item>Fri</item><item>Sat</item><item>Sun</item>
+    </string-array>
+    <string name="calendar_selected_title">Selected date</string>
+    <string name="calendar_today_badge">Today</string>
+    <string name="calendar_lunar_value">Lunar month %1$s, day %2$s</string>
+    <string name="calendar_ganzhi_label">Ganzhi</string>
+    <string name="calendar_ganzhi_value">Year %1$s · Month %2$s · Day %3$s</string>
+    <string name="calendar_zodiac_label">Zodiac</string>
+    <string-array name="calendar_zodiac_names">
+        <item>Rat</item><item>Ox</item><item>Tiger</item><item>Rabbit</item><item>Dragon</item><item>Snake</item>
+        <item>Horse</item><item>Goat</item><item>Monkey</item><item>Rooster</item><item>Dog</item><item>Pig</item>
+    </string-array>
+    <string name="calendar_yi_label">Suitable</string>
+    <string name="calendar_ji_label">Avoid</string>
+    <string name="calendar_none">None</string>
+    <string name="calendar_report">Copy and share</string>
+    <string name="calendar_report_title">Perpetual Calendar</string>
+    <string name="calendar_report_line">• %1$s</string>
+    <string name="calendar_almanac_line">%1$s: %2$s</string>
+    <string name="calendar_note" formatted="false">Gregorian and lunar dates, ganzhi, solar terms, festivals and almanac notes come from local lunar-java data and are provided as cultural reference; different almanac traditions may phrase them differently. Selected dates stay on this device.</string>
+    <string name="calendar_error">The calendar could not be calculated. Check the date range and retry.</string>
+    <string name="calendar_retry">Retry</string>
 </resources>

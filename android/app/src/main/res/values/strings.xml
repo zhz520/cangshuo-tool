@@ -2359,4 +2359,36 @@
     <string name="holiday_singles_day">双十一</string>
     <string name="holiday_christmas_eve">平安夜</string>
     <string name="holiday_christmas">圣诞节</string>
+    <string name="calendar_name">万年历</string>
+    <string name="calendar_description">查看公历月历、农历日期、干支生肖、节气、节日与每日宜忌，支持月份切换和日期详情。</string>
+    <string-array name="calendar_keywords" translatable="false">
+        <item>万年历</item><item>日历</item><item>农历</item><item>黄历</item><item>干支</item><item>生肖</item><item>节气</item><item>宜忌</item><item>calendar</item><item>lunar</item><item>almanac</item><item>老黄历</item>
+    </string-array>
+    <string name="calendar_previous_month">上月</string>
+    <string name="calendar_next_month">下月</string>
+    <string name="calendar_month_hint">点按日期查看农历、节气、节日与宜忌</string>
+    <string name="calendar_today">回到今天</string>
+    <string-array name="calendar_weekdays">
+        <item>一</item><item>二</item><item>三</item><item>四</item><item>五</item><item>六</item><item>日</item>
+    </string-array>
+    <string name="calendar_selected_title">已选日期</string>
+    <string name="calendar_today_badge">今天</string>
+    <string name="calendar_lunar_value">农历 %1$s月%2$s</string>
+    <string name="calendar_ganzhi_label">干支</string>
+    <string name="calendar_ganzhi_value">%1$s年 · %2$s月 · %3$s日</string>
+    <string name="calendar_zodiac_label">生肖</string>
+    <string-array name="calendar_zodiac_names">
+        <item>鼠</item><item>牛</item><item>虎</item><item>兔</item><item>龙</item><item>蛇</item>
+        <item>马</item><item>羊</item><item>猴</item><item>鸡</item><item>狗</item><item>猪</item>
+    </string-array>
+    <string name="calendar_yi_label">宜</string>
+    <string name="calendar_ji_label">忌</string>
+    <string name="calendar_none">无</string>
+    <string name="calendar_report">复制与分享</string>
+    <string name="calendar_report_title">万年历</string>
+    <string name="calendar_report_line">• %1$s</string>
+    <string name="calendar_almanac_line">%1$s：%2$s</string>
+    <string name="calendar_note" formatted="false">公历、农历、干支、节气、节日与宜忌来自本地 lunar-java 历法数据，作为传统文化查询参考；不同黄历流派可能有不同表述。工具只在本机计算，不上传所选日期。</string>
+    <string name="calendar_error">日历计算失败，请检查日期范围后重试。</string>
+    <string name="calendar_retry">重试</string>
 </resources>
