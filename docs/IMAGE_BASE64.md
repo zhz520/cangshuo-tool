@@ -106,8 +106,8 @@ python -B scripts/check_image_base64_runtime.py <candidate-image>
 - Android 16 模拟器通过系统照片选择器加载 138,683 字节 PNG，显示 `image/png`、原图 1080 × 2400、预览 540 × 1200 和完整的 `data:image/png;base64,` 输出，共 184,934 字符；复制后出现系统剪贴板浮层。
 - 同一模拟器以 91 字符 URL-safe、无填充的 1 × 1 PNG 输入成功解码，界面显示 68 原始字节、`image/png`、原图/预览 1 × 1，并规范化为带填充的标准 Data URL；关闭 Data URL、开启 URL-safe 和 76 字符换行后输出即时更新为 92 字符且实际换行。
 - 保存流程通过系统文件选择器写入 Downloads 的 `decoded.png.base64.txt`，回读 114 字符，前缀与结尾和界面完整结果一致；分享流程通过 FileProvider 生成 `.txt` 并打开系统分享面板。
-- 静态脚本与完整 Android 门禁已通过；服务端候选、真实 Flyway/API 和生产发布结果由本轮验收记录和 ROADMAP 回填，未把候选检查等同于已部署。
+- 生产提交 `46755dc` 已推送并由部署仓库同步；运行镜像 `sha256:369b36726dafea3ad21b37a594f5dcfd7ca92dbcbdd9b63017b78db4e0563662` 直接推广，回滚标签 `before-image-base64-v59`；Flyway **59/59、失败 0**，线上 HTTPS 只读验收 **114/114**，五个容器 healthy。
 
 独立复核又收紧了资源与并发边界：二进制上限调整为 4 MiB、文本上限 6,000,000 字符；换行改为单缓冲构造，避免分块列表；渲染和 Repository 捕获 OOM；选项重算期间禁止复制/保存/分享；换图、清空和模式切换取消旧保存/分享任务；超长粘贴明确报错且禁止继续解码旧内容；解析、Base64 解码与图片解码前后增加取消检查。同步等待底层 bitmap codec 仍不能被强制中止，这是 Android 原生调用边界。
 
-尚未覆盖 JPEG、WebP、动画 GIF 的真机样例，以及接近 4 MiB 的极限输入、低内存设备、TalkBack、不同文件 provider 与横屏大字号；这些边界由领域测试和代码预算覆盖，未经真实设备逐项确认。服务端目录仍需候选镜像验证迁移/API 后再发布。
+尚未覆盖 JPEG、WebP、动画 GIF 的真机样例，以及接近 4 MiB 的极限输入、低内存设备、TalkBack、不同文件 provider 与横屏大字号；这些边界由领域测试和代码预算覆盖，未经真实设备逐项确认。部署不自动更新用户手机 APK。

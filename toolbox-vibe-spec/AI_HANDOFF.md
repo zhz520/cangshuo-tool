@@ -4,7 +4,7 @@
 
 ## 最新增量（2026-10-17 第二批，优先于下方历史记录）
 
-正在完成 Wave 1 batch 12 `image_base64`：Android 图片/Data URL 双向转换、magic bytes 校验、PNG/JPEG/WebP/GIF 有界 EXIF 预览、标准/URL-safe/76 字符换行、复制、系统文档保存与 FileProvider 分享；V59 目录元数据和 42 项静态检查已加入。独立复核发现的内存峰值、导出竞态、旧保存/分享任务和超长粘贴问题已修复。Android 572/572、APK/Lint 0 错误/81 既有警告；服务端 226/226，隔离候选 185/185，镜像 `sha256:369b3672…`。Android 16 模拟器已验证 138,683 字节 PNG 编码为 184,934 字符 Data URL、URL-safe 无填充 1×1 PNG 解码、选项切换、完整复制、Downloads 回读 114 字符和系统分享。Git 提交和生产发布仍在收尾，不能提前宣称上线。详见 `../docs/IMAGE_BASE64.md`。
+Wave 1 batch 12 `image_base64` 已完成并上线：Android 图片/Data URL 双向转换、magic bytes 校验、PNG/JPEG/WebP/GIF 有界 EXIF 预览、标准/URL-safe/76 字符换行、复制、系统文档保存与 FileProvider 分享；V59 已上线。独立复核的内存峰值、导出竞态、旧保存/分享任务和超长粘贴问题已修复。Android 572/572、APK/Lint 0 错误/81 既有警告；服务端 226/226，隔离候选 185/185，生产镜像 `sha256:369b3672…`，回滚标签 `before-image-base64-v59`，Flyway 59/59、HTTPS 114/114、五个容器 healthy。Android 16 模拟器已验证编解码、选项、复制、保存和分享；真机/TalkBack/低内存/全部 codec 未验收。详见 `../docs/IMAGE_BASE64.md` 与 `../docs/IMAGE_BASE64_ACCEPTANCE_2026-10-17.md`。下一步按 ROADMAP 继续独立单项，不等待重复“继续”。
 
 ## 最新增量（2026-10-17，优先于下方历史记录）
 

@@ -6,7 +6,7 @@
 
 | 角色 | 范围 | 状态 |
 | --- | --- | --- |
-| 主线程 | Android 实现、资源/UI、JVM 回归、模拟器、门禁、候选与发布 | 门禁、模拟器和候选完成；生产推广中 |
+| 主线程 | Android 实现、资源/UI、JVM 回归、模拟器、门禁、候选与发布 | 门禁、模拟器、生产推广与只读验收完成 |
 | Lovelace | V59、静态/隔离验收脚本、工具文档初稿 | 已整合；未提交或部署 |
 | McClintock | Android 只读独立复核 | 发现 1 个高、3 个中和 1 个低风险问题；主线程均修复/收紧，未改动文件 |
 
@@ -39,4 +39,10 @@ Android 16 AVD，1080 × 2400：
 
 ## 生产发布
 
-生产发布结果待回填。调试 APK 为 `android/app/build/outputs/apk/debug/app-debug.apk`；服务端目录更新不自动安装新 APK。真机、TalkBack、低内存设备、所有文件 provider 与全部图片 codec 仍未验收。
+生产提交 `46755dc` 已推送并由部署仓库更新，直接推广隔离候选而未重新构建来源：
+
+- 运行镜像 `sha256:369b36726dafea3ad21b37a594f5dcfd7ca92dbcbdd9b63017b78db4e0563662`；旧 API 保留为 `before-image-base64-v59` 回滚标签。
+- Flyway **59/59、失败 0**；`image_base64` 为 `ENABLED / LOCAL / sort 106`。
+- 线上只读 HTTPS **114/114**：公开/后台 DTO、权限保护、编辑选项、7/30/90 天统计/排行和热门边界一致；未写入合成使用量或修改配置。五个容器 healthy。
+
+调试 APK 为 `android/app/build/outputs/apk/debug/app-debug.apk`；服务端目录更新不自动安装新 APK。真机、TalkBack、低内存设备、所有文件 provider 与全部图片 codec 仍未验收。
