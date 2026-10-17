@@ -8,7 +8,7 @@
 
 ## 最新增量（2026-10-17 第十一批）
 
-手持弹幕 `handheld_banner`（LIFE/LOCAL、排序 625、V73）已完成本地与模拟器验收：120 码点单行输入、实时蓝黑预览、全屏沉浸系统栏隐藏、4 秒自动隐藏控制、点按恢复、暂停/继续保留位置、速度/字号滑块、双向滚动、镜像、主题对比度兜底、常亮、中英快捷文案和 SavedState。参考 Apache-2.0 ronghao/AutoScrollTextView 固定 commit 的文本宽度/位移循环，以及 MIT sergiomattioli/LedMagic 的编辑后全屏流程，未复制源码、点阵资源或引入依赖。Android 全量 675/675、APK/Lint 0 错误/85 警告（新增弹幕文件无 finding）、服务端 226/226、静态契约 52/52；Android 16 模拟器已验证全屏、自动隐藏、暂停、退出系统栏恢复、镜像与 2 倍字体布局。当前检查点待提交、V73 隔离和生产上线。详见 `../docs/HANDHELD_BANNER.md`。
+手持弹幕 `handheld_banner`（LIFE/LOCAL、排序 625、V73）已完成并上线：120 码点单行输入、实时蓝黑预览、全屏沉浸系统栏隐藏、4 秒自动隐藏控制、可访问点按恢复、暂停/继续保留位置、速度/字号滑块、双向滚动、镜像、主题对比度兜底、常亮、中英快捷文案和 SavedState。参考 Apache-2.0 ronghao/AutoScrollTextView 固定 commit 的文本宽度/位移循环，以及 MIT sergiomattioli/LedMagic 的编辑后全屏流程，未复制源码、点阵资源或引入依赖。Android 全量 675/675、APK/Lint 0 错误/85 警告（新增弹幕文件无 finding）、服务端 226/226、静态契约 52/52；Android 16 模拟器已验证全屏、自动隐藏、暂停、退出系统栏恢复、镜像与 2 倍字体布局。提交 `fd15696`、`2d0d0aa` 已推送；隔离候选 227/227，使用一次性网络与临时 Redis；生产镜像 `sha256:bf6b4f6cd8775c04126c70b7ecd770031124cd0cd1e5203630b54d2aa9aa4c5e`，Git/Docker 回滚标签 `before-handheld-banner-v73`，Flyway 73/73、HTTPS 124/124、官网/后台 200、五容器 healthy。详见 `../docs/HANDHELD_BANNER.md`。
 
 ## 最新增量（2026-10-17 第十批）
 
