@@ -6,7 +6,7 @@
 
 | 角色 | 范围 | 状态 |
 | --- | --- | --- |
-| 主线程 | Android 图片加载、领域/状态回归、UI、文档、候选与发布 | 门禁与模拟器完成，发布收尾中 |
+| 主线程 | Android 图片加载、领域/状态回归、UI、文档、候选与发布 | 门禁、模拟器、生产发布与只读验收完成 |
 | Halley | `check_color_picker_runtime.py`、`verify_color_picker_deploy.py` | 两份文件已整合，离线 35/35；父线程已运行真实隔离候选 608/608；子智能体未提交或部署 |
 | Kierkegaard | 图片加载、坐标、取消与状态的独立代码复核 | 发现高位深 PNG 预算偏低、Compose 整数对齐偏差；主线程已修复并加 3 项回归；无文件改动、提交或部署 |
 
@@ -32,4 +32,9 @@ Android 16 AVD 实际验证：
 
 截图保存在 `android/build/calc-emulator/color-picker-alpha.png`、`color-picker-rotated.png`、`color-picker-narrow-dark.png`、`color-picker-narrow-dark-result.png`、`color-picker-16bit-edge.png`（忽略的构建证据目录，不进入 Git）。
 
-生产发布结果待回填。调试 APK 为 `android/app/build/outputs/apk/debug/app-debug.apk`，部署不自动更新用户手机。真机、TalkBack、低端硬件耗时与所有 provider 不视为已验证。
+实现提交 `237afad` 已推送 GitHub 并由生产仓库 fast-forward 同步；直接将已通过的候选镜像推广，未重新构建来源。
+
+- 生产 API 镜像 `sha256:db4e1cc9437736135926874ac95e54531fd4fd5afd51a2cf291eb84b5bddcc72`，旧 API 保留为 `before-color-picker-v58` 回滚标签；Flyway **58/58、失败 0**，`color_picker` 为 `ENABLED / LOCAL / sort 105`。
+- 线上 HTTPS 只读验收 **107/107**：公开目录、双语元数据、后台权限/详情/筛选/编辑选项、7/30/90 天统计与排行均一致；未写入合成使用量、未修改线上配置。5 个生产容器 healthy。
+
+调试 APK 为 `android/app/build/outputs/apk/debug/app-debug.apk`，部署不自动更新用户手机。真机、TalkBack、低端硬件耗时与所有图片 provider 不视为已验证。

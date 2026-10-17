@@ -4,7 +4,7 @@
 
 ## 最新增量（2026-10-17，优先于下方历史记录）
 
-当前只收尾 Wave 1 batch 11 `color_picker`：Android 图片导入/EXIF/预算/取样/透明色/色板和复制分享、V58、后台目录/统计复用已实现。独立复核发现的高位深预算和 Compose 整数对齐问题已修复；Android 560/560、APK/Lint 0 错误/81 既有警告；服务端 226/226，隔离候选 608/608。Android 16 模拟器已验证透明 PNG、90° EXIF JPEG、真实 RGB16 PNG 与边缘取样、错误恢复、复制与微调、360dp/1.5 倍字体/深色滚动布局。候选镜像 `sha256:db4e1cc9…`，生产仍为 V57；正在提交、推送并推广已验证候选。不得把“候选通过”写成“已经上线”。主线程与子智能体分工和发布证据更新到 `../docs/COLOR_PICKER_ACCEPTANCE_2026-10-17.md`。用户持续授权开发、Git 提交/推送及生产更新；按现有单项路线图依次继续，不等待用户重复回复“继续”。
+Wave 1 batch 11 `color_picker` 已完成并上线：Android 560/560、APK/Lint 0 错误/81 既有警告；服务端 226/226，隔离候选 608/608；提交 `237afad` 已推送，生产 API `sha256:db4e1cc9…` 使用回滚标签 `before-color-picker-v58`，Flyway 58/58、HTTPS 107/107、五个容器 healthy。Android 16 模拟器已验证透明 PNG、90° EXIF JPEG、真实 RGB16 PNG 与边缘取样、错误恢复、复制/微调和 360dp/1.5 倍字体/深色滚动布局。真机、TalkBack 与低端硬件耗时未验收；详见 `../docs/COLOR_PICKER_ACCEPTANCE_2026-10-17.md`。接下来按 ROADMAP 剩余图片/设备/便捷与 Wave 6 项继续单项实现，不等待用户重复回复“继续”。
 
 ## 最新增量（2026-10-15，优先于下方历史记录）
 
