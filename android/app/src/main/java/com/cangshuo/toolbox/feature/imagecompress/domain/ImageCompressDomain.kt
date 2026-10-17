@@ -35,7 +35,11 @@ data class CompressParams(
     val maxDimension: Int = 1920,
     val outputFormat: OutputImageFormat = OutputImageFormat.MATCH_SOURCE,
     val flipMode: FlipMode = FlipMode.NONE,
+    val cornerRadiusPercent: Int = 0,
 )
+
+fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =
+    minOf(width, height) * percent.coerceIn(0, 50) / 100f
 
 /** Basic metadata describing dimensions, size, and type of an image. */
 data class ImageMetadata(

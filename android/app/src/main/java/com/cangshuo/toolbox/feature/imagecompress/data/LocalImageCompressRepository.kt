@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Path
+import android.graphics.RectF
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
@@ -90,6 +92,20 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                     currentCoroutineContext().ensureActive()
                     if (working.width != width || working.height != height) {
                         working = replace(working, working.scale(width, height, filter = true))
+                    }
+                    if (params.cornerRadiusPercent > 0) {
+                        val radius = com.cangshuo.toolbox.feature.imagecompress.domain.cornerRadiusPx(
+                            params.cornerRadiusPercent, width, height,
+                        )
+                        val rounded = createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        Canvas(rounded).apply {
+                            val path = Path().apply {
+                                addRoundRect(RectF(0f, 0f, width.toFloat(), height.toFloat()), radius, radius, Path.Direction.CW)
+                            }
+                            clipPath(path)
+                            drawBitmap(working, 0f, 0f, null)
+                        }
+                        working = replace(working, rounded)
                     }
                     if (mime == "image/jpeg" && working.hasAlpha()) {
                         val opaque = createBitmap(width, height, Bitmap.Config.ARGB_8888)

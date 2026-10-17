@@ -67,6 +67,7 @@ class ImageCompressViewModel(
     fun onMaxDimensionChanged(dim: Int) = updateParams(_uiState.value.compressParams.copy(maxDimension = dim.coerceIn(100, 8192)))
     fun onFormatChanged(format: OutputImageFormat) = updateParams(_uiState.value.compressParams.copy(outputFormat = format))
     fun onFlipModeChanged(mode: FlipMode) = updateParams(_uiState.value.compressParams.copy(flipMode = mode))
+    fun onCornerRadiusChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(cornerRadiusPercent = percent.coerceIn(0, 50)))
 
     private fun updateParams(params: CompressParams) {
         if (isExporting || params == _uiState.value.compressParams) return

@@ -234,3 +234,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V61 图片镜像发现性
 
 `V61__update_image_compress_description.sql` 仅在 `image_compress` 描述仍等于 V13 原始种子时更新中文说明与关键词，加入镜像/翻转/flip/mirror；人工编辑过的目录不会被覆盖。没有新增表、API 或图片上传。实现见 [图片压缩](IMAGE_COMPRESS.md)。
+
+## V62 图片圆角发现性
+
+`V62__update_image_compress_rounded.sql` 仅在描述仍为 V61 内容时加入圆角与 `rounded` 关键词，保留人工编辑；不新增表或接口。

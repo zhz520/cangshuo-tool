@@ -77,6 +77,7 @@ fun ImageCompressScreen(
     onMaxDimensionChanged: (Int) -> Unit,
     onFormatChanged: (OutputImageFormat) -> Unit,
     onFlipModeChanged: (FlipMode) -> Unit,
+    onCornerRadiusChanged: (Int) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -286,6 +287,7 @@ fun ImageCompressScreen(
                     onMaxDimensionChanged = onMaxDimensionChanged,
                     onFormatChanged = onFormatChanged,
                     onFlipModeChanged = onFlipModeChanged,
+                    onCornerRadiusChanged = onCornerRadiusChanged,
                 )
             }
 
@@ -534,6 +536,7 @@ private fun SettingsCard(
     onMaxDimensionChanged: (Int) -> Unit,
     onFormatChanged: (OutputImageFormat) -> Unit,
     onFlipModeChanged: (FlipMode) -> Unit,
+    onCornerRadiusChanged: (Int) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -715,6 +718,32 @@ private fun SettingsCard(
                         )
                     }
                 }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(R.string.image_compress_corner_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text("${params.cornerRadiusPercent}%", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+                }
+                Slider(
+                    value = params.cornerRadiusPercent.toFloat(),
+                    onValueChange = { onCornerRadiusChanged(it.toInt()) },
+                    valueRange = 0f..50f,
+                    enabled = enabled,
+                )
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(0, 10, 20, 30, 50).forEach { value ->
+                        FilterChip(enabled = enabled, selected = params.cornerRadiusPercent == value,
+                            onClick = { onCornerRadiusChanged(value) }, label = { Text("$value%") })
+                    }
+                }
+                if (params.cornerRadiusPercent > 0) Text(
+                    stringResource(R.string.image_compress_corner_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))

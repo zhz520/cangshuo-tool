@@ -564,7 +564,7 @@
         <item>二维码</item><item>QR</item><item>qrcode</item><item>扫码</item><item>生成器</item><item>解析</item><item>识别</item><item>wifi</item><item>条码</item>
     </string-array>
     <string name="image_compress_name">图片压缩</string>
-    <string name="image_compress_description">图片压缩、尺寸调整、镜像与格式转换，实时预览处理效果与体积对比。</string>
+    <string name="image_compress_description">图片压缩、尺寸调整、镜像、圆角与格式转换，实时预览处理效果与体积对比。</string>
     <string name="image_compress_pick_title">选择图片</string>
     <string name="image_compress_pick_desc">从本地相册选择需要压缩或调整的图片（支持 JPEG、PNG、WEBP）</string>
     <string name="image_compress_btn_pick">选择图片</string>
@@ -583,6 +583,8 @@
     <string name="image_compress_flip_horizontal">水平镜像</string>
     <string name="image_compress_flip_vertical">垂直镜像</string>
     <string name="image_compress_flip_both">双向镜像</string>
+    <string name="image_compress_corner_title">圆角比例</string>
+    <string name="image_compress_corner_hint">圆角使用透明像素；导出 JPEG 时透明角落会变为白色。</string>
     <string name="image_compress_format_source">保持原格式</string>
     <string name="image_compress_format_jpeg">JPEG (高压缩率)</string>
     <string name="image_compress_format_png">PNG (无损保真)</string>
@@ -616,7 +618,7 @@
     <string name="image_compress_png_quality_note">PNG 使用无损编码，不使用质量滑块；可通过调整尺寸控制文件大小</string>
     <string name="image_compress_jpeg_note">JPEG 不保留透明区域，透明背景会变为白色</string>
     <string-array name="image_compress_keywords" translatable="false">
-        <item>图片</item><item>压缩</item><item>图片压缩</item><item>尺寸调整</item><item>格式转换</item><item>镜像</item><item>翻转</item><item>flip</item><item>mirror</item><item>image</item><item>compress</item><item>resize</item><item>squoosh</item><item>luban</item><item>webp</item><item>jpeg</item><item>png</item>
+        <item>图片</item><item>压缩</item><item>图片压缩</item><item>尺寸调整</item><item>格式转换</item><item>镜像</item><item>翻转</item><item>圆角</item><item>rounded</item><item>flip</item><item>mirror</item><item>image</item><item>compress</item><item>resize</item><item>squoosh</item><item>luban</item><item>webp</item><item>jpeg</item><item>png</item>
     </string-array>
     <string name="qr_input_count">长度：%1$d / %2$d</string>
     <string name="qr_wifi_ssid_hint">名称最多 32 个 UTF-8 字节；保留首尾空格</string>
