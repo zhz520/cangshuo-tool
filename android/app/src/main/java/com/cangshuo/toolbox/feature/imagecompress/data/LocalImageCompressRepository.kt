@@ -77,17 +77,17 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
         try {
             val result = operation {
                 val source = readSource(uri)
-                val (width, height) = ImageProcessingLimits.targetSize(source.metadata.width, source.metadata.height, params)
-                val decodeWidth = if (source.swapsAxes) height else width
-                val decodeHeight = if (source.swapsAxes) width else height
+                val (initialWidth, initialHeight) = ImageProcessingLimits.targetSize(source.metadata.width, source.metadata.height, params)
+                val decodeWidth = if (source.swapsAxes) initialHeight else initialWidth
+                val decodeHeight = if (source.swapsAxes) initialWidth else initialHeight
                 val sample = ImageProcessingLimits.targetSample(source.rawWidth, source.rawHeight, decodeWidth, decodeHeight)
-                ImageProcessingLimits.validateMemory(source.rawWidth, source.rawHeight, sample, width, height, Runtime.getRuntime().maxMemory())
+                ImageProcessingLimits.validateMemory(source.rawWidth, source.rawHeight, sample, initialWidth, initialHeight, Runtime.getRuntime().maxMemory())
                 ensureCacheSpace()
                 val (format, mime) = resolveFormat(params.outputFormat, source.metadata.mimeType, params.quality)
                 val file = File(outputDirectory, "${UUID.randomUUID()}${extension(mime)}")
                 output = file
-                var finalWidth = width
-                var finalHeight = height
+                var finalWidth = initialWidth
+                var finalHeight = initialHeight
                 var working = decode(uri, sample)
                 try {
                     currentCoroutineContext().ensureActive()
@@ -113,6 +113,8 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                         }
                     }
                     currentCoroutineContext().ensureActive()
+                    val (width, height) = ImageProcessingLimits.targetSize(working.width, working.height, params)
+                    ImageProcessingLimits.validateMemory(working.width, working.height, 1, width, height, Runtime.getRuntime().maxMemory())
                     if (working.width != width || working.height != height) {
                         working = replace(working, working.scale(width, height, filter = true))
                     }
@@ -186,7 +188,7 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                 if (outputSize <= 0L) throw ImageProcessingException(ImageFailure.COMPRESS_FAILED)
                 // Every preview, including small images, comes from the encoded output.
                 val previewOptions = BitmapFactory.Options().apply {
-                    inSampleSize = ImageProcessingLimits.boundedPreviewSample(width, height, Runtime.getRuntime().maxMemory())
+                    inSampleSize = ImageProcessingLimits.boundedPreviewSample(finalWidth, finalHeight, Runtime.getRuntime().maxMemory())
                     inPreferredConfig = Bitmap.Config.ARGB_8888
                 }
                 val preview = BitmapFactory.decodeFile(file.absolutePath, previewOptions)
