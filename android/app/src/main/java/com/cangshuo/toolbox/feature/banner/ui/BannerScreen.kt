@@ -1,15 +1,11 @@
 package com.cangshuo.toolbox.feature.banner.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,11 +37,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -57,11 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogWindowProvider
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.ToolGroupCard
 import com.cangshuo.toolbox.core.ui.ToolSectionHeader
@@ -71,6 +59,8 @@ import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
 import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.core.ui.ToolboxTextField
+import com.cangshuo.toolbox.core.ui.ToolboxFullscreenWindowEffect
+import com.cangshuo.toolbox.core.ui.toolboxDisplayColors
 import com.cangshuo.toolbox.feature.banner.domain.BannerDirection
 import com.cangshuo.toolbox.feature.banner.domain.BannerError
 import com.cangshuo.toolbox.feature.banner.domain.BannerPolicy
@@ -94,7 +84,7 @@ fun BannerScreen(
 ) {
     var fullscreen by rememberSaveable { mutableStateOf(false) }
     val settings = state.settings
-    val visual = bannerVisualColors()
+    val visual = toolboxDisplayColors()
     val playable = state.validation == null
     val pointCount = settings.text.codePointCount(0, settings.text.length)
     val fontScale = LocalDensity.current.fontScale
@@ -338,7 +328,7 @@ private fun FullscreenBanner(settings: BannerSettings, onDismiss: () -> Unit) {
     var running by rememberSaveable { mutableStateOf(true) }
     var controlsVisible by rememberSaveable { mutableStateOf(true) }
     var interaction by remember { mutableIntStateOf(0) }
-    val visual = bannerVisualColors()
+    val visual = toolboxDisplayColors()
     val description = stringResource(R.string.banner_description_accessibility, settings.text.trim())
     val toggleControlsLabel = stringResource(R.string.banner_toggle_controls)
     LaunchedEffect(controlsVisible, running, interaction) {
@@ -356,7 +346,7 @@ private fun FullscreenBanner(settings: BannerSettings, onDismiss: () -> Unit) {
             decorFitsSystemWindows = false,
         ),
     ) {
-        FullscreenWindowEffect(settings.keepScreenOn)
+        ToolboxFullscreenWindowEffect(settings.keepScreenOn)
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -435,51 +425,6 @@ private fun FullscreenBanner(settings: BannerSettings, onDismiss: () -> Unit) {
             }
         }
     }
-}
-
-@Composable
-private fun FullscreenWindowEffect(keepScreenOn: Boolean) {
-    val view = LocalView.current
-    val context = LocalContext.current
-    DisposableEffect(keepScreenOn) {
-        view.keepScreenOn = keepScreenOn
-        val window = (view.parent as? DialogWindowProvider)?.window
-            ?: context.findActivity()?.window
-        val controller = window?.let { target -> WindowCompat.getInsetsController(target, view) }
-        val previousBehavior = controller?.systemBarsBehavior
-        controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        controller?.hide(WindowInsetsCompat.Type.systemBars())
-        onDispose {
-            view.keepScreenOn = false
-            controller?.show(WindowInsetsCompat.Type.systemBars())
-            if (previousBehavior != null) controller.systemBarsBehavior = previousBehavior
-        }
-    }
-}
-
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
-
-private data class BannerVisualColors(val background: Color, val foreground: Color)
-
-@Composable
-private fun bannerVisualColors(): BannerVisualColors {
-    val scheme = MaterialTheme.colorScheme
-    val background = if (isSystemInDarkTheme()) scheme.surfaceContainerLowest else scheme.inverseSurface
-    val accent = scheme.primary
-    val foreground = if (contrastRatio(accent, background) >= 3f) accent else scheme.tertiary
-    return BannerVisualColors(background, foreground)
-}
-
-private fun contrastRatio(first: Color, second: Color): Float {
-    val a = first.luminance()
-    val b = second.luminance()
-    val lighter = maxOf(a, b)
-    val darker = minOf(a, b)
-    return (lighter + 0.05f) / (darker + 0.05f)
 }
 
 @StringRes

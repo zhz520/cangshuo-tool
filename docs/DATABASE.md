@@ -282,3 +282,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V73 手持弹幕目录
 
 `V73__seed_handheld_banner_tool.sql` 登记 `handheld_banner`，LIFE/LOCAL/ENABLED，排序 625、requires_login=0、is_featured=0。关键词覆盖手持弹幕、弹幕、滚动字幕、走马灯、LED、接机及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。弹幕文字和样式只保存在 Android 本地，不上传也不新增表。实现与边界见 [手持弹幕](HANDHELD_BANNER.md)。生产已执行 V73，Flyway 历史 73/73 且全部成功。
+
+## V74 时间屏幕目录
+
+`V74__seed_time_screen_tool.sql` 登记 `time_screen`，LIFE/LOCAL/ENABLED，排序 626、requires_login=0、is_featured=0。关键词覆盖时间屏幕、全屏时钟、桌面时钟、数字时钟、防烧屏、时间显示及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。时间、时区和显示偏好只读取或保存在 Android 本地，不上传也不新增表。实现与边界见 [时间屏幕](TIME_SCREEN.md)。生产迁移将在发布验收后记录。

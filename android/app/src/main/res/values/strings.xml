@@ -2556,4 +2556,39 @@
     <string name="banner_exit">退出</string>
     <string name="banner_fullscreen_summary">%1$s · %2$s · %3$s</string>
     <string name="banner_description_accessibility">全屏滚动弹幕：%1$s</string>
+    <string name="time_screen_name">时间屏幕</string>
+    <string name="time_screen_description">将设备变成全屏数字时钟，支持 12/24 小时、秒数与日期、主题强调色、防烧屏漂移和屏幕常亮。</string>
+    <string-array name="time_screen_keywords">
+        <item>时间屏幕</item><item>全屏时钟</item><item>桌面时钟</item><item>数字时钟</item><item>防烧屏</item><item>时间显示</item><item>clock</item><item>screensaver</item><item>fullscreen clock</item><item>time display</item>
+    </string-array>
+    <string name="time_screen_preview_title">实时预览</string>
+    <string name="time_screen_accessibility">%1$s，%2$s，%3$s</string>
+    <string name="time_screen_clock_with_period">%1$s %2$s</string>
+    <string name="time_screen_format_title">时间格式</string>
+    <string name="time_screen_clock_format">时钟格式</string>
+    <string name="time_screen_24_hour">24 小时</string>
+    <string name="time_screen_12_hour">12 小时</string>
+    <string name="time_screen_show_seconds">显示秒数</string>
+    <string name="time_screen_show_seconds_hint">关闭后只在每分钟更新一次，减少屏幕刷新和耗电。</string>
+    <string name="time_screen_show_date">显示日期</string>
+    <string name="time_screen_show_date_hint">在时间下方显示本地日期和星期。</string>
+    <string name="time_screen_show_zone">显示时区</string>
+    <string name="time_screen_show_zone_hint">在时钟下方显示当前时区简称。</string>
+    <string name="time_screen_display_title">屏幕与显示</string>
+    <string name="time_screen_anti_burn">防烧屏漂移</string>
+    <string name="time_screen_anti_burn_hint">全屏时让时钟以缓慢圆周轨迹移动，减少 OLED 静态残影。</string>
+    <string name="time_screen_drift_radius">漂移范围</string>
+    <string name="time_screen_drift_small">轻</string>
+    <string name="time_screen_drift_medium">中</string>
+    <string name="time_screen_drift_large">大</string>
+    <string name="time_screen_keep_screen">全屏时保持屏幕常亮</string>
+    <string name="time_screen_keep_screen_hint">离开全屏后立即释放常亮标志。</string>
+    <string name="time_screen_play">全屏显示</string>
+    <string name="time_screen_reset">恢复默认设置</string>
+    <string name="time_screen_note" formatted="false">时间来自设备时区与系统时钟，不联网、不上传。全屏仅使用持续但缓慢的位移防止烧屏，不闪烁、不强制横屏；退出后自动恢复系统栏与常亮设置。</string>
+    <string name="time_screen_fullscreen_title">全屏时钟</string>
+    <string name="time_screen_fullscreen_hint">点按屏幕显示或隐藏控制</string>
+    <string name="time_screen_toggle_controls">显示或隐藏控制</string>
+    <string name="time_screen_hide_seconds">隐藏秒</string>
+    <string name="time_screen_exit">退出</string>
 </resources>

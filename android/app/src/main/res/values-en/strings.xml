@@ -2476,4 +2476,39 @@
     <string name="banner_exit">Exit</string>
     <string name="banner_fullscreen_summary">%1$s · %2$s · %3$s</string>
     <string name="banner_description_accessibility">Full-screen scrolling banner: %1$s</string>
+    <string name="time_screen_name">Time Screen</string>
+    <string name="time_screen_description">Turn the device into a full-screen digital clock with 12/24-hour formats, seconds, date, accent color, burn-in drift and keep-screen controls.</string>
+    <string-array name="time_screen_keywords">
+        <item>clock</item><item>screensaver</item><item>fullscreen clock</item><item>time display</item><item>desk clock</item><item>digital clock</item><item>burn-in</item><item>时间屏幕</item><item>全屏时钟</item><item>防烧屏</item>
+    </string-array>
+    <string name="time_screen_preview_title">Live preview</string>
+    <string name="time_screen_accessibility">%1$s, %2$s, %3$s</string>
+    <string name="time_screen_clock_with_period">%1$s %2$s</string>
+    <string name="time_screen_format_title">Time format</string>
+    <string name="time_screen_clock_format">Clock format</string>
+    <string name="time_screen_24_hour">24-hour</string>
+    <string name="time_screen_12_hour">12-hour</string>
+    <string name="time_screen_show_seconds">Show seconds</string>
+    <string name="time_screen_show_seconds_hint">When off, the clock updates once per minute to reduce refreshes and power use.</string>
+    <string name="time_screen_show_date">Show date</string>
+    <string name="time_screen_show_date_hint">Show the local date and weekday below the time.</string>
+    <string name="time_screen_show_zone">Show time zone</string>
+    <string name="time_screen_show_zone_hint">Show the current time-zone abbreviation below the clock.</string>
+    <string name="time_screen_display_title">Screen and display</string>
+    <string name="time_screen_anti_burn">Burn-in drift</string>
+    <string name="time_screen_anti_burn_hint">Slowly moves the full-screen clock in a circle to reduce OLED image retention.</string>
+    <string name="time_screen_drift_radius">Drift range</string>
+    <string name="time_screen_drift_small">Small</string>
+    <string name="time_screen_drift_medium">Medium</string>
+    <string name="time_screen_drift_large">Large</string>
+    <string name="time_screen_keep_screen">Keep the screen awake in full screen</string>
+    <string name="time_screen_keep_screen_hint">The keep-awake flag is released when full screen closes.</string>
+    <string name="time_screen_play">Show full screen</string>
+    <string name="time_screen_reset">Reset defaults</string>
+    <string name="time_screen_note" formatted="false">Time comes from the device time zone and system clock; nothing is uploaded. Full screen uses a slow drift to reduce burn-in without flashing, and it never forces landscape. Exiting restores the system bars and keep-awake setting.</string>
+    <string name="time_screen_fullscreen_title">Full-screen clock</string>
+    <string name="time_screen_fullscreen_hint">Tap the screen to show or hide controls</string>
+    <string name="time_screen_toggle_controls">Show or hide controls</string>
+    <string name="time_screen_hide_seconds">Hide seconds</string>
+    <string name="time_screen_exit">Exit</string>
 </resources>
