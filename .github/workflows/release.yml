@@ -74,7 +74,7 @@ jobs:
           fi
           unset UPLOAD_KEY_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
           cd android
-          sh gradlew --no-daemon --console=plain "-Dorg.gradle.jvmargs=-Xmx4096m -Dfile.encoding=UTF-8" "-PtoolboxVersionCode=$VERSION_CODE" "-PtoolboxVersionName=$VERSION_NAME" :app:testReleaseUnitTest :app:lintRelease :app:assembleRelease :app:bundleRelease
+          sh gradlew --no-daemon --console=plain "-Dorg.gradle.jvmargs=-Xmx4096m -Dfile.encoding=COMPAT" "-PtoolboxVersionCode=$VERSION_CODE" "-PtoolboxVersionName=$VERSION_NAME" :app:testReleaseUnitTest :app:lintRelease :app:assembleRelease :app:bundleRelease
           cd ..
           python3 scripts/check_release_artifacts.py --sdk "$ANDROID_HOME" "${signature_args[@]}"
       - name: Upload release artifacts and reports
