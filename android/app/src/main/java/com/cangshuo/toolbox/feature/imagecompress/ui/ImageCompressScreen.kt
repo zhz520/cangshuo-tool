@@ -59,6 +59,7 @@ import com.cangshuo.toolbox.core.ui.ToolboxLoadingState
 import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
+import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -75,6 +76,7 @@ fun ImageCompressScreen(
     onScalePercentChanged: (Int) -> Unit,
     onMaxDimensionChanged: (Int) -> Unit,
     onFormatChanged: (OutputImageFormat) -> Unit,
+    onFlipModeChanged: (FlipMode) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -283,6 +285,7 @@ fun ImageCompressScreen(
                     onScalePercentChanged = onScalePercentChanged,
                     onMaxDimensionChanged = onMaxDimensionChanged,
                     onFormatChanged = onFormatChanged,
+                    onFlipModeChanged = onFlipModeChanged,
                 )
             }
 
@@ -530,6 +533,7 @@ private fun SettingsCard(
     onScalePercentChanged: (Int) -> Unit,
     onMaxDimensionChanged: (Int) -> Unit,
     onFormatChanged: (OutputImageFormat) -> Unit,
+    onFlipModeChanged: (FlipMode) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -684,6 +688,31 @@ private fun SettingsCard(
                                 label = { Text("${dim}px") },
                             )
                         }
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.image_compress_flip_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(
+                        FlipMode.NONE to R.string.image_compress_flip_none,
+                        FlipMode.HORIZONTAL to R.string.image_compress_flip_horizontal,
+                        FlipMode.VERTICAL to R.string.image_compress_flip_vertical,
+                        FlipMode.BOTH to R.string.image_compress_flip_both,
+                    ).forEach { (mode, label) ->
+                        FilterChip(
+                            enabled = enabled,
+                            selected = params.flipMode == mode,
+                            onClick = { onFlipModeChanged(mode) },
+                            label = { Text(stringResource(label)) },
+                        )
                     }
                 }
             }

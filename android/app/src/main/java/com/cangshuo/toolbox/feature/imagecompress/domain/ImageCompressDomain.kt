@@ -18,6 +18,8 @@ enum class ResizeMode {
     MAX_DIMENSION,
 }
 
+enum class FlipMode { NONE, HORIZONTAL, VERTICAL, BOTH }
+
 /** Compression parameters selected by the user. */
 data class CompressParams(
     val quality: Int = 80,
@@ -25,6 +27,7 @@ data class CompressParams(
     val scalePercent: Int = 80,
     val maxDimension: Int = 1920,
     val outputFormat: OutputImageFormat = OutputImageFormat.MATCH_SOURCE,
+    val flipMode: FlipMode = FlipMode.NONE,
 )
 
 /** Basic metadata describing dimensions, size, and type of an image. */

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressImageUseCase
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
+import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.DiscardImageUseCase
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -65,6 +66,7 @@ class ImageCompressViewModel(
     fun onScalePercentChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(scalePercent = percent.coerceIn(10, 100)))
     fun onMaxDimensionChanged(dim: Int) = updateParams(_uiState.value.compressParams.copy(maxDimension = dim.coerceIn(100, 8192)))
     fun onFormatChanged(format: OutputImageFormat) = updateParams(_uiState.value.compressParams.copy(outputFormat = format))
+    fun onFlipModeChanged(mode: FlipMode) = updateParams(_uiState.value.compressParams.copy(flipMode = mode))
 
     private fun updateParams(params: CompressParams) {
         if (isExporting || params == _uiState.value.compressParams) return

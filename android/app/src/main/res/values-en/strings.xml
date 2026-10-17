@@ -514,7 +514,7 @@
     <string name="qr_btn_pick_image">Choose Image to Decode</string>
     <string name="qr_decode_result_title">Decoded Content</string>
     <string name="image_compress_name">Image Compression</string>
-    <string name="image_compress_description">Image compression, resizing, and format conversion with real-time preview and size comparison.</string>
+    <string name="image_compress_description">Image compression, resizing, mirroring, and format conversion with real-time preview and size comparison.</string>
     <string name="image_compress_pick_title">Select Image</string>
     <string name="image_compress_pick_desc">Choose an image from your gallery to compress or resize (supports JPEG, PNG, WEBP)</string>
     <string name="image_compress_btn_pick">Choose Image</string>
@@ -528,6 +528,11 @@
     <string name="image_compress_scale_percent">Scale</string>
     <string name="image_compress_max_dimension">Max side (px)</string>
     <string name="image_compress_format_title">Output Format</string>
+    <string name="image_compress_flip_title">Mirror / Flip</string>
+    <string name="image_compress_flip_none">None</string>
+    <string name="image_compress_flip_horizontal">Horizontal</string>
+    <string name="image_compress_flip_vertical">Vertical</string>
+    <string name="image_compress_flip_both">Both</string>
     <string name="image_compress_format_source">Keep Source Format</string>
     <string name="image_compress_format_jpeg">JPEG (High Compression)</string>
     <string name="image_compress_format_png">PNG (Lossless)</string>

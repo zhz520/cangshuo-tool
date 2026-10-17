@@ -230,3 +230,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V60 纯色图目录
 
 `V60__seed_pure_color_image_tool.sql` 登记 `pure_color_image`，IMAGE/LOCAL/ENABLED，排序 107、requires_login=0、is_featured=0。只写既有工具目录列，不保存颜色、尺寸或生成图片。重复执行保留后台编辑、配置、状态、时间戳与软删除。详见 [纯色图制作](PURE_COLOR_IMAGE.md)。
+
+## V61 图片镜像发现性
+
+`V61__update_image_compress_description.sql` 仅在 `image_compress` 描述仍等于 V13 原始种子时更新中文说明与关键词，加入镜像/翻转/flip/mirror；人工编辑过的目录不会被覆盖。没有新增表、API 或图片上传。实现见 [图片压缩](IMAGE_COMPRESS.md)。

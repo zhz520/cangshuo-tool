@@ -2,6 +2,10 @@
 
 本文件给新的 AI 会话使用：新开窗口或切换模型时，把下面「开场消息」整段发给 AI，让它从仓库读取现状，不依赖人复述。
 
+## 最新增量（2026-10-17 第四批）
+
+图片镜像已集成到现有 `image_compress`，提供不翻转/水平/垂直/双向选项，顺序为 EXIF 校正→镜像→缩放→PNG/JPEG/WebP 编码；V61 在描述仍为原种子时追加镜像关键词并保留人工编辑。Android 580/580、APK/Lint 0 错误/81 警告，服务端 226/226。设备像素回读、隔离候选和生产发布尚未完成，因此该增强未上线。详见 `../docs/IMAGE_COMPRESS.md`。
+
 ## 最新增量（2026-10-17 第三批，优先于下方历史记录）
 
 Wave 1 batch 13 `pure_color_image` 已完成并上线：Android 支持 `#RGB/#RRGGBB/#RRGGBBAA`、1–4096 边长与 800 万像素/堆预算、透明棋盘格预览、PNG、MediaStore/文档保存和 FileProvider 分享。Android 580/580、APK/Lint 0 错误/81 既有警告，服务端 226/226、隔离候选 188/188；模拟器实测 1080×1080 半透明蓝 `(22,120,255,128)`、保存和分享成功。提交 `1b60f6d` 已推送，生产镜像 `sha256:f0bb7458…`，回滚标签 `before-pure-color-v60`，Flyway 60/60、HTTPS 117/117、五个容器 healthy。真机/TalkBack/低内存/旧系统文件选择器未验收。详见 `../docs/PURE_COLOR_IMAGE.md` 与 `../docs/PURE_COLOR_IMAGE_ACCEPTANCE_2026-10-17.md`。下一步按 ROADMAP 继续独立单项。

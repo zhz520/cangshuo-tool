@@ -1,6 +1,10 @@
 # 图片压缩与处理工具
 
-工具编码 `image_compress`，分类 `IMAGE`，模式 `LOCAL`。提供单张图片的压缩、等比缩放、格式转换、前后预览、大小对比、保存和分享。应用不向服务端上传图片；工具实现无需登录或网络 API。
+工具编码 `image_compress`，分类 `IMAGE`，模式 `LOCAL`。提供单张图片的压缩、等比缩放、水平/垂直/双向镜像、格式转换、前后预览、大小对比、保存和分享。应用不向服务端上传图片。
+
+## 2026-10-17 镜像增强
+
+镜像在 EXIF 方向校正之后、缩放/编码之前应用，尺寸与透明通道保持不变；`FlipMode.NONE/HORIZONTAL/VERTICAL/BOTH` 复用现有 Preview、保存和分享链路。实现依据 ImageMagick `MagickCore/transform.c` 的 FlipImage/FlopImage 语义（以水平/垂直轴镜像像素），未复制源码或增加依赖。V61 仅当目录描述仍等于 V13 种子时更新说明并追加 `镜像/翻转/flip/mirror` 关键词，保留后台人工编辑。Android 580/580、APK/Lint 0 错误/81 警告，服务端 226/226；实际图片像素回读、候选和线上验收尚未完成。
 
 ## 开源参考与适配
 
