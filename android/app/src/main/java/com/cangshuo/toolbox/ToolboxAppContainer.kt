@@ -334,6 +334,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.calendar.data.LocalLunarCalendarRepository(),
         ),
     )
+    private val workValueFactory = com.cangshuo.toolbox.feature.workvalue.ui.WorkValueViewModel.factory(
+        com.cangshuo.toolbox.feature.workvalue.domain.CalculateWorkValueUseCase(
+            com.cangshuo.toolbox.feature.workvalue.domain.LocalWorkValueRepository(),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -359,6 +364,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.mortgage.MortgageToolDefinition(resources, mortgageFactory),
             com.cangshuo.toolbox.feature.fuel.FuelToolDefinition(resources, fuelFactory),
             com.cangshuo.toolbox.feature.datecalc.DateCalcToolDefinition(resources, dateCalcFactory),
+            com.cangshuo.toolbox.feature.workvalue.WorkValueToolDefinition(resources, workValueFactory),
             com.cangshuo.toolbox.feature.color.ColorToolDefinition(resources, colorFactory),
             com.cangshuo.toolbox.feature.password.PasswordToolDefinition(resources, passwordFactory),
             com.cangshuo.toolbox.feature.textcount.TextCountToolDefinition(resources, textCountFactory),

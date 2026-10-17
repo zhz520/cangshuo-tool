@@ -2393,4 +2393,56 @@
     <string name="calendar_note" formatted="false">公历、农历、干支、节气、节日与宜忌来自本地 lunar-java 历法数据，作为传统文化查询参考；不同黄历流派可能有不同表述。工具只在本机计算，不上传所选日期。</string>
     <string name="calendar_error">日历计算失败，请检查日期范围后重试。</string>
     <string name="calendar_retry">重试</string>
+    <string name="work_value_name">工作性价比</string>
+    <string name="work_value_description">综合月薪、发薪月数、奖金福利、工作支出、工时与通勤，计算名义时薪和真实时薪。</string>
+    <string-array name="work_value_keywords" translatable="false">
+        <item>工作性价比</item><item>时薪</item><item>工资</item><item>月薪</item><item>通勤</item><item>加班</item><item>年收入</item><item>工作</item><item>salary</item><item>hourly</item><item>commute</item><item>work</item>
+    </string-array>
+    <string name="work_value_pay_title">收入与福利</string>
+    <string name="work_value_salary">月薪（税前）</string>
+    <string name="work_value_salary_hint">例如 10000</string>
+    <string name="work_value_paid_months">每年发薪月数</string>
+    <string name="work_value_annual_bonus">年度奖金</string>
+    <string name="work_value_monthly_benefits">每月现金福利</string>
+    <string name="work_value_monthly_cost">每月工作支出</string>
+    <string name="work_value_time_title">工时与通勤</string>
+    <string name="work_value_work_days">每周工作天数</string>
+    <string name="work_value_office_days">每周到岗天数</string>
+    <string name="work_value_daily_hours">每日在岗小时</string>
+    <string name="work_value_break_hours">每日无薪休息</string>
+    <string name="work_value_commute">单程通勤小时</string>
+    <string name="work_value_nonworking_days">每年带薪非工作日</string>
+    <string name="work_value_presets">快速填充工时</string>
+    <string name="work_value_preset_standard">标准双休</string>
+    <string name="work_value_preset_single">单休</string>
+    <string name="work_value_preset_big_small">大小周</string>
+    <string name="work_value_preset_remote">远程办公</string>
+    <string name="work_value_clear">清空输入</string>
+    <string name="work_value_result_title">真实时薪</string>
+    <string name="work_value_real_hourly">真实时薪</string>
+    <string name="work_value_nominal_hourly">名义时薪</string>
+    <string name="work_value_per_hour_value">%1$s 元/小时</string>
+    <string name="work_value_nominal_value">名义时薪 %1$s 元/小时</string>
+    <string name="work_value_currency">元</string>
+    <string name="work_value_metrics_title">计算明细</string>
+    <string name="work_value_annual_cash">年度总现金</string>
+    <string name="work_value_annual_cost">年度工作支出</string>
+    <string name="work_value_annual_net">扣除支出后年收入</string>
+    <string name="work_value_paid_days">有效带薪工作日</string>
+    <string name="work_value_work_hours">年度有效工时</string>
+    <string name="work_value_commute_hours">年度通勤小时</string>
+    <string name="work_value_commute_share">通勤占全部时间</string>
+    <string name="work_value_minutes_per_100">每 100 元收入耗时</string>
+    <string name="work_value_days_value">%1$s 天</string>
+    <string name="work_value_hours_value">%1$s 小时</string>
+    <string name="work_value_percent_value">%1$s%%</string>
+    <string name="work_value_minutes_value">%1$s 分钟</string>
+    <string name="work_value_empty">输入月薪后显示真实时薪、年收入和通勤时间成本。</string>
+    <string name="work_value_error_invalid">请输入有效的非负数字。</string>
+    <string name="work_value_error_range">工时、通勤或金额超出允许范围，请检查后重试。</string>
+    <string name="work_value_error_no_time">有效工作日或工作时间必须大于零。</string>
+    <string name="work_value_report">复制与分享</string>
+    <string name="work_value_report_title">工作性价比</string>
+    <string name="work_value_report_line">%1$s：%2$s</string>
+    <string name="work_value_note" formatted="false">按每年 52 周近似计算；月薪 × 发薪月数 + 年度奖金 + 每月福利 × 12，再扣除每月工作支出 × 12。名义时薪只除有效工作小时，真实时薪还计入到岗日往返通勤。结果为税前估算，不含社保、公积金和个人所得税。</string>
 </resources>

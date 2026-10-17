@@ -2313,4 +2313,56 @@
     <string name="calendar_note" formatted="false">Gregorian and lunar dates, ganzhi, solar terms, festivals and almanac notes come from local lunar-java data and are provided as cultural reference; different almanac traditions may phrase them differently. Selected dates stay on this device.</string>
     <string name="calendar_error">The calendar could not be calculated. Check the date range and retry.</string>
     <string name="calendar_retry">Retry</string>
+    <string name="work_value_name">Work Value</string>
+    <string name="work_value_description">Combine salary, paid months, bonuses, benefits, work costs, hours and commuting to calculate nominal and real hourly value.</string>
+    <string-array name="work_value_keywords" translatable="false">
+        <item>work value</item><item>hourly rate</item><item>salary</item><item>wage</item><item>commute</item><item>overtime</item><item>annual income</item><item>work</item><item>工作性价比</item><item>时薪</item><item>工资</item><item>通勤</item>
+    </string-array>
+    <string name="work_value_pay_title">Income and benefits</string>
+    <string name="work_value_salary">Monthly gross salary</string>
+    <string name="work_value_salary_hint">For example 10000</string>
+    <string name="work_value_paid_months">Paid months per year</string>
+    <string name="work_value_annual_bonus">Annual bonus</string>
+    <string name="work_value_monthly_benefits">Monthly cash benefits</string>
+    <string name="work_value_monthly_cost">Monthly job costs</string>
+    <string name="work_value_time_title">Hours and commute</string>
+    <string name="work_value_work_days">Work days per week</string>
+    <string name="work_value_office_days">Office days per week</string>
+    <string name="work_value_daily_hours">Attendance hours per day</string>
+    <string name="work_value_break_hours">Unpaid break per day</string>
+    <string name="work_value_commute">One-way commute hours</string>
+    <string name="work_value_nonworking_days">Paid non-working days per year</string>
+    <string name="work_value_presets">Quick hour presets</string>
+    <string name="work_value_preset_standard">Five-day week</string>
+    <string name="work_value_preset_single">Six-day week</string>
+    <string name="work_value_preset_big_small">Alternating week</string>
+    <string name="work_value_preset_remote">Remote work</string>
+    <string name="work_value_clear">Clear inputs</string>
+    <string name="work_value_result_title">Real hourly value</string>
+    <string name="work_value_real_hourly">Real hourly value</string>
+    <string name="work_value_nominal_hourly">Nominal hourly value</string>
+    <string name="work_value_per_hour_value">%1$s CNY/hour</string>
+    <string name="work_value_nominal_value">Nominal: %1$s CNY/hour</string>
+    <string name="work_value_currency">CNY</string>
+    <string name="work_value_metrics_title">Calculation details</string>
+    <string name="work_value_annual_cash">Annual cash</string>
+    <string name="work_value_annual_cost">Annual job costs</string>
+    <string name="work_value_annual_net">Annual cash after costs</string>
+    <string name="work_value_paid_days">Effective paid work days</string>
+    <string name="work_value_work_hours">Annual productive hours</string>
+    <string name="work_value_commute_hours">Annual commute hours</string>
+    <string name="work_value_commute_share">Commute share of total time</string>
+    <string name="work_value_minutes_per_100">Minutes per 100 CNY earned</string>
+    <string name="work_value_days_value">%1$s days</string>
+    <string name="work_value_hours_value">%1$s hours</string>
+    <string name="work_value_percent_value">%1$s%%</string>
+    <string name="work_value_minutes_value">%1$s minutes</string>
+    <string name="work_value_empty">Enter a monthly salary to see real hourly value, annual cash and commute time.</string>
+    <string name="work_value_error_invalid">Enter a valid non-negative number.</string>
+    <string name="work_value_error_range">Hours, commute or amounts are outside the allowed range. Check the inputs and retry.</string>
+    <string name="work_value_error_no_time">Effective work days and productive hours must be greater than zero.</string>
+    <string name="work_value_report">Copy and share</string>
+    <string name="work_value_report_title">Work Value</string>
+    <string name="work_value_report_line">%1$s: %2$s</string>
+    <string name="work_value_note" formatted="false">Uses an approximation of 52 weeks per year. Annual cash is salary × paid months + annual bonus + monthly benefits × 12, then monthly job costs × 12 are deducted. Nominal hourly value divides by productive work hours only; real hourly value also includes round-trip commuting on office days. Results are pre-tax and exclude social insurance, housing fund and income tax.</string>
 </resources>
