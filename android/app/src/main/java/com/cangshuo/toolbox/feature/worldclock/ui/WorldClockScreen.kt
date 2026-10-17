@@ -36,11 +36,11 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.core.ui.SystemReportActions
+import com.cangshuo.toolbox.core.ui.ToolboxBadge
 import com.cangshuo.toolbox.core.ui.ToolListItem
 import com.cangshuo.toolbox.core.ui.ToolSectionHeader
 import com.cangshuo.toolbox.core.ui.ToolboxDivider
@@ -234,7 +234,7 @@ private fun SystemClockPanel(reading: WorldClockReading) {
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        WorldClockBadge(
+        ToolboxBadge(
             text = stringResource(R.string.world_clock_device_zone),
             emphasized = true,
         )
@@ -307,7 +307,7 @@ private fun CityClockRow(reading: WorldClockReading, onRemove: (String) -> Unit)
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            WorldClockBadge(dayDeltaText(reading.dayDelta))
+            ToolboxBadge(dayDeltaText(reading.dayDelta))
         }
         Text(
             text = stringResource(R.string.world_clock_date_weekday, reading.date, reading.weekday),
@@ -325,8 +325,8 @@ private fun ReadingMetadata(reading: WorldClockReading) {
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        WorldClockBadge(reading.utcOffset)
-        WorldClockBadge(
+        ToolboxBadge(reading.utcOffset)
+        ToolboxBadge(
             text = stringResource(
                 when (reading.dstState) {
                     WorldClockDstState.DAYLIGHT -> R.string.world_clock_dst_daylight
@@ -353,30 +353,6 @@ private fun ReadingMetadata(reading: WorldClockReading) {
             text = stringResource(R.string.world_clock_fixed_offset),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun WorldClockBadge(text: String, emphasized: Boolean = false) {
-    Surface(
-        shape = MaterialTheme.shapes.extraSmall,
-        color = if (emphasized) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant
-        },
-        contentColor = if (emphasized) {
-            MaterialTheme.colorScheme.onPrimaryContainer
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Medium,
         )
     }
 }

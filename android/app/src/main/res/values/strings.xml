@@ -1229,7 +1229,7 @@
     <string name="popular_use_count">%1$d 次使用</string>
     <string name="popular_empty">暂无使用数据，先去打开几个工具吧。</string>
     <string name="licenses_info_title">开源许可</string>
-    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\npinyin-data —— MIT（汉字拼音数据表）\nOpenCC 1.1.9 —— Apache-2.0（简繁转换字库，Carbo Kuo 及贡献者）\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库；OpenCC 许可随应用打包于 assets/licenses/opencc.txt。</string>
+    <string name="licenses_info_body">本项目使用以下开源组件（版权归各作者，按对应许可发布）：\n\nKotlin 与 kotlinx.coroutines —— Apache-2.0\nAndroidX（Activity、Lifecycle、Core、DataStore、Room）—— Apache-2.0\nJetpack Compose（UI、Foundation、Material 3、Animation）—— Apache-2.0\nOkHttp —— Apache-2.0\nRetrofit —— Apache-2.0\nMoshi —— Apache-2.0\nZXing core —— Apache-2.0\nre2j —— BSD-3-Clause\npinyin-data —— MIT（汉字拼音数据表）\nOpenCC 1.1.9 —— Apache-2.0（简繁转换字库，Carbo Kuo 及贡献者）\nlunar-java 1.7.7 —— MIT（农历、节气与公历互转，6tail 及贡献者）\nCameraX（core、camera2、lifecycle、view）—— Apache-2.0\n\n完整许可证文本见各组件官方代码仓库；OpenCC 许可随应用打包于 assets/licenses/opencc.txt，lunar-java 许可打包于 assets/licenses/lunar-java.txt。</string>
     <string name="profile_my_favorites">我的收藏</string>
     <string name="profile_recent">最近使用</string>
     <string name="profile_stats">使用统计</string>
@@ -2295,4 +2295,68 @@
     <string name="world_clock_report_title">世界时间</string>
     <string name="world_clock_report_line">%1$s：%2$s，%3$s（%4$s）</string>
     <string name="world_clock_note">时间与时区规则来自设备时钟及 Android 系统时区数据库。已添加城市、显示格式和搜索词会在页面恢复时保留，不参与云同步。</string>
+    <string name="holiday_name">节日倒数</string>
+    <string name="holiday_description">倒数春节、中秋、国庆等中外节日，显示下一次日期、星期、农历、未来三次与实时倒计时。</string>
+    <string-array name="holiday_keywords" translatable="false">
+        <item>节日</item><item>倒数</item><item>倒计时</item><item>农历</item><item>春节</item><item>中秋</item><item>国庆</item><item>圣诞节</item><item>holiday</item><item>countdown</item><item>festival</item><item>lunar</item>
+    </string-array>
+    <string name="holiday_next_title">下一个节日</string>
+    <string name="holiday_filter_all">全部</string>
+    <string name="holiday_filter_traditional">传统节日</string>
+    <string name="holiday_filter_gregorian">公历节日</string>
+    <string name="holiday_live_caption">每秒刷新 · 按北京时间当地午夜计算</string>
+    <string name="holiday_refresh">刷新</string>
+    <string name="holiday_upcoming_title">即将到来</string>
+    <plurals name="holiday_upcoming_count">
+        <item quantity="one">%1$d 个</item>
+        <item quantity="other">%1$d 个</item>
+    </plurals>
+    <string name="holiday_future_title">未来三次</string>
+    <string name="holiday_empty">没有符合筛选条件的节日。</string>
+    <string name="holiday_error">节日日期计算失败，请检查系统时区后重试。</string>
+    <string name="holiday_retry">重试</string>
+    <string name="holiday_report">复制与分享</string>
+    <string name="holiday_report_title">节日倒数</string>
+    <string name="holiday_report_line">%1$s：%2$s（%3$s）· %4$s</string>
+    <string name="holiday_note" formatted="false">农历与节气日期在设备本地计算，节日日期和倒计时统一按北京时间（UTC+8）的当地午夜处理。法定放假、调休和工作日安排以当年官方通知为准，本工具不推算调休。</string>
+    <string name="holiday_today">今天</string>
+    <string name="holiday_tomorrow">明天</string>
+    <string name="holiday_tomorrow_countdown">明天 · %1$02d:%2$02d:%3$02d</string>
+    <plurals name="holiday_days_after">
+        <item quantity="one">%1$d 天后</item>
+        <item quantity="other">%1$d 天后</item>
+    </plurals>
+    <string name="holiday_kind_solar">公历节日</string>
+    <string name="holiday_kind_lunar">农历节日</string>
+    <string name="holiday_kind_term">节气</string>
+    <string name="holiday_date_basis">%1$s · %2$s</string>
+    <string name="holiday_lunar_date">农历 %1$d月%2$d日</string>
+    <string name="holiday_lunar_date_leap">农历闰%1$d月%2$d日</string>
+    <string name="holiday_today_countdown">今天 · 剩余 %1$02d:%2$02d:%3$02d</string>
+    <plurals name="holiday_countdown">
+        <item quantity="one">%1$d 天 %2$02d:%3$02d:%4$02d</item>
+        <item quantity="other">%1$d 天 %2$02d:%3$02d:%4$02d</item>
+    </plurals>
+    <string name="holiday_spring_festival">春节</string>
+    <string name="holiday_lantern_festival">元宵节</string>
+    <string name="holiday_dragon_head">龙头节</string>
+    <string name="holiday_qingming">清明节</string>
+    <string name="holiday_dragon_boat_festival">端午节</string>
+    <string name="holiday_qixi">七夕节</string>
+    <string name="holiday_ghost_festival">中元节</string>
+    <string name="holiday_mid_autumn_festival">中秋节</string>
+    <string name="holiday_double_ninth">重阳节</string>
+    <string name="holiday_laba_festival">腊八节</string>
+    <string name="holiday_little_new_year">小年</string>
+    <string name="holiday_new_year">元旦</string>
+    <string name="holiday_valentines_day">情人节</string>
+    <string name="holiday_womens_day">妇女节</string>
+    <string name="holiday_labor_day">劳动节</string>
+    <string name="holiday_childrens_day">儿童节</string>
+    <string name="holiday_teachers_day">教师节</string>
+    <string name="holiday_national_day">国庆节</string>
+    <string name="holiday_halloween">万圣夜</string>
+    <string name="holiday_singles_day">双十一</string>
+    <string name="holiday_christmas_eve">平安夜</string>
+    <string name="holiday_christmas">圣诞节</string>
 </resources>

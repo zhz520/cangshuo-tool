@@ -6,6 +6,10 @@
 
 用户要求持续自主推进，不要因单个工具完成或普通验证步骤停下来等待“继续”。每轮先读取本文件和 ROADMAP，选择最小可完整交付的未完成项；完成代码、测试/Lint、文档、提交/推送，并按既有授权在验证通过后部署生产。只有遇到自动审批拒绝、缺少必要凭据/设备或真正不可逆风险时才暂停并明确说明。镜像轴映射回归已提交为 `63f6280`。
 
+## 最新增量（2026-10-17 第七批）
+
+本地节日倒数 `holiday_countdown`（LIFE/LOCAL、排序 622、V69）已完成：22 个公历/农历/节气节日、下一次发生日、当天语义、未来三次、北京时间午夜倒计时、农历/闰月显示、全部/传统/公历筛选、选择与 SavedState、整秒生命周期 ticker、重试和复制分享。使用 MIT 许可的 lunar-java 1.7.7 并打包许可证；官方法定放假/调休明确不支持且不推算。参考 6tail/lunar-java、mark216tw/anniversary-countdown-android、NateScarlet/holiday-cn 固定源码。Android 621/621、APK/Lint 0 错误/80 既有警告，服务端 226/226；Android 16 模拟器验证重阳节默认倒计时、22/11 项筛选、明天倒计时、行选择和未来三次。当前检查点尚未提交/部署，下一步提交、V69 候选和生产 HTTPS 验收后回填。详见 `../docs/HOLIDAY_COUNTDOWN.md`。
+
 ## 最新增量（2026-10-17 第六批）
 
 世界时间 `world_clock`（LIFE/LOCAL、排序 621、V68）已完成并上线：设备时区、23 个其他城市、635 个系统时区中英文检索、常用优先、增删/重复/上限反馈、12/24 小时制、日期线 ±2 天差、秒级偏移、DST/下一次偏移变更、SavedState 与整秒生命周期 ticker，以及复制/分享。参考 depau/wearos-world-clock-tile、PranshulGG/ClockMaster、jclllycf/best-mates-world-clock 的固定源码 commit；未复制 GPL 文件。Android 604/604、APK/Lint 0 错误/80 既有警告且新文件无 finding，服务端 226/226；Android 16 模拟器验证中文日期、12 小时制、635 项搜索、添加东京、重开恢复和删除。提交 `7c740ec`、验收脚本 `0afe068` 已推送；隔离候选 `186/186`、HTTPS `115/115`，生产镜像 `sha256:9f72d0f3…`，回滚标签 `before-world-clock-v68`，Flyway `68/68`、五容器 healthy、官网/后台 200。详见 `../docs/WORLD_CLOCK.md`。下一步继续路线图下一项，不等待重复“继续”。

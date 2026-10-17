@@ -49,6 +49,7 @@
 - `ToolboxTextField`：浅灰填充输入框（无边框）。
 - `ToolboxSwitch`：共享主题开关，关闭态圆点使用 `onSurfaceVariant`，与浅色轨道区分；沿用原有回调、禁用和无障碍语义。
 - `ToolboxDivider(startIndent)`：1dp 细分割线。
+- `ToolboxBadge(text, emphasized)`：世界时间和节日倒数共用的列表/结果行小型状态标签，使用主题次级/强调容器色。
 - `ToolboxLoadingState` / `ToolboxLoadingIndicator`、`SystemReportCard` / `SystemReportActions`。
 - `ToolResultRow(label, value)`：计算结果的标签与数值；窄屏、大字号或长数值上下排布，完整显示结果；明细列表可通过 `ToolListItem.subtitleMaxLines` 展开全文。
 - `ToolboxTrendChart(points, description)`：最多 600 点的时间趋势，使用主题强调色与低干扰网格；横轴按真实时间比例，支持平值、单点与可访问描述。

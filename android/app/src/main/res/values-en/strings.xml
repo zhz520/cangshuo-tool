@@ -1172,7 +1172,7 @@
     <string name="popular_use_count">Used %1$d times</string>
     <string name="popular_empty">No usage data yet. Open a few tools first.</string>
     <string name="licenses_info_title">Open source licenses</string>
-    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\npinyin-data — MIT (Chinese pinyin table)\nOpenCC 1.1.9 — Apache-2.0 (conversion dictionaries, Carbo Kuo and contributors)\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull texts are available in each project repository. OpenCC is also bundled at assets/licenses/opencc.txt.</string>
+    <string name="licenses_info_body">This app uses the following open source components (copyright their authors, released under the listed licenses):\n\nKotlin and kotlinx.coroutines — Apache-2.0\nAndroidX (Activity, Lifecycle, Core, DataStore, Room) — Apache-2.0\nJetpack Compose (UI, Foundation, Material 3, Animation) — Apache-2.0\nOkHttp — Apache-2.0\nRetrofit — Apache-2.0\nMoshi — Apache-2.0\nZXing core — Apache-2.0\nre2j — BSD-3-Clause\npinyin-data — MIT (Chinese pinyin table)\nOpenCC 1.1.9 — Apache-2.0 (conversion dictionaries, Carbo Kuo and contributors)\nlunar-java 1.7.7 — MIT (lunar, solar-term and Gregorian conversion, 6tail and contributors)\nCameraX (core, camera2, lifecycle, view) — Apache-2.0\n\nFull texts are available in each project repository. OpenCC is licensed at assets/licenses/opencc.txt and lunar-java at assets/licenses/lunar-java.txt.</string>
     <string name="profile_my_favorites">My favorites</string>
     <string name="profile_recent">Recently used</string>
     <string name="profile_stats">Usage statistics</string>
@@ -2215,4 +2215,68 @@
     <string name="world_clock_report_title">World Clock</string>
     <string name="world_clock_report_line">%1$s: %2$s, %3$s (%4$s)</string>
     <string name="world_clock_note">Times and zone rules come from the device clock and the Android system time-zone database. Added cities, display format and search text are restored on this screen and are not cloud-synchronized.</string>
+    <string name="holiday_name">Holiday Countdown</string>
+    <string name="holiday_description">Count down to Chinese and international holidays with the next date, weekday, lunar date, three future occurrences and a live timer.</string>
+    <string-array name="holiday_keywords" translatable="false">
+        <item>holiday</item><item>countdown</item><item>festival</item><item>lunar</item><item>spring festival</item><item>mid-autumn</item><item>new year</item><item>christmas</item><item>节日</item><item>倒数</item><item>春节</item><item>中秋</item>
+    </string-array>
+    <string name="holiday_next_title">Next holiday</string>
+    <string name="holiday_filter_all">All</string>
+    <string name="holiday_filter_traditional">Traditional</string>
+    <string name="holiday_filter_gregorian">Gregorian</string>
+    <string name="holiday_live_caption">Updates every second · Counts to midnight in Beijing time</string>
+    <string name="holiday_refresh">Refresh</string>
+    <string name="holiday_upcoming_title">Coming up</string>
+    <plurals name="holiday_upcoming_count">
+        <item quantity="one">%1$d holiday</item>
+        <item quantity="other">%1$d holidays</item>
+    </plurals>
+    <string name="holiday_future_title">Next three occurrences</string>
+    <string name="holiday_empty">No holiday matches this filter.</string>
+    <string name="holiday_error">Holiday dates could not be calculated. Check the device time zone and retry.</string>
+    <string name="holiday_retry">Retry</string>
+    <string name="holiday_report">Copy and share</string>
+    <string name="holiday_report_title">Holiday Countdown</string>
+    <string name="holiday_report_line">%1$s: %2$s (%3$s) · %4$s</string>
+    <string name="holiday_note" formatted="false">Lunar and solar-term dates are calculated locally. Festival dates and countdowns use midnight in Beijing time (UTC+8). Official statutory leave, make-up workdays and office schedules follow the applicable annual notice; this tool does not infer adjusted workdays.</string>
+    <string name="holiday_today">Today</string>
+    <string name="holiday_tomorrow">Tomorrow</string>
+    <string name="holiday_tomorrow_countdown">Tomorrow · %1$02d:%2$02d:%3$02d</string>
+    <plurals name="holiday_days_after">
+        <item quantity="one">In %1$d day</item>
+        <item quantity="other">In %1$d days</item>
+    </plurals>
+    <string name="holiday_kind_solar">Gregorian holiday</string>
+    <string name="holiday_kind_lunar">Lunar holiday</string>
+    <string name="holiday_kind_term">Solar term</string>
+    <string name="holiday_date_basis">%1$s · %2$s</string>
+    <string name="holiday_lunar_date">Lunar month %1$d, day %2$d</string>
+    <string name="holiday_lunar_date_leap">Lunar leap month %1$d, day %2$d</string>
+    <string name="holiday_today_countdown">Today · remaining %1$02d:%2$02d:%3$02d</string>
+    <plurals name="holiday_countdown">
+        <item quantity="one">%1$d day %2$02d:%3$02d:%4$02d</item>
+        <item quantity="other">%1$d days %2$02d:%3$02d:%4$02d</item>
+    </plurals>
+    <string name="holiday_spring_festival">Spring Festival</string>
+    <string name="holiday_lantern_festival">Lantern Festival</string>
+    <string name="holiday_dragon_head">Longtaitou</string>
+    <string name="holiday_qingming">Qingming</string>
+    <string name="holiday_dragon_boat_festival">Dragon Boat Festival</string>
+    <string name="holiday_qixi">Qixi Festival</string>
+    <string name="holiday_ghost_festival">Ghost Festival</string>
+    <string name="holiday_mid_autumn_festival">Mid-Autumn Festival</string>
+    <string name="holiday_double_ninth">Double Ninth Festival</string>
+    <string name="holiday_laba_festival">Laba Festival</string>
+    <string name="holiday_little_new_year">Little New Year</string>
+    <string name="holiday_new_year">New Year’s Day</string>
+    <string name="holiday_valentines_day">Valentine’s Day</string>
+    <string name="holiday_womens_day">International Women’s Day</string>
+    <string name="holiday_labor_day">Labour Day</string>
+    <string name="holiday_childrens_day">Children’s Day</string>
+    <string name="holiday_teachers_day">Teachers’ Day</string>
+    <string name="holiday_national_day">National Day</string>
+    <string name="holiday_halloween">Halloween</string>
+    <string name="holiday_singles_day">Singles’ Day</string>
+    <string name="holiday_christmas_eve">Christmas Eve</string>
+    <string name="holiday_christmas">Christmas</string>
 </resources>

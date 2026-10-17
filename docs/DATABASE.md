@@ -262,3 +262,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V68 世界时间目录
 
 `V68__seed_world_clock_tool.sql` 登记 `world_clock`，LIFE/LOCAL/ENABLED，排序 621、requires_login=0、is_featured=0。关键词覆盖世界时间、时区、城市时间、UTC、夏令时和中英文检索词；`ON DUPLICATE KEY UPDATE tool_code=tool_code` 重放时保留管理员编辑、配置、状态、时间戳与软删除。工具只使用设备时区和系统 IANA 规则，没有新增表、公开 API 或服务端时间记录。实现与边界见 [世界时间](WORLD_CLOCK.md)。生产已执行 V68，Flyway 历史 68/68 且全部成功。
+
+## V69 节日倒数目录
+
+`V69__seed_holiday_countdown_tool.sql` 登记 `holiday_countdown`，LIFE/LOCAL/ENABLED，排序 622、requires_login=0、is_featured=0。关键词覆盖节日、倒数、农历、春节、中秋和中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。农历算法和内置节日只存在于 Android，不新增表、公开 API、远程执行代码或用户节日记录。实现与边界见 [节日倒数](HOLIDAY_COUNTDOWN.md)。
