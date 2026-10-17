@@ -344,6 +344,11 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.scoreboard.data.LocalScoreboardRepository(),
         ),
     )
+    private val handheldBannerFactory = com.cangshuo.toolbox.feature.banner.ui.BannerViewModel.factory(
+        com.cangshuo.toolbox.feature.banner.domain.ApplyBannerSettingsUseCase(
+            com.cangshuo.toolbox.feature.banner.data.LocalBannerSettingsRepository(),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -404,6 +409,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.holiday.HolidayCountdownToolDefinition(resources,holidayCountdownFactory),
             com.cangshuo.toolbox.feature.calendar.LunarCalendarToolDefinition(resources,lunarCalendarFactory),
             com.cangshuo.toolbox.feature.scoreboard.ScoreboardToolDefinition(resources,scoreboardFactory),
+            com.cangshuo.toolbox.feature.banner.HandheldBannerToolDefinition(resources,handheldBannerFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

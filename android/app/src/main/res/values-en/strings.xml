@@ -2432,4 +2432,48 @@
     <string name="scoreboard_report_timer">Timer: %1$s (%2$s)</string>
     <string name="scoreboard_report_step">Button increment: %1$s</string>
     <string name="scoreboard_note" formatted="false">Scores, team names, periods and the timer stay on this device and need no sign-in or network. They are restored when you return to the page. Resetting clears history; resetting the timer clears only the elapsed time.</string>
+    <string name="handheld_banner_name">Handheld Banner</string>
+    <string name="handheld_banner_description">Turn text into an adjustable full-screen marquee with mirroring, size, direction, color, pause and keep-screen controls.</string>
+    <string-array name="handheld_banner_keywords">
+        <item>banner</item><item>marquee</item><item>ticker</item><item>scrolling text</item><item>LED</item><item>airport pickup</item><item>手持弹幕</item><item>弹幕</item><item>滚动字幕</item><item>走马灯</item>
+    </string-array>
+    <string name="banner_preview_title">Live preview</string>
+    <string name="banner_empty">Enter text to see the scrolling preview.</string>
+    <string name="banner_content_title">Banner text</string>
+    <string name="banner_content_label">Text to display</string>
+    <string name="banner_content_hint">For example: Welcome! Please order here</string>
+    <string name="banner_character_count">Character count: %1$d / %2$d</string>
+    <string name="banner_presets_title">Quick messages</string>
+    <string name="banner_preset_welcome">Welcome</string>
+    <string name="banner_preset_pickup">Airport pickup</string>
+    <string name="banner_preset_birthday">Happy birthday</string>
+    <string name="banner_preset_make_way">Excuse me, thank you</string>
+    <string name="banner_motion_title">Motion and style</string>
+    <string name="banner_speed">Scroll speed</string>
+    <string name="banner_speed_slow">Slow</string>
+    <string name="banner_speed_standard">Standard speed</string>
+    <string name="banner_speed_fast">Fast</string>
+    <string name="banner_font_size">Text size</string>
+    <string name="banner_font_small">Small text</string>
+    <string name="banner_font_standard">Standard size</string>
+    <string name="banner_font_large">Large text</string>
+    <string name="banner_direction">Direction</string>
+    <string name="banner_direction_ltr">Left to right</string>
+    <string name="banner_direction_rtl">Right to left</string>
+    <string name="banner_mirror">Mirror display</string>
+    <string name="banner_mirror_hint">Useful when the screen is reflected in glass for someone else to read.</string>
+    <string name="banner_keep_screen">Keep the screen on in full screen</string>
+    <string name="banner_keep_screen_hint">The keep-screen flag is released when full screen closes.</string>
+    <string name="banner_play">Play full screen</string>
+    <string name="banner_clear">Clear text</string>
+    <string name="banner_reset_style">Reset style</string>
+    <string name="banner_note" formatted="false">Text, speed and style stay on this device; no network or sign-in is required. The banner loops continuously in full screen. Tap the screen to show or hide the controls; pause keeps the current position.</string>
+    <string name="banner_fullscreen_title">Full-screen banner</string>
+    <string name="banner_fullscreen_hint">Tap the screen to show or hide controls</string>
+    <string name="banner_toggle_controls">Show or hide controls</string>
+    <string name="banner_pause">Pause</string>
+    <string name="banner_resume">Resume</string>
+    <string name="banner_exit">Exit</string>
+    <string name="banner_fullscreen_summary">%1$s · %2$s · %3$s</string>
+    <string name="banner_description_accessibility">Full-screen scrolling banner: %1$s</string>
 </resources>

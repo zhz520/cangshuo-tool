@@ -1,5 +1,7 @@
 package com.cangshuo.toolbox.feature.scoreboard.domain
 
+import com.cangshuo.toolbox.core.model.UnicodeText
+
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 import java.util.Locale
@@ -89,6 +91,7 @@ object ScoreboardPolicy {
     const val MAX_SCORE = 999
     const val MAX_PERIOD = 99
     const val MAX_NAME_CODE_POINTS = 24
+    const val MAX_NAME_SCAN_UNITS = 1024
     const val MAX_HISTORY = 50
     const val DISPLAY_HISTORY = 20
     const val MIN_STEP = 1
@@ -99,10 +102,8 @@ object ScoreboardPolicy {
     const val MAX_EVENT_EPOCH_MS = 253_402_300_799_999L
 
     fun nameInput(raw: String): String {
-        val cleaned = raw.filterNot(::unsafeNameCharacter)
-        val count = cleaned.codePointCount(0, cleaned.length)
-        if (count <= MAX_NAME_CODE_POINTS) return cleaned
-        return cleaned.substring(0, cleaned.offsetByCodePoints(0, MAX_NAME_CODE_POINTS))
+        val cleaned = raw.take(MAX_NAME_SCAN_UNITS).filterNot(::unsafeNameCharacter)
+        return UnicodeText.takeCodePointsWithoutSplittingCluster(cleaned, MAX_NAME_CODE_POINTS)
     }
 
     private fun unsafeNameCharacter(character: Char): Boolean =

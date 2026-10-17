@@ -230,8 +230,9 @@ def check_candidate_isolation(check):
     check('codex-stats-redis-' in harness and "'redis-server', '--save', '', '--appendonly', 'no'" in harness,
           'strict candidate uses disposable Redis instead of production credentials')
     check("if not strict_isolation:\n            args.extend(['--network', edge])" in harness
-          and "command(['docker', 'network', 'connect', network, container])" in harness,
-          'strict candidate stays off the production edge network')
+          and "temporary_network = 'codex-stats-net-'" in harness
+          and "temporary_network if strict_isolation else network" in harness,
+          'strict candidate uses a temporary network instead of production app networks')
     check("MEDIA_ENABLED='false'" in harness and "ZEPP_ENABLED='false'" in harness
           and "STORAGE_ENABLED='false'" in harness,
           'strict candidate disables external integration paths')

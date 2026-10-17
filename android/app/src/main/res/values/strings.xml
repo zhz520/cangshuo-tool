@@ -2512,4 +2512,48 @@
     <string name="scoreboard_report_timer">计时：%1$s（%2$s）</string>
     <string name="scoreboard_report_step">每次加减：%1$s</string>
     <string name="scoreboard_note" formatted="false">比分、队伍名称、节次和计时只保存在本机，不要求登录或网络。切换页面后仍会恢复；重置记分牌会清空历史，计时归零只影响计时器。</string>
+    <string name="handheld_banner_name">手持弹幕</string>
+    <string name="handheld_banner_description">把文字变成可调速、可镜像的全屏滚动弹幕，支持字号、方向、配色、暂停和屏幕常亮。</string>
+    <string-array name="handheld_banner_keywords">
+        <item>手持弹幕</item><item>弹幕</item><item>滚动字幕</item><item>走马灯</item><item>LED</item><item>接机</item><item>banner</item><item>marquee</item><item>ticker</item><item>scroll</item>
+    </string-array>
+    <string name="banner_preview_title">实时预览</string>
+    <string name="banner_empty">输入文字后会在这里滚动预览。</string>
+    <string name="banner_content_title">弹幕内容</string>
+    <string name="banner_content_label">要显示的文字</string>
+    <string name="banner_content_hint">例如：欢迎光临，请扫码点单</string>
+    <string name="banner_character_count">%1$d / %2$d 个字符</string>
+    <string name="banner_presets_title">快捷文案</string>
+    <string name="banner_preset_welcome">欢迎光临</string>
+    <string name="banner_preset_pickup">接机送站</string>
+    <string name="banner_preset_birthday">生日快乐</string>
+    <string name="banner_preset_make_way">借过一下，谢谢</string>
+    <string name="banner_motion_title">滚动样式</string>
+    <string name="banner_speed">滚动速度</string>
+    <string name="banner_speed_slow">慢速</string>
+    <string name="banner_speed_standard">标准速度</string>
+    <string name="banner_speed_fast">快速</string>
+    <string name="banner_font_size">文字大小</string>
+    <string name="banner_font_small">小字</string>
+    <string name="banner_font_standard">标准字号</string>
+    <string name="banner_font_large">大字</string>
+    <string name="banner_direction">滚动方向</string>
+    <string name="banner_direction_ltr">从左到右</string>
+    <string name="banner_direction_rtl">从右到左</string>
+    <string name="banner_mirror">镜像显示</string>
+    <string name="banner_mirror_hint">适合把手机屏幕朝向玻璃反射给他人观看。</string>
+    <string name="banner_keep_screen">全屏时保持屏幕常亮</string>
+    <string name="banner_keep_screen_hint">离开全屏后立即释放常亮标志。</string>
+    <string name="banner_play">全屏播放</string>
+    <string name="banner_clear">清空文字</string>
+    <string name="banner_reset_style">恢复默认样式</string>
+    <string name="banner_note" formatted="false">文字、速度和样式只保存在本机，不上传也不要求网络。全屏中默认持续循环滚动；点按屏幕可显示或隐藏控制，暂停会停在当前位置。</string>
+    <string name="banner_fullscreen_title">全屏弹幕</string>
+    <string name="banner_fullscreen_hint">点按屏幕显示或隐藏控制</string>
+    <string name="banner_toggle_controls">显示或隐藏控制</string>
+    <string name="banner_pause">暂停</string>
+    <string name="banner_resume">继续</string>
+    <string name="banner_exit">退出</string>
+    <string name="banner_fullscreen_summary">%1$s · %2$s · %3$s</string>
+    <string name="banner_description_accessibility">全屏滚动弹幕：%1$s</string>
 </resources>

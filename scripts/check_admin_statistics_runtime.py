@@ -46,6 +46,8 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
     admin_password = uuid.uuid4().hex
     created_db = False
     redis_container = None
+    temporary_network = None
+    mysql_container = 'cangshuo-toolbox-production-mysql-1'
     checks = [0]
     check_lock = threading.Lock()
     def check(condition, name):
@@ -66,13 +68,16 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
             # The strict candidate never receives production API, mail, storage
             # or third-party credentials and is attached only to its database
             # network. A disposable Redis instance supplies rate-limit storage.
+            temporary_network = 'codex-stats-net-' + suffix
+            command(['docker', 'network', 'create', temporary_network])
+            command(['docker', 'network', 'connect', temporary_network, mysql_container])
             redis_image = inspect('cangshuo-toolbox-production-redis-1')['Config']['Image']
             redis_container = 'codex-stats-redis-' + suffix
-            command(['docker', 'create', '--name', redis_container, '--network', network,
+            command(['docker', 'create', '--name', redis_container, '--network', temporary_network,
                      redis_image, 'redis-server', '--save', '', '--appendonly', 'no'])
             command(['docker', 'start', redis_container])
             inherited = (
-                'DB_HOST', 'DB_PORT', 'DB_SSL_MODE', 'SPRING_PROFILES_ACTIVE',
+                'DB_SSL_MODE', 'SPRING_PROFILES_ACTIVE',
                 'SERVER_FORWARD_HEADERS_STRATEGY', 'ADMIN_TOKEN_TTL_SECONDS',
                 'RATE_LIMIT_WINDOW_SECONDS', 'RATE_LIMIT_MAX_ANONYMOUS',
                 'RATE_LIMIT_MAX_AUTHENTICATED', 'RATE_LIMIT_MAX_AUTH_ATTEMPTS',
@@ -80,7 +85,8 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
             environment = dict((key, source_environment[key]) for key in inherited
                                if key in source_environment)
             environment.update(
-                DB_NAME=database, DB_USERNAME=user, DB_PASSWORD=password,
+                DB_HOST=mysql_container, DB_PORT='3306', DB_NAME=database,
+                DB_USERNAME=user, DB_PASSWORD=password,
                 REDIS_HOST=redis_container, REDIS_PORT='6379', REDIS_PASSWORD='',
                 REDIS_USERNAME='', REDIS_DATABASE='0', REDIS_SSL_ENABLED='false',
                 SERVER_PORT='8080', CORS_ALLOWED_ORIGINS='',
@@ -108,7 +114,7 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
             args.extend(['-e', key + '=' + value])
         args.append(image)
         command(args)
-        command(['docker', 'network', 'connect', network, container])
+        command(['docker', 'network', 'connect', temporary_network if strict_isolation else network, container])
         for extra_network in candidate_networks:
             command(['docker', 'network', 'connect', extra_network, container])
         command(['docker', 'start', container])
@@ -235,6 +241,11 @@ def run(image, extra_checks=None, candidate_environment=None, candidate_networks
         subprocess.call(['docker', 'rm', '-f', container], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if redis_container is not None:
             subprocess.call(['docker', 'rm', '-f', redis_container], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if temporary_network is not None:
+            subprocess.call(['docker', 'network', 'disconnect', '-f', temporary_network, mysql_container],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.call(['docker', 'network', 'rm', temporary_network],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if created_db:
             sql("DROP DATABASE `%s`; DROP USER '%s'@'%%';" % (database, user))
         print('Isolated container/database/user cleanup finished')

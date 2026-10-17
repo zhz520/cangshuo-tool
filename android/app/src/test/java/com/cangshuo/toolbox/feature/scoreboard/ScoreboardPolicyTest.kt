@@ -97,6 +97,9 @@ class ScoreboardPolicyTest {
         assertFalse(ScoreboardPolicy.isUsableName("\u200C\u200D"))
         val longer = emoji + "x"
         assertEquals(ScoreboardPolicy.MAX_NAME_CODE_POINTS, ScoreboardPolicy.boundedName(longer).codePointCount(0, ScoreboardPolicy.boundedName(longer).length))
+        val family = "👨‍👩‍👧‍👦"
+        val families = ScoreboardPolicy.boundedName(family.repeat(10))
+        assertEquals(3 * family.codePointCount(0, family.length), families.codePointCount(0, families.length))
         assertEquals("Alpha", ScoreboardPolicy.editedName("   ", "Alpha"))
     }
 

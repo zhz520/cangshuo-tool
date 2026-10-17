@@ -278,3 +278,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V72 记分牌目录
 
 `V72__seed_scoreboard_tool.sql` 登记 `scoreboard`，LIFE/LOCAL/ENABLED，排序 624、requires_login=0、is_featured=0。关键词覆盖记分牌、计分、比分、两队、计时、比赛、裁判及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。比分、队名、节次、计时和撤销历史只保存在 Android 本地，不上传也不新增表。实现与边界见 [记分牌](SCOREBOARD.md)。生产已执行 V72，Flyway 历史 72/72 且全部成功。
+
+## V73 手持弹幕目录
+
+`V73__seed_handheld_banner_tool.sql` 登记 `handheld_banner`，LIFE/LOCAL/ENABLED，排序 625、requires_login=0、is_featured=0。关键词覆盖手持弹幕、弹幕、滚动字幕、走马灯、LED、接机及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。弹幕文字和样式只保存在 Android 本地，不上传也不新增表。实现与边界见 [手持弹幕](HANDHELD_BANNER.md)。
