@@ -20,6 +20,8 @@ enum class ResizeMode {
 
 enum class FlipMode { NONE, HORIZONTAL, VERTICAL, BOTH }
 
+enum class ImageFilter { NONE, GRAYSCALE, WARM, COOL, HIGH_CONTRAST }
+
 fun FlipMode.scaleFactors(): Pair<Float, Float> = when (this) {
     FlipMode.NONE -> 1f to 1f
     FlipMode.HORIZONTAL -> -1f to 1f
@@ -38,6 +40,7 @@ data class CompressParams(
     val cornerRadiusPercent: Int = 0,
     val mosaicPercent: Int = 0,
     val blurPercent: Int = 0,
+    val filter: ImageFilter = ImageFilter.NONE,
 )
 
 fun cornerRadiusPx(percent: Int, width: Int, height: Int): Float =

@@ -8,6 +8,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Path
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.graphics.RectF
 import android.media.ExifInterface
 import android.net.Uri
@@ -29,6 +32,7 @@ import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFailure
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingException
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageProcessingLimits
+import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
 import com.cangshuo.toolbox.feature.imagecompress.domain.OutputImageFormat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -105,6 +109,21 @@ class LocalImageCompressRepository(private val context: Context) : ImageCompress
                         val blurred = small.scale(width, height, filter = true)
                         small.recycle()
                         working = replace(working, blurred)
+                    }
+                    if (params.filter != ImageFilter.NONE) {
+                        val matrix = when (params.filter) {
+                            ImageFilter.GRAYSCALE -> ColorMatrix().apply { setSaturation(0f) }
+                            ImageFilter.WARM -> ColorMatrix(floatArrayOf(
+                                1.08f, 0f, 0f, 0f, 8f, 0f, 1.02f, 0f, 0f, 0f, 0f, 0f, 0.92f, 0f, 0f, 0f, 0f, 0f, 1f, 0f))
+                            ImageFilter.COOL -> ColorMatrix(floatArrayOf(
+                                0.92f, 0f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 0f, 1.08f, 0f, 8f, 0f, 0f, 0f, 1f, 0f))
+                            ImageFilter.HIGH_CONTRAST -> ColorMatrix(floatArrayOf(
+                                1.25f, 0f, 0f, 0f, -31.8f, 0f, 1.25f, 0f, 0f, -31.8f, 0f, 0f, 1.25f, 0f, -31.8f, 0f, 0f, 0f, 1f, 0f))
+                            ImageFilter.NONE -> ColorMatrix()
+                        }
+                        val filtered = createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        Canvas(filtered).drawBitmap(working, 0f, 0f, Paint().apply { colorFilter = ColorMatrixColorFilter(matrix) })
+                        working = replace(working, filtered)
                     }
                     if (params.mosaicPercent > 0) {
                         val cell = mosaicCellSize(params.mosaicPercent, width, height)

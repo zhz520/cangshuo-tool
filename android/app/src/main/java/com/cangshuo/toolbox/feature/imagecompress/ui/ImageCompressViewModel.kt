@@ -8,6 +8,7 @@ import com.cangshuo.toolbox.R
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressImageUseCase
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.DiscardImageUseCase
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -70,6 +71,7 @@ class ImageCompressViewModel(
     fun onCornerRadiusChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(cornerRadiusPercent = percent.coerceIn(0, 50)))
     fun onMosaicChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(mosaicPercent = percent.coerceIn(0, 50)))
     fun onBlurChanged(percent: Int) = updateParams(_uiState.value.compressParams.copy(blurPercent = percent.coerceIn(0, 20)))
+    fun onFilterChanged(filter: ImageFilter) = updateParams(_uiState.value.compressParams.copy(filter = filter))
 
     private fun updateParams(params: CompressParams) {
         if (isExporting || params == _uiState.value.compressParams) return

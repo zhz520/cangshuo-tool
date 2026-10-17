@@ -60,6 +60,7 @@ import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressParams
 import com.cangshuo.toolbox.feature.imagecompress.domain.FlipMode
+import com.cangshuo.toolbox.feature.imagecompress.domain.ImageFilter
 import com.cangshuo.toolbox.feature.imagecompress.domain.CompressResult
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageMetadata
 import com.cangshuo.toolbox.feature.imagecompress.domain.ImageExportRequest
@@ -80,6 +81,7 @@ fun ImageCompressScreen(
     onCornerRadiusChanged: (Int) -> Unit,
     onMosaicChanged: (Int) -> Unit,
     onBlurChanged: (Int) -> Unit,
+    onFilterChanged: (ImageFilter) -> Unit,
     onSaveRequested: (Boolean) -> ImageExportRequest?,
     onDocumentCreated: (Uri?) -> Unit,
     onExportUnavailable: () -> Unit,
@@ -292,6 +294,7 @@ fun ImageCompressScreen(
                     onCornerRadiusChanged = onCornerRadiusChanged,
                     onMosaicChanged = onMosaicChanged,
                     onBlurChanged = onBlurChanged,
+                    onFilterChanged = onFilterChanged,
                 )
             }
 
@@ -543,6 +546,7 @@ private fun SettingsCard(
     onCornerRadiusChanged: (Int) -> Unit,
     onMosaicChanged: (Int) -> Unit,
     onBlurChanged: (Int) -> Unit,
+    onFilterChanged: (ImageFilter) -> Unit,
 ) {
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -782,6 +786,22 @@ private fun SettingsCard(
                     listOf(0, 5, 10, 15, 20).forEach { value ->
                         FilterChip(enabled = enabled, selected = params.blurPercent == value,
                             onClick = { onBlurChanged(value) }, label = { Text("$value%") })
+                    }
+                }
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.image_compress_filter_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(ImageFilter.NONE to R.string.image_compress_filter_none,
+                        ImageFilter.GRAYSCALE to R.string.image_compress_filter_gray,
+                        ImageFilter.WARM to R.string.image_compress_filter_warm,
+                        ImageFilter.COOL to R.string.image_compress_filter_cool,
+                        ImageFilter.HIGH_CONTRAST to R.string.image_compress_filter_contrast).forEach { (filter, label) ->
+                        FilterChip(enabled = enabled, selected = params.filter == filter,
+                            onClick = { onFilterChanged(filter) }, label = { Text(stringResource(label)) })
                     }
                 }
             }

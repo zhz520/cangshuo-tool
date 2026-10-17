@@ -246,3 +246,7 @@ Room v6/v7 分别为最近和设置增加独立开关/enrolled 标记，旧收�
 ## V64 图片模糊发现性
 
 `V64__update_image_compress_blur.sql` 仅在描述仍为 V63 内容时加入模糊与 `blur` 关键词，保留人工编辑；不新增表或接口。
+
+## V65 图片滤镜发现性
+
+`V65__update_image_compress_filters.sql` 仅在描述仍为 V64 内容时加入滤镜与 `filter` 关键词，保留人工编辑；不新增表或接口。
