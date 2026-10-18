@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     QrHistoryEntity::class, QrHistoryPreferenceEntity::class, SyncEntity::class, SyncPreferenceEntity::class,
     SyncDeviceEntity::class, TodoTaskEntity::class, HabitEntity::class, HabitEntryEntity::class,
     AnniversaryEventEntity::class, PomodoroSessionEntity::class, InventoryItemEntity::class,
-    SubscriptionItemEntity::class], version = 13, exportSchema = true)
+    SubscriptionItemEntity::class, PeriodCycleEntity::class], version = 14, exportSchema = true)
 abstract class ToolboxDatabase : RoomDatabase() {
     abstract fun favoriteToolDao(): FavoriteToolDao
     abstract fun recentToolDao(): RecentToolDao
@@ -20,4 +20,5 @@ abstract class ToolboxDatabase : RoomDatabase() {
     abstract fun pomodoroSessionDao(): PomodoroSessionDao
     abstract fun inventoryItemDao(): InventoryItemDao
     abstract fun subscriptionItemDao(): SubscriptionItemDao
+    abstract fun periodCycleDao(): PeriodCycleDao
 }

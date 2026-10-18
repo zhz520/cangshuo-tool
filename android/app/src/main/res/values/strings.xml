@@ -3310,4 +3310,122 @@
     <string name="noise_note" formatted="false">所有环境声由设备实时合成，不包含下载或录制的音频素材，也不上传使用数据。播放依赖媒体前台服务和系统音频焦点；耳机断开时会自动暂停。强制停止应用会终止播放，睡眠定时在暂停期间冻结。</string>
     <string name="noise_invalid_settings">声音设置无效，请重新选择。</string>
     <string name="noise_audio_unavailable">当前无法启动音频输出，请检查声音设备后重试。</string>
+    <string name="period_name">经期记录</string>
+    <string name="period_description">在本机记录经期起止、流量、症状和情绪，查看日历、历史统计与周期估算。</string>
+    <string-array name="period_keywords">
+        <item>经期</item><item>月经</item><item>周期</item><item>排卵</item><item>日历</item><item>健康</item><item>period</item><item>cycle</item>
+    </string-array>
+    <string-array name="period_weekdays">
+        <item>一</item><item>二</item><item>三</item><item>四</item><item>五</item><item>六</item><item>日</item>
+    </string-array>
+    <string-array name="period_weekdays_full">
+        <item>星期一</item><item>星期二</item><item>星期三</item><item>星期四</item><item>星期五</item><item>星期六</item><item>星期日</item>
+    </string-array>
+    <string name="period_loading">正在读取本机周期记录…</string>
+    <string name="period_previous_month">上月</string>
+    <string name="period_next_month">下月</string>
+    <string name="period_calendar_hint">点击日期查看或记录当天所属的经期。</string>
+    <string name="period_calendar_swipe">窄屏可左右滑动日历</string>
+    <string name="period_today">今天</string>
+    <string name="period_cycle_overview">周期概览</string>
+    <string name="period_current_period">当前经期</string>
+    <string name="period_ongoing">进行中</string>
+    <string name="period_first_record_hint">记录第一次经期后，将根据历史长度估算下一次日期。</string>
+    <string name="period_cycle_day">当前周期</string>
+    <string name="period_cycle_day_value">第 %1$d 天</string>
+    <string name="period_next_expected">预计下次经期</string>
+    <string name="period_today_label">今天</string>
+    <string name="period_add_record">添加记录</string>
+    <string name="period_edit_record">编辑记录</string>
+    <string name="period_settings">周期设置</string>
+    <string name="period_day_description">%1$s</string>
+    <string name="period_day_status_description">%1$s，%2$s</string>
+    <string name="period_legend_recorded_ongoing">已记录，经期进行中</string>
+    <string name="period_legend_recorded">已记录经期</string>
+    <string name="period_legend_predicted">预计经期</string>
+    <string name="period_legend_reference">参考窗口</string>
+    <string name="period_legend_symptoms">已记录症状</string>
+    <string name="period_legend_notes">含备注</string>
+    <string name="period_start_day_status">经期开始日</string>
+    <string name="period_end_day_status">经期结束日</string>
+    <string name="period_today_status">今天</string>
+    <string name="period_selected_status">已选中</string>
+    <string name="period_outside_month">不在当前月份</string>
+    <string name="period_no_record">这一天没有周期记录。</string>
+    <string name="period_flow">流量</string>
+    <string name="period_symptoms">症状</string>
+    <string name="period_mood">情绪</string>
+    <string name="period_estimates">周期估算</string>
+    <string name="period_average_cycle">平均周期</string>
+    <string name="period_average_period">平均经期</string>
+    <string name="period_setting_fallback">%1$d 天预设</string>
+    <string name="period_reference_window">参考窗口</string>
+    <string name="period_predicted_end">预计结束</string>
+    <string name="period_ovulation_estimate">排卵日估算</string>
+    <string name="period_estimate_note">预计日期和参考窗口由本机历史记录与预设长度计算，仅用于日常记录；不用于避孕、疾病诊断或医疗决策。压力、疾病和周期不规律都会影响结果。</string>
+    <string name="period_history">历史记录</string>
+    <string name="period_empty">还没有经期记录。选择日期后点“添加记录”开始。</string>
+    <string name="period_note">所有日期、症状、情绪和备注只保存在本机应用数据库，不上传、不同步。清除应用数据或卸载会删除全部记录。本工具不是医疗器械。</string>
+    <string name="period_range">%1$s – %2$s</string>
+    <string name="period_range_ongoing">%1$s 开始</string>
+    <string name="period_add_title">添加经期记录</string>
+    <string name="period_edit_title">编辑经期记录</string>
+    <string name="period_start_date">开始日期</string>
+    <string name="period_end_date">结束日期</string>
+    <string name="period_ongoing_switch">仍在进行</string>
+    <string name="period_ongoing_hint">尚不知道结束日期时保持开启。</string>
+    <string name="period_flow_light">少量</string>
+    <string name="period_flow_medium">中等</string>
+    <string name="period_flow_heavy">较多</string>
+    <string name="period_symptom_cramps">腹痛</string>
+    <string name="period_symptom_headache">头痛</string>
+    <string name="period_symptom_back_pain">腰背痛</string>
+    <string name="period_symptom_fatigue">疲劳</string>
+    <string name="period_symptom_bloating">腹胀</string>
+    <string name="period_symptom_tender_breasts">乳房胀痛</string>
+    <string name="period_symptom_acne">痘痘</string>
+    <string name="period_symptom_nausea">恶心</string>
+    <string name="period_mood_calm">平静</string>
+    <string name="period_mood_happy">愉快</string>
+    <string name="period_mood_sensitive">敏感</string>
+    <string name="period_mood_irritable">烦躁</string>
+    <string name="period_mood_low">低落</string>
+    <string name="period_mood_anxious">焦虑</string>
+    <string name="period_notes">备注</string>
+    <string name="period_cancel">取消</string>
+    <string name="period_saving">保存中…</string>
+    <string name="period_save">保存</string>
+    <string name="period_delete">删除</string>
+    <string name="period_delete_title">删除这条经期记录？</string>
+    <string name="period_delete_message">删除后，对应的日历标记、症状和历史统计会立即更新。此操作无法撤销。</string>
+    <string name="period_settings_title">周期设置</string>
+    <string name="period_settings_description">历史样本不足时，使用这两项作为估算默认值；有足够历史后优先使用最近 12 次的平均值。</string>
+    <string name="period_setting_cycle">典型周期长度（天）</string>
+    <string name="period_setting_period">典型经期长度（天）</string>
+    <string name="period_setting_bounds">周期可设 15–60 天，经期可设 1–14 天。</string>
+    <string name="period_error_start_date">开始日期必须在 1900 年 1 月 1 日到今天的范围内。</string>
+    <string name="period_error_end_date">结束日期必须在开始日期到今天之间，且单次记录最多 31 天。</string>
+    <string name="period_error_date_order">结束日期不能早于开始日期。</string>
+    <string name="period_error_overlap">该日期范围与另一条经期记录重叠，请先调整现有记录。</string>
+    <string name="period_error_ongoing">已经有一条进行中的经期，请先结束它。</string>
+    <string name="period_error_notes">备注最多 500 个字符。</string>
+    <string name="period_error_limit">最多保存 1200 条经期记录。</string>
+    <string name="period_error_settings">周期需为 15–60 天，经期需为 1–14 天。</string>
+    <string name="period_error_storage">本机数据操作失败，请重试。</string>
+    <string name="period_saved">经期记录已保存。</string>
+    <string name="period_deleted">经期记录已删除。</string>
+    <string name="period_settings_saved">周期设置已保存。</string>
+    <string name="period_future_date">未来日期不能新增经期记录。</string>
+    <plurals name="period_day_value">
+        <item quantity="one">%1$d 天</item>
+        <item quantity="other">%1$d 天</item>
+    </plurals>
+    <plurals name="period_late_days">
+        <item quantity="one">预计日期已过 %1$d 天，仍可继续记录。</item>
+        <item quantity="other">预计日期已过 %1$d 天，仍可继续记录。</item>
+    </plurals>
+    <plurals name="period_record_count">
+        <item quantity="one">共 %1$d 条</item>
+        <item quantity="other">共 %1$d 条</item>
+    </plurals>
 </resources>

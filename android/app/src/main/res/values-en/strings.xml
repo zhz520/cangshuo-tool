@@ -3230,4 +3230,122 @@
     <string name="noise_note" formatted="false">All ambience is synthesized on the device; there are no downloaded or recorded audio assets and no usage upload. Playback uses a media foreground service and audio focus, and pauses when headphones disconnect. Force-stopping the app ends playback; the sleep timer freezes while paused.</string>
     <string name="noise_invalid_settings">The sound settings are invalid. Select the layers again.</string>
     <string name="noise_audio_unavailable">Audio output could not start. Check the sound device and try again.</string>
+    <string name="period_name">Period tracker</string>
+    <string name="period_description">Track period dates, flow, symptoms and mood locally, with calendar history and cycle estimates.</string>
+    <string-array name="period_keywords">
+        <item>period</item><item>menstruation</item><item>cycle</item><item>calendar</item><item>symptoms</item><item>health</item><item>经期</item><item>月经</item>
+    </string-array>
+    <string-array name="period_weekdays">
+        <item>M</item><item>T</item><item>W</item><item>T</item><item>F</item><item>S</item><item>S</item>
+    </string-array>
+    <string-array name="period_weekdays_full">
+        <item>Monday</item><item>Tuesday</item><item>Wednesday</item><item>Thursday</item><item>Friday</item><item>Saturday</item><item>Sunday</item>
+    </string-array>
+    <string name="period_loading">Reading local cycle records…</string>
+    <string name="period_previous_month">Previous</string>
+    <string name="period_next_month">Next</string>
+    <string name="period_calendar_hint">Select a date to view or record its period.</string>
+    <string name="period_calendar_swipe">Swipe the calendar horizontally on narrow screens</string>
+    <string name="period_today">Today</string>
+    <string name="period_cycle_overview">Cycle overview</string>
+    <string name="period_current_period">Current period</string>
+    <string name="period_ongoing">Ongoing</string>
+    <string name="period_first_record_hint">Record your first period to receive estimates based on your history.</string>
+    <string name="period_cycle_day">Current cycle</string>
+    <string name="period_cycle_day_value">Day %1$d</string>
+    <string name="period_next_expected">Next expected period</string>
+    <string name="period_today_label">Today</string>
+    <string name="period_add_record">Add record</string>
+    <string name="period_edit_record">Edit record</string>
+    <string name="period_settings">Cycle settings</string>
+    <string name="period_day_description">%1$s</string>
+    <string name="period_day_status_description">%1$s, %2$s</string>
+    <string name="period_legend_recorded_ongoing">Recorded, period ongoing</string>
+    <string name="period_legend_recorded">Recorded period</string>
+    <string name="period_legend_predicted">Predicted period</string>
+    <string name="period_legend_reference">Reference window</string>
+    <string name="period_legend_symptoms">Symptoms recorded</string>
+    <string name="period_legend_notes">Notes included</string>
+    <string name="period_start_day_status">Period start day</string>
+    <string name="period_end_day_status">Period end day</string>
+    <string name="period_today_status">Today</string>
+    <string name="period_selected_status">Selected</string>
+    <string name="period_outside_month">Outside current month</string>
+    <string name="period_no_record">No cycle record for this date.</string>
+    <string name="period_flow">Flow</string>
+    <string name="period_symptoms">Symptoms</string>
+    <string name="period_mood">Mood</string>
+    <string name="period_estimates">Cycle estimates</string>
+    <string name="period_average_cycle">Average cycle</string>
+    <string name="period_average_period">Average period</string>
+    <string name="period_setting_fallback">%1$d-day default</string>
+    <string name="period_reference_window">Reference window</string>
+    <string name="period_predicted_end">Predicted end</string>
+    <string name="period_ovulation_estimate">Estimated ovulation</string>
+    <string name="period_estimate_note">Estimated dates and the reference window are calculated from local history and defaults for tracking only. They are not for contraception, diagnosis or medical decisions. Stress, illness and irregular cycles can affect results.</string>
+    <string name="period_history">History</string>
+    <string name="period_empty">No period records yet. Select a date and choose Add record to begin.</string>
+    <string name="period_note">Dates, symptoms, mood and notes stay in the private on-device database and are not uploaded or synchronized. Clearing app data or uninstalling removes them. This tool is not a medical device.</string>
+    <string name="period_range">%1$s – %2$s</string>
+    <string name="period_range_ongoing">Since %1$s</string>
+    <string name="period_add_title">Add period record</string>
+    <string name="period_edit_title">Edit period record</string>
+    <string name="period_start_date">Start date</string>
+    <string name="period_end_date">End date</string>
+    <string name="period_ongoing_switch">Still ongoing</string>
+    <string name="period_ongoing_hint">Keep this on when the end date is not known yet.</string>
+    <string name="period_flow_light">Light</string>
+    <string name="period_flow_medium">Medium</string>
+    <string name="period_flow_heavy">Heavy</string>
+    <string name="period_symptom_cramps">Cramps</string>
+    <string name="period_symptom_headache">Headache</string>
+    <string name="period_symptom_back_pain">Back pain</string>
+    <string name="period_symptom_fatigue">Fatigue</string>
+    <string name="period_symptom_bloating">Bloating</string>
+    <string name="period_symptom_tender_breasts">Tender breasts</string>
+    <string name="period_symptom_acne">Acne</string>
+    <string name="period_symptom_nausea">Nausea</string>
+    <string name="period_mood_calm">Calm</string>
+    <string name="period_mood_happy">Happy</string>
+    <string name="period_mood_sensitive">Sensitive</string>
+    <string name="period_mood_irritable">Irritable</string>
+    <string name="period_mood_low">Low</string>
+    <string name="period_mood_anxious">Anxious</string>
+    <string name="period_notes">Notes</string>
+    <string name="period_cancel">Cancel</string>
+    <string name="period_saving">Saving…</string>
+    <string name="period_save">Save</string>
+    <string name="period_delete">Delete</string>
+    <string name="period_delete_title">Delete this period record?</string>
+    <string name="period_delete_message">Its calendar marks, symptoms and statistics will update immediately. This cannot be undone.</string>
+    <string name="period_settings_title">Cycle settings</string>
+    <string name="period_settings_description">These defaults are used when history is sparse. Once enough records exist, the latest 12 averages take priority.</string>
+    <string name="period_setting_cycle">Typical cycle length (days)</string>
+    <string name="period_setting_period">Typical period length (days)</string>
+    <string name="period_setting_bounds">Cycle: 15–60 days. Period: 1–14 days.</string>
+    <string name="period_error_start_date">The start date must be between January 1, 1900 and today.</string>
+    <string name="period_error_end_date">The end date must be between the start date and today, with at most 31 days per record.</string>
+    <string name="period_error_date_order">The end date cannot be before the start date.</string>
+    <string name="period_error_overlap">This range overlaps another period record. Adjust the existing record first.</string>
+    <string name="period_error_ongoing">Another period is already ongoing. End it first.</string>
+    <string name="period_error_notes">Notes can contain at most 500 characters.</string>
+    <string name="period_error_limit">You can keep up to 1,200 period records.</string>
+    <string name="period_error_settings">Cycle must be 15–60 days and period must be 1–14 days.</string>
+    <string name="period_error_storage">The local data operation failed. Try again.</string>
+    <string name="period_saved">Period record saved.</string>
+    <string name="period_deleted">Period record deleted.</string>
+    <string name="period_settings_saved">Cycle settings saved.</string>
+    <string name="period_future_date">Future dates cannot be added as period records.</string>
+    <plurals name="period_day_value">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="period_late_days">
+        <item quantity="one">The estimate is %1$d day past. You can still record.</item>
+        <item quantity="other">The estimate is %1$d days past. You can still record.</item>
+    </plurals>
+    <plurals name="period_record_count">
+        <item quantity="one">%1$d record</item>
+        <item quantity="other">%1$d records</item>
+    </plurals>
 </resources>

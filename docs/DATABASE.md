@@ -207,6 +207,8 @@ Room v12 为物品资产新增 `inventory_item`。记录保存名称、备注、
 
 Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务商、分类、分单位价格、计费周期与自定义天数、开始日期、原始账单锚点、下次续费日期、支付方式、备注、提醒/自动续费/启用状态和毫秒时间戳；`MIGRATION_12_13` 只创建新表及启用状态、下次续费、更新时间索引。Room `@Transaction` 原子检查 500 条上限，后台每日提醒接收器通过 App 级数据库提供器读取本地记录。真实 v12 数据库覆盖升级到 v13 后保留 `calculator` 最近使用记录，18 列和三个索引与导出 schema 13 一致。见 [订阅管理](SUBSCRIPTION_MANAGER.md)。
 
+Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期、可空的进行中状态、流量、症状位掩码、可空情绪、备注和毫秒时间戳；`MIGRATION_13_14` 只创建新表、唯一开始日索引和更新时间索引，不修改任何旧表或已执行迁移。`@Transaction` 检查 1200 条上限；记录不接入现有云同步。真实 v13 数据库升级到 v14 后保留 `recent_tool` 历史，9 列和两个索引与导出 schema 14 一致。见 [经期记录](PERIOD_TRACKER.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -338,3 +340,7 @@ Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务
 `V83__seed_white_noise_tool.sql` 登记 `white_noise`，LIFE/LOCAL/ENABLED，排序 635、requires_login=0、is_featured=0。关键词覆盖白噪音、粉噪音、褐噪音、雨声、海浪、助眠及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。声音由 Android DSP 实时合成，播放设置只保存在应用私有 SharedPreferences，不新增音频文件、业务表、公开 API 或服务端播放记录。实现与边界见 [白噪音](WHITE_NOISE.md)。
 
 生产已执行 V83，Flyway 历史 83/83 且失败 0。
+
+## V84 经期记录目录
+
+`V84__seed_period_tracker_tool.sql` 登记 `period_tracker`，LIFE/LOCAL/ENABLED，排序 636、requires_login=0、is_featured=0。关键词覆盖经期、月经、周期、排卵、日历、健康及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。敏感健康记录只保存在 Android Room/私有 SharedPreferences，不上传、不同步，也不新增服务端业务表或健康数据 API。实现与边界见 [经期记录](PERIOD_TRACKER.md)。

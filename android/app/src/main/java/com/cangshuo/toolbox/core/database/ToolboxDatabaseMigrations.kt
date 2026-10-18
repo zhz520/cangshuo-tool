@@ -157,3 +157,20 @@ val MIGRATION_12_13 = object : Migration(12, 13) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_subscription_item_updated_at ON subscription_item (updated_at)")
     }
 }
+
+/** Version 14 adds local-only menstrual cycle records without touching existing tables. */
+val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS period_cycle (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "start_epoch_day INTEGER NOT NULL, end_epoch_day INTEGER, flow INTEGER NOT NULL, " +
+                "symptoms_mask INTEGER NOT NULL, mood INTEGER, notes TEXT NOT NULL, " +
+                "created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL(
+            "CREATE UNIQUE INDEX IF NOT EXISTS index_period_cycle_start_epoch_day " +
+                "ON period_cycle (start_epoch_day)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_period_cycle_updated_at ON period_cycle (updated_at)")
+    }
+}

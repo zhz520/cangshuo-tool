@@ -393,6 +393,12 @@ class ToolboxAppContainer(context: Context) {
     private val noiseFactory = com.cangshuo.toolbox.feature.noise.ui.NoiseViewModel.factory(
         com.cangshuo.toolbox.feature.noise.data.LocalNoiseRepository(applicationContext),
     )
+    private val periodFactory = com.cangshuo.toolbox.feature.period.ui.PeriodViewModel.factory(
+        com.cangshuo.toolbox.feature.period.domain.PeriodUseCases(
+            com.cangshuo.toolbox.feature.period.data.RoomPeriodRepository(database.periodCycleDao()),
+            com.cangshuo.toolbox.feature.period.data.LocalPeriodSettingsRepository(applicationContext),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -464,6 +470,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.inventory.InventoryToolDefinition(resources,inventoryFactory),
             com.cangshuo.toolbox.feature.subscription.SubscriptionToolDefinition(resources,subscriptionFactory),
             com.cangshuo.toolbox.feature.noise.NoiseToolDefinition(resources,noiseFactory),
+            com.cangshuo.toolbox.feature.period.PeriodTrackerToolDefinition(resources,periodFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
