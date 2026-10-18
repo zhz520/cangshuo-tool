@@ -115,7 +115,8 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.core.database.MIGRATION_5_6, com.cangshuo.toolbox.core.database.MIGRATION_6_7,
             com.cangshuo.toolbox.core.database.MIGRATION_7_8, com.cangshuo.toolbox.core.database.MIGRATION_8_9,
             com.cangshuo.toolbox.core.database.MIGRATION_9_10,
-            com.cangshuo.toolbox.core.database.MIGRATION_10_11)
+            com.cangshuo.toolbox.core.database.MIGRATION_10_11,
+            com.cangshuo.toolbox.core.database.MIGRATION_11_12)
         .build()
     private val calculatorFactory = CalculatorViewModel.factory(
         CalculateExpressionUseCase(LocalCalculatorRepository()),
@@ -388,6 +389,11 @@ class ToolboxAppContainer(context: Context) {
     private val pomodoroFactory = com.cangshuo.toolbox.feature.pomodoro.ui.PomodoroViewModel.factory(
         com.cangshuo.toolbox.feature.pomodoro.domain.PomodoroUseCases(pomodoroRepository),
     )
+    private val inventoryFactory = com.cangshuo.toolbox.feature.inventory.ui.InventoryViewModel.factory(
+        com.cangshuo.toolbox.feature.inventory.domain.InventoryUseCases(
+            com.cangshuo.toolbox.feature.inventory.data.RoomInventoryRepository(database.inventoryItemDao()),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -456,6 +462,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.habit.HabitToolDefinition(resources,habitFactory),
             com.cangshuo.toolbox.feature.anniversary.AnniversaryToolDefinition(resources,anniversaryFactory),
             com.cangshuo.toolbox.feature.pomodoro.PomodoroToolDefinition(resources,pomodoroFactory),
+            com.cangshuo.toolbox.feature.inventory.InventoryToolDefinition(resources,inventoryFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

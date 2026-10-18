@@ -203,6 +203,8 @@ Room v10 为纪念日新增 `anniversary_event`。事件保存标题、备注、
 
 Room v11 为番茄专注新增 `pomodoro_session`。记录保存专注名称、阶段、计划/实际秒数、完成状态和起止毫秒时间；`MIGRATION_10_11` 只创建新表及结束时间/阶段索引，DAO 在事务内插入并裁剪最近 2000 条。计时快照和设置保存在本机 SharedPreferences，服务端只登记工具目录。见 [番茄专注](POMODORO_FOCUS.md)。
 
+Room v12 为物品资产新增 `inventory_item`。记录保存名称、备注、分类、存放位置、数量与单位、可选分单位单价、低库存阈值、可选购买/到期 epoch day 和创建/更新时间；`MIGRATION_11_12` 只创建新表及分类、到期日、更新时间索引。新增 SQL 原子检查 1000 条上限，快速增减在单条 SQL 中夹到 `0..999999`。全部物品数据不上传；服务端只登记工具目录。真实 v11 数据库覆盖升级到 v12 后保留了 `calculator` 最近使用记录，新表列和三个索引与导出 schema 12 一致。见 [物品资产](INVENTORY_ASSETS.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -318,3 +320,7 @@ Room v11 为番茄专注新增 `pomodoro_session`。记录保存专注名称、�
 ## V80 番茄专注目录
 
 `V80__seed_pomodoro_focus_tool.sql` 登记 `pomodoro_focus`，LIFE/LOCAL/ENABLED，排序 632、requires_login=0、is_featured=0。关键词覆盖番茄、专注、计时、休息、效率及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。计时设置、运行快照和专注记录只保存在 Android 本机，不上传、不同步，也不新增服务端业务表。实现与边界见 [番茄专注](POMODORO_FOCUS.md)。生产已执行 V80，Flyway 历史 80/80 且失败 0。
+
+## V81 物品资产目录
+
+`V81__seed_inventory_assets_tool.sql` 登记 `inventory_assets`，LIFE/LOCAL/ENABLED，排序 633、requires_login=0、is_featured=0。关键词覆盖物品、资产、库存、价格、位置、保质期及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。物品资料、数量和日期只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [物品资产](INVENTORY_ASSETS.md)。

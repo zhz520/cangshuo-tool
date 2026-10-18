@@ -118,3 +118,19 @@ val MIGRATION_10_11 = object : Migration(10, 11) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_pomodoro_session_phase ON pomodoro_session (phase)")
     }
 }
+
+/** Version 12 adds the local inventory ledger without touching existing tables. */
+val MIGRATION_11_12 = object : Migration(11, 12) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS inventory_item (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "name TEXT NOT NULL, notes TEXT NOT NULL, category INTEGER NOT NULL, location TEXT NOT NULL, " +
+                "quantity INTEGER NOT NULL, unit TEXT NOT NULL, unit_price_cents INTEGER, " +
+                "low_stock_threshold INTEGER NOT NULL, purchase_epoch_day INTEGER, expiry_epoch_day INTEGER, " +
+                "created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_inventory_item_category ON inventory_item (category)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_inventory_item_expiry_epoch_day ON inventory_item (expiry_epoch_day)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_inventory_item_updated_at ON inventory_item (updated_at)")
+    }
+}
