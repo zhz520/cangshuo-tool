@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextButton
@@ -62,6 +63,27 @@ fun ToolboxTextButton(
         modifier = modifier.heightIn(min = ToolboxDimens.buttonHeight),
         enabled = enabled,
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 3.dp),
+        content = content,
+    )
+}
+
+@Composable
+fun ToolboxDangerButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier.heightIn(min = ToolboxDimens.buttonHeight),
+        enabled = enabled,
+        shape = MaterialTheme.shapes.medium,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error,
+            contentColor = MaterialTheme.colorScheme.onError,
+        ),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
         content = content,
     )
 }

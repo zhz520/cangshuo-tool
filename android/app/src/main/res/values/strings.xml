@@ -3428,4 +3428,56 @@
         <item quantity="one">共 %1$d 条</item>
         <item quantity="other">共 %1$d 条</item>
     </plurals>
+    <string name="countdown_name">计时器</string>
+    <string name="countdown_description">设置最长 24 小时的倒计时，支持暂停、增加时间、通知控制和本机状态恢复。</string>
+    <string-array name="countdown_keywords">
+        <item>计时器</item><item>倒计时</item><item>计时</item><item>提醒</item><item>番茄</item><item>timer</item><item>countdown</item><item>alarm</item>
+    </string-array>
+    <string name="countdown_title">倒计时</string>
+    <string name="countdown_ready">准备就绪</string>
+    <string name="countdown_running">倒计时中</string>
+    <string name="countdown_paused">已暂停</string>
+    <string name="countdown_finished">时间到</string>
+    <string name="countdown_progress_description">倒计时进度 %1$d%%</string>
+    <string name="countdown_start">开始</string>
+    <string name="countdown_pause">暂停</string>
+    <string name="countdown_resume">继续</string>
+    <string name="countdown_reset">重置</string>
+    <string name="countdown_restart">重新开始</string>
+    <string name="countdown_add_minute">加 1 分钟</string>
+    <string name="countdown_presets">常用时长</string>
+    <string name="countdown_minutes">%1$d 分钟</string>
+    <string name="countdown_custom_duration">自定义时长</string>
+    <string name="countdown_hours">小时</string>
+    <string name="countdown_minutes_label">分钟</string>
+    <string name="countdown_seconds">秒</string>
+    <string name="countdown_label">计时器名称（可选）</string>
+    <string name="countdown_label_hint">例如：煮蛋、专注阅读</string>
+    <string name="countdown_keep_screen">计时期间保持屏幕常亮</string>
+    <string name="countdown_keep_screen_hint">仅在计时器页面位于前台时生效。</string>
+    <string name="countdown_finish_at">预计结束 %1$s</string>
+    <string name="countdown_note">计时使用前台服务和本机单调时钟，暂停后不计时；通知权限被拒时倒计时仍会继续，但只在应用内显示状态。强制停止应用会终止倒计时。本工具不使用精确闹钟权限，不是医疗或安全设备。</string>
+    <string name="countdown_notification_channel">倒计时进行中</string>
+    <string name="countdown_notification_channel_desc">后台倒计时状态与暂停、加时、停止操作</string>
+    <string name="countdown_notification_running">倒计时进行中</string>
+    <string name="countdown_notification_paused">倒计时已暂停</string>
+    <string name="countdown_complete_channel">倒计时结束提醒</string>
+    <string name="countdown_complete_channel_desc">倒计时结束时发出声音和振动提醒</string>
+    <string name="countdown_finished_title">倒计时结束</string>
+    <string name="countdown_finished_message">时间到了</string>
+    <string name="countdown_permission_title">允许结束提醒</string>
+    <string name="countdown_permission_message">允许通知后，可在通知栏暂停、继续或加时，并在时间到时收到提醒；重置需回到应用内确认。拒绝不会阻止倒计时本身。</string>
+    <string name="countdown_permission_action">允许通知</string>
+    <string name="countdown_open_notification_settings">打开通知设置</string>
+    <string name="countdown_error_duration">请输入 1 秒到 23:59:59 之间的时长。</string>
+    <string name="countdown_error_label">计时器名称最多 60 个 Unicode 码点。</string>
+    <string name="countdown_error_storage">本机计时状态保存失败，请重试。</string>
+    <string name="countdown_reset_title">重置当前倒计时？</string>
+    <string name="countdown_reset_body">当前进度会被清除并回到新的计时状态。</string>
+    <string name="countdown_reset_message">倒计时已重置。</string>
+    <string name="countdown_cancel">取消</string>
+    <string name="countdown_started">倒计时已开始。</string>
+    <string name="countdown_paused_message">倒计时已暂停。</string>
+    <string name="countdown_resumed_message">倒计时已继续。</string>
+    <string name="countdown_extended_message">已增加 1 分钟。</string>
 </resources>

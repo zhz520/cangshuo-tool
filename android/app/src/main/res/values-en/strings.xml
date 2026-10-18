@@ -3348,4 +3348,56 @@
         <item quantity="one">%1$d record</item>
         <item quantity="other">%1$d records</item>
     </plurals>
+    <string name="countdown_name">Timer</string>
+    <string name="countdown_description">Set a countdown up to 24 hours with pause, add-time, notification controls and local state recovery.</string>
+    <string-array name="countdown_keywords">
+        <item>timer</item><item>countdown</item><item>alarm</item><item>reminder</item><item>pomodoro</item><item>计时器</item><item>倒计时</item><item>计时</item>
+    </string-array>
+    <string name="countdown_title">Countdown</string>
+    <string name="countdown_ready">Ready</string>
+    <string name="countdown_running">Counting down</string>
+    <string name="countdown_paused">Paused</string>
+    <string name="countdown_finished">Time is up</string>
+    <string name="countdown_progress_description">Countdown progress %1$d%%</string>
+    <string name="countdown_start">Start</string>
+    <string name="countdown_pause">Pause</string>
+    <string name="countdown_resume">Resume</string>
+    <string name="countdown_reset">Reset</string>
+    <string name="countdown_restart">Start again</string>
+    <string name="countdown_add_minute">Add 1 minute</string>
+    <string name="countdown_presets">Quick durations</string>
+    <string name="countdown_minutes">%1$d min</string>
+    <string name="countdown_custom_duration">Custom duration</string>
+    <string name="countdown_hours">Hours</string>
+    <string name="countdown_minutes_label">Minutes</string>
+    <string name="countdown_seconds">Seconds</string>
+    <string name="countdown_label">Timer name (optional)</string>
+    <string name="countdown_label_hint">For example: boil eggs, reading</string>
+    <string name="countdown_keep_screen">Keep the screen on while timing</string>
+    <string name="countdown_keep_screen_hint">Applies while this timer page is in the foreground.</string>
+    <string name="countdown_finish_at">Ends around %1$s</string>
+    <string name="countdown_note">The countdown uses a foreground service and the device monotonic clock. Paused time is not counted. If notification permission is denied, the countdown continues but status is only visible in the app. Force-stopping the app ends the countdown. This tool uses no exact-alarm permission and is not a medical or safety device.</string>
+    <string name="countdown_notification_channel">Countdown in progress</string>
+    <string name="countdown_notification_channel_desc">Background countdown status with pause, add-time and stop actions</string>
+    <string name="countdown_notification_running">Countdown in progress</string>
+    <string name="countdown_notification_paused">Countdown paused</string>
+    <string name="countdown_complete_channel">Countdown completion</string>
+    <string name="countdown_complete_channel_desc">Play a sound and vibrate when the countdown ends</string>
+    <string name="countdown_finished_title">Countdown finished</string>
+    <string name="countdown_finished_message">Time is up</string>
+    <string name="countdown_permission_title">Allow completion alerts</string>
+    <string name="countdown_permission_message">Allow notifications to pause, resume or add time from the notification shade, and receive an alert when time is up. Reset stays in the app and asks for confirmation. Denying permission does not stop the countdown.</string>
+    <string name="countdown_permission_action">Allow notifications</string>
+    <string name="countdown_open_notification_settings">Open notification settings</string>
+    <string name="countdown_error_duration">Enter a duration from 1 second to 23:59:59.</string>
+    <string name="countdown_error_label">The timer name can contain at most 60 Unicode code points.</string>
+    <string name="countdown_error_storage">Could not save the local timer state. Try again.</string>
+    <string name="countdown_reset_title">Reset this countdown?</string>
+    <string name="countdown_reset_body">The current progress will be cleared and the timer will return to its ready state.</string>
+    <string name="countdown_reset_message">Countdown reset.</string>
+    <string name="countdown_cancel">Cancel</string>
+    <string name="countdown_started">Countdown started.</string>
+    <string name="countdown_paused_message">Countdown paused.</string>
+    <string name="countdown_resumed_message">Countdown resumed.</string>
+    <string name="countdown_extended_message">Added 1 minute.</string>
 </resources>

@@ -7,6 +7,9 @@
 | INTERNET | 工具目录、账号/同步、公告推荐、反馈、AI、官网 WebView 和用户主动网络诊断；普通权限，无授权弹窗 | 可匿名使用基础工具，云同步默认关闭，AI 提交前单独同意 |
 | CAMERA | 二维码实时扫描；运行时敏感权限 | 点击开启相机才申请，拒绝后仍能用生成/相册识别；可在系统权限设置撤回 |
 | ACCESS_NETWORK_STATE | 合并依赖清单引入的普通权限，查询网络可用性 | 不等同于位置权限，不读取 Wi-Fi 密码 |
+| POST_NOTIFICATIONS | Android 13+ 的白噪音、倒计时、番茄钟与订阅提醒状态通知；运行时权限 | 拒绝不会阻止本地计时或音频，但通知栏操作和完成提醒不可见；可在系统设置撤回 |
+| FOREGROUND_SERVICE / FOREGROUND_SERVICE_SPECIAL_USE / FOREGROUND_SERVICE_MEDIA_PLAYBACK | 番茄钟、倒计时与白噪音的前台服务；系统要求声明用途类型 | 仅在对应任务运行期间保持前台服务，停止后撤销 |
+| WAKE_LOCK | 倒计时运行期间持有一个非引用计数 `PARTIAL_WAKE_LOCK`，避免设备休眠使 CPU 停止推进 | 暂停、完成、重置和服务销毁时立即释放；不读取或控制其他应用电源状态 |
 | com.cangshuo.toolbox.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION | AndroidX 自动声明的应用内 signature 级接收器保护 | 不向用户申请，不用于读取其他应用数据 |
 
 未声明定位、麦克风、通讯录、电话、READ_MEDIA_*、READ/WRITE_EXTERNAL_STORAGE 或 MANAGE_EXTERNAL_STORAGE。传感器指南针/水平仪不申请位置；相机为可选硬件，缺失设备可安装并使用其他工具。

@@ -12,7 +12,8 @@ EXPECTED_PERMISSIONS = {'android.permission.INTERNET', 'android.permission.CAMER
     'android.permission.ACCESS_NETWORK_STATE', 'com.cangshuo.toolbox.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION',
     'android.permission.FOREGROUND_SERVICE', 'android.permission.FOREGROUND_SERVICE_SPECIAL_USE',
     'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
-    'android.permission.POST_NOTIFICATIONS', 'android.permission.RECEIVE_BOOT_COMPLETED'}
+    'android.permission.POST_NOTIFICATIONS', 'android.permission.RECEIVE_BOOT_COMPLETED',
+    'android.permission.WAKE_LOCK'}
 
 def require(value, reason):
     if not value: raise ValueError(reason)

@@ -45,7 +45,7 @@
 - `ToolSectionHeader(title, trailing)`：分区标题（SemiBold）。
 - `ToolboxChevron()`：列表行右侧箭头。
 - `ToolGroupCard(title)`：分组卡（白底 + 1dp 细边 + 16dp 圆角），仅用于真正的分组。
-- `ToolboxButton` / `ToolboxOutlinedButton` / `ToolboxTextButton`：统一尺寸按钮。
+- `ToolboxButton` / `ToolboxOutlinedButton` / `ToolboxTextButton` / `ToolboxDangerButton`：统一尺寸按钮；危险确认使用错误色令牌。
 - `ToolboxTextField`：浅灰填充输入框（无边框）。
 - `ToolboxSwitch`：共享主题开关，关闭态圆点使用 `onSurfaceVariant`，与浅色轨道区分；沿用原有回调、禁用和无障碍语义。
 - `ToolboxDivider(startIndent)`：1dp 细分割线。
