@@ -330,3 +330,5 @@ Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务
 ## V82 订阅管理目录
 
 `V82__seed_subscription_manager_tool.sql` 登记 `subscription_manager`，LIFE/LOCAL/ENABLED，排序 634、requires_login=0、is_featured=0。关键词覆盖订阅、会员、续费、账单、到期、自动续费及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。订阅资料和提醒设置只保存在 Android Room/私有 SharedPreferences，不上传、不同步，也不新增服务端业务表或第三方支付接口。实现与边界见 [订阅管理](SUBSCRIPTION_MANAGER.md)。
+
+生产已执行 V82，Flyway 历史 82/82 且失败 0。

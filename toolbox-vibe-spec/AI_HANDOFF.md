@@ -10,7 +10,7 @@
 
 订阅管理 `subscription_manager`（LIFE/LOCAL、排序 634、V82）已完成本地交付：Room v13 本地订阅资料、周/月/季/半年/年与自定义周期、整数分月/年汇总、持久化账单锚点和月末不漂移续费、自动续费有效日期、记录续费、暂停/恢复、搜索筛选排序、500 条事务上限、双语与 SavedState。通知权限按需申请，存在提醒订阅时每日 09:00 使用无需精确闹钟权限的 `AlarmManager` 检查，并在重启、时间/时区/日期变化后重排；摘要通知使用自动续费后的有效日期。参考 Apache-2.0 Wallosmobile 与 MIT SubGuard 固定 commit 的续费/统计/提醒概念，未复制源码或资源。
 
-Android Debug/Release 各 **789/789**（117 suites），两种构建 Lint **0 错误/91 条既有警告** 且订阅管理文件无 finding；Debug APK **25,482,728** 字节、Release APK **17,275,433** 字节、AAB **16,702,293** 字节，Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、静态契约 **152/152**，后台 `vue-tsc --noEmit` 与生产构建通过。Android 16 模拟器验证新增、金额汇总、到期状态、权限申请、真实通知、续费推进、深色、2 倍字体，并从 v12 升 v13 保留 `calculator` 最近使用记录。独立审查推进修复账单锚点、自动续费提醒、权限卡、重排广播、删除确认和数据库流重试。发布验收与提交/部署信息随后补入。详见 `../docs/SUBSCRIPTION_MANAGER.md`。
+Android Debug/Release 各 **789/789**（117 suites），两种构建 Lint **0 错误/91 条既有警告** 且订阅管理文件无 finding；Debug APK **25,482,728** 字节、Release APK **17,275,433** 字节、AAB **16,702,293** 字节，Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、静态契约 **152/152**，后台 `vue-tsc --noEmit` 与生产构建通过。Android 16 模拟器验证新增、金额汇总、到期状态、权限申请、真实通知、续费推进、深色、2 倍字体，并从 v12 升 v13 保留 `calculator` 最近使用记录。独立审查推进修复账单锚点、自动续费提醒、权限卡、重排广播、删除确认和数据库流重试。提交 `dbb9d46` 已推送；严格隔离候选 **323/323**，生产 HTTPS **223/223**；生产镜像 `sha256:b1991f330085d95c951ac7ee89f9eb9b0536d7568aae37dc597969dfb4a421b0`，Git/Docker 回滚标签 `before-subscription-v82`，Flyway **82/82** 且失败 0，官网/后台/健康均 200、五容器 healthy。详见 `../docs/SUBSCRIPTION_MANAGER.md`。下一步沿 ROADMAP 继续下一个未完成工具，不等待重复“继续”。
 
 ## 上一轮增量（2026-10-18 第十九批）
 

@@ -53,4 +53,4 @@ Android 16 模拟器验证新增订阅、金额与月/年汇总、到期徽标�
 
 本地门禁：Android Debug/Release 各 **789/789**，117 个测试套件；`assembleDebug`、`assembleRelease` 与 `bundleRelease` 成功，Debug APK **25,482,728** 字节、Release APK **17,275,433** 字节、AAB **16,702,293** 字节；Debug/Release Lint 均 **0 错误 / 91 条既有警告**，订阅管理源码、资源、测试与 schema 无 finding；Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、V82 离线静态契约 **152/152**，后台 `vue-tsc --noEmit` 与生产构建通过。
 
-发布验收在完成严格隔离候选、生产升级和只读 HTTPS 检查后补记。
+2026-10-18 发布验收：严格隔离候选 **323/323** 通过，使用一次性 Docker 网络、临时数据库/用户和临时 Redis，候选启动、V82、后台编辑保持、通知相关元数据、排行与 7/30/90 天统计均通过，结束后资源全部清理。生产只读 HTTPS **223/223**；生产镜像 `sha256:b1991f330085d95c951ac7ee89f9eb9b0536d7568aae37dc597969dfb4a421b0`，Git/Docker 回滚标签 `before-subscription-v82`。Flyway **82/82** 且失败 **0**，最新记录为 `82 seed subscription manager tool`；五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。
