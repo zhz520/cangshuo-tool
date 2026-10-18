@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_PERMISSIONS = {'android.permission.INTERNET', 'android.permission.CAMERA',
     'android.permission.ACCESS_NETWORK_STATE', 'com.cangshuo.toolbox.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION',
     'android.permission.FOREGROUND_SERVICE', 'android.permission.FOREGROUND_SERVICE_SPECIAL_USE',
+    'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
     'android.permission.POST_NOTIFICATIONS', 'android.permission.RECEIVE_BOOT_COMPLETED'}
 
 def require(value, reason):

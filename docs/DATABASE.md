@@ -332,3 +332,7 @@ Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务
 `V82__seed_subscription_manager_tool.sql` 登记 `subscription_manager`，LIFE/LOCAL/ENABLED，排序 634、requires_login=0、is_featured=0。关键词覆盖订阅、会员、续费、账单、到期、自动续费及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。订阅资料和提醒设置只保存在 Android Room/私有 SharedPreferences，不上传、不同步，也不新增服务端业务表或第三方支付接口。实现与边界见 [订阅管理](SUBSCRIPTION_MANAGER.md)。
 
 生产已执行 V82，Flyway 历史 82/82 且失败 0。
+
+## V83 白噪音目录
+
+`V83__seed_white_noise_tool.sql` 登记 `white_noise`，LIFE/LOCAL/ENABLED，排序 635、requires_login=0、is_featured=0。关键词覆盖白噪音、粉噪音、褐噪音、雨声、海浪、助眠及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。声音由 Android DSP 实时合成，播放设置只保存在应用私有 SharedPreferences，不新增音频文件、业务表、公开 API 或服务端播放记录。实现与边界见 [白噪音](WHITE_NOISE.md)。

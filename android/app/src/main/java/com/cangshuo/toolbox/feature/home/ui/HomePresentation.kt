@@ -97,6 +97,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "pomodoro_focus" -> R.drawable.ic_pomodoro
     "inventory_assets" -> R.drawable.ic_inventory
     "subscription_manager" -> R.drawable.ic_subscription
+    "white_noise" -> R.drawable.ic_noise
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info

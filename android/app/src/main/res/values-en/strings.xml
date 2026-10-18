@@ -3178,4 +3178,56 @@
     </plurals>
     <string name="subscription_notification_separator">, </string>
     <string name="subscription_note" formatted="false">Subscription data and reminder settings stay on this device and are not uploaded or synchronized. Android wakes the check once per day, so delivery is not minute-exact and may be skipped when notifications are disabled or the app is force-stopped. Uninstalling the app or clearing its data deletes all records.</string>
+    <string name="noise_name">White noise</string>
+    <string name="noise_description">Synthesize white, pink and brown noise plus rain, ocean and fan ambience locally. Mix layers, adjust volumes and set a sleep timer.</string>
+    <string-array name="noise_keywords">
+        <item>white noise</item><item>pink noise</item><item>brown noise</item><item>rain</item><item>ocean</item><item>sleep</item><item>ambience</item><item>soundscape</item><item>白噪音</item>
+    </string-array>
+    <string name="noise_status_ready">Ready</string>
+    <string name="noise_status_playing">Playing</string>
+    <string name="noise_status_paused">Paused</string>
+    <string name="noise_no_layers">No sounds selected</string>
+    <string name="noise_select_layer_hint">Enable at least one sound before playing.</string>
+    <string name="noise_play">Play</string>
+    <string name="noise_pause">Pause</string>
+    <string name="noise_resume">Resume</string>
+    <string name="noise_stop">Stop</string>
+    <string name="noise_presets">Scenes</string>
+    <string name="noise_preset_focus">Focus</string>
+    <string name="noise_preset_rain">Rainy night</string>
+    <string name="noise_preset_sleep">Sleep</string>
+    <string name="noise_timer">Sleep timer</string>
+    <string name="noise_timer_off">Off</string>
+    <plurals name="noise_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="noise_timer_remaining">Stops in %1$s</string>
+    <string name="noise_timer_free">Continuous playback</string>
+    <string name="noise_master_volume">Master volume</string>
+    <string name="noise_layer_volume_for">%1$s volume</string>
+    <string name="noise_volume_percent">%1$d%%</string>
+    <string name="noise_white">White noise</string>
+    <string name="noise_white_desc">Even full-spectrum noise for masking distractions</string>
+    <string name="noise_pink">Pink noise</string>
+    <string name="noise_pink_desc">Softer highs for focus and quiet reading</string>
+    <string name="noise_brown">Brown noise</string>
+    <string name="noise_brown_desc">Deep low frequencies like a distant waterfall</string>
+    <string name="noise_rain">Rain</string>
+    <string name="noise_rain_desc">Soft rain texture with occasional drops</string>
+    <string name="noise_ocean">Ocean</string>
+    <string name="noise_ocean_desc">Slow, rolling low-frequency waves</string>
+    <string name="noise_fan">Fan</string>
+    <string name="noise_fan_desc">Steady low hum for long work sessions</string>
+    <string name="noise_permission_title">Allow playback notifications</string>
+    <string name="noise_permission_message">Background audio uses a media foreground service. Notifications show playback and provide pause or stop controls; denying permission does not block audio.</string>
+    <string name="noise_permission_action">Allow notifications</string>
+    <string name="noise_notification_channel">Noise playback</string>
+    <string name="noise_notification_channel_desc">Background ambience status and controls</string>
+    <string name="noise_notification_playing">White noise is playing</string>
+    <string name="noise_notification_paused">White noise paused</string>
+    <string name="noise_notification_with_timer">%1$s · stops in %2$s</string>
+    <string name="noise_note" formatted="false">All ambience is synthesized on the device; there are no downloaded or recorded audio assets and no usage upload. Playback uses a media foreground service and audio focus, and pauses when headphones disconnect. Force-stopping the app ends playback; the sleep timer freezes while paused.</string>
+    <string name="noise_invalid_settings">The sound settings are invalid. Select the layers again.</string>
+    <string name="noise_audio_unavailable">Audio output could not start. Check the sound device and try again.</string>
 </resources>

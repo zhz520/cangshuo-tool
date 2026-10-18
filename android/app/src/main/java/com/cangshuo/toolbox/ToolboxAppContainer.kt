@@ -390,6 +390,9 @@ class ToolboxAppContainer(context: Context) {
             ),
         ),
     )
+    private val noiseFactory = com.cangshuo.toolbox.feature.noise.ui.NoiseViewModel.factory(
+        com.cangshuo.toolbox.feature.noise.data.LocalNoiseRepository(applicationContext),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -460,6 +463,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.pomodoro.PomodoroToolDefinition(resources,pomodoroFactory),
             com.cangshuo.toolbox.feature.inventory.InventoryToolDefinition(resources,inventoryFactory),
             com.cangshuo.toolbox.feature.subscription.SubscriptionToolDefinition(resources,subscriptionFactory),
+            com.cangshuo.toolbox.feature.noise.NoiseToolDefinition(resources,noiseFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

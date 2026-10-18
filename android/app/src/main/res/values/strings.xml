@@ -3258,4 +3258,56 @@
     </plurals>
     <string name="subscription_notification_separator">、</string>
     <string name="subscription_note" formatted="false">订阅资料和提醒设置只保存在本机数据库中，不上传、不同步。提醒由系统每日唤醒一次，不保证精确到分钟；关闭通知权限或强制停止应用时可能不会显示。卸载应用或清除数据会删除全部记录。</string>
+    <string name="noise_name">白噪音</string>
+    <string name="noise_description">在本机合成白、粉、褐噪音和雨声、海浪、风扇等环境声，可混音、调节音量并设置睡眠定时。</string>
+    <string-array name="noise_keywords">
+        <item>白噪音</item><item>粉噪音</item><item>褐噪音</item><item>雨声</item><item>海浪</item><item>助眠</item><item>white noise</item><item>soundscape</item><item>sleep</item>
+    </string-array>
+    <string name="noise_status_ready">准备就绪</string>
+    <string name="noise_status_playing">播放中</string>
+    <string name="noise_status_paused">已暂停</string>
+    <string name="noise_no_layers">尚未选择声音</string>
+    <string name="noise_select_layer_hint">请至少启用一种声音后再播放。</string>
+    <string name="noise_play">播放</string>
+    <string name="noise_pause">暂停</string>
+    <string name="noise_resume">继续</string>
+    <string name="noise_stop">停止</string>
+    <string name="noise_presets">快捷场景</string>
+    <string name="noise_preset_focus">专注</string>
+    <string name="noise_preset_rain">雨夜</string>
+    <string name="noise_preset_sleep">睡眠</string>
+    <string name="noise_timer">睡眠定时</string>
+    <string name="noise_timer_off">关闭</string>
+    <plurals name="noise_minutes">
+        <item quantity="one">%1$d 分钟</item>
+        <item quantity="other">%1$d 分钟</item>
+    </plurals>
+    <string name="noise_timer_remaining">%1$s 后停止</string>
+    <string name="noise_timer_free">持续播放，不自动停止</string>
+    <string name="noise_master_volume">总音量</string>
+    <string name="noise_layer_volume_for">%1$s音量</string>
+    <string name="noise_volume_percent">%1$d%%</string>
+    <string name="noise_white">白噪音</string>
+    <string name="noise_white_desc">均匀覆盖全频段，适合屏蔽环境杂音</string>
+    <string name="noise_pink">粉噪音</string>
+    <string name="noise_pink_desc">高频更柔和，适合专注与安静阅读</string>
+    <string name="noise_brown">褐噪音</string>
+    <string name="noise_brown_desc">低频更厚实，接近远处瀑布与风声</string>
+    <string name="noise_rain">雨声</string>
+    <string name="noise_rain_desc">细密底噪与随机雨滴，适合放松入睡</string>
+    <string name="noise_ocean">海浪</string>
+    <string name="noise_ocean_desc">缓慢起伏的低频潮汐与拍岸感</string>
+    <string name="noise_fan">风扇</string>
+    <string name="noise_fan_desc">稳定低频转动声，适合长时间工作</string>
+    <string name="noise_permission_title">允许播放通知</string>
+    <string name="noise_permission_message">后台播放会使用媒体前台服务。允许通知后可以查看播放状态并使用通知栏暂停或停止；拒绝权限不会阻止音频播放。</string>
+    <string name="noise_permission_action">允许通知</string>
+    <string name="noise_notification_channel">白噪音播放</string>
+    <string name="noise_notification_channel_desc">后台环境声播放状态与控制</string>
+    <string name="noise_notification_playing">白噪音正在播放</string>
+    <string name="noise_notification_paused">白噪音已暂停</string>
+    <string name="noise_notification_with_timer">%1$s · %2$s 后停止</string>
+    <string name="noise_note" formatted="false">所有环境声由设备实时合成，不包含下载或录制的音频素材，也不上传使用数据。播放依赖媒体前台服务和系统音频焦点；耳机断开时会自动暂停。强制停止应用会终止播放，睡眠定时在暂停期间冻结。</string>
+    <string name="noise_invalid_settings">声音设置无效，请重新选择。</string>
+    <string name="noise_audio_unavailable">当前无法启动音频输出，请检查声音设备后重试。</string>
 </resources>
