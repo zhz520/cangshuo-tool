@@ -344,3 +344,5 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 ## V84 经期记录目录
 
 `V84__seed_period_tracker_tool.sql` 登记 `period_tracker`，LIFE/LOCAL/ENABLED，排序 636、requires_login=0、is_featured=0。关键词覆盖经期、月经、周期、排卵、日历、健康及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。敏感健康记录只保存在 Android Room/私有 SharedPreferences，不上传、不同步，也不新增服务端业务表或健康数据 API。实现与边界见 [经期记录](PERIOD_TRACKER.md)。
+
+生产已执行 V84，Flyway 历史 84/84 且失败 0。
