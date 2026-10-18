@@ -73,7 +73,7 @@
 | --- | --- | --- | --- |
 | 待办事项 | ✅ | A | `todo_list` 本地 Room 待办：标题/备注、优先级、截止日期、完成状态、搜索、筛选、四种排序、统计、清除已完成；GPL-3.0 Tasks.org 仅作交互参考。见 [工具文档](TODO_LIST.md) |
 | 习惯打卡 | ✅ | A | `habit_tracker` 本地 Room 习惯：星期安排、今日/历史打卡、连续与完成率、归档、搜索筛选和 28 天记录；GPL-3.0 Loop Habit Tracker 仅作模型/交互参考。见 [工具文档](HABIT_TRACKER.md) |
-| 纪念日 | ✅ | A | `anniversary_countdown` 本地 Room 纪念日：单次/每月/每年重复、倒计时、未来三次、闰日与短月处理、分类、置顶、搜索筛选排序和农历生肖；MIT anniversary-countdown-android 仅作日期规则/交互参考，桌面小组件未包含。见 [工具文档](ANNIVERSARY_COUNTDOWN.md) |
+| 纪念日 | ✅ | A | `anniversary_countdown` 本地 Room 纪念日：单次/每月/每年重复、倒计时、未来三次、闰日与短月处理、分类、置顶、搜索筛选排序和农历生肖；MIT anniversary-countdown-android 仅作日期规则/交互参考，桌面小组件未包含。已上线。见 [工具文档](ANNIVERSARY_COUNTDOWN.md) |
 | 番茄专注 | ✗ | A | 前台服务 + 计时状态机 |
 | 物品资产 | ✗ | A | Room 本地存储（物品/价格/位置） |
 | 订阅管理 | ✗ | A | Room + 到期提醒通知 |

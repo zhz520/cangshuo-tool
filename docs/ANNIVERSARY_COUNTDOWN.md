@@ -48,3 +48,5 @@
 2026-10-18 Android 16 模拟器实测：新建年度生日、月度重复和过去单次事件；当天/过去筛选、搜索、排序、置顶、编辑及删除取消/确认；详情显示农历、生肖、完整年数与未来三次日期。真实 Room v9→v10 升级后 `user_version=10`，原有 12 条最近使用记录保留。深色主题和 2 倍字体下验证窄屏换行；另修复了 2 倍字体加软键盘时编辑正文被压缩的问题，正文现在可滚动，取消/保存随内容滚动到达。
 
 本地门禁：Android Debug/Release 各 **754/754**，111 个测试套件；`assembleDebug`、`assembleRelease` 与 `bundleRelease` 成功，Debug APK **24,726,812** 字节、Release APK **16,990,732** 字节、AAB **16,436,932** 字节；Debug/Release Lint 均 **0 错误 / 91 条既有警告**，纪念日源码、资源、测试与 schema 无 finding；Release artifact 门禁通过。服务端 **226/226**、V79 离线静态契约 **111/111**、同步 SQLite **30/30**，后台 `vue-tsc --noEmit` 与生产构建通过。
+
+2026-10-18 发布验收：严格隔离候选 **283/283** 通过，使用一次性 Docker 网络，仅连接生产 MySQL 容器与临时 Redis；未继承生产应用网络或第三方凭据。生产只读 HTTPS 验收 **182/182**；生产镜像 `sha256:a127bf430d0915abb15e555fc7284dfb76ab87813d228f110405de01ee85f34f`，Git/Docker 回滚标签 `before-anniversary-v79`。Flyway **79/79** 且失败 **0**，最新记录为 `79 seed anniversary countdown tool`；五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。

@@ -311,4 +311,4 @@ Room v10 为纪念日新增 `anniversary_event`。事件保存标题、备注、
 
 ## V79 纪念日目录
 
-`V79__seed_anniversary_countdown_tool.sql` 登记 `anniversary_countdown`，LIFE/LOCAL/ENABLED，排序 631、requires_login=0、is_featured=0。关键词覆盖纪念日、生日、周年、倒数、重要日子及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。纪念日记录只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。
+`V79__seed_anniversary_countdown_tool.sql` 登记 `anniversary_countdown`，LIFE/LOCAL/ENABLED，排序 631、requires_login=0、is_featured=0。关键词覆盖纪念日、生日、周年、倒数、重要日子及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。纪念日记录只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。生产已执行 V79，Flyway 历史 79/79 且失败 0。
