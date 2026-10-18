@@ -205,6 +205,8 @@ Room v11 为番茄专注新增 `pomodoro_session`。记录保存专注名称、�
 
 Room v12 为物品资产新增 `inventory_item`。记录保存名称、备注、分类、存放位置、数量与单位、可选分单位单价、低库存阈值、可选购买/到期 epoch day 和创建/更新时间；`MIGRATION_11_12` 只创建新表及分类、到期日、更新时间索引。Room `@Transaction` 在同一事务中检查并插入 1000 条上限，快速增减在单条 SQL 中夹到 `0..999999`。全部物品数据不上传；服务端只登记工具目录。真实 v11 数据库覆盖升级到 v12 后保留了 `calculator` 最近使用记录，新表列和三个索引与导出 schema 12 一致。见 [物品资产](INVENTORY_ASSETS.md)。
 
+Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务商、分类、分单位价格、计费周期与自定义天数、开始日期、原始账单锚点、下次续费日期、支付方式、备注、提醒/自动续费/启用状态和毫秒时间戳；`MIGRATION_12_13` 只创建新表及启用状态、下次续费、更新时间索引。Room `@Transaction` 原子检查 500 条上限，后台每日提醒接收器通过 App 级数据库提供器读取本地记录。真实 v12 数据库覆盖升级到 v13 后保留 `calculator` 最近使用记录，18 列和三个索引与导出 schema 13 一致。见 [订阅管理](SUBSCRIPTION_MANAGER.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -324,3 +326,7 @@ Room v12 为物品资产新增 `inventory_item`。记录保存名称、备注、
 ## V81 物品资产目录
 
 `V81__seed_inventory_assets_tool.sql` 登记 `inventory_assets`，LIFE/LOCAL/ENABLED，排序 633、requires_login=0、is_featured=0。关键词覆盖物品、资产、库存、价格、位置、保质期及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。物品资料、数量和日期只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [物品资产](INVENTORY_ASSETS.md)。生产已执行 V81，Flyway 历史 81/81 且失败 0。
+
+## V82 订阅管理目录
+
+`V82__seed_subscription_manager_tool.sql` 登记 `subscription_manager`，LIFE/LOCAL/ENABLED，排序 634、requires_login=0、is_featured=0。关键词覆盖订阅、会员、续费、账单、到期、自动续费及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。订阅资料和提醒设置只保存在 Android Room/私有 SharedPreferences，不上传、不同步，也不新增服务端业务表或第三方支付接口。实现与边界见 [订阅管理](SUBSCRIPTION_MANAGER.md)。

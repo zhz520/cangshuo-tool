@@ -134,3 +134,26 @@ val MIGRATION_11_12 = object : Migration(11, 12) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_inventory_item_updated_at ON inventory_item (updated_at)")
     }
 }
+
+/** Version 13 adds local subscription tracking and daily reminder metadata. */
+val MIGRATION_12_13 = object : Migration(12, 13) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS subscription_item (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "name TEXT NOT NULL, provider TEXT NOT NULL, category INTEGER NOT NULL, " +
+                "price_cents INTEGER NOT NULL, billing_cycle INTEGER NOT NULL, " +
+                "custom_cycle_days INTEGER NOT NULL, start_epoch_day INTEGER NOT NULL, " +
+                "billing_anchor_epoch_day INTEGER NOT NULL, " +
+                "next_payment_epoch_day INTEGER NOT NULL, payment_method TEXT NOT NULL, notes TEXT NOT NULL, " +
+                "reminder_enabled INTEGER NOT NULL, reminder_days INTEGER NOT NULL, auto_renew INTEGER NOT NULL, " +
+                "active INTEGER NOT NULL, " +
+                "created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_subscription_item_active ON subscription_item (active)")
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_subscription_item_next_payment_epoch_day " +
+                "ON subscription_item (next_payment_epoch_day)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_subscription_item_updated_at ON subscription_item (updated_at)")
+    }
+}

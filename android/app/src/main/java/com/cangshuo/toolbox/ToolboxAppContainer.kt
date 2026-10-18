@@ -1,13 +1,8 @@
 package com.cangshuo.toolbox
 
 import android.content.Context
-import androidx.room.Room
-import com.cangshuo.toolbox.core.database.MIGRATION_1_2
-import com.cangshuo.toolbox.core.database.MIGRATION_2_3
-import com.cangshuo.toolbox.core.database.MIGRATION_3_4
 import com.cangshuo.toolbox.feature.qr.data.RoomQrHistoryRepository
 import com.cangshuo.toolbox.feature.qr.domain.QrHistoryUseCases
-import com.cangshuo.toolbox.core.database.ToolboxDatabase
 import com.cangshuo.toolbox.core.tool.ToolRegistry
 import com.cangshuo.toolbox.core.tool.ToolRegistryStore
 import com.cangshuo.toolbox.feature.calculator.CalculatorToolDefinition
@@ -110,14 +105,7 @@ class ToolboxAppContainer(context: Context) {
     val diagnosticsViewModelFactory = com.cangshuo.toolbox.feature.diagnostics.ui.DiagnosticsViewModel.factory(
         com.cangshuo.toolbox.feature.diagnostics.domain.DiagnosticsUseCases(
             com.cangshuo.toolbox.feature.diagnostics.data.LocalDiagnosticsRepository(applicationContext)))
-    private val database = Room.databaseBuilder(applicationContext, ToolboxDatabase::class.java, "toolbox.db")
-        .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, com.cangshuo.toolbox.core.database.MIGRATION_4_5,
-            com.cangshuo.toolbox.core.database.MIGRATION_5_6, com.cangshuo.toolbox.core.database.MIGRATION_6_7,
-            com.cangshuo.toolbox.core.database.MIGRATION_7_8, com.cangshuo.toolbox.core.database.MIGRATION_8_9,
-            com.cangshuo.toolbox.core.database.MIGRATION_9_10,
-            com.cangshuo.toolbox.core.database.MIGRATION_10_11,
-            com.cangshuo.toolbox.core.database.MIGRATION_11_12)
-        .build()
+    private val database = com.cangshuo.toolbox.core.database.ToolboxDatabaseProvider.get(applicationContext)
     private val calculatorFactory = CalculatorViewModel.factory(
         CalculateExpressionUseCase(LocalCalculatorRepository()),
     )
@@ -394,6 +382,14 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.inventory.data.RoomInventoryRepository(database.inventoryItemDao()),
         ),
     )
+    private val subscriptionFactory = com.cangshuo.toolbox.feature.subscription.ui.SubscriptionViewModel.factory(
+        com.cangshuo.toolbox.feature.subscription.domain.SubscriptionUseCases(
+            com.cangshuo.toolbox.feature.subscription.data.RoomSubscriptionRepository(database.subscriptionItemDao()),
+            com.cangshuo.toolbox.feature.subscription.reminder.AndroidSubscriptionReminderScheduler(
+                applicationContext,
+            ),
+        ),
+    )
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -463,6 +459,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.anniversary.AnniversaryToolDefinition(resources,anniversaryFactory),
             com.cangshuo.toolbox.feature.pomodoro.PomodoroToolDefinition(resources,pomodoroFactory),
             com.cangshuo.toolbox.feature.inventory.InventoryToolDefinition(resources,inventoryFactory),
+            com.cangshuo.toolbox.feature.subscription.SubscriptionToolDefinition(resources,subscriptionFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

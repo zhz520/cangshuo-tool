@@ -6,8 +6,8 @@ import androidx.room.RoomDatabase
 @Database(entities = [FavoriteToolEntity::class, RecentToolEntity::class, CachedToolCatalogEntity::class,
     QrHistoryEntity::class, QrHistoryPreferenceEntity::class, SyncEntity::class, SyncPreferenceEntity::class,
     SyncDeviceEntity::class, TodoTaskEntity::class, HabitEntity::class, HabitEntryEntity::class,
-    AnniversaryEventEntity::class, PomodoroSessionEntity::class, InventoryItemEntity::class],
-    version = 12, exportSchema = true)
+    AnniversaryEventEntity::class, PomodoroSessionEntity::class, InventoryItemEntity::class,
+    SubscriptionItemEntity::class], version = 13, exportSchema = true)
 abstract class ToolboxDatabase : RoomDatabase() {
     abstract fun favoriteToolDao(): FavoriteToolDao
     abstract fun recentToolDao(): RecentToolDao
@@ -19,4 +19,5 @@ abstract class ToolboxDatabase : RoomDatabase() {
     abstract fun anniversaryEventDao(): AnniversaryEventDao
     abstract fun pomodoroSessionDao(): PomodoroSessionDao
     abstract fun inventoryItemDao(): InventoryItemDao
+    abstract fun subscriptionItemDao(): SubscriptionItemDao
 }
