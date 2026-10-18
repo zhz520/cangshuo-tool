@@ -323,4 +323,4 @@ Room v12 为物品资产新增 `inventory_item`。记录保存名称、备注、
 
 ## V81 物品资产目录
 
-`V81__seed_inventory_assets_tool.sql` 登记 `inventory_assets`，LIFE/LOCAL/ENABLED，排序 633、requires_login=0、is_featured=0。关键词覆盖物品、资产、库存、价格、位置、保质期及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。物品资料、数量和日期只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [物品资产](INVENTORY_ASSETS.md)。
+`V81__seed_inventory_assets_tool.sql` 登记 `inventory_assets`，LIFE/LOCAL/ENABLED，排序 633、requires_login=0、is_featured=0。关键词覆盖物品、资产、库存、价格、位置、保质期及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。物品资料、数量和日期只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [物品资产](INVENTORY_ASSETS.md)。生产已执行 V81，Flyway 历史 81/81 且失败 0。

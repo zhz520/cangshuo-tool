@@ -10,7 +10,7 @@
 
 物品资产 `inventory_assets`（LIFE/LOCAL、排序 633、V81）已完成本地交付：Room 本地物品/分类/位置/数量单位/分单位单价/低库存阈值/购买和到期日期，已知价值、低库存、30 天内到期和过期统计，名称/备注/位置搜索、四种筛选、五种排序、详情编辑删除、确认删除、同条目并发保护的原子 `+1/-1`、1000 条上限、双语、深色和 2 倍字体布局。参考 Apache-2.0 Google Inventory App 固定 commit 的实体、DAO、列表/详情和 CRUD 概念，未复制源码或资源。
 
-Android Debug/Release 各 **778/778**（115 suites），两种构建 Lint **0 错误/91 条既有警告** 且物品资产文件无 finding；Debug APK **24,748,008** 字节、Release APK **17,160,921** 字节、AAB **16,597,035** 字节，Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、静态契约 **132/132**，后台 `vue-tsc --noEmit` 与生产构建通过。Android 16 模拟器验证新增/编辑、金额与低库存重算、日期、筛选、快捷增减、详情、删除确认、深色、2 倍字体和键盘布局，并从真实 Room v11 升 v12 保留 `calculator` 最近使用记录。独立审查修复了 Room 插入上限误报、宽屏对话框宽度、TalkBack 条目上下文和连续同类型消息去重问题。发布验收与提交/部署信息随后补入。详见 `../docs/INVENTORY_ASSETS.md`。
+Android Debug/Release 各 **778/778**（115 suites），两种构建 Lint **0 错误/91 条既有警告** 且物品资产文件无 finding；Debug APK **24,748,008** 字节、Release APK **17,160,921** 字节、AAB **16,597,035** 字节，Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、静态契约 **132/132**，后台 `vue-tsc --noEmit` 与生产构建通过。Android 16 模拟器验证新增/编辑、金额与低库存重算、日期、筛选、快捷增减、详情、删除确认、深色、2 倍字体和键盘布局，并从真实 Room v11 升 v12 保留 `calculator` 最近使用记录。独立审查修复了 Room 插入上限误报、宽屏对话框宽度、TalkBack 条目上下文和连续同类型消息去重问题。提交 `5104cc3`、`75353e1`、`e5c61ae` 已推送；严格隔离候选 **303/303**，生产 HTTPS **203/203**；生产镜像 `sha256:5be4301f4029ce3a0f272b1e4b696b7e4a71f6024e083a8ab30ec4c98360d47f`，Git/Docker 回滚标签 `before-inventory-assets-v81`，Flyway **81/81** 且失败 0，官网/后台/健康均 200、五容器 healthy。详见 `../docs/INVENTORY_ASSETS.md`。下一步沿 ROADMAP 继续下一个未完成工具，不等待重复“继续”。
 
 ## 上一轮增量（2026-10-18 第十八批）
 

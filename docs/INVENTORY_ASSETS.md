@@ -49,4 +49,4 @@ Android 16 模拟器实测新增物品、编辑价格/低库存阈值、购买�
 
 本地门禁：Android Debug/Release 各 **778/778**，115 个测试套件；`assembleDebug`、`assembleRelease` 与 `bundleRelease` 成功，Debug APK **24,748,008** 字节、Release APK **17,160,921** 字节、AAB **16,597,035** 字节；Debug/Release Lint 均 **0 错误 / 91 条既有警告**，物品资产源码、资源、测试与 schema 无 finding；Release artifact 门禁通过。服务端在 JDK 21 下 **226/226**、V81 离线静态契约 **132/132**，后台 `vue-tsc --noEmit` 与生产构建通过。
 
-发布验收在完成严格隔离候选、生产升级和只读 HTTPS 检查后补记。
+2026-10-18 发布验收：严格隔离候选 **303/303** 通过，使用一次性 Docker 网络、临时数据库/用户和临时 Redis，只从当前生产容器继承非秘密运行配置；候选启动、V81、后台编辑保持、排行榜与 7/30/90 天统计均通过，结束后资源全部清理。生产只读 HTTPS 验收 **203/203**；生产镜像 `sha256:5be4301f4029ce3a0f272b1e4b696b7e4a71f6024e083a8ab30ec4c98360d47f`，Git/Docker 回滚标签 `before-inventory-assets-v81`。Flyway **81/81** 且失败 **0**，最新记录为 `81 seed inventory assets tool`；五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。
