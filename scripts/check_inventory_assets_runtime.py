@@ -241,7 +241,10 @@ def check_database(check):
     }, 'Inventory exports all three indexes')
     dao = read_source(os.path.join(JAVA_ROOT, 'com/cangshuo/toolbox/core/database/InventoryItemDao.kt'))
     for label, token in (
-        ('bounded atomic insert', 'WHERE (SELECT COUNT(*) FROM inventory_item) < :limit'),
+        ('transactional count', '@Transaction'),
+        ('bounded count query', 'SELECT COUNT(*) FROM inventory_item'),
+        ('transactional bounded insert', 'suspend fun insertIfBelowLimit(item: InventoryItemEntity, limit: Int): Long'),
+        ('limit sentinel', 'if (countItems() >= limit) return -1L'),
         ('checked update', 'suspend fun update(item: InventoryItemEntity): Int'),
         ('clamped quantity', 'quantity = MAX(0, MIN(:maxQuantity, quantity + :delta))'),
         ('updated timestamp', 'updated_at = :updatedAt'),
@@ -265,7 +268,9 @@ def check_implementation(check):
     for label, token in UI_FEATURES:
         check(token in screen, 'Inventory UI provides ' + label)
     for token in ('safeDrawingPadding()', 'imePadding()', 'verticalScroll(rememberScrollState())',
-                  'rememberLazyListState()', 'maxLines = 2', 'heightIn(max = 820.dp)'):
+                  'rememberLazyListState()', 'maxLines = 2', 'heightIn(max = 820.dp)',
+                  'widthIn(max = ToolboxDimens.formMaxWidth).fillMaxWidth()',
+                  'inventory_action_for_item', 'messageRevision'):
         check(token in screen, 'Inventory UI adaptation contains ' + token)
     route = read_source(os.path.join(FEATURE_ROOT, 'ui/InventoryRoute.kt'))
     check('repeatOnLifecycle(Lifecycle.State.RESUMED)' in route and 'delay(60_000L)' in route,

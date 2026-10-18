@@ -1,7 +1,9 @@
 package com.cangshuo.toolbox.core.database
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -13,28 +15,18 @@ interface InventoryItemDao {
     @Query("SELECT * FROM inventory_item WHERE id = :id")
     suspend fun find(id: Long): InventoryItemEntity?
 
-    @Query(
-        "INSERT INTO inventory_item (name, notes, category, location, quantity, unit, " +
-            "unit_price_cents, low_stock_threshold, purchase_epoch_day, expiry_epoch_day, created_at, updated_at) " +
-            "SELECT :name, :notes, :category, :location, :quantity, :unit, :unitPriceCents, " +
-            ":lowStockThreshold, :purchaseEpochDay, :expiryEpochDay, :createdAt, :updatedAt " +
-            "WHERE (SELECT COUNT(*) FROM inventory_item) < :limit",
-    )
-    suspend fun insertIfBelowLimit(
-        name: String,
-        notes: String,
-        category: Int,
-        location: String,
-        quantity: Int,
-        unit: String,
-        unitPriceCents: Long?,
-        lowStockThreshold: Int,
-        purchaseEpochDay: Long?,
-        expiryEpochDay: Long?,
-        createdAt: Long,
-        updatedAt: Long,
-        limit: Int,
-    ): Long
+    @Query("SELECT COUNT(*) FROM inventory_item")
+    suspend fun countItems(): Int
+
+    @Insert
+    suspend fun insert(item: InventoryItemEntity): Long
+
+    /** Room runs both statements in one transaction, so concurrent callers cannot exceed the limit. */
+    @Transaction
+    suspend fun insertIfBelowLimit(item: InventoryItemEntity, limit: Int): Long {
+        if (countItems() >= limit) return -1L
+        return insert(item)
+    }
 
     @Update
     suspend fun update(item: InventoryItemEntity): Int

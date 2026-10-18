@@ -18,21 +18,7 @@ class RoomInventoryRepository(private val dao: InventoryItemDao) : InventoryRepo
     override suspend fun find(id: Long): InventoryItem? = dao.find(id)?.let(::toDomain)
 
     override suspend fun insert(item: InventoryItem): Long {
-        val id = dao.insertIfBelowLimit(
-            name = item.name,
-            notes = item.notes,
-            category = item.category.storage,
-            location = item.location,
-            quantity = item.quantity,
-            unit = item.unit,
-            unitPriceCents = item.unitPriceCents,
-            lowStockThreshold = item.lowStockThreshold,
-            purchaseEpochDay = item.purchaseEpochDay,
-            expiryEpochDay = item.expiryEpochDay,
-            createdAt = item.createdAt,
-            updatedAt = item.updatedAt,
-            limit = InventoryPolicy.MAX_ITEMS,
-        )
+        val id = dao.insertIfBelowLimit(toEntity(item), InventoryPolicy.MAX_ITEMS)
         if (id == -1L) throw InventoryLimitException()
         return id
     }

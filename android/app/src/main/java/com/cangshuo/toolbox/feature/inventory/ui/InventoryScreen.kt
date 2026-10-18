@@ -123,7 +123,7 @@ fun InventoryScreen(
             onClearEditError()
         }
     }
-    LaunchedEffect(state.message) {
+    LaunchedEffect(state.messageRevision) {
         val message = state.message ?: return@LaunchedEffect
         snackbar.showSnackbar(messages[message] ?: return@LaunchedEffect)
         onMessageConsumed()
@@ -311,8 +311,8 @@ fun InventoryScreen(
     deleting?.let { item ->
         AlertDialog(
             onDismissRequest = { deleteId = null },
-            title = { Text(stringResource(R.string.inventory_delete_title)) },
-            text = { Text(stringResource(R.string.inventory_delete_message)) },
+            title = { Text(stringResource(R.string.inventory_delete_title, item.name)) },
+            text = { Text(stringResource(R.string.inventory_delete_message, item.name)) },
             confirmButton = {
                 ToolboxTextButton(onClick = {
                     deleteId = null
@@ -424,8 +424,31 @@ private fun InventoryCard(
     onDelete: () -> Unit,
 ) {
     val expiry = item.expiryState(today)
-    val decreaseDescription = stringResource(R.string.inventory_decrease)
-    val increaseDescription = stringResource(R.string.inventory_increase)
+    val decreaseDescription = stringResource(
+        R.string.inventory_action_for_item,
+        stringResource(R.string.inventory_decrease),
+        item.name,
+    )
+    val increaseDescription = stringResource(
+        R.string.inventory_action_for_item,
+        stringResource(R.string.inventory_increase),
+        item.name,
+    )
+    val detailsDescription = stringResource(
+        R.string.inventory_action_for_item,
+        stringResource(R.string.inventory_details),
+        item.name,
+    )
+    val editDescription = stringResource(
+        R.string.inventory_action_for_item,
+        stringResource(R.string.inventory_edit),
+        item.name,
+    )
+    val deleteDescription = stringResource(
+        R.string.inventory_action_for_item,
+        stringResource(R.string.inventory_delete),
+        item.name,
+    )
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
@@ -512,13 +535,31 @@ private fun InventoryCard(
                         contentDescription = increaseDescription
                     },
                 ) { Text(stringResource(R.string.inventory_increment_short)) }
-                ToolboxTextButton(onClick = onDetails, enabled = !busy) {
+                ToolboxTextButton(
+                    onClick = onDetails,
+                    enabled = !busy,
+                    modifier = Modifier.semantics {
+                        contentDescription = detailsDescription
+                    },
+                ) {
                     Text(stringResource(R.string.inventory_details))
                 }
-                ToolboxTextButton(onClick = onEdit, enabled = !busy) {
+                ToolboxTextButton(
+                    onClick = onEdit,
+                    enabled = !busy,
+                    modifier = Modifier.semantics {
+                        contentDescription = editDescription
+                    },
+                ) {
                     Text(stringResource(R.string.inventory_edit))
                 }
-                ToolboxTextButton(onClick = onDelete, enabled = !busy) {
+                ToolboxTextButton(
+                    onClick = onDelete,
+                    enabled = !busy,
+                    modifier = Modifier.semantics {
+                        contentDescription = deleteDescription
+                    },
+                ) {
                     Text(stringResource(R.string.inventory_delete), color = MaterialTheme.colorScheme.error)
                 }
             }
@@ -584,7 +625,7 @@ private fun InventoryEditorDialog(
             contentAlignment = Alignment.Center,
         ) {
             Surface(
-                modifier = Modifier.fillMaxWidth().widthIn(max = ToolboxDimens.formMaxWidth)
+                modifier = Modifier.widthIn(max = ToolboxDimens.formMaxWidth).fillMaxWidth()
                     .heightIn(max = 820.dp).fillMaxHeight(),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -898,7 +939,7 @@ private fun InventoryDetailDialog(
             contentAlignment = Alignment.Center,
         ) {
             Surface(
-                modifier = Modifier.fillMaxWidth().widthIn(max = ToolboxDimens.formMaxWidth)
+                modifier = Modifier.widthIn(max = ToolboxDimens.formMaxWidth).fillMaxWidth()
                     .heightIn(max = 720.dp),
                 shape = MaterialTheme.shapes.extraLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,

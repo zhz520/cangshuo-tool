@@ -165,6 +165,7 @@ class InventoryViewModelTest {
         assertEquals("box", created.unit)
         assertEquals(1_990L, created.unitPriceCents)
         assertEquals(InventoryMessage.ADDED, model.state.value.message)
+        assertEquals(1L, model.state.value.messageRevision)
         assertEquals(1L, model.state.value.saveSuccessRevision)
 
         model.consumeMessage()
@@ -172,6 +173,7 @@ class InventoryViewModelTest {
         advanceUntilIdle()
         assertEquals("Desk lamp", repo.items.value.last().name)
         assertEquals(InventoryMessage.UPDATED, model.state.value.message)
+        assertEquals(2L, model.state.value.messageRevision)
         assertEquals(2L, model.state.value.saveSuccessRevision)
 
         repo.failWrite = true
@@ -234,10 +236,12 @@ class InventoryViewModelTest {
         model.adjust(model.state.value.items.first(), 1)
         advanceUntilIdle()
         assertEquals(InventoryMessage.STORAGE_FAILED, model.state.value.message)
+        assertEquals(1L, model.state.value.messageRevision)
         model.consumeMessage()
         model.delete(model.state.value.items.first())
         advanceUntilIdle()
         assertEquals(InventoryMessage.STORAGE_FAILED, model.state.value.message)
+        assertEquals(2L, model.state.value.messageRevision)
 
         repo.todayDay = today + 1
         model.refreshToday()

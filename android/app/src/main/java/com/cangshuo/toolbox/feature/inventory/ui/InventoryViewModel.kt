@@ -49,7 +49,8 @@ class InventoryViewModel(
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (_: Exception) {
-                mutable.value = mutable.value.copy(loading = false, message = InventoryMessage.STORAGE_FAILED)
+                mutable.value = mutable.value.copy(loading = false)
+                emitMessage(InventoryMessage.STORAGE_FAILED)
             }
         }
     }
@@ -100,8 +101,8 @@ class InventoryViewModel(
                 mutable.value = mutable.value.copy(
                     saving = false,
                     saveSuccessRevision = mutable.value.saveSuccessRevision + 1,
-                    message = if (current == null) InventoryMessage.ADDED else InventoryMessage.UPDATED,
                 )
+                emitMessage(if (current == null) InventoryMessage.ADDED else InventoryMessage.UPDATED)
             } else {
                 mutable.value = mutable.value.copy(saving = false, editError = error)
             }
@@ -115,7 +116,7 @@ class InventoryViewModel(
         viewModelScope.launch {
             try {
                 val error = useCases.adjust(item.id, delta)
-                if (error != null) mutable.value = mutable.value.copy(message = InventoryMessage.STORAGE_FAILED)
+                if (error != null) emitMessage(InventoryMessage.STORAGE_FAILED)
             } finally {
                 setBusy(item.id, false)
             }
@@ -128,9 +129,7 @@ class InventoryViewModel(
         viewModelScope.launch {
             try {
                 val error = useCases.delete(item.id)
-                mutable.value = mutable.value.copy(
-                    message = if (error == null) InventoryMessage.DELETED else InventoryMessage.STORAGE_FAILED,
-                )
+                emitMessage(if (error == null) InventoryMessage.DELETED else InventoryMessage.STORAGE_FAILED)
             } finally {
                 setBusy(item.id, false)
             }
@@ -158,6 +157,13 @@ class InventoryViewModel(
     private fun setBusy(id: Long, busy: Boolean) {
         val ids = if (busy) mutable.value.busyItemIds + id else mutable.value.busyItemIds - id
         mutable.value = mutable.value.copy(busyItemIds = ids)
+    }
+
+    private fun emitMessage(message: InventoryMessage) {
+        mutable.value = mutable.value.copy(
+            message = message,
+            messageRevision = mutable.value.messageRevision + 1,
+        )
     }
 
     companion object {

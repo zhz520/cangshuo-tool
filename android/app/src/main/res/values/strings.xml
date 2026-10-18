@@ -3078,8 +3078,8 @@
     <string name="inventory_updated">物品已更新。</string>
     <string name="inventory_deleted">物品已删除。</string>
     <string name="inventory_storage_failed">物品资产保存失败，请重试。</string>
-    <string name="inventory_delete_title">删除这个物品？</string>
-    <string name="inventory_delete_message">物品资料、数量和日期记录将一并删除，无法恢复。</string>
+    <string name="inventory_delete_title">删除“%1$s”？</string>
+    <string name="inventory_delete_message">“%1$s”的资料、数量和日期记录将一并删除，无法恢复。</string>
     <string name="inventory_delete_confirm">删除</string>
     <string name="inventory_category_electronics">电子设备</string>
     <string name="inventory_category_home">家居</string>
@@ -3102,6 +3102,7 @@
     <string name="inventory_delete">删除</string>
     <string name="inventory_decrease">减少一件</string>
     <string name="inventory_increase">增加一件</string>
+    <string name="inventory_action_for_item">%1$s：%2$s</string>
     <string name="inventory_decrement_short">−1</string>
     <string name="inventory_increment_short">+1</string>
     <string name="inventory_details_title">%1$s 详情</string>

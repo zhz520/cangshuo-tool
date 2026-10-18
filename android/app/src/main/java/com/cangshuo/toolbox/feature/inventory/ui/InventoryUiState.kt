@@ -20,5 +20,6 @@ data class InventoryUiState(
     val saveSuccessRevision: Long = 0,
     val editError: InventoryError? = null,
     val message: InventoryMessage? = null,
+    val messageRevision: Long = 0,
     val busyItemIds: Set<Long> = emptySet(),
 )

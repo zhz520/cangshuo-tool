@@ -2998,8 +2998,8 @@
     <string name="inventory_updated">Item updated.</string>
     <string name="inventory_deleted">Item deleted.</string>
     <string name="inventory_storage_failed">Could not save inventory data. Try again.</string>
-    <string name="inventory_delete_title">Delete this item?</string>
-    <string name="inventory_delete_message">The item details, quantity and dates cannot be restored.</string>
+    <string name="inventory_delete_title">Delete “%1$s”?</string>
+    <string name="inventory_delete_message">The details, quantity and dates for “%1$s” cannot be restored.</string>
     <string name="inventory_delete_confirm">Delete</string>
     <string name="inventory_category_electronics">Electronics</string>
     <string name="inventory_category_home">Home</string>
@@ -3022,6 +3022,7 @@
     <string name="inventory_delete">Delete</string>
     <string name="inventory_decrease">Decrease by one</string>
     <string name="inventory_increase">Increase by one</string>
+    <string name="inventory_action_for_item">%1$s: %2$s</string>
     <string name="inventory_decrement_short">−1</string>
     <string name="inventory_increment_short">+1</string>
     <string name="inventory_details_title">%1$s details</string>
