@@ -50,3 +50,5 @@
 2026-10-18 Android 16 模拟器实测：Android 13+ 首次开始时请求通知权限；启动一分钟专注后常驻通知显示倒计时，退到桌面后继续更新；通知栏“暂停”可停止前台服务并保留剩余时间，返回页面显示暂停和继续；完成专注后自动进入短休息、显示完成通知、写入历史与统计；跳过休息回到下一轮专注；重置前显示确认，重置后前台服务停止。深色主题与 2 倍字体下阶段按钮、计时卡、名称和操作均可换行访问。另从真实 Room v10 数据库覆盖安装 v11，升级后 `user_version=11`、2 条最近使用记录保留、`pomodoro_session` 表及索引创建成功。
 
 本地门禁：Android Debug/Release 各 **768/768**，113 个测试套件；`assembleDebug`、`assembleRelease` 与 `bundleRelease` 成功，Debug APK **25,138,121** 字节、Release APK **17,084,005** 字节、AAB **16,516,127** 字节；Debug/Release Lint 均 **0 错误 / 91 条既有警告**，番茄专注源码、资源、测试与 schema 无 finding；Release artifact 门禁通过。服务端 **226/226**、V80 离线静态契约 **118/118**，后台 `vue-tsc --noEmit` 与生产构建通过。
+
+2026-10-18 发布验收：严格隔离候选 **289/289** 通过，使用一次性 Docker 网络，仅连接生产 MySQL 容器与临时 Redis；未继承生产应用网络或第三方凭据。生产只读 HTTPS 验收 **189/189**；生产镜像 `sha256:c9fa69f09a43ad801f7d9f70ede6c88bbaeb034b66e486c1b762a5148551d06c`，Git/Docker 回滚标签 `before-pomodoro-v80`。Flyway **80/80** 且失败 **0**，最新记录为 `80 seed pomodoro focus tool`；五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。

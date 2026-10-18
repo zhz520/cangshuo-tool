@@ -317,4 +317,4 @@ Room v11 为番茄专注新增 `pomodoro_session`。记录保存专注名称、�
 
 ## V80 番茄专注目录
 
-`V80__seed_pomodoro_focus_tool.sql` 登记 `pomodoro_focus`，LIFE/LOCAL/ENABLED，排序 632、requires_login=0、is_featured=0。关键词覆盖番茄、专注、计时、休息、效率及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。计时设置、运行快照和专注记录只保存在 Android 本机，不上传、不同步，也不新增服务端业务表。实现与边界见 [番茄专注](POMODORO_FOCUS.md)。
+`V80__seed_pomodoro_focus_tool.sql` 登记 `pomodoro_focus`，LIFE/LOCAL/ENABLED，排序 632、requires_login=0、is_featured=0。关键词覆盖番茄、专注、计时、休息、效率及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。计时设置、运行快照和专注记录只保存在 Android 本机，不上传、不同步，也不新增服务端业务表。实现与边界见 [番茄专注](POMODORO_FOCUS.md)。生产已执行 V80，Flyway 历史 80/80 且失败 0。
