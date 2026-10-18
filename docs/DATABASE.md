@@ -199,6 +199,8 @@ Room v8 为本地待办新增 `todo_task`，使用自增主键、标题/备注�
 
 Room v9 为习惯打卡新增 `habit` 与 `habit_entry`。习惯保存名称、说明、7 位星期掩码、归档/顺序、创建日和毫秒时间戳；打卡以 `(habit_id, date_epoch_day)` 为复合主键，外键级联删除。`MIGRATION_8_9` 只创建新表、外键与索引；模拟器从 v8 升级到 v9 后 12 条最近使用记录保留。见 [习惯打卡](HABIT_TRACKER.md)。
 
+Room v10 为纪念日新增 `anniversary_event`。事件保存标题、备注、原始 epoch day、重复规则、分类、置顶状态和毫秒时间戳；`MIGRATION_9_10` 只创建新表及置顶/日期索引，500 条上限由新增 SQL 原子检查。日期、标题和备注都不上传，服务端不新增业务表。见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -306,3 +308,7 @@ Room v9 为习惯打卡新增 `habit` 与 `habit_entry`。习惯保存名称、�
 ## V78 习惯打卡目录
 
 `V78__seed_habit_tracker_tool.sql` 登记 `habit_tracker`，LIFE/LOCAL/ENABLED，排序 630、requires_login=0、is_featured=0。关键词覆盖习惯、打卡、连续、坚持、目标、日程及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。习惯定义和打卡历史只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [习惯打卡](HABIT_TRACKER.md)。生产已执行 V78，Flyway 历史 78/78 且全部成功。
+
+## V79 纪念日目录
+
+`V79__seed_anniversary_countdown_tool.sql` 登记 `anniversary_countdown`，LIFE/LOCAL/ENABLED，排序 631、requires_login=0、is_featured=0。关键词覆盖纪念日、生日、周年、倒数、重要日子及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。纪念日记录只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。

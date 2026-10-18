@@ -2794,4 +2794,92 @@
         <item quantity="one">%1$d day each week</item>
         <item quantity="other">%1$d days each week</item>
     </plurals>
+    <string name="anniversary_name">Anniversaries</string>
+    <string name="anniversary_description">Keep birthdays, relationships, family dates and important days locally with monthly or yearly repeats, pinning, countdowns and lunar dates.</string>
+    <string-array name="anniversary_keywords">
+        <item>anniversary</item><item>birthday</item><item>countdown</item><item>important date</item><item>yearly</item><item>纪念日</item><item>生日</item><item>周年</item><item>倒数</item>
+    </string-array>
+    <string name="anniversary_search">Search anniversaries</string>
+    <string name="anniversary_search_hint">Search title or notes</string>
+    <string name="anniversary_clear_search">Clear</string>
+    <string name="anniversary_filter_all">All</string>
+    <string name="anniversary_filter_upcoming">Upcoming</string>
+    <string name="anniversary_filter_today">Today</string>
+    <string name="anniversary_filter_past">Past</string>
+    <string name="anniversary_sort_label">Sort</string>
+    <string name="anniversary_sort_pinned">Pinned first</string>
+    <string name="anniversary_sort_next">Next date</string>
+    <string name="anniversary_sort_newest">Newest</string>
+    <string name="anniversary_sort_name">Name</string>
+    <string name="anniversary_visible_count">Showing %1$d</string>
+    <string name="anniversary_add">New anniversary</string>
+    <string name="anniversary_loading">Loading local anniversaries…</string>
+    <string name="anniversary_empty_title">No matching anniversaries</string>
+    <string name="anniversary_empty_hint">Create an important date or adjust the filters and search.</string>
+    <string name="anniversary_no_matches">No title or note matches this search.</string>
+    <string name="anniversary_added">Anniversary created.</string>
+    <string name="anniversary_updated">Anniversary updated.</string>
+    <string name="anniversary_deleted">Anniversary deleted.</string>
+    <string name="anniversary_pinned_message">Anniversary pinned.</string>
+    <string name="anniversary_unpinned">Anniversary unpinned.</string>
+    <string name="anniversary_storage_failed">Could not save the anniversary. Try again.</string>
+    <string name="anniversary_delete_title">Delete this anniversary?</string>
+    <string name="anniversary_delete_message">This cannot be undone.</string>
+    <string name="anniversary_delete_confirm">Delete</string>
+    <string name="anniversary_stat_total">All dates</string>
+    <string name="anniversary_stat_today">Today</string>
+    <string name="anniversary_stat_next7">Next 7 days</string>
+    <string name="anniversary_stat_next30">Next 30 days</string>
+    <string name="anniversary_category_birthday">Birthday</string>
+    <string name="anniversary_category_relationship">Relationship</string>
+    <string name="anniversary_category_family">Family</string>
+    <string name="anniversary_category_work">Work</string>
+    <string name="anniversary_category_other">Other</string>
+    <string name="anniversary_repeat_none">Once</string>
+    <string name="anniversary_repeat_monthly">Monthly</string>
+    <string name="anniversary_repeat_yearly">Yearly</string>
+    <string name="anniversary_pinned_badge">Pinned</string>
+    <string name="anniversary_today">Today</string>
+    <string name="anniversary_tomorrow">Tomorrow</string>
+    <plurals name="anniversary_days_away">
+        <item quantity="one">%1$d day away</item>
+        <item quantity="other">%1$d days away</item>
+    </plurals>
+    <plurals name="anniversary_days_past">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <string name="anniversary_original_date">Original date %1$s</string>
+    <string name="anniversary_next_date">Next %1$s</string>
+    <string name="anniversary_lunar_date">Lunar %1$s/%2$s · year of the %3$s</string>
+    <string name="anniversary_lunar_date_leap">Lunar leap %1$s/%2$s · year of the %3$s</string>
+    <plurals name="anniversary_elapsed_years">
+        <item quantity="one">%1$d full year, %2$d days since the last anniversary</item>
+        <item quantity="other">%1$d full years, %2$d days since the last anniversary</item>
+    </plurals>
+    <string name="anniversary_detail_title">Anniversary details</string>
+    <string name="anniversary_next_occurrences">Next three dates</string>
+    <string name="anniversary_details">Details</string>
+    <string name="anniversary_edit">Edit</string>
+    <string name="anniversary_pin">Pin</string>
+    <string name="anniversary_unpin">Unpin</string>
+    <string name="anniversary_delete">Delete</string>
+    <string name="anniversary_edit_title">Edit anniversary</string>
+    <string name="anniversary_title_label">Title</string>
+    <string name="anniversary_title_count">Characters: %1$d / %2$d</string>
+    <string name="anniversary_notes_label">Notes (optional)</string>
+    <string name="anniversary_notes_hint">Write the story, place or details worth remembering</string>
+    <string name="anniversary_date_label">Original date</string>
+    <string name="anniversary_choose_date">Choose date</string>
+    <string name="anniversary_category_label">Category</string>
+    <string name="anniversary_repeat_label">Repeat</string>
+    <string name="anniversary_pinned_label">Pin to top</string>
+    <string name="anniversary_save">Save</string>
+    <string name="anniversary_saving">Saving…</string>
+    <string name="anniversary_cancel">Cancel</string>
+    <string name="anniversary_error_title">A title is required and limited to 80 characters.</string>
+    <string name="anniversary_error_notes">Notes are limited to 500 characters.</string>
+    <string name="anniversary_error_date">The date must be between January 1, 1900 and December 31, 2100.</string>
+    <string name="anniversary_error_limit">Up to 500 anniversaries can be stored.</string>
+    <string name="anniversary_note" formatted="false">Anniversaries stay only in the local database and are not uploaded or synchronized. February 29 uses February 28 in non-leap years. Notifications, reminders, times and home-screen widgets are not included.</string>
 </resources>

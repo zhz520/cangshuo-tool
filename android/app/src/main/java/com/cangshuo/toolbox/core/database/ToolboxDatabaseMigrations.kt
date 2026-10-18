@@ -90,3 +90,17 @@ val MIGRATION_8_9 = object : Migration(8, 9) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_habit_entry_date_epoch_day ON habit_entry (date_epoch_day)")
     }
 }
+
+/** Version 10 adds local anniversary events without touching existing data. */
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS anniversary_event (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "title TEXT NOT NULL, notes TEXT NOT NULL, date_epoch_day INTEGER NOT NULL, " +
+                "repeat_rule INTEGER NOT NULL, category INTEGER NOT NULL, pinned INTEGER NOT NULL, " +
+                "created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_anniversary_event_pinned ON anniversary_event (pinned)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_anniversary_event_date_epoch_day ON anniversary_event (date_epoch_day)")
+    }
+}

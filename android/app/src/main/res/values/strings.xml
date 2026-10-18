@@ -2874,4 +2874,92 @@
         <item quantity="one">每周 %1$d 天</item>
         <item quantity="other">每周 %1$d 天</item>
     </plurals>
+    <string name="anniversary_name">纪念日</string>
+    <string name="anniversary_description">在本机记录生日、相识、家庭与重要日子，支持每月或每年重复、置顶、倒计时和农历显示。</string>
+    <string-array name="anniversary_keywords">
+        <item>纪念日</item><item>生日</item><item>周年</item><item>倒数</item><item>重要日子</item><item>倒数日</item><item>anniversary</item><item>birthday</item><item>countdown</item>
+    </string-array>
+    <string name="anniversary_search">搜索纪念日</string>
+    <string name="anniversary_search_hint">搜索名称或备注</string>
+    <string name="anniversary_clear_search">清除</string>
+    <string name="anniversary_filter_all">全部</string>
+    <string name="anniversary_filter_upcoming">即将到来</string>
+    <string name="anniversary_filter_today">今天</string>
+    <string name="anniversary_filter_past">已过去</string>
+    <string name="anniversary_sort_label">排序</string>
+    <string name="anniversary_sort_pinned">置顶优先</string>
+    <string name="anniversary_sort_next">下次日期</string>
+    <string name="anniversary_sort_newest">最近创建</string>
+    <string name="anniversary_sort_name">名称</string>
+    <string name="anniversary_visible_count">当前显示 %1$d 项</string>
+    <string name="anniversary_add">新建纪念日</string>
+    <string name="anniversary_loading">正在读取本机纪念日…</string>
+    <string name="anniversary_empty_title">还没有符合条件的纪念日</string>
+    <string name="anniversary_empty_hint">新建一个重要日子，或调整筛选和搜索。</string>
+    <string name="anniversary_no_matches">没有匹配的名称或备注。</string>
+    <string name="anniversary_added">纪念日已创建。</string>
+    <string name="anniversary_updated">纪念日已更新。</string>
+    <string name="anniversary_deleted">纪念日已删除。</string>
+    <string name="anniversary_pinned_message">纪念日已置顶。</string>
+    <string name="anniversary_unpinned">纪念日已取消置顶。</string>
+    <string name="anniversary_storage_failed">纪念日保存失败，请重试。</string>
+    <string name="anniversary_delete_title">删除这个纪念日？</string>
+    <string name="anniversary_delete_message">删除后无法恢复。</string>
+    <string name="anniversary_delete_confirm">删除</string>
+    <string name="anniversary_stat_total">全部纪念日</string>
+    <string name="anniversary_stat_today">今天</string>
+    <string name="anniversary_stat_next7">未来 7 天</string>
+    <string name="anniversary_stat_next30">未来 30 天</string>
+    <string name="anniversary_category_birthday">生日</string>
+    <string name="anniversary_category_relationship">关系</string>
+    <string name="anniversary_category_family">家庭</string>
+    <string name="anniversary_category_work">工作</string>
+    <string name="anniversary_category_other">其他</string>
+    <string name="anniversary_repeat_none">不重复</string>
+    <string name="anniversary_repeat_monthly">每月</string>
+    <string name="anniversary_repeat_yearly">每年</string>
+    <string name="anniversary_pinned_badge">已置顶</string>
+    <string name="anniversary_today">就是今天</string>
+    <string name="anniversary_tomorrow">明天</string>
+    <plurals name="anniversary_days_away">
+        <item quantity="one">还有 %1$d 天</item>
+        <item quantity="other">还有 %1$d 天</item>
+    </plurals>
+    <plurals name="anniversary_days_past">
+        <item quantity="one">已过去 %1$d 天</item>
+        <item quantity="other">已过去 %1$d 天</item>
+    </plurals>
+    <string name="anniversary_original_date">原始日期 %1$s</string>
+    <string name="anniversary_next_date">下次 %1$s</string>
+    <string name="anniversary_lunar_date">农历%1$s月%2$s · 属%3$s</string>
+    <string name="anniversary_lunar_date_leap">农历闰%1$s月%2$s · 属%3$s</string>
+    <plurals name="anniversary_elapsed_years">
+        <item quantity="one">完整经过 %1$d 年，距上次周年 %2$d 天</item>
+        <item quantity="other">完整经过 %1$d 年，距上次周年 %2$d 天</item>
+    </plurals>
+    <string name="anniversary_detail_title">纪念日详情</string>
+    <string name="anniversary_next_occurrences">未来三次</string>
+    <string name="anniversary_details">详情</string>
+    <string name="anniversary_edit">编辑</string>
+    <string name="anniversary_pin">置顶</string>
+    <string name="anniversary_unpin">取消置顶</string>
+    <string name="anniversary_delete">删除</string>
+    <string name="anniversary_edit_title">编辑纪念日</string>
+    <string name="anniversary_title_label">名称</string>
+    <string name="anniversary_title_count">字符：%1$d / %2$d</string>
+    <string name="anniversary_notes_label">备注（可选）</string>
+    <string name="anniversary_notes_hint">写下故事、地点或想记住的细节</string>
+    <string name="anniversary_date_label">原始日期</string>
+    <string name="anniversary_choose_date">选择日期</string>
+    <string name="anniversary_category_label">分类</string>
+    <string name="anniversary_repeat_label">重复</string>
+    <string name="anniversary_pinned_label">置顶显示</string>
+    <string name="anniversary_save">保存</string>
+    <string name="anniversary_saving">保存中…</string>
+    <string name="anniversary_cancel">取消</string>
+    <string name="anniversary_error_title">名称不能为空，且最多 80 个字符。</string>
+    <string name="anniversary_error_notes">备注最多 500 个字符。</string>
+    <string name="anniversary_error_date">日期必须在 1900 年 1 月 1 日至 2100 年 12 月 31 日之间。</string>
+    <string name="anniversary_error_limit">最多保存 500 个纪念日。</string>
+    <string name="anniversary_note" formatted="false">纪念日只保存在本机数据库中，不上传、不同步。2 月 29 日在非闰年按 2 月 28 日计算；系统通知、提醒、时间和桌面小组件暂不提供。</string>
 </resources>
