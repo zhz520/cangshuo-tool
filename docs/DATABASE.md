@@ -336,3 +336,5 @@ Room v13 为订阅管理新增 `subscription_item`。记录保存名称、服务
 ## V83 白噪音目录
 
 `V83__seed_white_noise_tool.sql` 登记 `white_noise`，LIFE/LOCAL/ENABLED，排序 635、requires_login=0、is_featured=0。关键词覆盖白噪音、粉噪音、褐噪音、雨声、海浪、助眠及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。声音由 Android DSP 实时合成，播放设置只保存在应用私有 SharedPreferences，不新增音频文件、业务表、公开 API 或服务端播放记录。实现与边界见 [白噪音](WHITE_NOISE.md)。
+
+生产已执行 V83，Flyway 历史 83/83 且失败 0。
