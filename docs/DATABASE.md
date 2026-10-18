@@ -201,6 +201,8 @@ Room v9 为习惯打卡新增 `habit` 与 `habit_entry`。习惯保存名称、�
 
 Room v10 为纪念日新增 `anniversary_event`。事件保存标题、备注、原始 epoch day、重复规则、分类、置顶状态和毫秒时间戳；`MIGRATION_9_10` 只创建新表及置顶/日期索引，500 条上限由新增 SQL 原子检查。日期、标题和备注都不上传，服务端不新增业务表。见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。
 
+Room v11 为番茄专注新增 `pomodoro_session`。记录保存专注名称、阶段、计划/实际秒数、完成状态和起止毫秒时间；`MIGRATION_10_11` 只创建新表及结束时间/阶段索引，DAO 在事务内插入并裁剪最近 2000 条。计时快照和设置保存在本机 SharedPreferences，服务端只登记工具目录。见 [番茄专注](POMODORO_FOCUS.md)。
+
 ## V49 本地文本工具目录
 
 `V49__seed_text_tools_batch.sql` 登记 `number_chinese`、`char_convert`、`text_similarity`，TEXT/LOCAL，排序 80/85/90。不保存工具输入或改变已有业务表；重复执行保留后台状态及软删除。源码说明分别见 NUMBER_CHINESE.md、CHAR_CONVERT.md、TEXT_SIMILARITY.md。
@@ -312,3 +314,7 @@ Room v10 为纪念日新增 `anniversary_event`。事件保存标题、备注、
 ## V79 纪念日目录
 
 `V79__seed_anniversary_countdown_tool.sql` 登记 `anniversary_countdown`，LIFE/LOCAL/ENABLED，排序 631、requires_login=0、is_featured=0。关键词覆盖纪念日、生日、周年、倒数、重要日子及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。纪念日记录只保存在 Android Room，不上传、不同步，也不新增服务端业务表。实现与边界见 [纪念日](ANNIVERSARY_COUNTDOWN.md)。生产已执行 V79，Flyway 历史 79/79 且失败 0。
+
+## V80 番茄专注目录
+
+`V80__seed_pomodoro_focus_tool.sql` 登记 `pomodoro_focus`，LIFE/LOCAL/ENABLED，排序 632、requires_login=0、is_featured=0。关键词覆盖番茄、专注、计时、休息、效率及中英文检索词；重复执行保留管理员编辑、配置、状态、时间戳与软删除。计时设置、运行快照和专注记录只保存在 Android 本机，不上传、不同步，也不新增服务端业务表。实现与边界见 [番茄专注](POMODORO_FOCUS.md)。

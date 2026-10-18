@@ -104,3 +104,17 @@ val MIGRATION_9_10 = object : Migration(9, 10) {
         db.execSQL("CREATE INDEX IF NOT EXISTS index_anniversary_event_date_epoch_day ON anniversary_event (date_epoch_day)")
     }
 }
+
+/** Version 11 adds local Pomodoro session history without touching existing data. */
+val MIGRATION_10_11 = object : Migration(10, 11) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS pomodoro_session (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "label TEXT NOT NULL, phase INTEGER NOT NULL, planned_seconds INTEGER NOT NULL, " +
+                "elapsed_seconds INTEGER NOT NULL, completed INTEGER NOT NULL, started_at INTEGER NOT NULL, " +
+                "ended_at INTEGER NOT NULL)",
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_pomodoro_session_ended_at ON pomodoro_session (ended_at)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS index_pomodoro_session_phase ON pomodoro_session (phase)")
+    }
+}

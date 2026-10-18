@@ -94,6 +94,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "todo_list" -> R.drawable.ic_todo_list
     "habit_tracker" -> R.drawable.ic_habit_tracker
     "anniversary_countdown" -> R.drawable.ic_anniversary
+    "pomodoro_focus" -> R.drawable.ic_pomodoro
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info
