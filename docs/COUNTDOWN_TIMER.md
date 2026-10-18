@@ -65,6 +65,8 @@
 
 - Android Debug/Release 各 **814/814**（123 suites），两种构建 Lint **0 错误/91 条既有警告**，计时器文件无 finding；Debug APK **26,686,106** 字节，Release APK **17,503,073** 字节，AAB **16,899,422** 字节，Release artifact 门禁通过（HTTPS、权限、备份、16 KB ZIP 对齐和 8 条权限集合）。
 - 服务端 JDK 21 **226/226**，静态契约 **109/109**，后台 `vue-tsc --noEmit` 与 Vite 生产构建通过。
-- Android 16 模拟器验证通知权限拒绝、重新授权、后台计时、通知栏暂停/继续/加时、重置确认、进程被杀后的服务重启和状态追赶；受控 5 秒计时在 `10:10:43.760` 获取 `PARTIAL_WAKE_LOCK`，在完成时 `10:10:48.625` 释放，状态持久化为 `FINISHED`、`completion_notified=true`，通知栏显示带自定义名称的 “Countdown finished” 完成提醒。重置不再产生重复 FGS 启动，`ForegroundServiceStartNotAllowedException` 和崩溃日志均未出现。
+- Android 16 模拟器验证通知权限拒绝、重新授权、后台计时、通知栏暂停/继续/加时、重置确认、进程被杀后的服务重启和状态追赶；修复后的受控 5 秒计时在 `10:29:36.348` 获取 `PARTIAL_WAKE_LOCK`，在完成时 `10:29:41.299` 释放，状态持久化为 `FINISHED`、`completion_notified=true`，通知栏显示带自定义名称的 “Countdown finished” 完成提醒。重置不再产生重复 FGS 启动，`ForegroundServiceStartNotAllowedException` 和崩溃日志均未出现。
 - 截止即完成规则覆盖暂停、继续和加时竞态；页面或服务任一先观察到截止时都走同一个完成提醒入口，最大 23:59:59 后不能继续增加时长，墙钟回拨也不会恢复出超过配置总时长的剩余时间。
 - 深色主题、2 倍字体和 720×1600 窄屏覆盖了标题/状态换行、全宽时分秒输入、快捷按钮、名称和设置区；真机 TalkBack 与厂商省电策略下的完成提醒延迟仍待后续设备验收。
+
+2026-10-18 发布验收：严格隔离候选 **280/280** 通过，使用一次性数据库、用户和临时网络，V85、目录元数据、后台编辑保持、使用量、排行及 7/30/90 天统计均通过，结束后资源全部清理。生产只读 HTTPS **180/180**；生产 API 镜像 `sha256:f867f8beaf53f31bfda829501e0cb0564137f17e0326afee1c6d5596a4b21a6b`，Git/Docker 回滚标签 `before-countdown-v85`。Flyway **85/85** 且失败 0，五个容器 healthy，官网、后台登录页和 API 健康接口均返回 200。GitHub CI `39119507915` 与 Release `39119507829` 均成功。
