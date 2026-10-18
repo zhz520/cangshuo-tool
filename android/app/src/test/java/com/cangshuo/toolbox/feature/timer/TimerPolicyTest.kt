@@ -85,6 +85,63 @@ class TimerPolicyTest {
         )
     }
 
+    @Test fun expiredTimerCannotResumeOrExtend() {
+        val expiredPaused = CountdownTimerState(
+            status = CountdownStatus.PAUSED,
+            totalMillis = 60_000L,
+            remainingMillis = 0L,
+        )
+        assertEquals(
+            CountdownStatus.FINISHED,
+            CountdownPolicy.resume(expiredPaused, 20_000L, 2_000_000L).status,
+        )
+        assertEquals(
+            CountdownStatus.FINISHED,
+            CountdownPolicy.extend(startSeconds(1), 60_000L, 11_000L, 1_001_000L).status,
+        )
+        assertEquals(
+            CountdownStatus.FINISHED,
+            CountdownPolicy.extend(expiredPaused, 60_000L, 20_000L, 2_000_000L).status,
+        )
+    }
+
+    @Test fun extendCapsAtMaximumAndKeepsPersistentTotalInBounds() {
+        val nearMaximum = CountdownPolicy.start(
+            CountdownTimerState(),
+            CountdownPolicy.MAX_DURATION_MILLIS - 30_000L,
+            "Long",
+            nowElapsedMillis = 10_000L,
+            nowWallMillis = 1_000_000L,
+        )
+        val extended = CountdownPolicy.extend(nearMaximum, 60_000L, 10_000L, 1_000_000L)
+        assertEquals(CountdownPolicy.MAX_DURATION_MILLIS, extended.totalMillis)
+        assertEquals(CountdownPolicy.MAX_DURATION_MILLIS, extended.remainingAt(10_000L))
+        assertEquals(
+            10_000L + CountdownPolicy.MAX_DURATION_MILLIS,
+            extended.deadlineElapsedMillis,
+        )
+        assertEquals(extended, CountdownPolicy.extend(extended, 60_000L, 10_000L, 1_000_000L))
+    }
+
+    @Test fun restoreClampsWallClockRollbackToConfiguredTotal() {
+        val restored = CountdownPolicy.restore(
+            status = CountdownStatus.RUNNING,
+            totalMillis = 60_000L,
+            storedRemainingMillis = 60_000L,
+            storedDeadlineElapsedMillis = null,
+            storedDeadlineWallMillis = 5_000_000L,
+            storedBootCount = 7,
+            currentBootCount = 8,
+            nowElapsedMillis = 2_000L,
+            nowWallMillis = 4_000_000L,
+            label = "Clock",
+            keepScreenOn = true,
+            completionNotified = false,
+        )
+        assertEquals(60_000L, restored.remainingMillis)
+        assertEquals(62_000L, restored.deadlineElapsedMillis)
+    }
+
     @Test fun restoreSelectsMonotonicWithinBootAndWallClockAfterReboot() {
         val sameBoot = CountdownPolicy.restore(
             status = CountdownStatus.RUNNING,

@@ -111,15 +111,18 @@ class TimerViewModel(
         if (!mutable.value.running) return
         useCases.pause()
         refresh()
-        emitMessage(TimerMessage.PAUSED)
+        if (mutable.value.paused) emitMessage(TimerMessage.PAUSED)
     }
 
     fun resume() {
         if (!mutable.value.paused) return
         useCases.resume()
-        emitMessage(TimerMessage.RESUMED)
-        useCases.ensureService()
-        startTicker()
+        refresh()
+        if (mutable.value.running) {
+            emitMessage(TimerMessage.RESUMED)
+            useCases.ensureService()
+            startTicker()
+        }
     }
 
     fun reset() {
@@ -132,10 +135,14 @@ class TimerViewModel(
 
     fun extend() {
         if (!mutable.value.running && !mutable.value.paused) return
+        val before = useCases.observe().value
         useCases.extend()
-        emitMessage(TimerMessage.EXTENDED)
-        useCases.ensureService()
         refresh()
+        val after = useCases.observe().value
+        if (after.status != CountdownStatus.FINISHED && after != before) {
+            emitMessage(TimerMessage.EXTENDED)
+            useCases.ensureService()
+        }
     }
 
     fun setKeepScreenOn(enabled: Boolean) {
@@ -182,7 +189,7 @@ class TimerViewModel(
 
     private fun onTimerState(status: CountdownStatus, totalMillis: Long, label: String, keepScreenOn: Boolean) {
         val finishedNow = status == CountdownStatus.FINISHED && lastStatus != CountdownStatus.FINISHED
-        if (status == CountdownStatus.IDLE && mutable.value.durationEditable) {
+        if (status == CountdownStatus.IDLE && lastStatus != CountdownStatus.IDLE && mutable.value.durationEditable) {
             val restored = CountdownPolicy.splitInput(totalMillis)
             saved["timerHours"] = restored.first
             saved["timerMinutes"] = restored.second

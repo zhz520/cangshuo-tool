@@ -118,4 +118,43 @@ class TimerViewModelTest {
         assertEquals(2, repo.serviceRequests)
         model.leaveForeground()
     }
+
+    @Test fun idleStoreEmissionKeepsDraftButResetRestoresDuration() = runTest {
+        val repo = FakeRepository()
+        val model = TimerViewModel(CountdownUseCases(repo), SavedStateHandle())
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { model.state.collect {} }
+        runCurrent()
+
+        model.setHours("24")
+        repo.mutable.value = repo.mutable.value.copy(label = "emission")
+        runCurrent()
+        assertEquals("24", model.state.value.hours)
+
+        model.setHours("0")
+        model.choosePreset(1)
+        model.start()
+        runCurrent()
+        repo.elapsed += 60_000L
+        model.reset()
+        runCurrent()
+        assertEquals("0", model.state.value.hours)
+        assertEquals("1", model.state.value.minutes)
+        assertEquals("0", model.state.value.seconds)
+    }
+
+    @Test fun pauseAtDeadlineFinishesWithoutFalsePauseMessage() = runTest {
+        val repo = FakeRepository()
+        val model = TimerViewModel(CountdownUseCases(repo), SavedStateHandle())
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { model.state.collect {} }
+        runCurrent()
+
+        model.choosePreset(1)
+        model.start()
+        runCurrent()
+        repo.elapsed += 60_000L
+        model.pause()
+        runCurrent()
+        assertEquals(CountdownStatus.FINISHED, model.state.value.status)
+        assertEquals(TimerMessage.FINISHED, model.state.value.message)
+    }
 }

@@ -155,7 +155,8 @@ object CountdownPolicy {
 
     fun resume(current: CountdownTimerState, nowElapsedMillis: Long, nowWallMillis: Long): CountdownTimerState {
         if (current.status != CountdownStatus.PAUSED) return current
-        val remaining = current.remainingMillis.coerceAtLeast(1L)
+        if (current.remainingMillis <= 0L) return finish(current)
+        val remaining = current.remainingMillis
         return current.copy(
             status = CountdownStatus.RUNNING,
             remainingMillis = remaining,
@@ -193,11 +194,12 @@ object CountdownPolicy {
                 status, total, storedRemaining, null, null, label, keepScreenOn, completionNotified,
             )
         }
-        val remaining = if (storedBootCount == currentBootCount && storedDeadlineElapsedMillis != null) {
+        val recorded = if (storedBootCount == currentBootCount && storedDeadlineElapsedMillis != null) {
             (storedDeadlineElapsedMillis - nowElapsedMillis).coerceAtLeast(0L)
         } else {
             storedDeadlineWallMillis?.let { (it - nowWallMillis).coerceAtLeast(0L) } ?: storedRemaining
         }
+        val remaining = recorded.coerceAtMost(total)
         return if (remaining <= 0L) {
             CountdownTimerState(
                 CountdownStatus.FINISHED, total, 0L, null, null, label, keepScreenOn, completionNotified,
@@ -218,17 +220,25 @@ object CountdownPolicy {
 
     fun extend(current: CountdownTimerState, additionalMillis: Long, nowElapsedMillis: Long, nowWallMillis: Long): CountdownTimerState {
         if (current.status != CountdownStatus.RUNNING && current.status != CountdownStatus.PAUSED) return current
-        val addition = additionalMillis.coerceAtLeast(1_000L)
+        val currentRemaining = if (current.status == CountdownStatus.RUNNING) {
+            current.remainingAt(nowElapsedMillis)
+        } else {
+            current.remainingMillis
+        }
+        if (currentRemaining <= 0L) return finish(current)
+        val room = MAX_DURATION_MILLIS - current.totalMillis
+        if (room <= 0L) return current
+        val addition = additionalMillis.coerceAtLeast(1_000L).coerceAtMost(room)
         val total = current.totalMillis + addition
         return if (current.status == CountdownStatus.RUNNING) {
             current.copy(
                 totalMillis = total,
-                remainingMillis = current.remainingAt(nowElapsedMillis) + addition,
+                remainingMillis = currentRemaining + addition,
                 deadlineElapsedMillis = (current.deadlineElapsedMillis ?: nowElapsedMillis) + addition,
                 deadlineWallMillis = (current.deadlineWallMillis ?: nowWallMillis) + addition,
             )
         } else {
-            current.copy(totalMillis = total, remainingMillis = current.remainingMillis + addition)
+            current.copy(totalMillis = total, remainingMillis = currentRemaining + addition)
         }
     }
 

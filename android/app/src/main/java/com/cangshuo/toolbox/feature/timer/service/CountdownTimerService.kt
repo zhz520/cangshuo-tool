@@ -58,8 +58,7 @@ class CountdownTimerService : Service() {
             notifyNow(current)
         }
         if (current.status == CountdownStatus.FINISHED && !current.completionNotified) {
-            postCompletion(current)
-            repository.markCompletionNotified()
+            postCompletionIfNeeded(current)
             finishService()
             return START_STICKY
         }
@@ -108,9 +107,8 @@ class CountdownTimerService : Service() {
                     CountdownStatus.RUNNING -> {
                         val remaining = state.remainingAt(repository.nowElapsedMillis())
                         if (remaining <= 0L) {
-                            postCompletion(state)
                             repository.finish()
-                            repository.markCompletionNotified()
+                            postCompletionIfNeeded(repository.state.value)
                             finishService()
                             break
                         }
@@ -127,6 +125,7 @@ class CountdownTimerService : Service() {
                         break
                     }
                     CountdownStatus.IDLE, CountdownStatus.FINISHED -> {
+                        postCompletionIfNeeded(state)
                         finishService()
                         break
                     }
@@ -191,6 +190,12 @@ class CountdownTimerService : Service() {
                 .setCategory(Notification.CATEGORY_ALARM)
                 .build(),
         )
+    }
+
+    private fun postCompletionIfNeeded(state: CountdownTimerState) {
+        if (state.status != CountdownStatus.FINISHED || state.completionNotified) return
+        postCompletion(state)
+        repository.markCompletionNotified()
     }
 
     private fun action(icon: Int, title: String, action: String, request: Int): Notification.Action {

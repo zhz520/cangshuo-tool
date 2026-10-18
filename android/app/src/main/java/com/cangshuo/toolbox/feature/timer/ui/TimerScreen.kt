@@ -1,7 +1,6 @@
 package com.cangshuo.toolbox.feature.timer.ui
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -66,6 +65,7 @@ import com.cangshuo.toolbox.core.ui.ToolboxOutlinedButton
 import com.cangshuo.toolbox.core.ui.ToolboxSwitch
 import com.cangshuo.toolbox.core.ui.ToolboxTextButton
 import com.cangshuo.toolbox.core.ui.ToolboxTextField
+import com.cangshuo.toolbox.core.ui.findActivity
 import com.cangshuo.toolbox.feature.timer.domain.CountdownPolicy
 import com.cangshuo.toolbox.feature.timer.domain.CountdownStatus
 import com.cangshuo.toolbox.feature.timer.domain.TimerError
@@ -171,7 +171,7 @@ fun TimerScreen(
             }
             if (!notificationGranted && Build.VERSION.SDK_INT >= 33) {
                 item("permission") {
-                    val activity = context as? Activity
+                    val activity = context.findActivity()
                     val canAskAgain = !permissionRequested || activity?.let {
                         ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.POST_NOTIFICATIONS)
                     } == true
@@ -450,7 +450,10 @@ private fun TimerClockCard(
                     )
                 }
                 if (state.running || state.paused) {
-                    ToolboxOutlinedButton(onClick = onExtend) {
+                    ToolboxOutlinedButton(
+                        onClick = onExtend,
+                        enabled = state.totalMillis < CountdownPolicy.MAX_DURATION_MILLIS,
+                    ) {
                         Text(stringResource(R.string.countdown_add_minute))
                     }
                 }
