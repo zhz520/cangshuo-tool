@@ -363,4 +363,8 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V88__seed_answer_book_tool.sql` 登记 `answer_book`，OTHER/LOCAL/ENABLED，排序 640，无登录要求，默认非推荐。重放保留人工配置、状态、软删除及使用量；答案收藏、历史和轮次仅存在 Android 私有存储，不新增服务端表或 API，后台复用原有管理/统计。见 [答案之书](ANSWER_BOOK.md)。
 
+### V89：振动器目录
+
+`V89__seed_vibrator_patterns_tool.sql` 登记 `vibrator_patterns`，OTHER/LOCAL/ENABLED，排序 641，无登录要求，默认非推荐。重放保留后台配置、状态、软删除和使用量。振动历史及参数只保存在设备，不新增服务端表或 API；后台继续复用目录、排行和统计。见 [振动器](VIBRATOR_PATTERNS.md)。
+
 生产已执行 V85，Flyway 历史 85/85 且失败 0。

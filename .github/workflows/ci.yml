@@ -59,6 +59,7 @@ jobs:
           python3 ../scripts/check_reaction_test_runtime.py --static
           python3 ../scripts/check_tap_speed_runtime.py --static
           python3 ../scripts/check_answer_book_runtime.py --static
+          python3 ../scripts/check_vibrator_patterns_runtime.py --static
       - name: Verify sync migrations and conditional queue acknowledgements
         run: python3 ../scripts/check_sync_sqlite.py
       - name: Upload debug APK
