@@ -1,0 +1,38 @@
+<resources>
+    <string name="answerbook_name">Book of answers</string>
+    <string name="answerbook_description">Browse themed random prompts with no repeats per cycle, favorites, history and sharing.</string>
+    <string-array name="answerbook_keywords"><item>answer</item><item>book</item><item>inspiration</item><item>random prompt</item><item>答案之书</item><item>灵感</item><item>翻书</item></string-array>
+    <string name="answerbook_instruction">Hold a question in mind, choose a theme, and open a different perspective.</string>
+    <string name="answerbook_all">All</string>
+    <string name="answerbook_action">A step forward</string>
+    <string name="answerbook_rest">Slow down</string>
+    <string name="answerbook_perspective">Another angle</string>
+    <string name="answerbook_pool">Theme size: %1$d · Remaining this cycle: %2$d</string>
+    <string name="answerbook_cover">Leave some space for the question</string>
+    <string name="answerbook_number">Page %1$d</string>
+    <string name="answerbook_open">Open a page</string>
+    <string name="answerbook_again">Another page</string>
+    <string name="answerbook_favorite">Save this page</string>
+    <string name="answerbook_unfavorite">Unsave page</string>
+    <string name="answerbook_history">Recent pages</string>
+    <string name="answerbook_favorites">Saved (%1$d)</string>
+    <string name="answerbook_empty_favorites">Save a sentence you would like to return to.</string>
+    <string name="answerbook_history_note">History limit: %1$d. Select a record to reread and share it above.</string>
+    <string name="answerbook_empty_history">No pages opened yet.</string>
+    <string name="answerbook_clear">Clear reading history</string>
+    <string name="answerbook_clear_confirm">Clear reading records on this device? Saved pages and the current draw cycle will remain.</string>
+    <string name="answerbook_reset">Reset device data</string>
+    <string name="answerbook_reset_confirm">Reset all reading records, saved pages and draw progress? This cannot be undone.</string>
+    <string name="answerbook_confirm">Confirm</string>
+    <string name="answerbook_cancel">Cancel</string>
+    <string name="answerbook_reload">Reload records</string>
+    <string name="answerbook_load_error">Cannot read local records. Reload, or confirm a reset if the data is damaged.</string>
+    <string name="answerbook_write_error">Saving could not be confirmed. Reload before trying again. The display does not assume the operation succeeded.</string>
+    <string name="answerbook_note">60 original bilingual prompts. Random selection does not analyze your question and is not a prediction or factual advice. Each theme tracks its own cycle and starts another after all pages are drawn. Themes can overlap. Do not substitute random results for important decisions.</string>
+    <string name="answerbook_report">Book of answers · %2$s\n\n%1$s\n\nA random prompt for entertainment.</string>
+    <string-array name="answerbook_texts">
+        <item>Make the first step small enough to finish today.</item><item>Try something small that you can undo.</item><item>Ask for clarity before making a guess.</item><item>Turn the goal into one concrete action.</item><item>Finish a version, then refine it.</item><item>Reserve some uninterrupted time for this.</item><item>Start with the part you can verify most easily.</item><item>Name the help you actually need.</item><item>Clear the desk, then sort your thoughts.</item><item>Add a checkpoint to your plan.</item><item>Divide the challenge into three smaller questions.</item><item>Choose a step that makes tomorrow easier.</item><item>Turn one worry into something you can check.</item><item>Update the plan with real feedback.</item><item>Make room for what matters first.</item><item>Give yourself a chance to practice properly.</item><item>Put the idea into a simple prototype.</item><item>Agree on boundaries before working together.</item><item>You can begin while it is still imperfect.</item><item>A small stretch of progress counts today.</item>
+        <item>Pause. The answer need not arrive right away.</item><item>Have a glass of water, then return to it.</item><item>Rest your body; your thoughts need room too.</item><item>Sleep on it before making the judgment.</item><item>Not answering yet is also a choice.</item><item>Leave yourself a little quiet time.</item><item>Set aside what you cannot do just now.</item><item>Not every message needs an instant reply.</item><item>Give the feeling some time to settle.</item><item>Care for the parts of yourself you can care for now.</item><item>A pause does not make the whole effort a failure.</item><item>Remove one task from today.</item><item>Let the plan make room for your energy.</item><item>Look away from the screen for a moment.</item><item>A slower pace can reveal the path underfoot.</item><item>Empty space gives things room to breathe.</item><item>Quiet the inner hurry for a while.</item><item>Bring your attention back to one breath.</item><item>You need not solve everything while tired.</item><item>Let the question rest on paper for a while.</item>
+        <item>How would you understand this if it happened to a friend?</item><item>Separate facts, guesses and wishes.</item><item>Ask again: whose expectation is this?</item><item>Give the opposite choice one fair reason.</item><item>You can hold two possibilities at once.</item><item>Try replacing must with I choose.</item><item>Consider the longer effect as well as the present feeling.</item><item>There may be a question behind the question.</item><item>Not every difference needs a winner.</item><item>Describe it before judging it.</item><item>Look for the resources already available to you.</item><item>Separate the outcome from your worth.</item><item>You may simply need more information.</item><item>What would your self a week from now notice?</item><item>Ask whether a third approach exists.</item><item>Admitting uncertainty leaves room to learn.</item><item>Return to the part you can influence.</item><item>One choice need not define your whole life.</item><item>Revisit the purpose and remove an unnecessary demand.</item><item>Let the answer be a beginning, not an order.</item>
+    </string-array>
+</resources>

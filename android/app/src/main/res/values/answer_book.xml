@@ -1,0 +1,38 @@
+<resources>
+    <string name="answerbook_name">答案之书</string>
+    <string name="answerbook_description">按主题随机翻阅灵感短句，支持一轮不重复、收藏、历史和分享。</string>
+    <string-array name="answerbook_keywords"><item>答案之书</item><item>灵感</item><item>随机答案</item><item>翻书</item><item>answer</item><item>book</item><item>inspiration</item></string-array>
+    <string name="answerbook_instruction">在心里想一个问题，选择主题，翻开一条新的思路。</string>
+    <string name="answerbook_all">全部</string>
+    <string name="answerbook_action">向前一步</string>
+    <string name="answerbook_rest">慢一点</string>
+    <string name="answerbook_perspective">换个角度</string>
+    <string name="answerbook_pool">本主题 %1$d 条 · 本轮剩余 %2$d 条</string>
+    <string name="answerbook_cover">给问题留一点空白</string>
+    <string name="answerbook_number">第 %1$d 页</string>
+    <string name="answerbook_open">翻开答案</string>
+    <string name="answerbook_again">再翻一页</string>
+    <string name="answerbook_favorite">收藏这页</string>
+    <string name="answerbook_unfavorite">取消收藏</string>
+    <string name="answerbook_history">最近翻阅</string>
+    <string name="answerbook_favorites">收藏 (%1$d)</string>
+    <string name="answerbook_empty_favorites">遇到喜欢的句子，可以收藏在这里。</string>
+    <string name="answerbook_history_note">仅保留最近 %1$d 次翻阅。选择记录可在上方重看并分享。</string>
+    <string name="answerbook_empty_history">还没有翻阅记录。</string>
+    <string name="answerbook_clear">清空翻阅历史</string>
+    <string name="answerbook_clear_confirm">清空本机翻阅记录？收藏和本轮已抽取进度仍会保留。</string>
+    <string name="answerbook_reset">重置本机数据</string>
+    <string name="answerbook_reset_confirm">重置全部翻阅、收藏和抽取进度？此操作无法撤销。</string>
+    <string name="answerbook_confirm">确认</string>
+    <string name="answerbook_cancel">取消</string>
+    <string name="answerbook_reload">重新读取</string>
+    <string name="answerbook_load_error">无法读取本机记录，可重新读取；数据损坏时可确认重置。</string>
+    <string name="answerbook_write_error">操作未能确认保存。请重新读取后再试，当前显示不会假定操作成功。</string>
+    <string name="answerbook_note">60 条原创中英灵感短句。随机抽取不分析问题，不是预测或事实建议。每个主题独立记录一轮已翻内容，抽完会开始新一轮；切换主题可能遇到相同句子。不要用随机结果替代重要决定。</string>
+    <string name="answerbook_report">答案之书 · %2$s\n\n%1$s\n\n随机灵感，仅供娱乐。</string>
+    <string-array name="answerbook_texts">
+        <item>把第一步缩小到今天就能完成。</item><item>先做一个可以撤回的小尝试。</item><item>与其猜测，先问清楚。</item><item>把目标写成一个具体动作。</item><item>先完成，再为它打磨。</item><item>为这件事留出不被打扰的时间。</item><item>从最容易验证的部分开始。</item><item>说出你真正需要的帮助。</item><item>先整理桌面，再整理思路。</item><item>给计划加上一个检查点。</item><item>把难题分成三个小问题。</item><item>选择能让明天更轻松的那一步。</item><item>把一个担心换成一次求证。</item><item>用实际反馈更新你的计划。</item><item>先把重要的事情安排进去。</item><item>给自己一次认真练习的机会。</item><item>把想法交给一个简单的原型。</item><item>约定边界，再开始合作。</item><item>带着不完美，也可以开始。</item><item>今天只推进一小段也算前进。</item>
+        <item>暂停一下，答案不必马上出现。</item><item>先喝一杯水，再回来看它。</item><item>让身体休息，思路也需要空间。</item><item>今晚先睡好，明天再作判断。</item><item>现在不回答，也是一种选择。</item><item>为自己留下一段安静的时间。</item><item>把暂时做不到的事先放一放。</item><item>不是每个消息都需要立刻回复。</item><item>给情绪一点散去的时间。</item><item>先照顾当下能够照顾的自己。</item><item>别把一次停顿当成全部的失败。</item><item>把今天的任务减掉一件。</item><item>允许计划为你的精力让路。</item><item>离开屏幕片刻，看看远处。</item><item>慢一点，也能看清脚下的路。</item><item>留白不是浪费，它让事情有余地。</item><item>先结束内心的催促。</item><item>把注意力收回到一次呼吸。</item><item>不必在疲惫时解决所有问题。</item><item>让这件事在纸上待一会儿。</item>
+        <item>换成朋友的处境，你会怎样理解？</item><item>区分事实、猜测和愿望。</item><item>重新问问：这是谁的期待？</item><item>试着给相反的选择一个理由。</item><item>你可以同时保留两种可能。</item><item>把“必须”改成“我选择”。</item><item>看一看长期影响，再看眼前情绪。</item><item>真正的问题也许藏在问题后面。</item><item>不是所有差异都需要分出对错。</item><item>试着描述，而不是先评价。</item><item>寻找你已经拥有的资源。</item><item>把结果和自我价值分开。</item><item>也许你需要的是新的信息。</item><item>想象一周后的自己会注意什么。</item><item>问问还有没有第三种做法。</item><item>承认不知道，才能继续了解。</item><item>把目光放回自己能够影响的部分。</item><item>一次选择不必定义整个人生。</item><item>重看最初的目的，删掉多余的要求。</item><item>让答案成为起点，而不是命令。</item>
+    </string-array>
+</resources>

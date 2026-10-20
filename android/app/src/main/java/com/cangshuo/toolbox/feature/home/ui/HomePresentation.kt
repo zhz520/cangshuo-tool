@@ -102,6 +102,7 @@ fun toolIconResource(name: String?): Int = when (name) {
       "countdown_timer" -> R.drawable.ic_timer
       "reaction_test" -> R.drawable.ic_reaction_test
       "tap_speed" -> R.drawable.ic_tap_speed
+      "answer_book" -> R.drawable.ic_answer_book
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info

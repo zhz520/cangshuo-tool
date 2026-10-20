@@ -403,6 +403,9 @@ class ToolboxAppContainer(context: Context) {
     private val countdownFactory = com.cangshuo.toolbox.feature.timer.ui.TimerViewModel.factory(
         com.cangshuo.toolbox.feature.timer.domain.CountdownUseCases(countdownRepository),
     )
+    private val answerBookFactory = com.cangshuo.toolbox.feature.answerbook.ui.AnswerBookViewModel.factory(
+        com.cangshuo.toolbox.feature.answerbook.domain.AnswerBookUseCases(
+            com.cangshuo.toolbox.feature.answerbook.data.LocalAnswerBookRepository(applicationContext)))
     private val tapSpeedFactory = com.cangshuo.toolbox.feature.tapspeed.ui.TapViewModel.factory(
         com.cangshuo.toolbox.feature.tapspeed.domain.TapUseCases(
             com.cangshuo.toolbox.feature.tapspeed.data.LocalTapRepository(applicationContext)))
@@ -484,6 +487,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.timer.CountdownTimerToolDefinition(resources,countdownFactory),
             com.cangshuo.toolbox.feature.reaction.ReactionToolDefinition(resources,reactionFactory),
             com.cangshuo.toolbox.feature.tapspeed.TapSpeedToolDefinition(resources,tapSpeedFactory),
+            com.cangshuo.toolbox.feature.answerbook.AnswerBookToolDefinition(resources,answerBookFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
