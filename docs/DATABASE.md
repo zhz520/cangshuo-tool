@@ -355,4 +355,8 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V86__seed_reaction_test_tool.sql` 登记 `reaction_test`，OTHER/LOCAL/ENABLED，排序 638，无登录要求，默认非推荐。重复执行保留人工编辑、状态、软删除和使用量。成绩与最近 20 组历史仅在 Android 私有存储，不新增服务端成绩数据或 API；后台复用工具管理、排行及统计。见 [反应力测试](REACTION_TEST.md)。
 
+### V87：手速测试目录
+
+`V87__seed_tap_speed_tool.sql` 登记 `tap_speed`，OTHER/LOCAL/ENABLED，排序 639，无登录要求，默认非推荐。重放不改变人工编辑、开关、软删除或使用量。点击分组及最近 20 组成绩仅在 Android 私有存储；后台复用工具管理、使用计数和排行榜，不新增成绩接口或数据库表。见 [手速测试](TAP_SPEED.md)。
+
 生产已执行 V85，Flyway 历史 85/85 且失败 0。
