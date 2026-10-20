@@ -6,9 +6,13 @@
 
 用户要求持续自主推进，不要因单个工具完成或普通验证步骤停下来等待“继续”。每轮先读取本文件和 ROADMAP，选择最小可完整交付的未完成项；完成代码、测试/Lint、文档、提交/推送，并按既有授权在验证通过后部署生产。只有遇到自动审批拒绝、缺少必要凭据/设备或真正不可逆风险时才暂停并明确说明。镜像轴映射回归已提交为 `63f6280`。
 
-## 当前增量（2026-10-20，反应力测试发布中）
+## 最新增量（2026-10-20，反应力测试已上线）
 
-`reaction_test`（OTHER/LOCAL、排序 638、V86）实现完成；随机提示、首帧 draw 到触摸按下计时、抢跑/超时、多轮统计、本机最近 20 组历史、CSV 与分享。参考 GPL-2.0 Dakostu/TapIt 固定 commit，仅流程概念，未复制代码。Android Debug/Release 各 827/827（124 suites），双 Lint 0 错误/91 既有警告且新工具无 finding；服务端 226/226、静态 14/14、release artifact gate 通过。Android 16 模拟器验证三轮真实提示与触摸、历史落盘、CSV/分享/确认、抢跑/超时/后台中断、深色和 720×1600 / 2 倍字体；真机与 TalkBack 仍未验收。生产仍是 `b50cec9` 和 V85，下一步提交推送、隔离候选验收后发布 V86；不能跳过隔离直接上线。详见 `../docs/REACTION_TEST.md`。上一轮两个明确临时验收/部署目录已安全清理；SSH 私有文件保留。
+`reaction_test`（OTHER/LOCAL、排序 638、V86）已完成并上线；随机提示、首帧 draw 到触摸按下计时、抢跑/超时、多轮统计、本机最近 20 组历史、CSV 与分享。参考 GPL-2.0 Dakostu/TapIt 固定 commit，仅流程概念，未复制代码。Android Debug/Release 各 827/827（124 suites），双 Lint 0 错误/91 既有警告且新工具无 finding；服务端 226/226、静态 14/14、release artifact gate 通过。Android 16 模拟器验证三轮真实提示与触摸、历史落盘、CSV/分享/确认、抢跑/超时/后台中断、深色和 720×1600 / 2 倍字体；真机、硬件时序校准与 TalkBack 仍未验收。
+
+提交 `6f09cf2` 已推送并部署；严格隔离 **185/185**，生产 HTTPS **85/85**，Flyway **86/86** 且失败 0，五个容器 healthy、官网/后台/健康均 200。生产镜像 `sha256:3b27a192cd756c3f393fd92268f44a1c16f9c70bf942c96822735214e1964a6c`；Git/Docker 回滚标签 `before-reaction-v86`，原生产代码 `b50cec9`、镜像 `sha256:f867f8be…` 保留。生产运行验收脚本使用宝塔现有 `/www/server/panel/pyenv/bin/python3`，不要假定 PATH 有 `python3`（系统 `/usr/bin/python` 为 2.7）。详见 `../docs/REACTION_TEST.md`。上一轮两个明确临时验收/部署目录已安全清理；SSH 私有文件保留。下一步沿 ROADMAP 继续未完成的 Wave 2 工具，不重做计时器或反应力测试。
+
+代码提交 `6f09cf2` 的 GitHub CI **39388275893** 与 Release artifacts **39388275902** 均成功。Debug APK 为 `android/app/build/outputs/apk/debug/app-debug.apk`，Release APK/AAB 门禁通过但未签名；不要把服务端发布写成用户手机已更新。
 
 ## 最新增量（2026-10-18 第二十三批）
 
