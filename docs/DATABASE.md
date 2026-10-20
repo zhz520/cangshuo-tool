@@ -367,4 +367,8 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V89__seed_vibrator_patterns_tool.sql` 登记 `vibrator_patterns`，OTHER/LOCAL/ENABLED，排序 641，无登录要求，默认非推荐。重放保留后台配置、状态、软删除和使用量。振动历史及参数只保存在设备，不新增服务端表或 API；后台继续复用目录、排行和统计。见 [振动器](VIBRATOR_PATTERNS.md)。
 
+### V90：电子木鱼目录
+
+`V90__seed_wooden_fish_tool.sql` 登记 `wooden_fish`，OTHER/LOCAL/ENABLED，排序 642，无登录要求，默认非推荐。重放保留管理员编辑、状态、软删除和用量。累计/今日次数、里程碑和声音设置仅在 Android 私有存储，不新增服务端业务数据或 API。见 [电子木鱼](WOODEN_FISH.md)。
+
 生产已执行 V85，Flyway 历史 85/85 且失败 0。

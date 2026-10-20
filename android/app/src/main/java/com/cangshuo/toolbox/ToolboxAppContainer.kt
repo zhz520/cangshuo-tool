@@ -403,6 +403,10 @@ class ToolboxAppContainer(context: Context) {
     private val countdownFactory = com.cangshuo.toolbox.feature.timer.ui.TimerViewModel.factory(
         com.cangshuo.toolbox.feature.timer.domain.CountdownUseCases(countdownRepository),
     )
+    private val woodenFishFactory = com.cangshuo.toolbox.feature.fish.ui.FishViewModel.factory(
+        com.cangshuo.toolbox.feature.fish.domain.FishUseCases(
+            com.cangshuo.toolbox.feature.fish.data.LocalFishRepository(applicationContext),
+            com.cangshuo.toolbox.feature.fish.data.SyntheticFishFeedback(applicationContext)))
     private val vibratorFactory = com.cangshuo.toolbox.feature.vibrator.ui.VibratorViewModel.factory(
         com.cangshuo.toolbox.feature.vibrator.domain.VibrationUseCases(
             com.cangshuo.toolbox.feature.vibrator.data.AndroidVibrationHardware(applicationContext),
@@ -493,6 +497,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.tapspeed.TapSpeedToolDefinition(resources,tapSpeedFactory),
             com.cangshuo.toolbox.feature.answerbook.AnswerBookToolDefinition(resources,answerBookFactory),
             com.cangshuo.toolbox.feature.vibrator.VibratorToolDefinition(resources,vibratorFactory),
+            com.cangshuo.toolbox.feature.fish.FishToolDefinition(resources,woodenFishFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
