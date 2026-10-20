@@ -403,6 +403,9 @@ class ToolboxAppContainer(context: Context) {
     private val countdownFactory = com.cangshuo.toolbox.feature.timer.ui.TimerViewModel.factory(
         com.cangshuo.toolbox.feature.timer.domain.CountdownUseCases(countdownRepository),
     )
+    private val reactionFactory = com.cangshuo.toolbox.feature.reaction.ui.ReactionViewModel.factory(
+        com.cangshuo.toolbox.feature.reaction.domain.ReactionUseCases(
+            com.cangshuo.toolbox.feature.reaction.data.LocalReactionRepository(applicationContext)))
     private val regexTesterFactory = com.cangshuo.toolbox.feature.regextester.ui.RegexTesterViewModel.factory(
         com.cangshuo.toolbox.feature.regextester.domain.TestRegexUseCase(
             com.cangshuo.toolbox.feature.regextester.data.LocalRegexTesterRepository()))
@@ -476,6 +479,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.noise.NoiseToolDefinition(resources,noiseFactory),
             com.cangshuo.toolbox.feature.period.PeriodTrackerToolDefinition(resources,periodFactory),
             com.cangshuo.toolbox.feature.timer.CountdownTimerToolDefinition(resources,countdownFactory),
+            com.cangshuo.toolbox.feature.reaction.ReactionToolDefinition(resources,reactionFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),

@@ -56,6 +56,7 @@ jobs:
           python3 ../scripts/check_color_picker_runtime.py --static
           python3 ../scripts/check_image_base64_runtime.py --static
           python3 ../scripts/check_pure_color_image_runtime.py --static
+          python3 ../scripts/check_reaction_test_runtime.py --static
       - name: Verify sync migrations and conditional queue acknowledgements
         run: python3 ../scripts/check_sync_sqlite.py
       - name: Upload debug APK

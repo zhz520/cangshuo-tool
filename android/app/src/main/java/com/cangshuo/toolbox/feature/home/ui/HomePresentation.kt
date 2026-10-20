@@ -100,6 +100,7 @@ fun toolIconResource(name: String?): Int = when (name) {
     "white_noise" -> R.drawable.ic_noise
       "period_tracker" -> R.drawable.ic_period_tracker
       "countdown_timer" -> R.drawable.ic_timer
+      "reaction_test" -> R.drawable.ic_reaction_test
     "battery_info" -> R.drawable.ic_battery_info
     "storage_info" -> R.drawable.ic_storage_info
     "device_info" -> R.drawable.ic_device_info
