@@ -22,3 +22,5 @@ Release 网络安全配置禁止明文 HTTP；Debug 只开放既有 loopback 开
 App 我的页提供内置中英权限说明，无需联网。发布时检查 APK/AAB 合并清单与第三方 SDK，若新增权限必须同步本说明与隐私政策。没有广告或第三方自动分析 SDK。
 
 Android assembleDebug/lintDebug 1 分 14 秒成功，内置中英说明与官网 `/permissions/` 已创建；没有新增运行时权限。依据：[Android 运行时权限](https://developer.android.com/training/permissions/requesting)、[SAF 文档访问](https://developer.android.com/training/data-storage/shared/documents-files)。设备授权/拒绝/撤回与真实 provider 验收延期；源码清单核对不替代运行时验收。
+
+2026-10-20 振动器新增普通 `VIBRATE` 权限：应用内中英权限说明、独立权限页与隐私页已同步。该普通权限不弹授权框，调用仅发生在用户开始振动测试时，可立即停止；Android 16 模拟器验证了振幅控制与取消，真机马达手感和 TalkBack 仍待验收。
