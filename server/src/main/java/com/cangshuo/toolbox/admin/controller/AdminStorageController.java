@@ -26,27 +26,27 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/storage", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin storage")
+@Tag(name = "后台文件存储")
 public class AdminStorageController {
     private final AdminStorageService service;
     public AdminStorageController(AdminStorageService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "Read object storage status and limits; enabled=false means every write returns 503/10008")
+    @Operation(summary = "获取文件存储状态与限制（停用时写入返回 503/10008）")
     public ApiResponse<AdminStorageStatusResponse> status(@AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.status(adminId(jwt)), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(value = "/objects", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Upload one bounded object; the server generates the key and computes SHA-256")
+    @Operation(summary = "上传文件（服务端生成对象键并计算 SHA-256）")
     public ApiResponse<AdminStoredObjectResponse> upload(@RequestParam("file") MultipartFile file,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.upload(file, context(request), adminId(jwt)), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/objects/presigned")
-    @Operation(summary = "Create a presigned GET URL for an existing object")
+    @Operation(summary = "获取已有文件的临时下载链接")
     public ApiResponse<AdminPresignedResponse> presigned(@RequestParam("key") String key,
             @RequestParam(name = "expirySeconds", required = false) Integer expirySeconds,
             HttpServletRequest request) {
@@ -54,7 +54,7 @@ public class AdminStorageController {
     }
 
     @DeleteMapping("/objects")
-    @Operation(summary = "Delete one object; missing objects return 404/10006")
+    @Operation(summary = "删除存储文件（不存在时返回 404/10006）")
     public ApiResponse<Void> delete(@RequestParam("key") String key, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
         service.delete(key, context(request), adminId(jwt));

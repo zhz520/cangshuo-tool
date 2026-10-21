@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Tools", description = "公开工具目录元数据")
+@Tag(name = "工具目录与排行", description = "公开工具目录元数据")
 @RestController
 @RequestMapping("/api/v1/tools")
 public class ToolCatalogController {

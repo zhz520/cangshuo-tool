@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Cloud sync", description = "需用户登录；使用游标增量同步收藏、最近使用与偏好。")
+@Tag(name = "云端数据同步", description = "需用户登录；使用游标增量同步收藏、最近使用与偏好。")
 @RequestMapping(value="/api/v1/sync",produces="application/json")
 public class SyncController {
     private final SyncService service;

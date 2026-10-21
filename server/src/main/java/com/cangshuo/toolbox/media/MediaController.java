@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Short video", description = "短视频、图文图集、封面与 Live Photo；下载使用解析结果提供的临时句柄。")
+@Tag(name = "短视频与图集解析", description = "短视频、图文图集、封面与 Live Photo；下载使用解析结果提供的临时句柄。")
 @RequestMapping("/api/v1/web-tools/short_video_parse")
 public class MediaController {
     private final MediaService service;

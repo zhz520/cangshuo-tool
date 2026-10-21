@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Membership", description = "账号会员状态")
+@Tag(name = "用户会员", description = "账号会员状态")
 @RestController
 @RequestMapping(value = "/api/v1/membership", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MembershipController {

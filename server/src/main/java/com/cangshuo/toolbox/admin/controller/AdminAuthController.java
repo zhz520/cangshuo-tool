@@ -23,25 +23,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin authentication")
+@Tag(name = "后台管理员认证")
 public class AdminAuthController {
     private final AdminAuthService service;
     public AdminAuthController(AdminAuthService service) { this.service = service; }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Sign in with an administrator username and password")
+    @Operation(summary = "管理员账号密码登录")
     public ApiResponse<AdminAuthResponse> login(@Valid @RequestBody AdminLoginRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.login(body, context(request)), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/me")
-    @Operation(summary = "Read the current administrator profile")
+    @Operation(summary = "获取当前管理员资料")
     public ApiResponse<AdminProfileResponse> me(@AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.current(jwt.getSubject()), TraceIdFilter.traceId(request));
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "Record an administrator sign-out; the stateless token is discarded by the client")
+    @Operation(summary = "管理员退出登录（记录退出事件，客户端丢弃令牌）")
     public ApiResponse<Void> logout(@AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         service.logout(jwt.getSubject(), context(request));
         return ApiResponse.success(null, TraceIdFilter.traceId(request));

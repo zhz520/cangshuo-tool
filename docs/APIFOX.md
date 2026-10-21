@@ -25,6 +25,8 @@ python scripts/export_openapi.py
 
 当前 **74 个操作 / 60 个路径 / 127 个 schema**。只包含真实 `/api/v1/**` 业务路由；Android 离线工具不伪造服务端接口，未实现的路线图接口不导入。
 
+用户要求文档使用中文：接口名称、25 个业务分组、分组说明、参数说明和成功/错误响应说明统一为简体中文。接口路径、字段名、状态枚举、模型引用与 operationId 保持原样；Apifox 自身的固定界面词汇由平台控制。
+
 - OpenAPI 3.1；生产/本地 server 地址，路径已经带 `/api/v1`。
 - 参数、请求体、Bean Validation、分页 DTO 与成功返回由真实源码生成。
 - 匿名/用户 Bearer/管理员 Bearer 边界；匿名接口携带错误 Token 也可能返回 401。
@@ -48,3 +50,7 @@ python scripts/export_openapi.py
 - 最终代码 `c57f083` 的 [CI 39546039313](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039313) 与 [Release artifacts 39546039346](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039346) 均成功；CI 的服务端快照一致性门禁已通过。无用的本轮 `temp/openapi/` 测试临时目录已清理。
 
 本任务不改变生产鉴权、不启用公开 Swagger，也不修改数据库或客户端业务。接口文档导入成功不等于对全部写接口进行了生产调用验收。后续新增/修改接口必须重新生成、推送并核对 Apifox。
+
+## 2026-10-21 中文化
+
+在 Controller 注解中翻译原有 54 个英文接口名称与 26 处分组声明（25 个不同分组）；生成配置将默认成功说明改为「请求成功」「创建成功」。生成后的 74 个接口名称、25 个分组和全部响应说明均含中文。已有 OpenAPI 导出校验 **2/2** 通过；与中文化之前的快照去除名称/分组/说明后完全一致，覆盖路由、请求体、响应模型、鉴权、参数及 operationId。没有新增测试用例、依赖、数据库迁移或业务逻辑改动。

@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/logs", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin operation logs")
+@Tag(name = "后台操作日志")
 public class AdminOperationLogController {
     private final AdminOperationLogService service;
     public AdminOperationLogController(AdminOperationLogService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "Page through administrator audit rows; module/result accept uppercase codes")
+    @Operation(summary = "分页查询操作日志（模块与结果使用大写编码筛选）")
     public ApiResponse<PageResponse<AdminOperationLogRow>> list(
             @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
             @RequestParam(name = "pageSize", defaultValue = "20") @Min(1) @Max(100) int pageSize,

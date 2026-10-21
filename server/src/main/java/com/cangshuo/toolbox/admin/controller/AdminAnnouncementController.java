@@ -30,27 +30,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/announcements", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin announcements")
+@Tag(name = "后台公告管理")
 public class AdminAnnouncementController {
     private final AdminAnnouncementService service;
     public AdminAnnouncementController(AdminAnnouncementService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "List non-deleted announcements, newest first (drafts included)")
+    @Operation(summary = "获取公告列表（包含草稿，按时间倒序）")
     public ApiResponse<List<AdminAnnouncementRow>> list(HttpServletRequest request) {
         return ApiResponse.success(service.list(), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create an announcement; enabled=false keeps it as a draft")
+    @Operation(summary = "创建公告（停用时保存为草稿）")
     public ApiResponse<AdminAnnouncementRow> create(@Valid @RequestBody AdminAnnouncementRequest body,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.create(body, context(request), adminId(jwt)), TraceIdFilter.traceId(request));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update an announcement")
+    @Operation(summary = "更新公告")
     public ApiResponse<AdminAnnouncementRow> update(@PathVariable String id,
             @Valid @RequestBody AdminAnnouncementRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class AdminAnnouncementController {
     }
 
     @PatchMapping(value = "/{id}/status", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Publish or unpublish an announcement")
+    @Operation(summary = "发布或撤回公告")
     public ApiResponse<AdminAnnouncementRow> status(@PathVariable String id,
             @Valid @RequestBody AdminAnnouncementStatusRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -67,7 +67,7 @@ public class AdminAnnouncementController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Soft-delete an announcement")
+    @Operation(summary = "软删除公告")
     public ApiResponse<Void> delete(@PathVariable String id, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
         service.delete(id, context(request), adminId(jwt));

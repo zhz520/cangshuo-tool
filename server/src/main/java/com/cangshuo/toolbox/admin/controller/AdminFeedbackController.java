@@ -27,13 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/feedback", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin feedback")
+@Tag(name = "后台反馈管理")
 public class AdminFeedbackController {
     private final AdminFeedbackService service;
     public AdminFeedbackController(AdminFeedbackService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "Page through user feedback with keyword and status filters")
+    @Operation(summary = "分页查询用户反馈（支持关键词和状态筛选）")
     public ApiResponse<PageResponse<AdminFeedbackRow>> list(
             @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
             @RequestParam(name = "pageSize", defaultValue = "20") @Min(1) @Max(100) int pageSize,
@@ -44,7 +44,7 @@ public class AdminFeedbackController {
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Move feedback through PENDING/PROCESSING/RESOLVED and optionally reply once")
+    @Operation(summary = "处理用户反馈（待处理、处理中、已解决，可回复一次）")
     public ApiResponse<AdminFeedbackRow> update(@PathVariable long id,
             @Valid @RequestBody AdminFeedbackUpdateRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {

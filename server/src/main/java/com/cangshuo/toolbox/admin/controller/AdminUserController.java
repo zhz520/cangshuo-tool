@@ -30,13 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin users")
+@Tag(name = "后台用户管理")
 public class AdminUserController {
     private final AdminUserService service;
     public AdminUserController(AdminUserService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "Page through user accounts; keyword matches email or nickname")
+    @Operation(summary = "分页查询用户（支持邮箱和昵称搜索）")
     public ApiResponse<PageResponse<AdminUserRow>> list(
             @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
             @RequestParam(name = "pageSize", defaultValue = "20") @Min(1) @Max(100) int pageSize,
@@ -47,13 +47,13 @@ public class AdminUserController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Read one user account with favorite/recent counts")
+    @Operation(summary = "获取用户详情及收藏、最近使用数量")
     public ApiResponse<AdminUserRow> detail(@PathVariable String id, HttpServletRequest request) {
         return ApiResponse.success(service.detail(id), TraceIdFilter.traceId(request));
     }
 
     @PatchMapping(value = "/{id}/status", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Enable or disable a user; disabling revokes every refresh session immediately")
+    @Operation(summary = "启用或停用用户（停用时立即撤销所有登录会话）")
     public ApiResponse<AdminUserRow> status(@PathVariable String id,
             @Valid @RequestBody AdminUserStatusRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -62,13 +62,13 @@ public class AdminUserController {
     }
 
     @GetMapping("/{id}/sessions")
-    @Operation(summary = "List the latest refresh sessions with masked selectors")
+    @Operation(summary = "获取用户最近登录会话（会话标识脱敏）")
     public ApiResponse<List<AdminUserSessionResponse>> sessions(@PathVariable String id, HttpServletRequest request) {
         return ApiResponse.success(service.sessions(id), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/{id}/sync")
-    @Operation(summary = "List sync entity keys (favorites/recent) without exposing payloads")
+    @Operation(summary = "获取收藏与最近使用的同步键（不返回同步内容）")
     public ApiResponse<List<AdminUserSyncEntryResponse>> sync(@PathVariable String id,
             @RequestParam(name = "limit", defaultValue = "20") @Min(1) @Max(50) int limit,
             HttpServletRequest request) {

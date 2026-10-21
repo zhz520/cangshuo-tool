@@ -3365,7 +3365,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -3501,8 +3501,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List non-deleted announcements, newest first (drafts included)",
-        "tags" : [ "Admin announcements" ]
+        "summary" : "获取公告列表（包含草稿，按时间倒序）",
+        "tags" : [ "后台公告管理" ]
       },
       "post" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -3526,7 +3526,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -3662,8 +3662,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Create an announcement; enabled=false keeps it as a draft",
-        "tags" : [ "Admin announcements" ]
+        "summary" : "创建公告（停用时保存为草稿）",
+        "tags" : [ "后台公告管理" ]
       }
     },
     "/api/v1/admin/announcements/{id}" : {
@@ -3688,7 +3688,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -3824,8 +3824,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Soft-delete an announcement",
-        "tags" : [ "Admin announcements" ]
+        "summary" : "软删除公告",
+        "tags" : [ "后台公告管理" ]
       },
       "put" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -3858,7 +3858,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -3994,8 +3994,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Update an announcement",
-        "tags" : [ "Admin announcements" ]
+        "summary" : "更新公告",
+        "tags" : [ "后台公告管理" ]
       }
     },
     "/api/v1/admin/announcements/{id}/status" : {
@@ -4030,7 +4030,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4166,8 +4166,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Publish or unpublish an announcement",
-        "tags" : [ "Admin announcements" ]
+        "summary" : "发布或撤回公告",
+        "tags" : [ "后台公告管理" ]
       }
     },
     "/api/v1/admin/auth/login" : {
@@ -4193,7 +4193,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4327,8 +4327,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Sign in with an administrator username and password",
-        "tags" : [ "Admin authentication" ]
+        "summary" : "管理员账号密码登录",
+        "tags" : [ "后台管理员认证" ]
       }
     },
     "/api/v1/admin/auth/logout" : {
@@ -4344,7 +4344,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4480,8 +4480,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Record an administrator sign-out; the stateless token is discarded by the client",
-        "tags" : [ "Admin authentication" ]
+        "summary" : "管理员退出登录（记录退出事件，客户端丢弃令牌）",
+        "tags" : [ "后台管理员认证" ]
       }
     },
     "/api/v1/admin/auth/me" : {
@@ -4497,7 +4497,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4633,8 +4633,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read the current administrator profile",
-        "tags" : [ "Admin authentication" ]
+        "summary" : "获取当前管理员资料",
+        "tags" : [ "后台管理员认证" ]
       }
     },
     "/api/v1/admin/categories" : {
@@ -4650,7 +4650,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4786,8 +4786,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List non-deleted categories with their live tool counts",
-        "tags" : [ "Admin categories" ]
+        "summary" : "获取分类列表及未删除工具数量",
+        "tags" : [ "后台分类管理" ]
       },
       "post" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -4811,7 +4811,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -4947,8 +4947,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Create a category",
-        "tags" : [ "Admin categories" ]
+        "summary" : "创建工具分类",
+        "tags" : [ "后台分类管理" ]
       }
     },
     "/api/v1/admin/categories/{code}" : {
@@ -4973,7 +4973,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5109,8 +5109,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Soft-delete an empty category; categories with live tools return 409/30007",
-        "tags" : [ "Admin categories" ]
+        "summary" : "软删除空分类（仍有工具时返回 409/30007）",
+        "tags" : [ "后台分类管理" ]
       },
       "put" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -5143,7 +5143,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5279,8 +5279,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Update a category",
-        "tags" : [ "Admin categories" ]
+        "summary" : "更新工具分类",
+        "tags" : [ "后台分类管理" ]
       }
     },
     "/api/v1/admin/categories/{code}/status" : {
@@ -5315,7 +5315,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5451,8 +5451,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Enable or disable a category; disabled categories hide their tools from the public catalog",
-        "tags" : [ "Admin categories" ]
+        "summary" : "启用或停用分类（停用后隐藏所属工具）",
+        "tags" : [ "后台分类管理" ]
       }
     },
     "/api/v1/admin/config" : {
@@ -5468,7 +5468,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5604,8 +5604,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List the whitelisted business configuration keys",
-        "tags" : [ "Admin config" ]
+        "summary" : "获取允许管理的业务配置列表",
+        "tags" : [ "后台系统配置" ]
       }
     },
     "/api/v1/admin/config/{key}" : {
@@ -5640,7 +5640,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5776,8 +5776,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Update one whitelisted configuration key",
-        "tags" : [ "Admin config" ]
+        "summary" : "更新白名单中的系统配置项",
+        "tags" : [ "后台系统配置" ]
       }
     },
     "/api/v1/admin/feedback" : {
@@ -5833,7 +5833,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -5969,8 +5969,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Page through user feedback with keyword and status filters",
-        "tags" : [ "Admin feedback" ]
+        "summary" : "分页查询用户反馈（支持关键词和状态筛选）",
+        "tags" : [ "后台反馈管理" ]
       }
     },
     "/api/v1/admin/feedback/{id}" : {
@@ -6006,7 +6006,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6142,8 +6142,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Move feedback through PENDING/PROCESSING/RESOLVED and optionally reply once",
-        "tags" : [ "Admin feedback" ]
+        "summary" : "处理用户反馈（待处理、处理中、已解决，可回复一次）",
+        "tags" : [ "后台反馈管理" ]
       }
     },
     "/api/v1/admin/logs" : {
@@ -6207,7 +6207,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6343,8 +6343,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Page through administrator audit rows; module/result accept uppercase codes",
-        "tags" : [ "Admin operation logs" ]
+        "summary" : "分页查询操作日志（模块与结果使用大写编码筛选）",
+        "tags" : [ "后台操作日志" ]
       }
     },
     "/api/v1/admin/recommendations" : {
@@ -6360,7 +6360,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6496,8 +6496,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List non-deleted recommendation slots with the computed active flag",
-        "tags" : [ "Admin recommendations" ]
+        "summary" : "获取推荐位列表及当前生效状态",
+        "tags" : [ "后台推荐位管理" ]
       },
       "post" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -6521,7 +6521,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6657,8 +6657,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Create a recommendation slot; set toolCode or linkUrl, never both",
-        "tags" : [ "Admin recommendations" ]
+        "summary" : "创建推荐位（工具编码与链接地址二选一）",
+        "tags" : [ "后台推荐位管理" ]
       }
     },
     "/api/v1/admin/recommendations/{code}" : {
@@ -6683,7 +6683,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6819,8 +6819,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Soft-delete a recommendation slot",
-        "tags" : [ "Admin recommendations" ]
+        "summary" : "软删除推荐位",
+        "tags" : [ "后台推荐位管理" ]
       },
       "put" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -6853,7 +6853,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -6989,8 +6989,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Update a recommendation slot",
-        "tags" : [ "Admin recommendations" ]
+        "summary" : "更新推荐位",
+        "tags" : [ "后台推荐位管理" ]
       }
     },
     "/api/v1/admin/recommendations/{code}/status" : {
@@ -7025,7 +7025,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -7161,8 +7161,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Enable or disable a recommendation slot",
-        "tags" : [ "Admin recommendations" ]
+        "summary" : "启用或停用推荐位",
+        "tags" : [ "后台推荐位管理" ]
       }
     },
     "/api/v1/admin/site-links" : {
@@ -7218,7 +7218,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -7354,8 +7354,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Page through navigation submissions with keyword and status filters",
-        "tags" : [ "Admin site links" ]
+        "summary" : "分页查询网站投稿（支持关键词和审核状态筛选）",
+        "tags" : [ "后台网站导航" ]
       }
     },
     "/api/v1/admin/site-links/{id}" : {
@@ -7391,7 +7391,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -7527,8 +7527,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Approve or reject a navigation submission",
-        "tags" : [ "Admin site links" ]
+        "summary" : "通过或拒绝网站投稿",
+        "tags" : [ "后台网站导航" ]
       }
     },
     "/api/v1/admin/statistics" : {
@@ -7555,7 +7555,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -7692,7 +7692,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "平台概览：7/30/90 日趋势、排行和累计统计",
-        "tags" : [ "Admin statistics" ]
+        "tags" : [ "后台运营统计" ]
       }
     },
     "/api/v1/admin/storage" : {
@@ -7708,7 +7708,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -7844,8 +7844,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read object storage status and limits; enabled=false means every write returns 503/10008",
-        "tags" : [ "Admin storage" ]
+        "summary" : "获取文件存储状态与限制（停用时写入返回 503/10008）",
+        "tags" : [ "后台文件存储" ]
       }
     },
     "/api/v1/admin/storage/objects" : {
@@ -7870,7 +7870,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8006,8 +8006,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Delete one object; missing objects return 404/10006",
-        "tags" : [ "Admin storage" ]
+        "summary" : "删除存储文件（不存在时返回 404/10006）",
+        "tags" : [ "后台文件存储" ]
       },
       "post" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -8037,7 +8037,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8173,8 +8173,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Upload one bounded object; the server generates the key and computes SHA-256",
-        "tags" : [ "Admin storage" ]
+        "summary" : "上传文件（服务端生成对象键并计算 SHA-256）",
+        "tags" : [ "后台文件存储" ]
       }
     },
     "/api/v1/admin/storage/objects/presigned" : {
@@ -8208,7 +8208,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8344,8 +8344,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Create a presigned GET URL for an existing object",
-        "tags" : [ "Admin storage" ]
+        "summary" : "获取已有文件的临时下载链接",
+        "tags" : [ "后台文件存储" ]
       }
     },
     "/api/v1/admin/tools" : {
@@ -8409,7 +8409,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8545,8 +8545,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Page through catalog entries, including disabled and maintenance tools",
-        "tags" : [ "Admin tools" ]
+        "summary" : "分页查询工具目录（包含停用和维护中的工具）",
+        "tags" : [ "后台工具管理" ]
       },
       "post" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -8570,7 +8570,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8706,8 +8706,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Create a catalog entry",
-        "tags" : [ "Admin tools" ]
+        "summary" : "创建工具目录项",
+        "tags" : [ "后台工具管理" ]
       }
     },
     "/api/v1/admin/tools/categories" : {
@@ -8723,7 +8723,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -8859,8 +8859,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read the category options used by the tool editor",
-        "tags" : [ "Admin tools" ]
+        "summary" : "获取工具编辑可用的分类选项",
+        "tags" : [ "后台工具管理" ]
       }
     },
     "/api/v1/admin/tools/{code}" : {
@@ -8885,7 +8885,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9021,8 +9021,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Soft-delete a catalog entry; the public catalog stops returning it",
-        "tags" : [ "Admin tools" ]
+        "summary" : "软删除工具（从公开目录隐藏）",
+        "tags" : [ "后台工具管理" ]
       },
       "get" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -9045,7 +9045,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9181,8 +9181,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read one catalog entry by code",
-        "tags" : [ "Admin tools" ]
+        "summary" : "按编码获取工具详情",
+        "tags" : [ "后台工具管理" ]
       },
       "put" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -9215,7 +9215,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9351,8 +9351,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Replace the editable fields of a catalog entry",
-        "tags" : [ "Admin tools" ]
+        "summary" : "更新工具的可编辑信息",
+        "tags" : [ "后台工具管理" ]
       }
     },
     "/api/v1/admin/tools/{code}/status" : {
@@ -9387,7 +9387,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9523,8 +9523,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Enable, disable or set maintenance for a catalog entry",
-        "tags" : [ "Admin tools" ]
+        "summary" : "启用、停用工具或设为维护状态",
+        "tags" : [ "后台工具管理" ]
       }
     },
     "/api/v1/admin/users" : {
@@ -9580,7 +9580,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9716,8 +9716,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Page through user accounts; keyword matches email or nickname",
-        "tags" : [ "Admin users" ]
+        "summary" : "分页查询用户（支持邮箱和昵称搜索）",
+        "tags" : [ "后台用户管理" ]
       }
     },
     "/api/v1/admin/users/{id}" : {
@@ -9742,7 +9742,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -9878,8 +9878,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read one user account with favorite/recent counts",
-        "tags" : [ "Admin users" ]
+        "summary" : "获取用户详情及收藏、最近使用数量",
+        "tags" : [ "后台用户管理" ]
       }
     },
     "/api/v1/admin/users/{id}/membership" : {
@@ -9905,7 +9905,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10041,8 +10041,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read one account's membership for the admin console",
-        "tags" : [ "Admin membership" ]
+        "summary" : "获取指定用户的会员状态",
+        "tags" : [ "后台会员管理" ]
       },
       "put" : {
         "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -10076,7 +10076,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10212,8 +10212,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Grant or revoke membership for one account",
-        "tags" : [ "Admin membership" ]
+        "summary" : "授予或取消用户会员",
+        "tags" : [ "后台会员管理" ]
       }
     },
     "/api/v1/admin/users/{id}/sessions" : {
@@ -10238,7 +10238,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10374,8 +10374,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List the latest refresh sessions with masked selectors",
-        "tags" : [ "Admin users" ]
+        "summary" : "获取用户最近登录会话（会话标识脱敏）",
+        "tags" : [ "后台用户管理" ]
       }
     },
     "/api/v1/admin/users/{id}/status" : {
@@ -10410,7 +10410,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10546,8 +10546,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Enable or disable a user; disabling revokes every refresh session immediately",
-        "tags" : [ "Admin users" ]
+        "summary" : "启用或停用用户（停用时立即撤销所有登录会话）",
+        "tags" : [ "后台用户管理" ]
       }
     },
     "/api/v1/admin/users/{id}/sync" : {
@@ -10584,7 +10584,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10720,8 +10720,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List sync entity keys (favorites/recent) without exposing payloads",
-        "tags" : [ "Admin users" ]
+        "summary" : "获取收藏与最近使用的同步键（不返回同步内容）",
+        "tags" : [ "后台用户管理" ]
       }
     },
     "/api/v1/app/version" : {
@@ -10737,7 +10737,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -10872,7 +10872,7 @@
         },
         "security" : [ ],
         "summary" : "获取最新客户端版本信息（匿名）",
-        "tags" : [ "App" ]
+        "tags" : [ "客户端版本" ]
       }
     },
     "/api/v1/auth/login" : {
@@ -10898,7 +10898,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11032,8 +11032,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Sign in with email and password",
-        "tags" : [ "Authentication" ]
+        "summary" : "邮箱密码登录",
+        "tags" : [ "用户注册与登录" ]
       }
     },
     "/api/v1/auth/logout" : {
@@ -11059,7 +11059,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11193,8 +11193,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Revoke the current refresh session",
-        "tags" : [ "Authentication" ]
+        "summary" : "退出登录并撤销当前会话",
+        "tags" : [ "用户注册与登录" ]
       }
     },
     "/api/v1/auth/me" : {
@@ -11220,7 +11220,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11356,8 +11356,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Permanently delete the current account after password and email confirmation",
-        "tags" : [ "Authentication" ]
+        "summary" : "核验邮箱与密码后永久注销当前账号",
+        "tags" : [ "用户注册与登录" ]
       },
       "get" : {
         "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -11371,7 +11371,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11507,8 +11507,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Read the current active account",
-        "tags" : [ "Authentication" ]
+        "summary" : "获取当前登录用户资料",
+        "tags" : [ "用户注册与登录" ]
       },
       "put" : {
         "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -11532,7 +11532,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11668,8 +11668,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Update the current account nickname",
-        "tags" : [ "Authentication" ]
+        "summary" : "修改当前用户昵称",
+        "tags" : [ "用户注册与登录" ]
       }
     },
     "/api/v1/auth/refresh" : {
@@ -11695,7 +11695,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11829,8 +11829,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Rotate a refresh token and issue a new access token",
-        "tags" : [ "Authentication" ]
+        "summary" : "轮换刷新令牌并获取新的访问令牌",
+        "tags" : [ "用户注册与登录" ]
       }
     },
     "/api/v1/auth/register" : {
@@ -11856,7 +11856,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -11990,8 +11990,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Register with email and password",
-        "tags" : [ "Authentication" ]
+        "summary" : "邮箱密码注册",
+        "tags" : [ "用户注册与登录" ]
       }
     },
     "/api/v1/feedback" : {
@@ -12017,7 +12017,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -12153,8 +12153,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "Submit feedback as the signed-in user",
-        "tags" : [ "Feedback" ]
+        "summary" : "提交用户反馈（需登录）",
+        "tags" : [ "用户反馈" ]
       }
     },
     "/api/v1/feedback/my" : {
@@ -12170,7 +12170,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -12306,8 +12306,8 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ],
-        "summary" : "List the caller's own feedback, newest first (max 50)",
-        "tags" : [ "Feedback" ]
+        "summary" : "获取我的反馈（按时间倒序，最多 50 条）",
+        "tags" : [ "用户反馈" ]
       }
     },
     "/api/v1/health" : {
@@ -12432,7 +12432,7 @@
         },
         "security" : [ ],
         "summary" : "服务健康检查",
-        "tags" : [ "Health" ]
+        "tags" : [ "服务健康检查" ]
       }
     },
     "/api/v1/home/announcements" : {
@@ -12448,7 +12448,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -12582,8 +12582,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Read currently visible announcements (anonymous, newest first)",
-        "tags" : [ "Home" ]
+        "summary" : "获取首页公告（匿名访问，按时间倒序）",
+        "tags" : [ "首页内容" ]
       }
     },
     "/api/v1/home/recommendations" : {
@@ -12599,7 +12599,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -12733,8 +12733,8 @@
           }
         },
         "security" : [ ],
-        "summary" : "Read the currently active home recommendations (anonymous)",
-        "tags" : [ "Home" ]
+        "summary" : "获取当前生效的首页推荐（匿名访问）",
+        "tags" : [ "首页内容" ]
       }
     },
     "/api/v1/membership" : {
@@ -12750,7 +12750,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -12887,7 +12887,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "读取当前账号的会员状态",
-        "tags" : [ "Membership" ]
+        "tags" : [ "用户会员" ]
       }
     },
     "/api/v1/site-links" : {
@@ -12916,7 +12916,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -13051,7 +13051,7 @@
         },
         "security" : [ ],
         "summary" : "获取已通过的网站导航（匿名）",
-        "tags" : [ "Site links" ]
+        "tags" : [ "网站导航与投稿" ]
       },
       "post" : {
         "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
@@ -13075,7 +13075,7 @@
                 }
               }
             },
-            "description" : "Created",
+            "description" : "创建成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -13212,7 +13212,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "投稿网站导航（需登录，提交后等待审核）",
-        "tags" : [ "Site links" ]
+        "tags" : [ "网站导航与投稿" ]
       }
     },
     "/api/v1/sync/pull" : {
@@ -13237,7 +13237,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -13374,7 +13374,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "按游标拉取云同步变更",
-        "tags" : [ "Cloud sync" ]
+        "tags" : [ "云端数据同步" ]
       }
     },
     "/api/v1/sync/push" : {
@@ -13400,7 +13400,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -13537,7 +13537,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "推送本机云同步变更",
-        "tags" : [ "Cloud sync" ]
+        "tags" : [ "云端数据同步" ]
       }
     },
     "/api/v1/tools" : {
@@ -13720,7 +13720,7 @@
         },
         "security" : [ ],
         "summary" : "分页获取启用工具",
-        "tags" : [ "Tools" ]
+        "tags" : [ "工具目录与排行" ]
       }
     },
     "/api/v1/tools/ai-text" : {
@@ -13746,7 +13746,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -13883,7 +13883,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "执行 AI 文本任务",
-        "tags" : [ "AI text" ]
+        "tags" : [ "AI 文本助手" ]
       }
     },
     "/api/v1/tools/ai-text/status" : {
@@ -13899,7 +13899,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -14036,7 +14036,7 @@
           "bearerAuth" : [ ]
         } ],
         "summary" : "读取 AI 文本服务状态与当前账号额度",
-        "tags" : [ "AI text" ]
+        "tags" : [ "AI 文本助手" ]
       }
     },
     "/api/v1/tools/popular" : {
@@ -14063,7 +14063,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -14198,7 +14198,7 @@
         },
         "security" : [ ],
         "summary" : "按使用量降序获取热门工具",
-        "tags" : [ "Tools" ]
+        "tags" : [ "工具目录与排行" ]
       }
     },
     "/api/v1/tools/{code}/usage" : {
@@ -14226,7 +14226,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -14361,7 +14361,7 @@
         },
         "security" : [ ],
         "summary" : "记录一次工具打开（匿名聚合计数，不保存用户标识）",
-        "tags" : [ "Tools" ]
+        "tags" : [ "工具目录与排行" ]
       }
     },
     "/api/v1/web-tools/short_video_parse/albums/{id}" : {
@@ -14530,7 +14530,7 @@
         },
         "security" : [ ],
         "summary" : "将选中的图集资源打包为 ZIP",
-        "tags" : [ "Short video" ]
+        "tags" : [ "短视频与图集解析" ]
       }
     },
     "/api/v1/web-tools/short_video_parse/assets/{id}/{index}" : {
@@ -14737,7 +14737,7 @@
         },
         "security" : [ ],
         "summary" : "预览或下载解析后的单个媒体资源",
-        "tags" : [ "Short video" ]
+        "tags" : [ "短视频与图集解析" ]
       }
     },
     "/api/v1/web-tools/short_video_parse/capabilities" : {
@@ -14753,7 +14753,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -14888,7 +14888,7 @@
         },
         "security" : [ ],
         "summary" : "读取短视频解析支持的平台与处理上限",
-        "tags" : [ "Short video" ]
+        "tags" : [ "短视频与图集解析" ]
       }
     },
     "/api/v1/web-tools/short_video_parse/parse" : {
@@ -14914,7 +14914,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -15049,7 +15049,7 @@
         },
         "security" : [ ],
         "summary" : "解析公开分享文本中的视频、图集与封面",
-        "tags" : [ "Short video" ]
+        "tags" : [ "短视频与图集解析" ]
       }
     },
     "/api/v1/web-tools/short_video_parse/results/{id}" : {
@@ -15074,7 +15074,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -15209,7 +15209,7 @@
         },
         "security" : [ ],
         "summary" : "清除一次解析结果及其临时下载句柄",
-        "tags" : [ "Short video" ]
+        "tags" : [ "短视频与图集解析" ]
       }
     },
     "/api/v1/web-tools/zepp_steps/capabilities" : {
@@ -15225,7 +15225,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -15360,7 +15360,7 @@
         },
         "security" : [ ],
         "summary" : "读取 Zepp Life 服务可用性、日期与步数范围",
-        "tags" : [ "Zepp Life" ]
+        "tags" : [ "Zepp Life 运动工具" ]
       }
     },
     "/api/v1/web-tools/zepp_steps/submit" : {
@@ -15386,7 +15386,7 @@
                 }
               }
             },
-            "description" : "OK",
+            "description" : "请求成功",
             "headers" : {
               "X-Trace-Id" : {
                 "description" : "服务端生成的请求编号",
@@ -15521,7 +15521,7 @@
         },
         "security" : [ ],
         "summary" : "提交 Zepp Life 步数",
-        "tags" : [ "Zepp Life" ]
+        "tags" : [ "Zepp Life 运动工具" ]
       }
     }
   },
@@ -15533,79 +15533,79 @@
     "url" : "http://127.0.0.1:8080"
   } ],
   "tags" : [ {
-    "description" : "沧烁工具箱 Admin announcements 接口",
-    "name" : "Admin announcements"
-  }, {
-    "description" : "沧烁工具箱 Admin authentication 接口",
-    "name" : "Admin authentication"
-  }, {
-    "description" : "沧烁工具箱 Admin categories 接口",
-    "name" : "Admin categories"
-  }, {
-    "description" : "沧烁工具箱 Admin config 接口",
-    "name" : "Admin config"
-  }, {
-    "description" : "沧烁工具箱 Admin feedback 接口",
-    "name" : "Admin feedback"
-  }, {
-    "description" : "沧烁工具箱 Admin membership 接口",
-    "name" : "Admin membership"
-  }, {
-    "description" : "沧烁工具箱 Admin operation logs 接口",
-    "name" : "Admin operation logs"
-  }, {
-    "description" : "沧烁工具箱 Admin recommendations 接口",
-    "name" : "Admin recommendations"
-  }, {
-    "description" : "沧烁工具箱 Admin site links 接口",
-    "name" : "Admin site links"
-  }, {
-    "description" : "仅管理员可读取的聚合运营统计",
-    "name" : "Admin statistics"
-  }, {
-    "description" : "沧烁工具箱 Admin storage 接口",
-    "name" : "Admin storage"
-  }, {
-    "description" : "沧烁工具箱 Admin tools 接口",
-    "name" : "Admin tools"
-  }, {
-    "description" : "沧烁工具箱 Admin users 接口",
-    "name" : "Admin users"
-  }, {
     "description" : "需用户登录；服务与额度由后台配置。",
-    "name" : "AI text"
-  }, {
-    "description" : "客户端版本与更新信息",
-    "name" : "App"
-  }, {
-    "description" : "沧烁工具箱 Authentication 接口",
-    "name" : "Authentication"
-  }, {
-    "description" : "需用户登录；使用游标增量同步收藏、最近使用与偏好。",
-    "name" : "Cloud sync"
-  }, {
-    "description" : "沧烁工具箱 Feedback 接口",
-    "name" : "Feedback"
-  }, {
-    "description" : "服务可用性",
-    "name" : "Health"
-  }, {
-    "description" : "沧烁工具箱 Home 接口",
-    "name" : "Home"
-  }, {
-    "description" : "账号会员状态",
-    "name" : "Membership"
-  }, {
-    "description" : "短视频、图文图集、封面与 Live Photo；下载使用解析结果提供的临时句柄。",
-    "name" : "Short video"
-  }, {
-    "description" : "网站导航与投稿",
-    "name" : "Site links"
-  }, {
-    "description" : "公开工具目录元数据",
-    "name" : "Tools"
+    "name" : "AI 文本助手"
   }, {
     "description" : "Zepp Life 网页工具；提交结果不确定时应先在客户端核对，不要重复提交。",
-    "name" : "Zepp Life"
+    "name" : "Zepp Life 运动工具"
+  }, {
+    "description" : "需用户登录；使用游标增量同步收藏、最近使用与偏好。",
+    "name" : "云端数据同步"
+  }, {
+    "description" : "沧烁工具箱 后台会员管理 接口",
+    "name" : "后台会员管理"
+  }, {
+    "description" : "沧烁工具箱 后台公告管理 接口",
+    "name" : "后台公告管理"
+  }, {
+    "description" : "沧烁工具箱 后台分类管理 接口",
+    "name" : "后台分类管理"
+  }, {
+    "description" : "沧烁工具箱 后台反馈管理 接口",
+    "name" : "后台反馈管理"
+  }, {
+    "description" : "沧烁工具箱 后台工具管理 接口",
+    "name" : "后台工具管理"
+  }, {
+    "description" : "沧烁工具箱 后台推荐位管理 接口",
+    "name" : "后台推荐位管理"
+  }, {
+    "description" : "沧烁工具箱 后台操作日志 接口",
+    "name" : "后台操作日志"
+  }, {
+    "description" : "沧烁工具箱 后台文件存储 接口",
+    "name" : "后台文件存储"
+  }, {
+    "description" : "沧烁工具箱 后台用户管理 接口",
+    "name" : "后台用户管理"
+  }, {
+    "description" : "沧烁工具箱 后台管理员认证 接口",
+    "name" : "后台管理员认证"
+  }, {
+    "description" : "沧烁工具箱 后台系统配置 接口",
+    "name" : "后台系统配置"
+  }, {
+    "description" : "沧烁工具箱 后台网站导航 接口",
+    "name" : "后台网站导航"
+  }, {
+    "description" : "仅管理员可读取的聚合运营统计",
+    "name" : "后台运营统计"
+  }, {
+    "description" : "客户端版本与更新信息",
+    "name" : "客户端版本"
+  }, {
+    "description" : "公开工具目录元数据",
+    "name" : "工具目录与排行"
+  }, {
+    "description" : "服务可用性",
+    "name" : "服务健康检查"
+  }, {
+    "description" : "账号会员状态",
+    "name" : "用户会员"
+  }, {
+    "description" : "沧烁工具箱 用户反馈 接口",
+    "name" : "用户反馈"
+  }, {
+    "description" : "沧烁工具箱 用户注册与登录 接口",
+    "name" : "用户注册与登录"
+  }, {
+    "description" : "短视频、图文图集、封面与 Live Photo；下载使用解析结果提供的临时句柄。",
+    "name" : "短视频与图集解析"
+  }, {
+    "description" : "网站导航与投稿",
+    "name" : "网站导航与投稿"
+  }, {
+    "description" : "沧烁工具箱 首页内容 接口",
+    "name" : "首页内容"
   } ]
 }

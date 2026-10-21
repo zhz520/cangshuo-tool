@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/config", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin config")
+@Tag(name = "后台系统配置")
 public class AdminConfigController {
 
     private final ConfigService service;
@@ -30,13 +30,13 @@ public class AdminConfigController {
     }
 
     @GetMapping
-    @Operation(summary = "List the whitelisted business configuration keys")
+    @Operation(summary = "获取允许管理的业务配置列表")
     public ApiResponse<List<ConfigEntry>> list(HttpServletRequest request) {
         return ApiResponse.success(service.list(), TraceIdFilter.traceId(request));
     }
 
     @PutMapping(value = "/{key}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update one whitelisted configuration key")
+    @Operation(summary = "更新白名单中的系统配置项")
     public ApiResponse<ConfigEntry> update(@PathVariable String key,
             @Valid @RequestBody UpdateConfigRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.update(key, body.value()), TraceIdFilter.traceId(request));

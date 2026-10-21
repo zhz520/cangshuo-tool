@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin membership")
+@Tag(name = "后台会员管理")
 public class AdminMembershipController {
 
     private final MembershipService service;
@@ -29,14 +29,14 @@ public class AdminMembershipController {
     }
 
     @PutMapping(value = "/{id}/membership", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Grant or revoke membership for one account")
+    @Operation(summary = "授予或取消用户会员")
     public ApiResponse<MembershipResponse> update(@PathVariable long id,
             @Valid @RequestBody MembershipRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.grant(id, body), TraceIdFilter.traceId(request));
     }
 
     @GetMapping(value = "/{id}/membership")
-    @Operation(summary = "Read one account's membership for the admin console")
+    @Operation(summary = "获取指定用户的会员状态")
     public ApiResponse<MembershipResponse> status(@PathVariable long id, HttpServletRequest request) {
         return ApiResponse.success(service.status(id), TraceIdFilter.traceId(request));
     }

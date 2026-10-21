@@ -30,6 +30,7 @@
 - 数据库结构变更必须新增 Flyway migration，不修改已执行的 migration。
 - API 契约变更要同步更新 DTO、接口文档及相关客户端模型。
 - API 接口文档同步到 Apifox 项目 `8952528`（https://app.apifox.com/project/8952528）。接口变更后运行 `python scripts/export_openapi.py` 更新 `docs/openapi.json` 并提交推送；该项目已绑定当前 GitHub 仓库的 `main`，同步后须在 Apifox 核对接口列表。流程见 `docs/APIFOX.md`。
+- 接口显示名称、业务分组及说明统一使用简体中文；路径、字段名、枚举值、模型引用与 operationId 保持稳定，不因文档翻译改变接口契约。
 - 不记录密码、Token、API Secret 或用户敏感原文。
 - 按需申请 Android 权限；服务端密钥从环境或密钥管理配置读取。
 

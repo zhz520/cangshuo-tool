@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Site links", description = "网站导航与投稿")
+@Tag(name = "网站导航与投稿", description = "网站导航与投稿")
 @RestController
 @RequestMapping(value = "/api/v1/site-links", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SiteLinkController {

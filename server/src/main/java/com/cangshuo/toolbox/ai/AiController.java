@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "AI text", description = "需用户登录；服务与额度由后台配置。")
+@Tag(name = "AI 文本助手", description = "需用户登录；服务与额度由后台配置。")
 @RequestMapping("/api/v1/tools/ai-text")
 public class AiController {
     private final AiService service;

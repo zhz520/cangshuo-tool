@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Authentication")
+@Tag(name = "用户注册与登录")
 public class AuthController {
     private final AuthService service;
     private final com.cangshuo.toolbox.auth.service.RefreshTokenService sessions;
@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @org.springframework.web.bind.annotation.DeleteMapping(value="/me", consumes=MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary="Permanently delete the current account after password and email confirmation")
+    @Operation(summary="核验邮箱与密码后永久注销当前账号")
     public ApiResponse<Void> deleteAccount(@AuthenticationPrincipal Jwt jwt,
         @Valid @RequestBody com.cangshuo.toolbox.auth.model.DeleteAccountRequest body, HttpServletRequest request) {
         if (jwt == null || "admin".equals(jwt.getClaimAsString("kind")))
@@ -43,14 +43,14 @@ public class AuthController {
     }
 
     @PostMapping(value = "/refresh", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Rotate a refresh token and issue a new access token")
+    @Operation(summary = "轮换刷新令牌并获取新的访问令牌")
     public ApiResponse<AuthResponse> refresh(@Valid @RequestBody com.cangshuo.toolbox.auth.model.RefreshRequest body,
                                             HttpServletRequest request) {
         return ApiResponse.success(sessions.refresh(body.refreshToken()), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(value = "/logout", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Revoke the current refresh session")
+    @Operation(summary = "退出登录并撤销当前会话")
     public ApiResponse<Void> logout(@Valid @RequestBody com.cangshuo.toolbox.auth.model.RefreshRequest body,
                                    HttpServletRequest request) {
         sessions.logout(body.refreshToken());
@@ -59,25 +59,25 @@ public class AuthController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Register with email and password")
+    @Operation(summary = "邮箱密码注册")
     public ApiResponse<AuthResponse> register(@Valid @RequestBody RegisterRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.register(body), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Sign in with email and password")
+    @Operation(summary = "邮箱密码登录")
     public ApiResponse<AuthResponse> login(@Valid @RequestBody LoginRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.login(body), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/me")
-    @Operation(summary = "Read the current active account")
+    @Operation(summary = "获取当前登录用户资料")
     public ApiResponse<UserResponse> me(@AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.currentUser(jwt.getSubject()), TraceIdFilter.traceId(request));
     }
 
     @org.springframework.web.bind.annotation.PutMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update the current account nickname")
+    @Operation(summary = "修改当前用户昵称")
     public ApiResponse<UserResponse> updateProfile(@AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody com.cangshuo.toolbox.auth.model.ProfileRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.updateProfile(jwt.getSubject(), body), TraceIdFilter.traceId(request));

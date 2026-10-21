@@ -35,13 +35,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/tools", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin tools")
+@Tag(name = "后台工具管理")
 public class AdminToolController {
     private final AdminToolService service;
     public AdminToolController(AdminToolService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "Page through catalog entries, including disabled and maintenance tools")
+    @Operation(summary = "分页查询工具目录（包含停用和维护中的工具）")
     public ApiResponse<PageResponse<AdminToolResponse>> list(
             @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
             @RequestParam(name = "pageSize", defaultValue = "20") @Min(1) @Max(100) int pageSize,
@@ -54,20 +54,20 @@ public class AdminToolController {
     }
 
     @GetMapping("/categories")
-    @Operation(summary = "Read the category options used by the tool editor")
+    @Operation(summary = "获取工具编辑可用的分类选项")
     public ApiResponse<List<AdminCategoryResponse>> categories(HttpServletRequest request) {
         return ApiResponse.success(service.categories(), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/{code}")
-    @Operation(summary = "Read one catalog entry by code")
+    @Operation(summary = "按编码获取工具详情")
     public ApiResponse<AdminToolResponse> detail(@PathVariable String code, HttpServletRequest request) {
         return ApiResponse.success(service.detail(code), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a catalog entry")
+    @Operation(summary = "创建工具目录项")
     public ApiResponse<AdminToolResponse> create(@Valid @RequestBody AdminToolRequest body,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.create(body, context(request), adminId(jwt)),
@@ -75,7 +75,7 @@ public class AdminToolController {
     }
 
     @PutMapping(value = "/{code}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Replace the editable fields of a catalog entry")
+    @Operation(summary = "更新工具的可编辑信息")
     public ApiResponse<AdminToolResponse> update(@PathVariable String code,
             @Valid @RequestBody AdminToolRequest body, @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.update(code, body, context(request), adminId(jwt)),
@@ -83,7 +83,7 @@ public class AdminToolController {
     }
 
     @PatchMapping(value = "/{code}/status", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Enable, disable or set maintenance for a catalog entry")
+    @Operation(summary = "启用、停用工具或设为维护状态")
     public ApiResponse<AdminToolResponse> status(@PathVariable String code,
             @Valid @RequestBody AdminToolStatusRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -92,7 +92,7 @@ public class AdminToolController {
     }
 
     @DeleteMapping("/{code}")
-    @Operation(summary = "Soft-delete a catalog entry; the public catalog stops returning it")
+    @Operation(summary = "软删除工具（从公开目录隐藏）")
     public ApiResponse<Void> delete(@PathVariable String code, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
         service.delete(code, context(request), adminId(jwt));

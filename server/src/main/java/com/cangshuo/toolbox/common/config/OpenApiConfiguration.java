@@ -115,8 +115,12 @@ public class OpenApiConfiguration {
                     operation.getResponses().putIfAbsent("429", failure("10007：请求过于频繁；按 Retry-After 等待后重试")
                             .addHeaderObject("Retry-After", new Header().schema(new IntegerSchema()).description("重试等待秒数")));
                 }
-                operation.getResponses().values().forEach(response -> response.addHeaderObject("X-Trace-Id",
-                        new Header().description("服务端生成的请求编号").schema(new StringSchema().pattern("^[0-9a-f]{32}$"))));
+                operation.getResponses().values().forEach(response -> {
+                    if ("OK".equals(response.getDescription())) response.setDescription("请求成功");
+                    if ("Created".equals(response.getDescription())) response.setDescription("创建成功");
+                    response.addHeaderObject("X-Trace-Id", new Header().description("服务端生成的请求编号")
+                            .schema(new StringSchema().pattern("^[0-9a-f]{32}$")));
+                });
             }));
             openApi.setTags(new ArrayList<>(tags.values()));
         };

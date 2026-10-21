@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Tag(name = "Zepp Life", description = "Zepp Life 网页工具；提交结果不确定时应先在客户端核对，不要重复提交。")
+@Tag(name = "Zepp Life 运动工具", description = "Zepp Life 网页工具；提交结果不确定时应先在客户端核对，不要重复提交。")
 @RequestMapping("/api/v1/web-tools/zepp_steps")
 public class ZeppStepsController {
     private final ZeppStepsService service;

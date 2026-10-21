@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "Admin statistics", description = "仅管理员可读取的聚合运营统计")
+@Tag(name = "后台运营统计", description = "仅管理员可读取的聚合运营统计")
 public class AdminStatisticsController {
     private final StatisticsService service;
     public AdminStatisticsController(StatisticsService service) { this.service = service; }

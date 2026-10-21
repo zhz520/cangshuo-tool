@@ -6,6 +6,10 @@
 
 用户要求持续自主推进，不要因单个工具完成或普通验证步骤停下来等待“继续”。每轮先读取本文件和 ROADMAP，选择最小可完整交付的未完成项；完成代码、测试/Lint、文档、提交/推送，并按既有授权在验证通过后部署生产。只有遇到自动审批拒绝、缺少必要凭据/设备或真正不可逆风险时才暂停并明确说明。镜像轴映射回归已提交为 `63f6280`。
 
+## 最新增量（2026-10-21，Apifox 中文化）
+
+用户补充要求「中文」。已在源注解翻译54个英文接口名称、26处分组声明（25个不同分组），并把默认成功说明改为中文；74操作/60路径/127模型保持不变。已有OpenApiExportTest **2/2** 通过，无新增测试。去除显示名称/分组/说明后，与旧快照的路由、参数、请求体、响应模型、鉴权及operationId完全一致。根AGENTS与APIFOX文档明确后续接口显示文本使用中文；协议字段不翻译。推送后由已有Webhook同步，须核对Apifox实际中文页面。本任务无业务、数据库或生产部署变化。
+
 ## 最新增量（2026-10-21，Apifox 接口同步）
 
 用户指定接口文档同步到 https://app.apifox.com/project/8952528。已在登录后的「Git & Branches」确认绑定 `zhz520/cangshuo-tool/main` 且 Webhook 已激活。`docs/openapi.json` 由真实 Springdoc 导出，覆盖74操作/60路径/127模型；补齐元信息/稳定operationId/Bearer声明/常见错误/traceId，以及Zepp成功DTO、能力同名模型和媒体流格式。`OpenApiExportTest` 逐接口核对MVC路由和实际AuthorizationManager，且断言DB/Redis/会话无业务调用。服务端227/227、package和快照一致性检查通过。`scripts/export_openapi.py` 可重复生成；CI对照快照并保存artifact。此任务无数据库/Android/生产部署变化。推送后须在Apifox核对新提交和接口列表，详细验收记录见 `../docs/APIFOX.md`；后续契约变更必须更新快照再推送。

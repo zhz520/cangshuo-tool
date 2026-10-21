@@ -3,6 +3,7 @@
 ## Phase 0 — Foundation
 - [x] Monorepo
 - [x] API contract documentation
+- [x] Apifox Chinese documentation (2026-10-21: localized all 74 operation names and 25 business groups, source annotations and default success descriptions; existing OpenAPI export checks 2/2 passed. After removing presentation text, the generated contract is identical to the previous snapshot, including routes, schemas, authentication and operation IDs. See docs/APIFOX.md.)
 - [x] Reproducible Apifox OpenAPI contract (2026-10-21: generated `docs/openapi.json` from all 74 implemented operations / 60 paths / 127 schemas; route coverage, anonymous access against Spring Security, unique operation IDs, resolved references, capability DTO separation and binary media formats verified; server 228/228 and package passed, all 573 regex patterns compile in JavaScript. CI checks the committed snapshot and publishes `openapi-contract`. Commits `99063de`/`c57f083` pushed; Apifox project 8952528 automatically synchronized the Git repository/main, displays 60 paths and reports 0 errors / 3 optional license/contact metadata hints. See docs/APIFOX.md.)
 - [x] Android shell (Compose startup screen + Gradle Wrapper; assembleDebug and lintDebug passed; device run pending)
 - [x] Spring Boot API (startup shell, health, response/error envelope, traceId, local OpenAPI; package/startup verified)

@@ -30,20 +30,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/recommendations", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin recommendations")
+@Tag(name = "后台推荐位管理")
 public class AdminRecommendationController {
     private final AdminRecommendationService service;
     public AdminRecommendationController(AdminRecommendationService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "List non-deleted recommendation slots with the computed active flag")
+    @Operation(summary = "获取推荐位列表及当前生效状态")
     public ApiResponse<List<AdminRecommendationRow>> list(HttpServletRequest request) {
         return ApiResponse.success(service.list(), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a recommendation slot; set toolCode or linkUrl, never both")
+    @Operation(summary = "创建推荐位（工具编码与链接地址二选一）")
     public ApiResponse<AdminRecommendationRow> create(@Valid @RequestBody AdminRecommendationRequest body,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.create(body, context(request), adminId(jwt)),
@@ -51,7 +51,7 @@ public class AdminRecommendationController {
     }
 
     @PutMapping(value = "/{code}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update a recommendation slot")
+    @Operation(summary = "更新推荐位")
     public ApiResponse<AdminRecommendationRow> update(@PathVariable String code,
             @Valid @RequestBody AdminRecommendationRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -60,7 +60,7 @@ public class AdminRecommendationController {
     }
 
     @PatchMapping(value = "/{code}/status", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Enable or disable a recommendation slot")
+    @Operation(summary = "启用或停用推荐位")
     public ApiResponse<AdminRecommendationRow> status(@PathVariable String code,
             @Valid @RequestBody AdminRecommendationStatusRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -69,7 +69,7 @@ public class AdminRecommendationController {
     }
 
     @DeleteMapping("/{code}")
-    @Operation(summary = "Soft-delete a recommendation slot")
+    @Operation(summary = "软删除推荐位")
     public ApiResponse<Void> delete(@PathVariable String code, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
         service.delete(code, context(request), adminId(jwt));

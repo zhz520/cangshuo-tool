@@ -25,21 +25,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/feedback", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Feedback")
+@Tag(name = "用户反馈")
 public class FeedbackController {
     private final FeedbackService service;
     public FeedbackController(FeedbackService service) { this.service = service; }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Submit feedback as the signed-in user")
+    @Operation(summary = "提交用户反馈（需登录）")
     public ApiResponse<FeedbackResponse> submit(@Valid @RequestBody FeedbackRequest body,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.submit(userId(jwt), body), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/my")
-    @Operation(summary = "List the caller's own feedback, newest first (max 50)")
+    @Operation(summary = "获取我的反馈（按时间倒序，最多 50 条）")
     public ApiResponse<List<FeedbackResponse>> mine(@AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.mine(userId(jwt)), TraceIdFilter.traceId(request));
     }

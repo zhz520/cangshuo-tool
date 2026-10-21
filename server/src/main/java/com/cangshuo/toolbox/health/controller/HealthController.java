@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Health", description = "服务可用性")
+@Tag(name = "服务健康检查", description = "服务可用性")
 @RestController
 @RequestMapping("/api/v1/health")
 public class HealthController {

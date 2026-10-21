@@ -30,27 +30,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/categories", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin categories")
+@Tag(name = "后台分类管理")
 public class AdminCategoryController {
     private final AdminCategoryService service;
     public AdminCategoryController(AdminCategoryService service) { this.service = service; }
 
     @GetMapping
-    @Operation(summary = "List non-deleted categories with their live tool counts")
+    @Operation(summary = "获取分类列表及未删除工具数量")
     public ApiResponse<List<AdminCategoryRow>> list(HttpServletRequest request) {
         return ApiResponse.success(service.list(), TraceIdFilter.traceId(request));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create a category")
+    @Operation(summary = "创建工具分类")
     public ApiResponse<AdminCategoryRow> create(@Valid @RequestBody AdminCategoryRequest body,
             @AuthenticationPrincipal Jwt jwt, HttpServletRequest request) {
         return ApiResponse.success(service.create(body, context(request), adminId(jwt)), TraceIdFilter.traceId(request));
     }
 
     @PutMapping(value = "/{code}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Update a category")
+    @Operation(summary = "更新工具分类")
     public ApiResponse<AdminCategoryRow> update(@PathVariable String code,
             @Valid @RequestBody AdminCategoryRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class AdminCategoryController {
     }
 
     @PatchMapping(value = "/{code}/status", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Enable or disable a category; disabled categories hide their tools from the public catalog")
+    @Operation(summary = "启用或停用分类（停用后隐藏所属工具）")
     public ApiResponse<AdminCategoryRow> status(@PathVariable String code,
             @Valid @RequestBody AdminCategoryStatusRequest body, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
@@ -67,7 +67,7 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{code}")
-    @Operation(summary = "Soft-delete an empty category; categories with live tools return 409/30007")
+    @Operation(summary = "软删除空分类（仍有工具时返回 409/30007）")
     public ApiResponse<Void> delete(@PathVariable String code, @AuthenticationPrincipal Jwt jwt,
             HttpServletRequest request) {
         service.delete(code, context(request), adminId(jwt));

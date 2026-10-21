@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/admin/site-links", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Admin site links")
+@Tag(name = "后台网站导航")
 public class AdminSiteLinkController {
 
     private final AdminSiteLinkService service;
@@ -33,7 +33,7 @@ public class AdminSiteLinkController {
     }
 
     @GetMapping
-    @Operation(summary = "Page through navigation submissions with keyword and status filters")
+    @Operation(summary = "分页查询网站投稿（支持关键词和审核状态筛选）")
     public ApiResponse<PageResponse<AdminSiteLinkRow>> list(
             @RequestParam(name = "page", defaultValue = "1") @Min(1) int page,
             @RequestParam(name = "pageSize", defaultValue = "20") @Min(1) @Max(100) int pageSize,
@@ -44,7 +44,7 @@ public class AdminSiteLinkController {
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Approve or reject a navigation submission")
+    @Operation(summary = "通过或拒绝网站投稿")
     public ApiResponse<AdminSiteLinkRow> update(@PathVariable long id,
             @Valid @RequestBody AdminSiteLinkUpdateRequest body, HttpServletRequest request) {
         return ApiResponse.success(service.update(id, body.status()), TraceIdFilter.traceId(request));

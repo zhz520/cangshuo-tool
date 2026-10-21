@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v1/home", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Home")
+@Tag(name = "首页内容")
 public class HomeController {
     private final HomeRecommendationRepository recommendations;
     private final HomeAnnouncementRepository announcements;
@@ -26,13 +26,13 @@ public class HomeController {
     }
 
     @GetMapping("/recommendations")
-    @Operation(summary = "Read the currently active home recommendations (anonymous)")
+    @Operation(summary = "获取当前生效的首页推荐（匿名访问）")
     public ApiResponse<List<HomeRecommendationResponse>> recommendations(HttpServletRequest request) {
         return ApiResponse.success(recommendations.active(), TraceIdFilter.traceId(request));
     }
 
     @GetMapping("/announcements")
-    @Operation(summary = "Read currently visible announcements (anonymous, newest first)")
+    @Operation(summary = "获取首页公告（匿名访问，按时间倒序）")
     public ApiResponse<List<HomeAnnouncementResponse>> announcements(HttpServletRequest request) {
         return ApiResponse.success(announcements.active(), TraceIdFilter.traceId(request));
     }
