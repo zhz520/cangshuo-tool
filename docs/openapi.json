@@ -2561,7 +2561,7 @@
           "plan" : {
             "enum" : [ "FREE", "PRO" ],
             "minLength" : 1,
-            "pattern" : "(?i)FREE|PRO",
+            "pattern" : "^(?:[Ff][Rr][Ee][Ee]|[Pp][Rr][Oo])$",
             "type" : "string"
           }
         },
@@ -3342,6 +3342,10 @@
     }
   },
   "info" : {
+    "contact" : {
+      "name" : "沧烁工具箱项目",
+      "url" : "https://github.com/zhz520/cangshuo-tool"
+    },
     "description" : "沧烁工具箱已实现的 REST 接口：账号、工具目录与排行、云同步、首页、反馈、网站导航、会员、版本、AI、网页工具及管理后台。JSON 接口统一返回 code/message/data/traceId；code=0 表示成功，错误时 data=null。媒体文件与图集下载返回二进制流。用户和管理员分别使用各自登录接口签发的 Bearer JWT，不能混用。本文件由实际 Controller 和 DTO 生成，不包含路线图中尚未实现的接口。",
     "title" : "沧烁工具箱 API",
     "version" : "0.1.0"
@@ -3350,6 +3354,7 @@
   "paths" : {
     "/api/v1/admin/announcements" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAnnouncement_list",
         "responses" : {
           "200" : {
@@ -3500,6 +3505,7 @@
         "tags" : [ "Admin announcements" ]
       },
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAnnouncement_create",
         "requestBody" : {
           "content" : {
@@ -3662,8 +3668,10 @@
     },
     "/api/v1/admin/announcements/{id}" : {
       "delete" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAnnouncement_delete",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -3820,8 +3828,10 @@
         "tags" : [ "Admin announcements" ]
       },
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAnnouncement_update",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -3990,8 +4000,10 @@
     },
     "/api/v1/admin/announcements/{id}/status" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAnnouncement_status",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -4160,6 +4172,7 @@
     },
     "/api/v1/admin/auth/login" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAuth_login",
         "requestBody" : {
           "content" : {
@@ -4320,6 +4333,7 @@
     },
     "/api/v1/admin/auth/logout" : {
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAuth_logout",
         "responses" : {
           "200" : {
@@ -4472,6 +4486,7 @@
     },
     "/api/v1/admin/auth/me" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminAuth_me",
         "responses" : {
           "200" : {
@@ -4624,6 +4639,7 @@
     },
     "/api/v1/admin/categories" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminCategory_list",
         "responses" : {
           "200" : {
@@ -4774,6 +4790,7 @@
         "tags" : [ "Admin categories" ]
       },
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminCategory_create",
         "requestBody" : {
           "content" : {
@@ -4936,8 +4953,10 @@
     },
     "/api/v1/admin/categories/{code}" : {
       "delete" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminCategory_delete",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -5094,8 +5113,10 @@
         "tags" : [ "Admin categories" ]
       },
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminCategory_update",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -5264,8 +5285,10 @@
     },
     "/api/v1/admin/categories/{code}/status" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminCategory_status",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -5434,6 +5457,7 @@
     },
     "/api/v1/admin/config" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminConfig_list",
         "responses" : {
           "200" : {
@@ -5586,8 +5610,10 @@
     },
     "/api/v1/admin/config/{key}" : {
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminConfig_update",
         "parameters" : [ {
+          "description" : "白名单配置键，来自配置列表。",
           "in" : "path",
           "name" : "key",
           "required" : true,
@@ -5756,8 +5782,10 @@
     },
     "/api/v1/admin/feedback" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminFeedback_list",
         "parameters" : [ {
+          "description" : "页码，从 1 开始；省略时使用 schema 中的默认值。",
           "in" : "query",
           "name" : "page",
           "required" : false,
@@ -5768,6 +5796,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "每页条数；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "pageSize",
           "required" : false,
@@ -5779,6 +5808,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "关键词筛选；省略时不限制关键词。",
           "in" : "query",
           "name" : "keyword",
           "required" : false,
@@ -5786,6 +5816,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "按对应业务资源状态筛选；省略时不限状态。",
           "in" : "query",
           "name" : "status",
           "required" : false,
@@ -5944,8 +5975,10 @@
     },
     "/api/v1/admin/feedback/{id}" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminFeedback_update",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -6115,8 +6148,10 @@
     },
     "/api/v1/admin/logs" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminOperationLog_list",
         "parameters" : [ {
+          "description" : "页码，从 1 开始；省略时使用 schema 中的默认值。",
           "in" : "query",
           "name" : "page",
           "required" : false,
@@ -6127,6 +6162,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "每页条数；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "pageSize",
           "required" : false,
@@ -6138,6 +6174,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "操作日志的模块编码筛选，使用大写编码。",
           "in" : "query",
           "name" : "module",
           "required" : false,
@@ -6145,6 +6182,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "操作日志的结果编码筛选，使用大写编码。",
           "in" : "query",
           "name" : "result",
           "required" : false,
@@ -6152,6 +6190,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "关键词筛选；省略时不限制关键词。",
           "in" : "query",
           "name" : "keyword",
           "required" : false,
@@ -6310,6 +6349,7 @@
     },
     "/api/v1/admin/recommendations" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminRecommendation_list",
         "responses" : {
           "200" : {
@@ -6460,6 +6500,7 @@
         "tags" : [ "Admin recommendations" ]
       },
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminRecommendation_create",
         "requestBody" : {
           "content" : {
@@ -6622,8 +6663,10 @@
     },
     "/api/v1/admin/recommendations/{code}" : {
       "delete" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminRecommendation_delete",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -6780,8 +6823,10 @@
         "tags" : [ "Admin recommendations" ]
       },
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminRecommendation_update",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -6950,8 +6995,10 @@
     },
     "/api/v1/admin/recommendations/{code}/status" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminRecommendation_status",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -7120,8 +7167,10 @@
     },
     "/api/v1/admin/site-links" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminSiteLink_list",
         "parameters" : [ {
+          "description" : "页码，从 1 开始；省略时使用 schema 中的默认值。",
           "in" : "query",
           "name" : "page",
           "required" : false,
@@ -7132,6 +7181,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "每页条数；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "pageSize",
           "required" : false,
@@ -7143,6 +7193,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "关键词筛选；省略时不限制关键词。",
           "in" : "query",
           "name" : "keyword",
           "required" : false,
@@ -7150,6 +7201,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "按对应业务资源状态筛选；省略时不限状态。",
           "in" : "query",
           "name" : "status",
           "required" : false,
@@ -7308,8 +7360,10 @@
     },
     "/api/v1/admin/site-links/{id}" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminSiteLink_update",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -7479,8 +7533,10 @@
     },
     "/api/v1/admin/statistics" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "adminStatistics",
         "parameters" : [ {
+          "description" : "统计窗口天数：7、30 或 90。",
           "in" : "query",
           "name" : "days",
           "required" : false,
@@ -7641,6 +7697,7 @@
     },
     "/api/v1/admin/storage" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminStorage_status",
         "responses" : {
           "200" : {
@@ -7793,8 +7850,10 @@
     },
     "/api/v1/admin/storage/objects" : {
       "delete" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminStorage_delete",
         "parameters" : [ {
+          "description" : "服务端上传响应返回的对象 key，不是任意本地文件路径。",
           "in" : "query",
           "name" : "key",
           "required" : true,
@@ -7951,6 +8010,7 @@
         "tags" : [ "Admin storage" ]
       },
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminStorage_upload",
         "requestBody" : {
           "content" : {
@@ -8119,8 +8179,10 @@
     },
     "/api/v1/admin/storage/objects/presigned" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminStorage_presigned",
         "parameters" : [ {
+          "description" : "服务端上传响应返回的对象 key，不是任意本地文件路径。",
           "in" : "query",
           "name" : "key",
           "required" : true,
@@ -8128,6 +8190,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "预签名下载链接的有效秒数；实际范围受存储配置约束。",
           "in" : "query",
           "name" : "expirySeconds",
           "required" : false,
@@ -8287,8 +8350,10 @@
     },
     "/api/v1/admin/tools" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_list",
         "parameters" : [ {
+          "description" : "页码，从 1 开始；省略时使用 schema 中的默认值。",
           "in" : "query",
           "name" : "page",
           "required" : false,
@@ -8299,6 +8364,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "每页条数；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "pageSize",
           "required" : false,
@@ -8310,6 +8376,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "关键词筛选；省略时不限制关键词。",
           "in" : "query",
           "name" : "keyword",
           "required" : false,
@@ -8317,6 +8384,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "工具分类编码，例如 CALC、TEXT、DEV；省略时不限分类。",
           "in" : "query",
           "name" : "categoryCode",
           "required" : false,
@@ -8324,6 +8392,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "按对应业务资源状态筛选；省略时不限状态。",
           "in" : "query",
           "name" : "status",
           "required" : false,
@@ -8480,6 +8549,7 @@
         "tags" : [ "Admin tools" ]
       },
       "post" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_create",
         "requestBody" : {
           "content" : {
@@ -8642,6 +8712,7 @@
     },
     "/api/v1/admin/tools/categories" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_categories",
         "responses" : {
           "200" : {
@@ -8794,8 +8865,10 @@
     },
     "/api/v1/admin/tools/{code}" : {
       "delete" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_delete",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -8952,8 +9025,10 @@
         "tags" : [ "Admin tools" ]
       },
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_detail",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -9110,8 +9185,10 @@
         "tags" : [ "Admin tools" ]
       },
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_update",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -9280,8 +9357,10 @@
     },
     "/api/v1/admin/tools/{code}/status" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminTool_status",
         "parameters" : [ {
+          "description" : "目标资源的稳定唯一编码，来自对应列表。",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -9450,8 +9529,10 @@
     },
     "/api/v1/admin/users" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminUser_list",
         "parameters" : [ {
+          "description" : "页码，从 1 开始；省略时使用 schema 中的默认值。",
           "in" : "query",
           "name" : "page",
           "required" : false,
@@ -9462,6 +9543,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "每页条数；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "pageSize",
           "required" : false,
@@ -9473,6 +9555,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "关键词筛选；省略时不限制关键词。",
           "in" : "query",
           "name" : "keyword",
           "required" : false,
@@ -9480,6 +9563,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "按启用状态筛选；省略时不限。",
           "in" : "query",
           "name" : "enabled",
           "required" : false,
@@ -9638,8 +9722,10 @@
     },
     "/api/v1/admin/users/{id}" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminUser_detail",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -9798,8 +9884,10 @@
     },
     "/api/v1/admin/users/{id}/membership" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminMembership_status",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -9957,8 +10045,10 @@
         "tags" : [ "Admin membership" ]
       },
       "put" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminMembership_update",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -10128,8 +10218,10 @@
     },
     "/api/v1/admin/users/{id}/sessions" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminUser_sessions",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -10288,8 +10380,10 @@
     },
     "/api/v1/admin/users/{id}/status" : {
       "patch" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminUser_status",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -10458,8 +10552,10 @@
     },
     "/api/v1/admin/users/{id}/sync" : {
       "get" : {
+        "description" : "需要管理员登录签发的 Bearer Token，用户 Token 无权访问。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "AdminUser_sync",
         "parameters" : [ {
+          "description" : "目标记录的唯一 id，来自对应列表。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -10467,6 +10563,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "返回条数上限；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "limit",
           "required" : false,
@@ -10780,6 +10877,7 @@
     },
     "/api/v1/auth/login" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_login",
         "requestBody" : {
           "content" : {
@@ -10940,6 +11038,7 @@
     },
     "/api/v1/auth/logout" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_logout",
         "requestBody" : {
           "content" : {
@@ -11100,6 +11199,7 @@
     },
     "/api/v1/auth/me" : {
       "delete" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_deleteAccount",
         "requestBody" : {
           "content" : {
@@ -11260,6 +11360,7 @@
         "tags" : [ "Authentication" ]
       },
       "get" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_me",
         "responses" : {
           "200" : {
@@ -11410,6 +11511,7 @@
         "tags" : [ "Authentication" ]
       },
       "put" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_updateProfile",
         "requestBody" : {
           "content" : {
@@ -11572,6 +11674,7 @@
     },
     "/api/v1/auth/refresh" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_refresh",
         "requestBody" : {
           "content" : {
@@ -11732,6 +11835,7 @@
     },
     "/api/v1/auth/register" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Auth_register",
         "requestBody" : {
           "content" : {
@@ -11892,6 +11996,7 @@
     },
     "/api/v1/feedback" : {
       "post" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Feedback_submit",
         "requestBody" : {
           "content" : {
@@ -12054,6 +12159,7 @@
     },
     "/api/v1/feedback/my" : {
       "get" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Feedback_mine",
         "responses" : {
           "200" : {
@@ -12331,6 +12437,7 @@
     },
     "/api/v1/home/announcements" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Home_announcements",
         "responses" : {
           "200" : {
@@ -12481,6 +12588,7 @@
     },
     "/api/v1/home/recommendations" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Home_recommendations",
         "responses" : {
           "200" : {
@@ -12631,6 +12739,7 @@
     },
     "/api/v1/membership" : {
       "get" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "getMembership",
         "responses" : {
           "200" : {
@@ -12783,8 +12892,10 @@
     },
     "/api/v1/site-links" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "getSiteLinks",
         "parameters" : [ {
+          "description" : "返回条数上限；允许范围和默认值见 schema。",
           "in" : "query",
           "name" : "limit",
           "required" : false,
@@ -12943,6 +13054,7 @@
         "tags" : [ "Site links" ]
       },
       "post" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "submitSiteLink",
         "requestBody" : {
           "content" : {
@@ -13105,8 +13217,10 @@
     },
     "/api/v1/sync/pull" : {
       "get" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Sync_pull",
         "parameters" : [ {
+          "description" : "上次拉取响应返回的不透明游标；首次拉取可省略。",
           "in" : "query",
           "name" : "cursor",
           "required" : false,
@@ -13265,6 +13379,7 @@
     },
     "/api/v1/sync/push" : {
       "post" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Sync_push",
         "requestBody" : {
           "content" : {
@@ -13610,6 +13725,7 @@
     },
     "/api/v1/tools/ai-text" : {
       "post" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Ai_complete",
         "requestBody" : {
           "content" : {
@@ -13772,6 +13888,7 @@
     },
     "/api/v1/tools/ai-text/status" : {
       "get" : {
+        "description" : "需要已登录账号的 Bearer Token。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Ai_status",
         "responses" : {
           "200" : {
@@ -13924,6 +14041,7 @@
     },
     "/api/v1/tools/popular" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "getPopularTools",
         "parameters" : [ {
           "description" : "返回条数；省略或空值时为 10",
@@ -14085,6 +14203,7 @@
     },
     "/api/v1/tools/{code}/usage" : {
       "post" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "recordToolUsage",
         "parameters" : [ {
           "description" : "工具编码",
@@ -14250,6 +14369,7 @@
         "description" : "selection 为逗号分隔的资源索引；仅接受当前结果中的图片，受数量和体积预算限制。",
         "operationId" : "Media_album",
         "parameters" : [ {
+          "description" : "解析响应返回的临时结果 id；过期后需要重新解析。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -14257,6 +14377,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "逗号分隔的图片资源索引，例如 0,1,2；最多选择 50 项。",
           "in" : "query",
           "name" : "selection",
           "required" : true,
@@ -14417,6 +14538,7 @@
         "description" : "index 来自解析结果；download=true 以附件下载。支持 Range 断点请求；过期结果返回 410。",
         "operationId" : "Media_asset",
         "parameters" : [ {
+          "description" : "解析响应返回的临时结果 id；过期后需要重新解析。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -14424,6 +14546,7 @@
             "type" : "string"
           }
         }, {
+          "description" : "解析结果中对应媒体资源的索引，从 0 开始。",
           "in" : "path",
           "name" : "index",
           "required" : true,
@@ -14432,6 +14555,7 @@
             "type" : "integer"
           }
         }, {
+          "description" : "true 表示附件下载，false 表示内联预览。",
           "in" : "query",
           "name" : "download",
           "required" : false,
@@ -14440,6 +14564,7 @@
             "type" : "boolean"
           }
         }, {
+          "description" : "可选单段字节范围，例如 bytes=0-1023，用于断点续传。",
           "in" : "header",
           "name" : "Range",
           "required" : false,
@@ -14617,6 +14742,7 @@
     },
     "/api/v1/web-tools/short_video_parse/capabilities" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Media_capabilities",
         "responses" : {
           "200" : {
@@ -14928,8 +15054,10 @@
     },
     "/api/v1/web-tools/short_video_parse/results/{id}" : {
       "delete" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "Media_clear",
         "parameters" : [ {
+          "description" : "解析响应返回的临时结果 id；过期后需要重新解析。",
           "in" : "path",
           "name" : "id",
           "required" : true,
@@ -15086,6 +15214,7 @@
     },
     "/api/v1/web-tools/zepp_steps/capabilities" : {
       "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
         "operationId" : "ZeppSteps_capabilities",
         "responses" : {
           "200" : {
@@ -15404,34 +15533,79 @@
     "url" : "http://127.0.0.1:8080"
   } ],
   "tags" : [ {
-    "description" : "Zepp Life 网页工具；提交结果不确定时应先在客户端核对，不要重复提交。",
-    "name" : "Zepp Life"
+    "description" : "沧烁工具箱 Admin announcements 接口",
+    "name" : "Admin announcements"
   }, {
-    "description" : "公开工具目录元数据",
-    "name" : "Tools"
+    "description" : "沧烁工具箱 Admin authentication 接口",
+    "name" : "Admin authentication"
   }, {
-    "description" : "需用户登录；服务与额度由后台配置。",
-    "name" : "AI text"
+    "description" : "沧烁工具箱 Admin categories 接口",
+    "name" : "Admin categories"
   }, {
-    "description" : "网站导航与投稿",
-    "name" : "Site links"
+    "description" : "沧烁工具箱 Admin config 接口",
+    "name" : "Admin config"
+  }, {
+    "description" : "沧烁工具箱 Admin feedback 接口",
+    "name" : "Admin feedback"
+  }, {
+    "description" : "沧烁工具箱 Admin membership 接口",
+    "name" : "Admin membership"
+  }, {
+    "description" : "沧烁工具箱 Admin operation logs 接口",
+    "name" : "Admin operation logs"
+  }, {
+    "description" : "沧烁工具箱 Admin recommendations 接口",
+    "name" : "Admin recommendations"
+  }, {
+    "description" : "沧烁工具箱 Admin site links 接口",
+    "name" : "Admin site links"
   }, {
     "description" : "仅管理员可读取的聚合运营统计",
     "name" : "Admin statistics"
   }, {
-    "description" : "服务可用性",
-    "name" : "Health"
+    "description" : "沧烁工具箱 Admin storage 接口",
+    "name" : "Admin storage"
   }, {
-    "description" : "账号会员状态",
-    "name" : "Membership"
+    "description" : "沧烁工具箱 Admin tools 接口",
+    "name" : "Admin tools"
+  }, {
+    "description" : "沧烁工具箱 Admin users 接口",
+    "name" : "Admin users"
+  }, {
+    "description" : "需用户登录；服务与额度由后台配置。",
+    "name" : "AI text"
+  }, {
+    "description" : "客户端版本与更新信息",
+    "name" : "App"
+  }, {
+    "description" : "沧烁工具箱 Authentication 接口",
+    "name" : "Authentication"
   }, {
     "description" : "需用户登录；使用游标增量同步收藏、最近使用与偏好。",
     "name" : "Cloud sync"
   }, {
+    "description" : "沧烁工具箱 Feedback 接口",
+    "name" : "Feedback"
+  }, {
+    "description" : "服务可用性",
+    "name" : "Health"
+  }, {
+    "description" : "沧烁工具箱 Home 接口",
+    "name" : "Home"
+  }, {
+    "description" : "账号会员状态",
+    "name" : "Membership"
+  }, {
     "description" : "短视频、图文图集、封面与 Live Photo；下载使用解析结果提供的临时句柄。",
     "name" : "Short video"
   }, {
-    "description" : "客户端版本与更新信息",
-    "name" : "App"
+    "description" : "网站导航与投稿",
+    "name" : "Site links"
+  }, {
+    "description" : "公开工具目录元数据",
+    "name" : "Tools"
+  }, {
+    "description" : "Zepp Life 网页工具；提交结果不确定时应先在客户端核对，不要重复提交。",
+    "name" : "Zepp Life"
   } ]
 }

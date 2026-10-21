@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Locale;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -63,6 +64,14 @@ class OpenApiExportTest {
         assertEquals("3.1.0", document.path("openapi").asText());
         assertEquals("https://toolapi.zhzgo.cn", document.path("servers").get(0).path("url").asText());
         assertEquals("bearer", document.at("/components/securitySchemes/bearerAuth/scheme").asText());
+        var globalTags = new HashSet<String>();
+        String previousTag = "";
+        for (var tag : document.path("tags")) {
+            String name = tag.path("name").asText();
+            assertTrue(previousTag.compareToIgnoreCase(name) < 0, "Global tags must be sorted and unique");
+            globalTags.add(name);
+            previousTag = name;
+        }
 
         Set<String> actual = new HashSet<>();
         requestMappingHandlerMapping.getHandlerMethods().forEach((mapping, handler) -> {
@@ -81,6 +90,9 @@ class OpenApiExportTest {
             assertFalse(id.isBlank());
             assertTrue(operationIds.add(id), "Duplicate operationId: " + id);
             assertFalse(method.getValue().path("summary").asText().isBlank(), "Missing summary: " + id);
+            assertFalse(method.getValue().path("description").asText().isBlank(), "Missing description: " + id);
+            method.getValue().path("tags").forEach(tag -> assertTrue(globalTags.contains(tag.asText()), "Undeclared tag: " + tag));
+            method.getValue().path("parameters").forEach(parameter -> assertFalse(parameter.path("description").asText().isBlank(), "Missing parameter description: " + id));
             String samplePath = path.getKey().replaceAll("\\{[^}]+}", "1");
             var request = new MockHttpServletRequest(method.getKey().toUpperCase(Locale.ROOT), samplePath);
             request.setServletPath(samplePath);
@@ -97,6 +109,7 @@ class OpenApiExportTest {
         assertTrue(document.at("/components/schemas/MediaCapabilities/properties").has("platforms"));
         assertFalse(document.at("/components/schemas/MediaCapabilities/properties").has("maxSteps"));
         assertTrue(document.at("/components/schemas/ZeppStepsResponse/properties").has("wechatVerified"));
+        assertEquals("^(?:[Ff][Rr][Ee][Ee]|[Pp][Rr][Oo])$", document.at("/components/schemas/MembershipRequest/properties/plan/pattern").asText());
         assertEquals("binary", document.at("/paths/~1api~1v1~1web-tools~1short_video_parse~1assets~1{id}~1{index}/get/responses/206/content/application~1octet-stream/schema/format").asText());
         assertEquals("binary", document.at("/paths/~1api~1v1~1web-tools~1short_video_parse~1albums~1{id}/get/responses/200/content/application~1zip/schema/format").asText());
         assertReferences(document, document);
@@ -108,6 +121,18 @@ class OpenApiExportTest {
         Files.writeString(output, ordered.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.convertValue(document, Object.class)) + "\n");
         System.out.printf("OpenAPI export: %d operations, %d paths, %d schemas -> %s%n", actual.size(),
                 document.path("paths").size(), document.at("/components/schemas").size(), output);
+    }
+
+    @Test void membershipPatternKeepsCaseInsensitiveValidationWithoutJavaOnlyRegexFlags() {
+        try (var factory = jakarta.validation.Validation.buildDefaultValidatorFactory()) {
+            var validator = factory.getValidator();
+            for (String plan : List.of("FREE", "free", "Free", "PRO", "pro", "Pro")) {
+                assertTrue(validator.validate(new com.cangshuo.toolbox.membership.model.MembershipRequest(plan, null)).isEmpty());
+            }
+            for (String plan : List.of("", "VIP", "xPRO", "FREEextra", "PRO\n", " FREE")) {
+                assertFalse(validator.validate(new com.cangshuo.toolbox.membership.model.MembershipRequest(plan, null)).isEmpty());
+            }
+        }
     }
 
     private void assertReferences(JsonNode root, JsonNode node) {

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 
 public record MembershipRequest(
         @Schema(requiredMode = Schema.RequiredMode.REQUIRED, allowableValues = {"FREE", "PRO"})
-        @NotBlank @Pattern(regexp = "(?i)FREE|PRO") String plan,
+        @NotBlank @Pattern(regexp = "^(?:[Ff][Rr][Ee][Ee]|[Pp][Rr][Oo])$") String plan,
         @Schema(types = {"string", "null"}, description = "ISO-8601 UTC 时间；留空表示长期有效", example = "2027-10-11T00:00:00Z")
         String expiresAt) {
 }
