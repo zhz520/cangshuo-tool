@@ -3,6 +3,7 @@
 ## Phase 0 — Foundation
 - [x] Monorepo
 - [x] API contract documentation
+- [x] Reproducible Apifox OpenAPI contract (2026-10-21: generated `docs/openapi.json` from all 74 implemented operations / 60 paths / 127 schemas; route coverage, anonymous access against Spring Security, unique operation IDs, resolved references, capability DTO separation and binary media formats verified; server 227/227 and package passed. CI checks the committed snapshot and publishes `openapi-contract`. Apifox project 8952528 is bound to this repository/main with an active webhook; push/UI synchronization acceptance is recorded in docs/APIFOX.md.)
 - [x] Android shell (Compose startup screen + Gradle Wrapper; assembleDebug and lintDebug passed; device run pending)
 - [x] Spring Boot API (startup shell, health, response/error envelope, traceId, local OpenAPI; package/startup verified)
 - [x] Admin shell (Vue + TypeScript layout/navigation, health overview, centralized API client; typecheck/build and local health integration verified; business modules pending)

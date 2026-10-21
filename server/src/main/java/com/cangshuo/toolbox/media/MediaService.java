@@ -36,6 +36,7 @@ public class MediaService {
         this.parseCache = new MediaParseCache(clock);
     }
     public record PlatformInfo(String code, String nameZh, String nameEn, List<String> hosts) {}
+    @io.swagger.v3.oas.annotations.media.Schema(name = "MediaCapabilities")
     public record Capabilities(boolean available, List<PlatformInfo> platforms, int maxTextLength, int maxImages,
                                long maxFileBytes, int maxZipBytes, int resultSeconds, int timeoutSeconds) {}
     public Capabilities capabilities() {

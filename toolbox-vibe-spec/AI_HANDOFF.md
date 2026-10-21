@@ -6,6 +6,10 @@
 
 用户要求持续自主推进，不要因单个工具完成或普通验证步骤停下来等待“继续”。每轮先读取本文件和 ROADMAP，选择最小可完整交付的未完成项；完成代码、测试/Lint、文档、提交/推送，并按既有授权在验证通过后部署生产。只有遇到自动审批拒绝、缺少必要凭据/设备或真正不可逆风险时才暂停并明确说明。镜像轴映射回归已提交为 `63f6280`。
 
+## 最新增量（2026-10-21，Apifox 接口同步）
+
+用户指定接口文档同步到 https://app.apifox.com/project/8952528。已在登录后的「Git & Branches」确认绑定 `zhz520/cangshuo-tool/main` 且 Webhook 已激活。`docs/openapi.json` 由真实 Springdoc 导出，覆盖74操作/60路径/127模型；补齐元信息/稳定operationId/Bearer声明/常见错误/traceId，以及Zepp成功DTO、能力同名模型和媒体流格式。`OpenApiExportTest` 逐接口核对MVC路由和实际AuthorizationManager，且断言DB/Redis/会话无业务调用。服务端227/227、package和快照一致性检查通过。`scripts/export_openapi.py` 可重复生成；CI对照快照并保存artifact。此任务无数据库/Android/生产部署变化。推送后须在Apifox核对新提交和接口列表，详细验收记录见 `../docs/APIFOX.md`；后续契约变更必须更新快照再推送。
+
 ## 最新增量（2026-10-20，电子木鱼已上线）
 
 `wooden_fish`（OTHER/LOCAL、排序642、V90）已实现并上线：本机合成WAV+SoundPool、有界触感、累计/今日计数、21/108/1080目标、七档里程碑、前台自动节奏上限5分钟、声音/触感/动画开关、确认重置与摘要分享。参考 MIT sodared/electronic-wooden-fish 固定 commit 的计数/跨日/成就组织，未复制代码/文案/音频。Android双变体879/879（128 suites）、双Lint0错误/91既有警告且新文件无finding；服务端226/226、静态22/22、发行物门禁通过（未签名）。Android16实测4844字节本机WAV、五次点击持久化、首里程碑、自动递增和后台停止、摘要分享、重置，及深色/2倍字体/720×1600。真机音色/触感/TalkBack待验收。详见 `../docs/WOODEN_FISH.md`。

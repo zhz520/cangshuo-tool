@@ -87,6 +87,7 @@ public class ZeppStepsService {
         } catch (java.security.NoSuchAlgorithmException impossible) { throw new IllegalStateException("SHA-256 unavailable"); }
     }
 
+    @io.swagger.v3.oas.annotations.media.Schema(name = "ZeppStepsCapabilities")
     public record Capabilities(boolean available, LocalDate date, int minSteps, int maxSteps,
                                int cooldownSeconds, int timeoutSeconds) {}
 }

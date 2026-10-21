@@ -2,10 +2,12 @@
 
 本文档把 `toolbox-vibe-spec/PROJECT_SPEC.md` 中的 REST 约定收敛为客户端与服务端共用的接口契约。当前已实现的接口由 Springdoc 生成 OpenAPI 3.1 描述，作为逐接口的机器可读版本；变更接口时同步更新本文档及实际消费该接口的客户端模型。
 
+完整的已实现接口、请求参数、DTO、响应及鉴权以 [OpenAPI 快照](openapi.json) 为准，并同步到 [Apifox 项目 8952528](https://app.apifox.com/project/8952528)。当前共 74 个操作、60 个路径；[同步流程与校验范围](APIFOX.md)。下文同时保留部分早期规划及历史说明，不能据此把待实现接口当作已提供能力。
+
 ## 通用约定
 
 - API 前缀：`/api/v1`
-- 正式环境 API 基础地址规划为 `https://toolapi.zhzgo.cn/api/v1`，供 Android 与后台使用；域名部署尚未完成。
+- 正式环境 API 基础地址为 `https://toolapi.zhzgo.cn/api/v1`，供 Android 与后台使用。OpenAPI 的 server URL 为域名根地址，路径中已经包含 `/api/v1`，不要重复添加前缀。
 - 官网使用 `https://tool.zhzgo.cn/`，后台默认规划为 `/admin/`；跨域访问配置见 [部署说明](../deploy/README.md#正式环境域名约定)。
 - 请求与响应：UTF-8 JSON
 - 工具目录和分类可匿名访问，便于未登录用户浏览和离线启动。
@@ -75,7 +77,7 @@ Admin 概览通过集中 API 模块消费该接口，校验响应封装和 `data
 
 显式启用 `local` profile 后，可访问 `/v3/api-docs` 获取生成的 OpenAPI，以及 `/swagger-ui/index.html` 浏览接口。默认、`staging`、`production` 环境关闭文档端点。OpenAPI 和 Swagger 静态资源使用原生格式。
 
-当前已实现健康检查、`GET /api/v1/tools` 和以下注册登录接口。其余规划接口按对应阶段开发，默认要求认证，匿名请求返回 HTTP `401`、业务码 `10002`。目录见 [目录说明](TOOL_CATALOG.md)，认证边界与验证见 [账号说明](AUTH.md)。
+当前已实现账号、工具目录/排行/使用统计、云同步、首页推荐/公告、反馈、导航投稿与审核、会员状态/管理、版本查询、AI、Zepp Life、短视频解析/媒体下载与管理后台接口，完整列表由上方 OpenAPI 快照生成。规划接口按对应阶段开发，默认要求认证，匿名请求返回 HTTP `401`、业务码 `10002`。目录见 [目录说明](TOOL_CATALOG.md)，认证边界与验证见 [账号说明](AUTH.md)。
 
 ## 当前已实现：注册登录
 
