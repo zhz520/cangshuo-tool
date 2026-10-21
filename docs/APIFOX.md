@@ -38,4 +38,13 @@ python scripts/export_openapi.py
 
 `OpenApiExportTest` 对照实际 Spring MVC 映射逐项核对全部路由；每个 operationId 唯一、摘要非空、所有 `$ref` 可解析，且每个接口的匿名声明与实际 Spring Security AuthorizationManager 的授权结果一致。另校验两个能力模型、Zepp 成功 DTO 及媒体/ZIP 格式。导出过程中断言数据库、Redis、会话测试替身无业务调用。
 
+## 2026-10-21 同步验收
+
+- `99063de` 首次推送后，Apifox 自动从 GitHub 读取并显示「沧烁工具箱 API」、`openapi.json` 与 `Paths (60)`。
+- `c57f083` 补全全局分组、操作/参数说明与项目联系方式，并将会员计划的 Java 内联忽略大小写标志替换为等价、可被 JSON Schema 解析的字符类。新增 Bean Validation 回归验证大小写与非法输入边界。
+- 服务端全量 **228/228**、Maven package、快照一致性检查通过；Node.js 对快照中 **573** 处 pattern 的 RegExp 编译全部成功。
+- Apifox 自动更新后，问题面板从「1 错误 / 146 提示」降为 **0 错误 / 3 可选提示**。剩余内容为未声明项目许可证/许可证 URL、未设置公开联系邮箱；未自行授予项目开源许可证或公布用户邮箱。
+- 预览显示生产/本地前置 URL、账号/目录/云同步/后台/网页工具等实际业务说明；原有 Git 绑定与 Webhook 保持有效。
+- 最终代码 `c57f083` 的 [CI 39546039313](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039313) 与 [Release artifacts 39546039346](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039346) 均成功；CI 的服务端快照一致性门禁已通过。无用的本轮 `temp/openapi/` 测试临时目录已清理。
+
 本任务不改变生产鉴权、不启用公开 Swagger，也不修改数据库或客户端业务。接口文档导入成功不等于对全部写接口进行了生产调用验收。后续新增/修改接口必须重新生成、推送并核对 Apifox。
