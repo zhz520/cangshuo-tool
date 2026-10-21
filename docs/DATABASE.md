@@ -371,4 +371,8 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V90__seed_wooden_fish_tool.sql` 登记 `wooden_fish`，OTHER/LOCAL/ENABLED，排序 642，无登录要求，默认非推荐。重放保留管理员编辑、状态、软删除和用量。累计/今日次数、里程碑和声音设置仅在 Android 私有存储，不新增服务端业务数据或 API。见 [电子木鱼](WOODEN_FISH.md)。
 
+### V91：可视帧率测试目录
+
+`V91__seed_frame_rate_test_tool.sql` 登记 `frame_rate_test`，OTHER/LOCAL/ENABLED，排序 643，无登录要求，默认非推荐。重放保留人工编辑、状态、软删除和使用量。帧时间和最多 10 条历史仅在 Android 私有存储，不新增服务端业务表或接口。见 [可视帧率测试](FRAME_RATE_TEST.md)。
+
 生产已执行 V85，Flyway 历史 85/85 且失败 0。

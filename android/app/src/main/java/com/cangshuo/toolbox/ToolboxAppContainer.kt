@@ -407,6 +407,9 @@ class ToolboxAppContainer(context: Context) {
         com.cangshuo.toolbox.feature.fish.domain.FishUseCases(
             com.cangshuo.toolbox.feature.fish.data.LocalFishRepository(applicationContext),
             com.cangshuo.toolbox.feature.fish.data.SyntheticFishFeedback(applicationContext)))
+    private val fpsFactory = com.cangshuo.toolbox.feature.fps.ui.FpsViewModel.factory(
+        com.cangshuo.toolbox.feature.fps.domain.FpsUseCases(
+            com.cangshuo.toolbox.feature.fps.data.AndroidFpsRepository(applicationContext)))
     private val vibratorFactory = com.cangshuo.toolbox.feature.vibrator.ui.VibratorViewModel.factory(
         com.cangshuo.toolbox.feature.vibrator.domain.VibrationUseCases(
             com.cangshuo.toolbox.feature.vibrator.data.AndroidVibrationHardware(applicationContext),
@@ -498,6 +501,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.answerbook.AnswerBookToolDefinition(resources,answerBookFactory),
             com.cangshuo.toolbox.feature.vibrator.VibratorToolDefinition(resources,vibratorFactory),
             com.cangshuo.toolbox.feature.fish.FishToolDefinition(resources,woodenFishFactory),
+            com.cangshuo.toolbox.feature.fps.FpsToolDefinition(resources,fpsFactory),
             com.cangshuo.toolbox.feature.ping.PingToolDefinition(resources,pingFactory),
             com.cangshuo.toolbox.feature.httpstatus.HttpStatusToolDefinition(resources,httpStatusFactory),
         ),
