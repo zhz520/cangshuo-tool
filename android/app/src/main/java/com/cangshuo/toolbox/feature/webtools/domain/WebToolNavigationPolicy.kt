@@ -29,5 +29,16 @@ class WebToolNavigationPolicy(baseUrl: String) {
         false
     }
 
+    /** The trusted Lanzou web page may hand a resolved download page or CDN link to the system browser. */
+    fun allowsLanzouExternal(url: String): Boolean = try {
+        val target = URI(url)
+        val host = target.host.orEmpty().lowercase(java.util.Locale.ROOT)
+        target.scheme?.lowercase(java.util.Locale.ROOT) in setOf("http", "https") && target.userInfo == null &&
+            target.rawFragment == null && host.contains('.') && host !in setOf("localhost", "127.0.0.1", "0.0.0.0") &&
+            !host.matches(Regex("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}")) && target.rawPath?.isNotBlank() == true &&
+            url.length <= 8192 && url.none { it.isISOControl() } &&
+            (target.port == -1 || target.port == 80 || target.port == 443)
+    } catch (_: Exception) { false }
+
     private fun port(uri: URI): Int = if (uri.port != -1) uri.port else if (uri.scheme.equals("https", ignoreCase = true)) 443 else 80
 }

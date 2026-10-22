@@ -309,6 +309,15 @@ Controller → Service → Provider 分层；工具或分类关闭时 503/10008�
 
 错误码：`61001` 平台不支持（400）、`61002` 作品不可用/需验证（422）、`61003` 上游失败（502）、`61004` 结果过期（410）、`61005` 超过资源上限（413）、`61006` 上游超时（504）、`61007` 格式不支持（422）、`61008` 链接失效或作品已移除（410）、`61009` 平台暂时限制匿名访问（503，不代表作品被删除）。相同链接的并发解析会合并（成功后 180 秒、失败后 30 秒内复用同一结果元数据），每次请求仍返回独立的结果句柄。所有响应 `no-store`；上游正文与用户链接不写日志。解析 12 次/分钟、打包 3 次/分钟（IP 维度），并发解析 3/传输 8/打包 1。详情见 [短视频解析](SHORT_VIDEO_PARSE.md)。
 
+## 蓝奏直链解析网页工具
+
+匿名端点（工具或分类停用、`LANZOU_ENABLED=false` 时 capabilities 返回 `available=false`，解析返回 503/10008）：
+
+- `GET /api/v1/web-tools/lanzou_direct/capabilities`：`{available,maxTextLength:4096,maxPasswordLength:64,cacheSeconds:180,requestsPerMinute:8,maxConcurrent:2,verificationMode:"OFFICIAL_PAGE_FALLBACK"}`。
+- `POST /api/v1/web-tools/lanzou_direct/parse`：JSON `{text,password?}`，正文最大 8192 字节；成功 data 为 `{shareUrl,fileName,fileSize,state(DIRECT|OFFICIAL_PAGE),directUrl,downloadPageUrl,verificationRequired,rateLimited,cached,resolvedAt,expiresInSeconds}`。密码仅用于当次请求，缓存键只保存其 SHA-256。
+
+错误码：62001 链接无效（400）、62002 需要密码（422）、62003 密码错误（422）、62004 文件不可用（410）、62006 上游暂时限制（503）、62007 上游异常（502）、62008 超时（504）、62009 文件夹不支持（422）。62005 保留给客户端兼容；正常无法解除的官方验证改为 HTTP 200/`OFFICIAL_PAGE`。所有响应 `no-store`；相同链接和密码的三分钟缓存及同键在途合并；上游主机限制后冷却 60 秒。服务端不代理文件、不伪造来源 IP。详情见 [蓝奏直链解析](LANZOU_DIRECT.md)。
+
 ## 客户端缓存和离线行为
 
 首页和搜索先用内置元数据，后台还原经过来源/版本/checksum/严格校验的 Room v3 WEB 快照，再请求完整网络目录。启动、前台（5 分钟）和手动（2 秒防连点）共享在途请求，失败/取消保留当前目录，成功空结果才移除旧远程项。网络预算仍为 3 页/300 条、每页 1,000,000 字节、合计 3,000,000 字节、20 秒；拒绝非 200、重定向、错误业务码、非法 trace/UTF-8/JSON/字段和不完整分页，不改变服务端契约。API 无跨页快照 token，同总数且满足顺序/唯一性的跨页变化仍无法完全识别。LOCAL 不请求服务端执行；SERVER 需要连接；HYBRID 按具体任务处理；WEB 页面必须联网，目录缓存不缓存网页或用户输入。V15/V16 已登记 qr_studio。实现及实际验证见 [请求校验](TOOL_CATALOG_SYNC.md)、[持久缓存](TOOL_CATALOG_CACHE.md)、[刷新策略](TOOL_CATALOG_REFRESH.md)和[本轮记录](WEB_TOOL_ACCEPTANCE_2026-10-05.md)。

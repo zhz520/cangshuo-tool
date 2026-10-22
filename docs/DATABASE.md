@@ -375,4 +375,8 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V91__seed_frame_rate_test_tool.sql` 登记 `frame_rate_test`，OTHER/LOCAL/ENABLED，排序 643，无登录要求，默认非推荐。重放保留人工编辑、状态、软删除和使用量。帧时间和最多 10 条历史仅在 Android 私有存储，不新增服务端业务表或接口。见 [可视帧率测试](FRAME_RATE_TEST.md)。
 
-生产已执行 V85，Flyway 历史 85/85 且失败 0。
+### V92：蓝奏直链解析目录
+
+`V92__seed_lanzou_direct_web_tool.sql` 登记 `lanzou_direct`，NETWORK/WEB/ENABLED，排序 631，无登录要求，默认非推荐，`config_json.webPath` 为 `/tools/lanzou_direct/`。重放保留后台编辑、状态、软删除和使用量。分享密码、临时直链和解析结果不写数据库，不新增服务端业务表。见 [蓝奏直链解析](LANZOU_DIRECT.md)。
+
+生产 V92 发布后应重新核对 Flyway 历史数与失败数；部署验收记录以对应工具文档为准。

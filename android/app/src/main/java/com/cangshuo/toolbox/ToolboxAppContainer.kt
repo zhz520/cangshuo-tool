@@ -469,6 +469,7 @@ class ToolboxAppContainer(context: Context) {
             com.cangshuo.toolbox.feature.purecolor.PureColorToolDefinition(resources, pureColorFactory),
             QrStudioToolDefinition(resources),
             com.cangshuo.toolbox.feature.webtools.PdfStudioToolDefinition(resources),
+            com.cangshuo.toolbox.feature.webtools.LanzouDirectToolDefinition(resources),
             com.cangshuo.toolbox.feature.aitext.AiTextToolDefinition(resources) { aiTextViewModelFactory },
             com.cangshuo.toolbox.feature.deviceinfo.DeviceInfoToolDefinition(resources,deviceInfoFactory),
             com.cangshuo.toolbox.feature.storage.StorageInfoToolDefinition(resources,storageInfoFactory),

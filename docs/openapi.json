@@ -1276,6 +1276,32 @@
         "required" : [ "code", "data", "message", "traceId" ],
         "type" : "object"
       },
+      "ApiResponseCapabilities" : {
+        "properties" : {
+          "code" : {
+            "example" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "data" : {
+            "anyOf" : [ {
+              "$ref" : "#/components/schemas/Capabilities"
+            }, {
+              "type" : "null"
+            } ]
+          },
+          "message" : {
+            "example" : "success",
+            "type" : "string"
+          },
+          "traceId" : {
+            "pattern" : "^[0-9a-f]{32}$",
+            "type" : "string"
+          }
+        },
+        "required" : [ "code", "data", "message", "traceId" ],
+        "type" : "object"
+      },
       "ApiResponseConfigEntry" : {
         "properties" : {
           "code" : {
@@ -2254,6 +2280,37 @@
           },
           "user" : {
             "$ref" : "#/components/schemas/UserResponse"
+          }
+        },
+        "type" : "object"
+      },
+      "Capabilities" : {
+        "properties" : {
+          "available" : {
+            "type" : "boolean"
+          },
+          "cacheSeconds" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "maxConcurrent" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "maxPasswordLength" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "maxTextLength" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "requestsPerMinute" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "verificationMode" : {
+            "type" : "string"
           }
         },
         "type" : "object"
@@ -14364,6 +14421,318 @@
         "tags" : [ "工具目录与排行" ]
       }
     },
+    "/api/v1/web-tools/lanzou_direct/capabilities" : {
+      "get" : {
+        "description" : "匿名可访问；携带无效 Token 仍可能返回 401。\n\nJSON 成功响应 code=0；错误响应 data=null，使用 HTTP 状态、业务码及 X-Trace-Id 定位失败。参数范围和请求/响应字段见下方模型。接口业务约定见仓库 docs/API.md。 ",
+        "operationId" : "Lanzou_capabilities",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseCapabilities"
+                }
+              }
+            },
+            "description" : "请求成功",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10001：请求参数无效",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10002：Token 缺失、无效或过期；匿名接口携带无效 Token 也可能返回此状态",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10005：权限或跨域来源不允许",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "429" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10007：请求过于频繁；按 Retry-After 等待后重试",
+            "headers" : {
+              "Retry-After" : {
+                "description" : "重试等待秒数",
+                "schema" : {
+                  "format" : "int32",
+                  "type" : "integer"
+                }
+              },
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10000：服务内部错误",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "503" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10008：服务暂不可用",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ ],
+        "summary" : "读取蓝奏直链解析的可用状态与请求预算",
+        "tags" : [ "蓝奏直链解析" ]
+      }
+    },
+    "/api/v1/web-tools/lanzou_direct/parse" : {
+      "post" : {
+        "description" : "输入分享文本和可选密码；密码仅用于本次请求。遇到官方验证页时返回官方下载页，不自动绕过验证。",
+        "operationId" : "Lanzou_parse",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiResponseResult"
+                }
+              }
+            },
+            "description" : "请求成功",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10001：请求参数无效",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10002：Token 缺失、无效或过期；匿名接口携带无效 Token 也可能返回此状态",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10005：权限或跨域来源不允许",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "429" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10007：请求过于频繁；按 Retry-After 等待后重试",
+            "headers" : {
+              "Retry-After" : {
+                "description" : "重试等待秒数",
+                "schema" : {
+                  "format" : "int32",
+                  "type" : "integer"
+                }
+              },
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10000：服务内部错误",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "503" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiFailure"
+                }
+              }
+            },
+            "description" : "10008：服务暂不可用",
+            "headers" : {
+              "X-Trace-Id" : {
+                "description" : "服务端生成的请求编号",
+                "schema" : {
+                  "pattern" : "^[0-9a-f]{32}$",
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ ],
+        "summary" : "解析蓝奏云公开分享链接",
+        "tags" : [ "蓝奏直链解析" ]
+      }
+    },
     "/api/v1/web-tools/short_video_parse/albums/{id}" : {
       "get" : {
         "description" : "selection 为逗号分隔的资源索引；仅接受当前结果中的图片，受数量和体积预算限制。",
@@ -15604,6 +15973,9 @@
   }, {
     "description" : "网站导航与投稿",
     "name" : "网站导航与投稿"
+  }, {
+    "description" : "解析公开蓝奏云分享页面中的文件信息与临时下载地址。",
+    "name" : "蓝奏直链解析"
   }, {
     "description" : "沧烁工具箱 首页内容 接口",
     "name" : "首页内容"

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>蓝奏直链解析 · 沧烁工具箱</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css?v=2">
+  <script defer src="engine.js?v=2"></script>
+  <script defer src="app.js?v=2"></script>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 13.5 13.5 10.5m-5.1 6.9-1.1 1.1a3.3 3.3 0 0 1-4.7-4.7l3.1-3.1a3.3 3.3 0 0 1 4.7 0M15.6 5.5l1.1-1.1a3.3 3.3 0 0 1 4.7 4.7l-3.1 3.1a3.3 3.3 0 0 1-4.7 0"/></svg>
+      <span data-i18n="brand">沧烁工具箱</span>
+    </a>
+    <div class="header-actions"><span class="tag" data-i18n="webTag">网页工具</span><label class="sr-only" for="language">Language / 语言</label><select id="language"><option value="zh">中文</option><option value="en">English</option></select></div>
+  </header>
+
+  <main class="layout">
+    <section class="workspace">
+      <div class="intro">
+        <p class="eyebrow" data-i18n="eyebrow">公开分享 · 临时链接</p>
+        <h1 data-i18n="heading">把蓝奏分享页，整理成可用链接。</h1>
+        <p data-i18n="intro">识别文件名、大小和临时直链。需要密码、官方验证或链接失效时，会明确说明并给出安全的下一步。</p>
+      </div>
+
+      <div id="availability" class="status" role="status"><span class="status-dot"></span><span id="availabilityText">正在检查服务…</span></div>
+
+      <form id="form" novalidate>
+        <label for="shareText" data-i18n="shareLabel">蓝奏云分享链接或分享文本</label>
+        <textarea id="shareText" rows="5" autocomplete="off" spellcheck="false" maxlength="4096" placeholder="https://www.lanzouf.com/…" data-i18n-placeholder="sharePlaceholder"></textarea>
+        <p class="help" data-i18n="shareHelp">可以粘贴整段分享文案；只包含密码时，请在下方单独填写。一次解析一个链接。</p>
+
+        <label for="password" data-i18n="passwordLabel">分享密码 <span class="optional" data-i18n="optional">可选</span></label>
+        <div class="password-field">
+          <input id="password" type="password" maxlength="64" autocomplete="off" spellcheck="false" data-i18n-placeholder="passwordPlaceholder" placeholder="没有密码可留空">
+          <button id="visibility" type="button" class="text-button" data-i18n="show">显示</button>
+        </div>
+        <p id="formError" class="form-error" role="alert" hidden></p>
+
+        <div class="actions">
+          <button id="submit" class="primary" type="submit"><span id="submitSpinner" class="spinner" hidden></span><span id="submitLabel" data-i18n="submit">解析链接</span></button>
+          <button id="stop" class="secondary" type="button" data-i18n="stop" hidden>停止等待</button>
+          <button id="clear" class="text-button" type="button" data-i18n="clear">清空</button>
+        </div>
+        <p class="privacy" data-i18n="privacy">链接和密码仅用于本次解析。密码不写入浏览器存储，也不会出现在日志或缓存结果中。</p>
+      </form>
+
+      <section id="result" class="result" tabindex="-1" aria-live="polite" hidden>
+        <div class="result-head"><div><span id="resultBadge" class="badge"></span><h2 id="resultTitle"></h2></div><span id="resultStateMark" class="state-mark">✓</span></div>
+        <p id="resultMessage" class="result-message"></p>
+        <dl class="facts"><div><dt data-i18n="fileName">文件名</dt><dd id="fileName">—</dd></div><div><dt data-i18n="fileSize">文件大小</dt><dd id="fileSize">—</dd></div><div><dt data-i18n="validity">结果有效期</dt><dd id="validity">—</dd></div></dl>
+        <div id="linkBox" class="link-box"><code id="linkText"></code></div>
+        <div class="actions result-actions">
+          <a id="openLink" class="primary" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" data-i18n="openOfficial">打开官方页</a>
+          <button id="copy" class="secondary" type="button" data-i18n="copyLink">复制链接</button>
+          <button id="again" class="text-button" type="button" data-i18n="again">解析另一个</button>
+        </div>
+        <p id="resultTrace" class="trace"></p>
+      </section>
+    </section>
+
+    <aside class="guide">
+      <section>
+        <h2 data-i18n="howTitle">解析流程</h2>
+        <ol>
+          <li><span>01</span><div><strong data-i18n="step1Title">粘贴公开分享</strong><p data-i18n="step1Text">支持当前蓝奏域名系列，自动识别分享文案中的链接和密码。</p></div></li>
+          <li><span>02</span><div><strong data-i18n="step2Title">服务器轻量解析</strong><p data-i18n="step2Text">3 分钟缓存、同链接请求合并、并发上限和退避，减少重复访问。</p></div></li>
+          <li><span>03</span><div><strong data-i18n="step3Title">核对结果类型</strong><p data-i18n="step3Text">直链会明确标注临时性；验证页只给出官方回退入口。</p></div></li>
+        </ol>
+      </section>
+      <section class="notice-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.2c0 4.5 3.2 8.3 7.5 9.8 4.3-1.5 7.5-5.3 7.5-9.8V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <div><strong data-i18n="limitTitle">请求预算</strong><p data-i18n="limitText">每个访问来源每分钟最多 8 次解析，并提供 60 秒冷却。没有代理轮换、伪造来源 IP 或验证码破解。</p></div>
+      </section>
+      <section class="faq">
+        <h2 data-i18n="faqTitle">常见情况</h2>
+        <details><summary data-i18n="faq1">显示“需要官方验证”</summary><p data-i18n="faq1Text">蓝奏官方页面触发了安全验证。请打开官方分享页完成验证后再下载；本站不会替你绕过验证。</p></details>
+        <details><summary data-i18n="faq2">直链过期或返回 403</summary><p data-i18n="faq2Text">临时直链会过期，也可能对来源地址敏感。重新解析获取新地址；仍失败时使用官方下载页。</p></details>
+        <details><summary data-i18n="faq3">文件夹分享为什么失败</summary><p data-i18n="faq3Text">当前只解析单个公开文件分享。文件夹列表不是本工具的下载代理，也不会遍历其中全部文件。</p></details>
+        <details><summary data-i18n="faq4">频繁请求会怎样</summary><p data-i18n="faq4Text">相同链接优先命中 3 分钟缓存。触发限额后按提示等待，不会自动重试或连续提交。</p></details>
+      </section>
+    </aside>
+  </main>
+
+  <footer><span data-i18n="footer">沧烁工具箱 · 第三方链接工具</span><div><a href="NOTICES.txt" data-i18n="notices">第三方许可</a><a href="/privacy/" data-i18n="privacyLink">隐私政策</a><a href="/" data-i18n="home">返回首页</a></div></footer>
+</div>
+</body>
+</html>

@@ -128,6 +128,13 @@ fun ToolboxWebScreen(title: String, code: String, onClose: () -> Unit, modifier:
                                 }
                             }
                             fun handleExport(target: String): Boolean {
+                                if (code == "lanzou_direct" && policy.allowsLanzouExternal(target) && policy.allows(this.url.orEmpty())) {
+                                    try {
+                                        context.startActivity(Intent(Intent.ACTION_VIEW, target.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                        Toast.makeText(context, browserDownloadMessage, Toast.LENGTH_SHORT).show()
+                                    } catch (_: RuntimeException) { Toast.makeText(context, exportFailureMessage, Toast.LENGTH_SHORT).show() }
+                                    return true
+                                }
                                 if (code == "short_video_parse" && policy.allowsMediaDownload(target) && policy.allows(this.url.orEmpty())) {
                                     try {
                                         context.startActivity(Intent(Intent.ACTION_VIEW, target.toUri()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

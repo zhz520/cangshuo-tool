@@ -1159,6 +1159,8 @@
     <string-array name="http_status_keywords"><item>HTTP</item><item>状态码</item><item>响应头</item><item>跳转</item><item>诊断</item><item>https</item><item>status</item><item>header</item><item>redirect</item></string-array>
     <string name="pdf_studio_name">PDF Studio</string>
     <string name="pdf_studio_description">Merge PDFs, extract or split pages, rotate pages, and convert JPG/PNG images to PDF.</string>
+    <string name="lanzou_direct_name">Lanzou direct link</string>
+    <string name="lanzou_direct_description">Resolve a public Lanzou share and inspect its file name, size, temporary direct link and official fallback page.</string>
     <string name="home_announcements">Announcements</string>
     <string name="home_external_link">External link</string>
     <string name="home_link_failed">Unable to open the link. Install or enable a browser.</string>

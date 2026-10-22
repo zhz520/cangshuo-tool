@@ -9,6 +9,14 @@ class WebMediaDownloadPolicyTest {
     private val id = "a".repeat(32)
     private val policy = WebToolNavigationPolicy(origin)
 
+    @Test fun lanzouExternalLinksRequireAPublicHostAndSafeScheme() {
+        assertTrue(policy.allowsLanzouExternal("https://www.lanzouf.com/iAbC123"))
+        assertTrue(policy.allowsLanzouExternal("https://cdn.example.com/file/a.zip?fn=a.zip"))
+        listOf("javascript:alert(1)", "file:///etc/passwd", "https://u:p@example.com/a", "https://127.0.0.1/a",
+            "https://localhost/a", "https://example.com:8443/a", "https://example.com/a\r\nX-Test: 1",
+            "https://example.com", "https://example.com/a#fragment").forEach { assertFalse(it, policy.allowsLanzouExternal(it)) }
+    }
+
     @Test fun allowsOnlyOwnOpaqueAttachmentUrls() {
         assertTrue(policy.allowsMediaDownload("$origin/api/v1/web-tools/short_video_parse/assets/$id/0?download=true"))
         assertTrue(policy.allowsMediaDownload("$origin/api/v1/web-tools/short_video_parse/albums/$id?selection=1,3,5"))

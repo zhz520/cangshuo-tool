@@ -61,7 +61,8 @@ jobs:
           python3 ../scripts/check_answer_book_runtime.py --static
           python3 ../scripts/check_vibrator_patterns_runtime.py --static
           python3 ../scripts/check_wooden_fish_runtime.py --static
-            python3 ../scripts/check_frame_rate_test_runtime.py --static
+          python3 ../scripts/check_frame_rate_test_runtime.py --static
+          python3 ../scripts/check_lanzou_runtime.py --static
       - name: Verify sync migrations and conditional queue acknowledgements
         run: python3 ../scripts/check_sync_sqlite.py
       - name: Upload debug APK
@@ -174,6 +175,8 @@ jobs:
         run: node ../scripts/check_web_account_deletion.cjs
       - name: Verify short-video media parsing client boundaries
         run: node --test ../scripts/check_web_short_video.cjs
+      - name: Verify Lanzou web client boundaries
+        run: node --test ../scripts/check_web_lanzou.cjs
       - name: Upload Admin build
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

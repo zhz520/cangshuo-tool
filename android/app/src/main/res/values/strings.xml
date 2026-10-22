@@ -1215,6 +1215,8 @@
     <string-array name="http_status_keywords"><item>HTTP</item><item>状态码</item><item>响应头</item><item>跳转</item><item>诊断</item><item>https</item><item>status</item><item>header</item><item>redirect</item></string-array>
     <string name="pdf_studio_name">PDF 工作台</string>
     <string name="pdf_studio_description">合并 PDF、提取或拆分页面、旋转页面、JPG/PNG 图片转 PDF。</string>
+    <string name="lanzou_direct_name">蓝奏直链解析</string>
+    <string name="lanzou_direct_description">解析蓝奏云公开分享链接，显示文件名、大小、临时直链和官方回退页；支持分享密码与失败说明。</string>
     <string name="home_announcements">公告</string>
     <string name="home_external_link">外部链接</string>
     <string name="home_link_failed">无法打开链接，请安装或启用浏览器。</string>
