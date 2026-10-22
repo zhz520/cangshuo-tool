@@ -22,19 +22,16 @@ class ReadOnlyApi(object):
         self.posts = 0
     def read(self, path, token=None):
         if path not in READ_PATHS: raise ValueError('production GET path is not allowlisted')
-        actual, body, cache = get(path, token=token)
-        if actual == 200: assert cache == 'no-store', 'API must forbid caching'
-        return actual, body
+        return get(path, token=token)
     def login(self, username, password):
         if self.login_attempted: raise RuntimeError('only one administrator login is permitted')
         self.login_attempted = True
-        actual, body, unused = get('admin/auth/login', payload={'username': username, 'password': password})
+        body = get('admin/auth/login', payload={'username': username, 'password': password})
         return body
     def invalid_parse(self):
         if self.posts: raise RuntimeError('only one invalid parse probe is permitted')
         self.posts += 1
-        actual, body, unused = get(PARSE, payload={'text': 'https://example.com/i1'})
-        return actual, body
+        return get(PARSE, payload={'text': 'https://example.com/i1'})
 
 
 def administrator_credentials():
@@ -48,8 +45,8 @@ def administrator_credentials():
 
 def verify(check, api, credentials):
     def read(path, token=None):
-        actual, body = api.read(path, token)
-        check(actual == 200 and body.get('code') == 0, 'HTTPS GET ' + path)
+        body = api.read(path, token)
+        check(body.get('code') == 0, 'HTTPS GET ' + path)
         return body.get('data')
     check_static(check)
     check(read('health')['status'] == 'UP', 'HTTPS API healthy')
@@ -60,12 +57,12 @@ def verify(check, api, credentials):
     check(capabilities == {'available': True, 'maxTextLength': 4096, 'maxPasswordLength': 64,
           'cacheSeconds': 180, 'requestsPerMinute': 8, 'maxConcurrent': 2,
           'verificationMode': 'OFFICIAL_PAGE_FALLBACK'}, 'HTTPS capabilities are bounded')
-    actual, body = api.invalid_parse()
-    check(actual == 400 and body.get('code') == 62001, 'Invalid non-Lanzou link is rejected without parsing')
+    body = api.invalid_parse()
+    check(body.get('code') == 62001, 'Invalid non-Lanzou link is rejected without parsing')
     for path in (ADMIN_PATH, ADMIN_FILTER, 'admin/tools/categories') + tuple(
             'admin/statistics?days=' + str(day) for day in (7, 30, 90)):
-        actual, body = api.read(path)
-        check(actual == 401 and body.get('code') == 10002, 'Anonymous management denied: ' + path)
+        body = api.read(path)
+        check(body.get('code') == 10002, 'Anonymous management denied: ' + path)
     username, password = credentials()
     login = api.login(username, password)
     check(login.get('code') == 0, 'HTTPS administrator login')

@@ -99,7 +99,15 @@ public class LanzouParser {
         if (zt != 1) classifyAjax(result.path("inf").asText(""));
         if (fileName.isBlank()) fileName = result.path("inf").asText("").strip();
         URI downloadPage = LanzouHosts.downloadPage(result.path("dom").asText(), result.path("url").asText());
-        var probe = http.probe(downloadPage, page.cookies(), "https://developer.lanzoug.com/", deadline);
+        LanzouHttp.Probe probe;
+        try {
+            probe = http.probe(downloadPage, page.cookies(), "https://developer.lanzoug.com/", deadline);
+        } catch (ApiException error) {
+            if (error.error() == ApiError.LANZOU_TIMEOUT || error.error() == ApiError.LANZOU_RESTRICTED)
+                return new Parsed(State.OFFICIAL_PAGE, input.uri(), safeText(fileName), safeText(fileSize), downloadPage,
+                        null, false, error.error() == ApiError.LANZOU_RESTRICTED);
+            throw error;
+        }
         if (probe.location() != null) {
             try {
                 URI direct = LanzouHosts.direct(probe.location().toString());

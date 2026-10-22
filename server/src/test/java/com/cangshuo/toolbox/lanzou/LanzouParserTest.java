@@ -80,4 +80,19 @@ class LanzouParserTest {
                 .thenReturn(new LanzouHttp.Document(share, page("<script>'sign':'s';https://evil.example/ajaxfile.php?file=1</script>"), ""));
         rejects(ApiError.LANZOU_PROVIDER_ERROR, () -> parser.parse(new LanzouInput(share, ""), System.nanoTime() + 1_000_000_000L));
     }
+    @Test void finalProbeTimeoutOrRestrictionFallsBackToTheKnownOfficialPage() {
+        String html = page("<script>'sign':'s';/ajaxfile.php?file=1</script>");
+        when(http.get(any(), anyString(), anyString(), anyLong())).thenReturn(new LanzouHttp.Document(share, html, ""));
+        when(http.post(any(), anyString(), anyString(), anyString(), anyLong()))
+                .thenReturn(new LanzouHttp.Document(share, "{\"zt\":1,\"dom\":\"https://download.lanzouf.com\",\"url\":\"x\"}", ""));
+        doThrow(new ApiException(ApiError.LANZOU_TIMEOUT))
+                .when(http).probe(any(), anyString(), anyString(), anyLong());
+        var timeout = parser.parse(new LanzouInput(share, ""), System.nanoTime() + 1_000_000_000L);
+        assertEquals(LanzouParser.State.OFFICIAL_PAGE, timeout.state()); assertNull(timeout.directUri());
+        assertFalse(timeout.rateLimited());
+        doThrow(new ApiException(ApiError.LANZOU_RESTRICTED))
+                .when(http).probe(any(), anyString(), anyString(), anyLong());
+        var restricted = parser.parse(new LanzouInput(share, ""), System.nanoTime() + 1_000_000_000L);
+        assertEquals(LanzouParser.State.OFFICIAL_PAGE, restricted.state()); assertTrue(restricted.rateLimited());
+    }
 }
