@@ -59,4 +59,6 @@
 - Android Debug/Release 各 **903/903**（130 suites），双构建与 Lint 通过，均 **0 错误 / 86 条既有警告**；Debug APK 26,501,589 字节、Release APK 17,736,597 字节、AAB 17,102,805 字节。HTTPS/权限/备份/原生库/ZIP 对齐门禁通过，`signatureVerified=false`（未签名 Release）。
 - 实网只读读取两个公开分享，均成功识别文件名和大小并获得临时直链：一个来自 `www.lanzouf.com`，下载页 `dmpdmp.com`；另一个来自 `www.lanzoux.com`，下载页 `lanrar.com`。未打开或下载文件本体；未执行压力测试。
 - Chrome 桌面及 390px 移动视口实际检查：中文/英文切换、默认/加载/错误/结果/复制/打开/清空路径已接线，隐藏按钮不占位，移动视口 `scrollWidth == clientWidth`，无横向溢出。页面使用临时本地 API 样例验证布局，图标与脚本均来自本地。
-- 真机 WebView、Android 外部浏览器交接、网络切换、复制权限和所有 Lanzou 域名轮换仍需持续抽查。严格隔离候选、生产部署、Apifox 同步和线上实链验证待完成。
+- 严格隔离候选 **224/224** 通过：V92、NETWORK/WEB 元数据、后台编辑、种子重放保留编辑与用量、热门排行、7/30/90 天统计、目录非缓存与蓝奏 API `no-store`；临时容器、数据库、用户、网络与 Redis 已清理。候选 API `sha256:62cf010520835457bada08375055253fe56111bbe9ef518a0dc030d144d2a646`。
+- 候选官网镜像 `sha256:ef23ebc71ece9f18b461b467c6c39ebd4948109ea0f203b806db55ef915b5edc` 在独立内网容器中实际返回 index/engine/app/CSS/NOTICES 200，CSP 保持 `frame-src 'none'`；临时容器已删除。
+- 真机 WebView、Android 外部浏览器交接、网络切换、复制权限和所有 Lanzou 域名轮换仍需持续抽查。生产部署、主线合并、Apifox 同步和线上实链验证待明确发布审批后完成。
