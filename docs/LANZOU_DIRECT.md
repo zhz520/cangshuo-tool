@@ -62,18 +62,18 @@
 
 ## 验证记录
 
-2026-10-22 开发完成、生产验收前验证：
+2026-10-22 全量验证：
 
-- 服务端完整 **248/248** 通过；蓝奏专项 **20/20**，覆盖官方域/伪装域、私网 DNS、控制字符、双链接、密码、新旧 Ajax/Sign、确定性挑战与残留挑战、失效/文件夹、不信任 Ajax 端点、缓存、限流、主机冷却和控制器边界。
-- 静态契约与网页 Engine 覆盖链接/密码提取、签名查询保留、错误分类、结果状态、永久跳转、CSP、MIT 署名、Android 注册和文档一致性；永久跳转发布后 OpenAPI 快照为 **78 操作 / 64 路径 / 131 schema**。
+- 服务端完整 **254/254** 通过；蓝奏专项 **26/26**，覆盖官方域/伪装域、私网 DNS、控制字符、双链接、密码、新旧 Ajax/Sign、确定性挑战与残留挑战、失效/文件夹、不信任 Ajax 端点、缓存、限流、主机冷却、AES-GCM 令牌、自动跳转和控制器边界。
+- 静态契约 **51/51**、网页 Engine **6/6**，覆盖链接/密码提取、签名查询保留、错误分类、结果状态、永久跳转、CSP、MIT 署名、Android 注册和文档一致性；OpenAPI 快照为 **78 操作 / 64 路径 / 131 schema**。
 - Android Debug/Release 各 **903/903**（130 suites），双构建与 Lint 通过，均 **0 错误 / 86 条既有警告**；Debug APK 26,501,589 字节、Release APK 17,736,597 字节、AAB 17,102,805 字节。HTTPS/权限/备份/原生库/ZIP 对齐门禁通过，`signatureVerified=false`（未签名 Release）。
 - 实网只读读取三个公开分享，均成功识别文件名和大小并获得临时直链：两个普通分享分别来自 `www.lanzouf.com`（下载页 `dmpdmp.com`）和 `www.lanzoux.com`（下载页 `lanrar.com`），一个带密码分享来自 `wwd.lanzouf.com`（Ajax `apifile.woozooo.com`，最终文件域 `webgetstore.com`）。未打开或下载文件本体；未执行压力测试。
 - Chrome 桌面及 390px 移动视口实际检查：中文/英文切换、默认/加载/错误/结果/复制/打开/清空路径已接线，隐藏按钮不占位，移动视口 `scrollWidth == clientWidth`，无横向溢出。页面使用临时本地 API 样例验证布局，图标与脚本均来自本地。
-- 严格隔离候选 **224/224** 通过：V92、NETWORK/WEB 元数据、后台编辑、种子重放保留编辑与用量、热门排行、7/30/90 天统计、目录非缓存与蓝奏 API `no-store`；临时容器、数据库、用户、网络与 Redis 已清理。最终候选 API `sha256:4d0a168ae95cc80a9e9d13b3e786624674ed2a14ad309844d361283a540ee192`。
-- 候选官网镜像 `sha256:ef23ebc71ece9f18b461b467c6c39ebd4948109ea0f203b806db55ef915b5edc` 在独立内网容器中实际返回 index/engine/app/CSS/NOTICES 200，CSP 保持 `frame-src 'none'`；临时容器已删除。
+- 严格隔离候选 **233/233** 通过：V92、NETWORK/WEB 元数据、后台编辑、种子重放保留编辑与用量、热门排行、7/30/90 天统计、目录非缓存、蓝奏 API `no-store`、永久能力开关和无效令牌路径；临时容器、数据库、用户、网络与 Redis 已清理。
+- 候选 API `sha256:6e3e7adf7185db18fcf1bf09059c0c0a7b8a24eedf65ff4a14d6db2fab0755bd`、官网 `sha256:79fc2965342fa92878e2a3085c73609bb61ef1a414168e3b718747a243d414fc`。官网镜像在独立内网容器中返回 index/engine/app/CSS/NOTICES 200，CSP 保持 `frame-src 'none'`，`nginx -t` 通过；临时容器已删除。
 - 真机 WebView、Android 外部浏览器交接、网络切换、复制权限和所有 Lanzou 域名轮换仍需持续抽查。
 
-## 生产发布（2026-10-22）
+## 基础直链生产发布（2026-10-22）
 
 候选分支已快进合并到 `main` 并部署。最终代码提交 `2765bd048fe74db09245a89907417103ef1cc160`；生产 API 镜像 `sha256:4d0a168ae95cc80a9e9d13b3e786624674ed2a14ad309844d361283a540ee192`，官网镜像 `sha256:ef23ebc71ece9f18b461b467c6c39ebd4948109ea0f203b806db55ef915b5edc`。Flyway **92/92、失败0**，目录 `lanzou_direct` 恰1条，官网/工具页/后台登录/健康接口均200，五容器 healthy。
 
@@ -81,4 +81,12 @@
 
 回滚点：Git/Docker `before-lanzou-v92` 保留 V91 代码 `76a7481a6a448a72f31cbf8a4415c20a25455a90`、API `sha256:e87c639060277771bccf8a2e1eb2fa5af42947a444d30696ab523ed85bd3deaf` 和官网 `sha256:fe1587514202f23bbabbc7c178d4362337936f127a2ce853e803e49cb51d3773`；`before-lanzou-hotfix-v92` 保留上一版 V92 代码 `a3bd1facddea165cb12160cd1017203463932108` 与 API `sha256:abe721525c5dcf3e823abdf7498f0738c5767f6fa6e3687cba19c929b3380976`。网页镜像在两次 V92 版本间未变化。
 
-Apifox 项目 8952528 在合并后显示 `Paths ( 62 )` 和“同步成功”；规范包含本次两个匿名接口。剩余4条均为可选元数据/排序提示（许可证对象与URL、公开联系邮箱、tags字母序），0条错误，没有为了样式提示擅自授予许可证或公开邮箱。
+## 永久跳转生产发布（2026-10-22）
+
+提交 `0a6b20ee7bbaf5817a77ebaefeaea075f24b345c` 已部署；生产 API 镜像 `sha256:6e3e7adf7185db18fcf1bf09059c0c0a7b8a24eedf65ff4a14d6db2fab0755bd`、官网镜像 `sha256:79fc2965342fa92878e2a3085c73609bb61ef1a414168e3b718747a243d414fc`。`LANZOU_LINK_SECRET` 仅保存在生产环境，未进入 Git；宝塔外层和容器内 Nginx 都对 `/api/v1/web-tools/lanzou_direct/download/` 关闭 access log，且两侧 `nginx -t` 通过。
+
+生产 HTTPS 验收 **118/118**；普通分享和密码分享都成功生成稳定地址，访问稳定地址得到 **302** 并跳转到真实 CDN。网页域名入口同样返回 302，两层日志均未出现令牌。Flyway 仍为 **92/92、失败0**，`lanzou_direct` 目录记录1条，五容器 healthy，官网/工具页/后台/健康接口均200。
+
+永久跳转回滚点：Git/Docker `before-lanzou-permanent-v92` 保留上一版代码 `2765bd048fe74db09245a89907417103ef1cc160`、API `sha256:4d0a168ae95cc80a9e9d13b3e786624674ed2a14ad309844d361283a540ee192` 和官网 `sha256:ef23ebc71ece9f18b461b467c6c39ebd4948109ea0f203b806db55ef915b5edc`。更早的 V91 与基础 V92 回滚点继续保留。
+
+Apifox 项目 8952528 在永久跳转合并后显示 `Paths ( 64 )` 和“同步成功”，包含四个蓝奏匿名接口。问题面板为 **0 错误 / 4 可选提示**（许可证对象与URL、公开联系邮箱、tags字母序），未为样式提示擅自授予许可证或公开邮箱。
