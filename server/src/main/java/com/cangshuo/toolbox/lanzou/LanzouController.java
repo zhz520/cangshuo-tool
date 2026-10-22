@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import java.net.URI;
+import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +31,39 @@ public class LanzouController {
             description = "输入分享文本和可选密码；密码仅用于本次请求。遇到官方验证页时返回官方下载页，不自动绕过验证。")
     public ResponseEntity<ApiResponse<LanzouService.Result>> parse(@Valid @RequestBody ParseRequest input,
             HttpServletRequest request) {
-        String identity = request.getRemoteAddr();
         return ResponseEntity.ok().body(ApiResponse.success(
-                service.parse(input.text(), input.password(), identity), TraceIdFilter.traceId(request)));
+                service.parse(input.text(), input.password(), identity(request)), TraceIdFilter.traceId(request)));
+    }
+
+    @PostMapping(value = "/permanent-links", consumes = "application/json")
+    @Operation(summary = "创建永久下载跳转地址",
+            description = "验证分享并返回稳定的本站路径。路径内含 AES-GCM 加密的分享信息，访问时重新解析并自动跳转到最新临时直链或官方页。")
+    public ResponseEntity<ApiResponse<LanzouService.PermanentLink>> permanentLink(
+            @Valid @RequestBody ParseRequest input, HttpServletRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.success(
+                service.permanentLink(input.text(), input.password(), identity(request)), TraceIdFilter.traceId(request)));
+    }
+
+    @GetMapping("/download/{token}")
+    @ResponseStatus(HttpStatus.FOUND)
+    @Operation(summary = "访问永久下载跳转地址",
+            description = "验证加密令牌后实时解析，并通过 302 自动跳转到临时直链或官方下载页。")
+    public ResponseEntity<Void> download(@PathVariable String token, HttpServletRequest request) {
+        var result = service.permanentRedirect(token, identity(request));
+        String target = result.directUrl() != null ? result.directUrl() : result.downloadPageUrl();
+        var headers = new HttpHeaders();
+        headers.setLocation(URI.create(target));
+        headers.setCacheControl("no-store");
+        headers.set("Referrer-Policy", "no-referrer");
+        headers.set("X-Content-Type-Options", "nosniff");
+        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+    }
+
+    private static String identity(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        String value = forwarded == null || forwarded.isBlank() ? request.getRemoteAddr()
+                : forwarded.split(",", 2)[0].strip();
+        return value != null && value.length() <= 45 && value.matches("[0-9A-Fa-f:.%]+")
+                ? value : "unknown";
     }
 }

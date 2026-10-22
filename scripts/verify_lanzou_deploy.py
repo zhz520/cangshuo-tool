@@ -56,9 +56,14 @@ def verify(check, api, credentials):
     capabilities = read(CAPABILITIES)
     check(capabilities == {'available': True, 'maxTextLength': 4096, 'maxPasswordLength': 64,
           'cacheSeconds': 180, 'requestsPerMinute': 8, 'maxConcurrent': 2,
-          'verificationMode': 'OFFICIAL_PAGE_FALLBACK'}, 'HTTPS capabilities are bounded')
+          'verificationMode': 'OFFICIAL_PAGE_FALLBACK', 'permanentLinksAvailable': True},
+          'HTTPS capabilities are bounded')
     body = api.invalid_parse()
     check(body.get('code') == 62001, 'Invalid non-Lanzou link is rejected without parsing')
+    body = get('web-tools/lanzou_direct/permanent-links', payload={'text': 'https://example.com/i1'})
+    check(body.get('code') == 62001, 'Invalid permanent-link source is rejected')
+    body = get('web-tools/lanzou_direct/download/not-a-valid-token')
+    check(body.get('code') == 62001, 'Invalid permanent token is rejected')
     for path in (ADMIN_PATH, ADMIN_FILTER, 'admin/tools/categories') + tuple(
             'admin/statistics?days=' + str(day) for day in (7, 30, 90)):
         body = api.read(path)

@@ -43,7 +43,9 @@ public class SecurityConfiguration {
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/short_video_parse/parse").permitAll();
                     requests.requestMatchers(HttpMethod.DELETE, "/api/v1/web-tools/short_video_parse/results/*").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/web-tools/lanzou_direct/capabilities").permitAll();
-                    requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/lanzou_direct/parse").permitAll();
+                    requests.requestMatchers(HttpMethod.GET, "/api/v1/web-tools/lanzou_direct/download/*").permitAll();
+                    requests.requestMatchers(HttpMethod.POST, "/api/v1/web-tools/lanzou_direct/parse",
+                            "/api/v1/web-tools/lanzou_direct/permanent-links").permitAll();
                     // Anonymous aggregate counting for tool opens.
                     requests.requestMatchers(HttpMethod.POST, "/api/v1/tools/*/usage").permitAll();
                     requests.requestMatchers(HttpMethod.GET, "/api/v1/app/version").permitAll();

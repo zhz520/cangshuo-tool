@@ -67,7 +67,8 @@
 
   function capabilities(envelope) {
     const data = envelope && envelope.code === 0 ? envelope.data : null;
-    return data && typeof data.available === 'boolean' ? data : null;
+    if (!data || typeof data.available !== 'boolean') return null;
+    return { ...data, available: data.available === true, permanentLinksAvailable: data.permanentLinksAvailable === true };
   }
 
   function result(envelope) {
@@ -87,6 +88,17 @@
     return typeof value === 'string' && /^[a-f0-9]{32}$/i.test(value) ? value : '';
   }
 
-  root.lanzouCore = { extract, validate, errorKey, capabilities, result, safeTrace, owned };
+  function permanentLink(envelope) {
+    if (!envelope || envelope.code !== 0 || !envelope.data) return null;
+    const path = String(envelope.data.path || '');
+    if (!/^\/api\/v1\/web-tools\/lanzou_direct\/download\/[A-Za-z0-9_-]{24,4096}$/.test(path)) return null;
+    return {
+      path, state: String(envelope.data.state || ''), fileName: String(envelope.data.fileName || ''),
+      fileSize: String(envelope.data.fileSize || ''), verificationRequired: envelope.data.verificationRequired === true,
+      rateLimited: envelope.data.rateLimited === true
+    };
+  }
+
+  root.lanzouCore = { extract, validate, errorKey, capabilities, result, permanentLink, safeTrace, owned };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.lanzouCore;
 })(globalThis);

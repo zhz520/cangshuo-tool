@@ -33,8 +33,15 @@ test('fixed business codes map to local UI messages without provider text',()=>{
   assert.equal(core.errorKey(999999),'providerFailed');
 });
 test('capabilities and official fallback stay explicit',()=>{
-  assert.ok(core.capabilities({code:0,data:{available:true,verificationMode:'OFFICIAL_PAGE_FALLBACK'}}));
+  assert.equal(core.capabilities({code:0,data:{available:true,verificationMode:'OFFICIAL_PAGE_FALLBACK',permanentLinksAvailable:true}}).permanentLinksAvailable,true);
   assert.equal(core.capabilities({code:0,data:{available:'true'}}),null);
   const official=core.result({code:0,data:{shareUrl:'https://lanzoux.com/a',fileName:'b.txt',fileSize:'2 KB',state:'OFFICIAL_PAGE',directUrl:'',downloadPageUrl:'https://download.lanzouf.com/file/y',verificationRequired:true,rateLimited:false,cached:true,expiresInSeconds:0}});
   assert.equal(official.state,'OFFICIAL_PAGE'); assert.equal(official.directUrl,''); assert.equal(official.verificationRequired,true);
+});
+test('permanent redirect capability accepts only the exact same-origin API path',()=>{
+  const token='a'.repeat(80), path='/api/v1/web-tools/lanzou_direct/download/'+token;
+  const value=core.permanentLink({code:0,data:{path,state:'DIRECT',fileName:'a.zip',fileSize:'1 MB',verificationRequired:false,rateLimited:false}});
+  assert.equal(value.path,path);
+  for(const bad of ['',path.replace('/api','https://evil.example/api'),path+'?x=1',path.replace('a','!'),
+    '/api/v1/web-tools/lanzou_direct/download/short']) assert.equal(core.permanentLink({code:0,data:{path:bad}}),null,String(bad));
 });

@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 public class LanzouService {
     public static final String CODE = "lanzou_direct";
     static final int CACHE_SECONDS = 180, RESULT_SECONDS = 300, MAX_CACHE = 100, REQUESTS_PER_MINUTE = 8;
+    static final String DOWNLOAD_PATH = "/api/v1/web-tools/lanzou_direct/download/";
     private final LanzouParser parser;
     private final ToolUsageRepository catalog;
     private final RateLimitService limiter;
     private final boolean enabled;
     private final Clock clock;
+    private final LanzouLinkTokenCodec tokenCodec;
     private final Semaphore slots = new Semaphore(2);
     private final LinkedHashMap<String, Entry> cache = new LinkedHashMap<>();
     private final ConcurrentHashMap<String, CompletableFuture<Result>> inflight = new ConcurrentHashMap<>();
@@ -27,30 +29,65 @@ public class LanzouService {
 
     @org.springframework.beans.factory.annotation.Autowired
     public LanzouService(LanzouParser parser, ToolUsageRepository catalog, RateLimitService limiter,
-                         @Value("${toolbox.lanzou.enabled:true}") boolean enabled) {
-        this(parser, catalog, limiter, enabled, Clock.systemUTC());
+                         @Value("${toolbox.lanzou.enabled:true}") boolean enabled,
+                         @Value("${toolbox.lanzou.link-secret:}") String linkSecret) {
+        this(parser, catalog, limiter, enabled, Clock.systemUTC(), new LanzouLinkTokenCodec(linkSecret));
     }
     LanzouService(LanzouParser parser, ToolUsageRepository catalog, RateLimitService limiter, boolean enabled, Clock clock) {
+        this(parser, catalog, limiter, enabled, clock, new LanzouLinkTokenCodec(""));
+    }
+    LanzouService(LanzouParser parser, ToolUsageRepository catalog, RateLimitService limiter, boolean enabled, Clock clock,
+                  LanzouLinkTokenCodec tokenCodec) {
         this.parser = parser; this.catalog = catalog; this.limiter = limiter; this.enabled = enabled; this.clock = clock;
+        this.tokenCodec = tokenCodec;
     }
 
     public record Capabilities(boolean available, int maxTextLength, int maxPasswordLength, int cacheSeconds,
-                               int requestsPerMinute, int maxConcurrent, String verificationMode) {}
+                               int requestsPerMinute, int maxConcurrent, String verificationMode,
+                               boolean permanentLinksAvailable) {}
     public record Result(String shareUrl, String fileName, String fileSize, String state, String directUrl,
                          String downloadPageUrl, boolean verificationRequired, boolean rateLimited, boolean cached,
                          Instant resolvedAt, int expiresInSeconds) {}
+    public record PermanentLink(String path, String state, String fileName, String fileSize,
+                                boolean verificationRequired, boolean rateLimited, Instant createdAt) {}
     private record Entry(Result value, Instant expiresAt) {}
 
     public Capabilities capabilities() {
-        return new Capabilities(enabled && catalog.visible(CODE), 4096, 64, CACHE_SECONDS,
-                REQUESTS_PER_MINUTE, 2, "OFFICIAL_PAGE_FALLBACK");
+        boolean ready = enabled && catalog.visible(CODE);
+        return new Capabilities(ready, 4096, 64, CACHE_SECONDS,
+                REQUESTS_PER_MINUTE, 2, "OFFICIAL_PAGE_FALLBACK", ready && tokenCodec.available());
     }
 
     public Result parse(String text, String password, String identity) {
         ready();
         LanzouInput input = LanzouInput.parse(text, password);
+        return resolve(input, identity, "parse", REQUESTS_PER_MINUTE);
+    }
+
+    public PermanentLink permanentLink(String text, String password, String identity) {
+        ready();
+        if (!tokenCodec.available()) throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
+        LanzouInput input = LanzouInput.parse(text, password);
+        Result result = resolve(input, identity, "parse", REQUESTS_PER_MINUTE);
+        Instant created = clock.instant();
+        String token;
+        try { token = tokenCodec.encode(input, created); }
+        catch (IllegalArgumentException tooLong) { throw new ApiException(ApiError.LANZOU_LINK_INVALID); }
+        return new PermanentLink(DOWNLOAD_PATH + token, result.state(), result.fileName(), result.fileSize(),
+                result.verificationRequired(), result.rateLimited(), created);
+    }
+
+    public Result permanentRedirect(String token, String identity) {
+        ready();
+        if (!tokenCodec.available()) throw new ApiException(ApiError.SERVICE_UNAVAILABLE);
+        var decoded = tokenCodec.decode(token);
+        if (decoded == null) throw new ApiException(ApiError.LANZOU_LINK_INVALID);
+        return resolve(decoded.input(), identity, "download", 30);
+    }
+
+    private Result resolve(LanzouInput input, String identity, String action, int minuteLimit) {
         String client = identity == null || identity.isBlank() ? "unknown" : identity.substring(0, Math.min(64, identity.length()));
-        if (!limiter.check("toolbox:rate:lanzou:parse:" + client, REQUESTS_PER_MINUTE, 60).allowed())
+        if (!limiter.check("toolbox:rate:lanzou:" + action + ":" + client, minuteLimit, 60).allowed())
             throw new ApiException(ApiError.TOO_MANY_REQUESTS);
         Instant now = clock.instant();
         if (cooldown.getOrDefault(input.uri().getHost(), Instant.MIN).isAfter(now))

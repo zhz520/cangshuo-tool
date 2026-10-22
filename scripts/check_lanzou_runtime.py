@@ -57,16 +57,19 @@ def check_static(check):
           and 'INSERT INTO tool_definition' in seed, 'V92 stores metadata only')
     java_dir = os.path.join(ROOT, 'server/src/main/java/com/cangshuo/toolbox/lanzou')
     for name in ('LanzouController.java', 'LanzouService.java', 'LanzouParser.java', 'LanzouHttp.java',
-                 'LanzouChallenge.java', 'LanzouHosts.java', 'LanzouInput.java'):
+                 'LanzouChallenge.java', 'LanzouHosts.java', 'LanzouInput.java', 'LanzouLinkTokenCodec.java'):
         check(os.path.isfile(os.path.join(java_dir, name)), 'Server class present: ' + name)
     server_source = ''.join(read_source(os.path.join(java_dir, name)) for name in os.listdir(java_dir)
                             if name.endswith('.java'))
-    for forbidden in ('X-FORWARDED-FOR', 'CLIENT-IP', 'TrustAll', 'setEndpointIdentificationAlgorithm'):
+    for forbidden in ('CLIENT-IP', 'TrustAll', 'setEndpointIdentificationAlgorithm'):
         check(forbidden not in server_source, 'No unsafe transport escape: ' + forbidden)
+    check('setHeader("X-Forwarded-For' not in server_source, 'No forged outgoing forwarding identity')
     check('REQUESTS_PER_MINUTE = 8' in server_source and 'new Semaphore(2)' in server_source,
           'Client request and upstream concurrency budgets are present')
     check('CACHE_SECONDS = 180' in server_source and 'MessageDigest.getInstance("SHA-256")' in server_source,
           'Short cache and digest-only password key are present')
+    check('AES/GCM/NoPadding' in server_source and 'DOWNLOAD_PATH' in server_source
+          and 'permanentLinksAvailable' in server_source, 'Encrypted permanent redirect capability is wired')
     check(os.path.isfile(os.path.join(ROOT, 'server/src/main/resources/licenses/lanzouapi-MIT.txt')),
           'Server distribution includes the reviewed MIT notice')
 
@@ -82,6 +85,11 @@ def check_static(check):
     check('localStorage' not in app and 'sessionStorage' not in app, 'Page does not persist links or passwords')
     check("$('password').value = ''" in app and 'controller.abort()' in app,
           'Password clearing and request cancellation are wired')
+    check('permanent-links' in app and 'openPermanent' in app, 'Permanent redirect UI is wired')
+    for nginx in ('api-locations.conf', 'api-locations-baota.conf'):
+        check('location ^~ /api/v1/web-tools/lanzou_direct/download/' in read_source(os.path.join(ROOT, 'deploy/nginx/common', nginx))
+              and 'access_log off' in read_source(os.path.join(ROOT, 'deploy/nginx/common', nginx)),
+              'Capability token paths are excluded from access logs: ' + nginx)
 
     docs = read_source(os.path.join(ROOT, 'docs/LANZOU_DIRECT.md'))
     for value in ('eb2d2eb25233d7e44645162e4f817abc0ec87d94',
@@ -131,11 +139,15 @@ def verify(check, request, sql, admin):
     capabilities = call(CAPABILITIES)
     check(capabilities == {'available': True, 'maxTextLength': 4096, 'maxPasswordLength': 64,
           'cacheSeconds': 180, 'requestsPerMinute': 8, 'maxConcurrent': 2,
-          'verificationMode': 'OFFICIAL_PAGE_FALLBACK'}, 'Capabilities are explicit and bounded')
+          'verificationMode': 'OFFICIAL_PAGE_FALLBACK', 'permanentLinksAvailable': True},
+          'Capabilities are explicit and bounded')
     call(PARSE, {'text': 'not a link'}, method='POST', status=400, code=10001)
     call(PARSE, {'text': 'https://example.com/i1'}, method='POST', status=400, code=62001)
     call(PARSE, {'text': 'https://www.lanzouf.com/i1', 'password': 'bad\r\nHost: evil'},
          method='POST', status=400, code=10001)
+    call('web-tools/lanzou_direct/permanent-links', {'text': 'https://example.com/i1'},
+         method='POST', status=400, code=62001)
+    call('web-tools/lanzou_direct/download/not-a-valid-token', status=400, code=62001)
 
     edited = dict(defaults, name=u'蓝奏直链验收', description=u'后台编辑的直链工具说明。',
                   icon=CODE + '_admin_check', keywords=[u'验收', 'lanzou-admin'],
@@ -172,7 +184,8 @@ def verify(check, request, sql, admin):
 def main():
     if len(sys.argv) == 2 and sys.argv[1] == '--static': offline_acceptance()
     elif len(sys.argv) == 2 and not sys.argv[1].startswith('-'):
-        run(sys.argv[1], extra_checks=verify, strict_isolation=True)
+        run(sys.argv[1], extra_checks=verify, strict_isolation=True,
+            candidate_environment={'LANZOU_LINK_SECRET': 'codex-isolated-lanzou-link-secret-32-plus'})
     else: raise SystemExit('Usage: python -B scripts/check_lanzou_runtime.py --static | <candidate-image>')
 
 

@@ -17,8 +17,16 @@
 - 输入单个蓝奏公开分享链接或整段分享文案；支持当前 `lanzou[a-z]?.com` 官方域名家族、HTTP 输入升级为 HTTPS、`pwd/password/code` 查询密码、文案中的“分享密码/提取码/访问码”。
 - 普通文件页支持新旧文件名、大小、iframe 详情页、内联或变量 `sign`、`wp_sign`、`ajaxdata`、`ajaxm.php`/`ajaxfile.php`、相对或绝对 Ajax 地址。
 - 结果区分 `DIRECT`（临时直链）和 `OFFICIAL_PAGE`（官方回退页）。两者都显示真实文件名/大小；直链可复制或在新窗口打开。
+- 可为已验证分享创建稳定下载跳转地址。地址路径中是 AES-GCM 加密令牌，包含分享 URL 与可选密码；每次访问按当前规则重新解析，并用 HTTP 302 自动跳转到最新临时直链或官方页面。
 - 密码页必须提供密码；错误、失效、暂停分享、文件夹、上游限流、超时和无法识别的改版分别给出固定业务码，不向页面回显第三方异常文本。
 - 文件夹分享、批量链接、登录后私有分享、文件代理下载、断点续传、自动重试和跨应用后台任务不在本工具范围。用户需要文件夹时进入官方页处理。
+
+## 永久跳转
+
+- 稳定路径固定为 `/api/v1/web-tools/lanzou_direct/download/<token>`；`<token>` 是版本化 AES-GCM 密文，密钥来自 `LANZOU_LINK_SECRET`，不会以明文保存密码。相同稳定地址可重复访问；真正会过期的是每次换得的蓝奏/CDN 临时 URL。
+- 创建前会实际解析并验证密码、文件状态和官方限制。无密钥、令牌篡改、密码或分享失效时明确失败；文件仍在但临时 URL 失效时，下次访问重新解析。
+- 令牌是持有即可使用的能力链接，应像私密分享地址一样保管。当前没有逐条撤销 UI；轮换 `LANZOU_LINK_SECRET` 会使全部旧稳定地址失效。文件被删除/取消分享时稳定地址也会失败，无法让第三方文件永久存在。
+- 稳定跳转每来源每分钟最多访问 30 次；结果仍使用三分钟解析缓存。响应为标准 302，包含 `Cache-Control: no-store`、`Referrer-Policy: no-referrer`、`X-Content-Type-Options: nosniff`。令牌只放在路径中，容器 Nginx 对该前缀关闭 access log；Baota 外层站点也必须在发布时关闭该前缀的访问日志。
 
 ## 请求与解析边界
 
@@ -38,15 +46,17 @@
 
 ## API
 
-- `GET /api/v1/web-tools/lanzou_direct/capabilities`：匿名，返回 `available,maxTextLength,maxPasswordLength,cacheSeconds,requestsPerMinute,maxConcurrent,verificationMode`。
+- `GET /api/v1/web-tools/lanzou_direct/capabilities`：匿名，返回 `available,maxTextLength,maxPasswordLength,cacheSeconds,requestsPerMinute,maxConcurrent,verificationMode,permanentLinksAvailable`。
 - `POST /api/v1/web-tools/lanzou_direct/parse`：匿名 JSON `{text,password?}`。成功 data 含 `shareUrl,fileName,fileSize,state,directUrl,downloadPageUrl,verificationRequired,rateLimited,cached,resolvedAt,expiresInSeconds`。
+- `POST /api/v1/web-tools/lanzou_direct/permanent-links`：匿名 JSON `{text,password?}`；验证后返回 `{path,state,fileName,fileSize,verificationRequired,rateLimited,createdAt}`。不返回明文密码或临时直链。
+- `GET /api/v1/web-tools/lanzou_direct/download/{token}`：解密并实时解析，成功时 302 到临时直链或官方回退页，不返回 JSON 包装；非法/被篡改令牌为 62001。
 - 错误码：62001 链接无效、62002 需要密码、62003 密码错误、62004 文件不可用、62006 上游限制、62007 上游异常、62008 超时、62009 文件夹不支持；通用限流仍为 10007。62005 保留作为客户端兼容映射，正常解析遇到无法解除的官方验证时改为 HTTP 200/`OFFICIAL_PAGE`，而不是假装直链成功。
 - 所有响应 `no-store`；请求体由共享过滤器限制 8192 字节。接口契约同步维护到 Apifox。
 
 ## 网页版与 Android
 
 - `/tools/lanzou_direct/` 使用本地 CSS/JS，无外部 CDN 或内嵌第三方框架；CSP 禁止 frame、object 和外部连接。
-- 中英双语；包含初始加载、离线/HTTPS/服务不可用、输入错误、提交中/停止等待、复制成功/失败、缓存命中、限速等待、直链/官方页结果。
+- 中英双语；包含初始加载、离线/HTTPS/服务不可用、输入错误、提交中/停止等待、复制成功/失败、缓存命中、限速等待、直链/官方页结果和永久跳转的生成/不可用/复制/打开状态。
 - 输入和密码不进入 localStorage/sessionStorage；离开页面清空密码。页面离开后可 abort 当前请求。
 - Android 注册 `LanzouDirectToolDefinition`，Web 模式、NETWORK 分类、无设备权限。网页向系统浏览器交出官方页或临时直链前，只允许 HTTP(S)、公开域名、无用户信息/片段/控制字符、默认端口。
 
@@ -55,7 +65,7 @@
 2026-10-22 开发完成、生产验收前验证：
 
 - 服务端完整 **248/248** 通过；蓝奏专项 **20/20**，覆盖官方域/伪装域、私网 DNS、控制字符、双链接、密码、新旧 Ajax/Sign、确定性挑战与残留挑战、失效/文件夹、不信任 Ajax 端点、缓存、限流、主机冷却和控制器边界。
-- 静态契约 **46/46**、网页 Engine **5/5**（Node test）通过，覆盖链接/密码提取、签名查询保留、错误分类、结果状态、回退、CSP、MIT 署名、Android 注册和文档一致性；OpenAPI 快照为 **76 操作 / 62 路径 / 129 schema**，快照一致性通过。
+- 静态契约与网页 Engine 覆盖链接/密码提取、签名查询保留、错误分类、结果状态、永久跳转、CSP、MIT 署名、Android 注册和文档一致性；永久跳转发布后 OpenAPI 快照为 **78 操作 / 64 路径 / 131 schema**。
 - Android Debug/Release 各 **903/903**（130 suites），双构建与 Lint 通过，均 **0 错误 / 86 条既有警告**；Debug APK 26,501,589 字节、Release APK 17,736,597 字节、AAB 17,102,805 字节。HTTPS/权限/备份/原生库/ZIP 对齐门禁通过，`signatureVerified=false`（未签名 Release）。
 - 实网只读读取三个公开分享，均成功识别文件名和大小并获得临时直链：两个普通分享分别来自 `www.lanzouf.com`（下载页 `dmpdmp.com`）和 `www.lanzoux.com`（下载页 `lanrar.com`），一个带密码分享来自 `wwd.lanzouf.com`（Ajax `apifile.woozooo.com`，最终文件域 `webgetstore.com`）。未打开或下载文件本体；未执行压力测试。
 - Chrome 桌面及 390px 移动视口实际检查：中文/英文切换、默认/加载/错误/结果/复制/打开/清空路径已接线，隐藏按钮不占位，移动视口 `scrollWidth == clientWidth`，无横向溢出。页面使用临时本地 API 样例验证布局，图标与脚本均来自本地。

@@ -97,6 +97,7 @@ toolbox:
     browser-url: ${MEDIA_BROWSER_URL:}
   lanzou:
     enabled: ${LANZOU_ENABLED:true}
+    link-secret: ${LANZOU_LINK_SECRET:}
   zepp:
     enabled: ${ZEPP_ENABLED:true}
     login-key: ${ZEPP_LOGIN_KEY:}

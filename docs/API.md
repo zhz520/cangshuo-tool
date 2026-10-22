@@ -313,10 +313,12 @@ Controller → Service → Provider 分层；工具或分类关闭时 503/10008�
 
 匿名端点（工具或分类停用、`LANZOU_ENABLED=false` 时 capabilities 返回 `available=false`，解析返回 503/10008）：
 
-- `GET /api/v1/web-tools/lanzou_direct/capabilities`：`{available,maxTextLength:4096,maxPasswordLength:64,cacheSeconds:180,requestsPerMinute:8,maxConcurrent:2,verificationMode:"OFFICIAL_PAGE_FALLBACK"}`。
+- `GET /api/v1/web-tools/lanzou_direct/capabilities`：`{available,maxTextLength:4096,maxPasswordLength:64,cacheSeconds:180,requestsPerMinute:8,maxConcurrent:2,verificationMode:"OFFICIAL_PAGE_FALLBACK",permanentLinksAvailable}`。
 - `POST /api/v1/web-tools/lanzou_direct/parse`：JSON `{text,password?}`，正文最大 8192 字节；成功 data 为 `{shareUrl,fileName,fileSize,state(DIRECT|OFFICIAL_PAGE),directUrl,downloadPageUrl,verificationRequired,rateLimited,cached,resolvedAt,expiresInSeconds}`。密码仅用于当次请求，缓存键只保存其 SHA-256。
+- `POST /api/v1/web-tools/lanzou_direct/permanent-links`：相同请求体；成功返回 `{path,state,fileName,fileSize,verificationRequired,rateLimited,createdAt}`。path 是稳定下载跳转地址，不包含明文分享或密码。
+- `GET /api/v1/web-tools/lanzou_direct/download/{token}`：解密稳定令牌后实时取得最新临时直链并以 302 自动跳转；回退场景跳转官方下载页。无效/篡改令牌返回 62001。
 
-错误码：62001 链接无效（400）、62002 需要密码（422）、62003 密码错误（422）、62004 文件不可用（410）、62006 上游暂时限制（503）、62007 上游异常（502）、62008 超时（504）、62009 文件夹不支持（422）。62005 保留给客户端兼容；正常无法解除的官方验证改为 HTTP 200/`OFFICIAL_PAGE`。所有响应 `no-store`；相同链接和密码的三分钟缓存及同键在途合并；上游主机限制后冷却 60 秒。服务端不代理文件、不伪造来源 IP。详情见 [蓝奏直链解析](LANZOU_DIRECT.md)。
+错误码：62001 链接无效（400）、62002 需要密码（422）、62003 密码错误（422）、62004 文件不可用（410）、62006 上游暂时限制（503）、62007 上游异常（502）、62008 超时（504）、62009 文件夹不支持（422）。62005 保留给客户端兼容；正常无法解除的官方验证改为 HTTP 200/`OFFICIAL_PAGE`。永久跳转创建/访问依赖 `LANZOU_LINK_SECRET`（至少32字符），未配置时 capabilities 明确返回不可用。所有 JSON 响应 `no-store`；相同链接和密码的三分钟缓存及同键在途合并；上游主机限制后冷却 60 秒。服务端不代理文件、不伪造来源 IP。详情见 [蓝奏直链解析](LANZOU_DIRECT.md)。
 
 ## 客户端缓存和离线行为
 

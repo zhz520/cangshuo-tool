@@ -7,9 +7,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
   <title>蓝奏直链解析 · 沧烁工具箱</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=2">
-  <script defer src="engine.js?v=2"></script>
-  <script defer src="app.js?v=2"></script>
+  <link rel="stylesheet" href="style.css?v=3">
+  <script defer src="engine.js?v=3"></script>
+  <script defer src="app.js?v=3"></script>
 </head>
 <body>
 <div class="shell">
@@ -60,6 +60,15 @@
           <a id="openLink" class="primary" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" data-i18n="openOfficial">打开官方页</a>
           <button id="copy" class="secondary" type="button" data-i18n="copyLink">复制链接</button>
           <button id="again" class="text-button" type="button" data-i18n="again">解析另一个</button>
+        </div>
+        <div class="permanent-block">
+          <div class="permanent-heading"><div><strong data-i18n="permanentTitle">永久下载跳转</strong><p data-i18n="permanentHelp">生成一个稳定的本站地址；每次访问都会重新获取最新临时直链并自动跳转下载。</p></div><button id="permanent" class="secondary" type="button" data-i18n="createPermanent">生成永久链接</button></div>
+          <div id="permanentResult" class="permanent-result" hidden>
+            <label for="permanentText" data-i18n="permanentLabel">稳定跳转地址</label>
+            <input id="permanentText" type="text" readonly>
+            <div class="actions"><a id="openPermanent" class="secondary" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" data-i18n="openPermanent">打开并下载</a><button id="copyPermanent" class="text-button" type="button" data-i18n="copyPermanent">复制永久链接</button></div>
+          </div>
+          <p id="permanentError" class="form-error" role="alert" hidden></p>
         </div>
         <p id="resultTrace" class="trace"></p>
       </section>

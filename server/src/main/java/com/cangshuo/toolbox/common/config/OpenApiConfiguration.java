@@ -73,10 +73,12 @@ public class OpenApiConfiguration {
                             "/api/v1/web-tools/short_video_parse/capabilities",
                             "/api/v1/web-tools/short_video_parse/assets/{id}/{index}",
                             "/api/v1/web-tools/short_video_parse/albums/{id}",
-                            "/api/v1/web-tools/lanzou_direct/capabilities").contains(path))
+                            "/api/v1/web-tools/lanzou_direct/capabilities",
+                            "/api/v1/web-tools/lanzou_direct/download/{token}").contains(path))
                     || (verb.equals("POST") && Set.of("/api/v1/web-tools/zepp_steps/submit",
                             "/api/v1/web-tools/short_video_parse/parse",
-                            "/api/v1/web-tools/lanzou_direct/parse").contains(path))
+                            "/api/v1/web-tools/lanzou_direct/parse",
+                            "/api/v1/web-tools/lanzou_direct/permanent-links").contains(path))
                     || (verb.equals("DELETE") && path.equals("/api/v1/web-tools/short_video_parse/results/{id}"));
             operation.setSecurity(anonymous ? List.of() : List.of(new SecurityRequirement().addList("bearerAuth")));
             if (operation.getDescription() == null || operation.getDescription().isBlank()) {
