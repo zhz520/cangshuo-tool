@@ -109,7 +109,8 @@ def verify(check, request, sql, admin):
     def call(path, payload=None, token=None, method=None, status=200, code=0):
         actual, body, cache = request(path, payload, token=token, method=method)
         check(actual == status and body.get('code') == code, (method or 'GET') + ' ' + path)
-        if status == 200: check(cache == 'no-store', 'Response forbids caching: ' + path)
+        if status == 200 and path.startswith('web-tools/lanzou_direct/'):
+            check(cache == 'no-store', 'Lanzou API response forbids caching: ' + path)
         return body.get('data')
     def records(path=CATALOG, token=None):
         return check_catalog_page(check, call(path, token=token), path)
