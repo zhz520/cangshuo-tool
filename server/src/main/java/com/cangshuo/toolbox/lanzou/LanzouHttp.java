@@ -44,11 +44,11 @@ public class LanzouHttp implements AutoCloseable {
     record Probe(int status, URI location, String body, String cookies) {}
 
     public Document get(URI uri, String cookies, String referer, long deadline) {
-        return fetch(uri, false, null, cookies, referer, deadline);
+        return fetch(uri, false, null, cookies, referer, deadline, false);
     }
 
     public Document post(URI uri, String form, String cookies, String referer, long deadline) {
-        return fetch(uri, true, form, cookies, referer, deadline);
+        return fetch(uri, true, form, cookies, referer, deadline, true);
     }
 
     public Probe probe(URI uri, String cookies, String referer, long deadline) {
@@ -85,12 +85,14 @@ public class LanzouHttp implements AutoCloseable {
         }
     }
 
-    private Document fetch(URI initial, boolean post, String form, String cookies, String referer, long deadline) {
+    private Document fetch(URI initial, boolean post, String form, String cookies, String referer, long deadline,
+                           boolean allowDownloadHost) {
         URI current = initial;
         String jar = cookies == null ? "" : cookies;
         boolean challengeRetried = false;
         for (int attempt = 0; attempt <= 4; attempt++) {
-            LanzouHosts.ownedPage(current);
+            if (allowDownloadHost) LanzouHosts.downloadPage(current);
+            else LanzouHosts.ownedPage(current);
             checkDeadline(deadline);
             var request = request(current, post, form, jar, referer);
             try (ClassicHttpResponse response = client.executeOpen(null, request, null)) {
@@ -99,7 +101,8 @@ public class LanzouHttp implements AutoCloseable {
                 if (redirect(status)) {
                     URI next = location(current, response);
                     if (next == null || attempt == 4) throw provider();
-                    LanzouHosts.ownedPage(next);
+                    if (allowDownloadHost) LanzouHosts.downloadPage(next);
+                    else LanzouHosts.ownedPage(next);
                     jar = current.getHost().equalsIgnoreCase(next.getHost()) ? nextCookies : "";
                     current = next;
                     if (status == 301 || status == 302 || status == 303) post = false;

@@ -147,7 +147,7 @@ public class LanzouParser {
             URI uri = value.startsWith("http://") || value.startsWith("https://")
                     ? URI.create(value) : base.resolve(value.startsWith("/") ? value : "/" + value);
             if ("http".equalsIgnoreCase(uri.getScheme())) uri = URI.create("https:" + uri.toString().substring(5));
-            return LanzouHosts.ownedPage(uri);
+            return LanzouHosts.downloadPage(uri);
         } catch (ApiException error) { throw error; }
         catch (IllegalArgumentException error) { throw provider(); }
     }

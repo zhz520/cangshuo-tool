@@ -21,7 +21,7 @@ class LanzouParserTest {
     }
     @Test void newPageUsesIframeVariableSignAbsoluteAjaxAndDirectRedirect() {
         URI frame = URI.create("https://www.lanzouf.com/fn?abc");
-        String detail = page("<script>var wp_sign='inline';var ajaxdata='web';var domain1='https://apifile.lanzouw.com/ajaxfile.php?file=88';"
+        String detail = page("<script>var wp_sign='inline';var ajaxdata='web';var domain1='https://apifile.woozooo.com/ajaxfile.php?file=88';"
                 + "var isngis='variable-sign';$.ajax({url:domain1,data:{'sign':isngis,'kd':1}});</script>");
         when(http.get(eq(share), anyString(), eq(share.toString()), anyLong()))
                 .thenReturn(new LanzouHttp.Document(share, page("<iframe src='/fn?abc'></iframe>"), "sid=1"));
@@ -35,7 +35,7 @@ class LanzouParserTest {
         assertEquals(LanzouParser.State.DIRECT, result.state());
         assertEquals("示例文件.txt", result.fileName()); assertEquals("12.5 KB", result.fileSize());
         assertEquals("https://cdn.example.com/a.txt?fn=a.txt", result.directUri().toString());
-        verify(http).post(eq(URI.create("https://apifile.lanzouw.com/ajaxfile.php?file=88")),
+        verify(http).post(eq(URI.create("https://apifile.woozooo.com/ajaxfile.php?file=88")),
                 argThat(form -> form.contains("sign=variable-sign") && form.contains("websignkey=web")), anyString(), anyString(), anyLong());
     }
     @Test void passwordPageRequiresAndClassifiesPasswordWithoutPersistingIt() {
