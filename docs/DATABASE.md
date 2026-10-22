@@ -379,4 +379,4 @@ Room v14 为经期记录新增 `period_cycle`。记录保存开始/结束日期�
 
 `V92__seed_lanzou_direct_web_tool.sql` 登记 `lanzou_direct`，NETWORK/WEB/ENABLED，排序 631，无登录要求，默认非推荐，`config_json.webPath` 为 `/tools/lanzou_direct/`。重放保留后台编辑、状态、软删除和使用量。分享密码、临时直链和解析结果不写数据库，不新增服务端业务表。见 [蓝奏直链解析](LANZOU_DIRECT.md)。
 
-生产 V92 发布后应重新核对 Flyway 历史数与失败数；部署验收记录以对应工具文档为准。
+2026-10-22 生产已执行 V92：Flyway **92/92、失败0**，`lanzou_direct` 目录记录恰1条，五个生产容器 healthy。见 [蓝奏直链解析](LANZOU_DIRECT.md)。

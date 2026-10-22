@@ -45,7 +45,7 @@ python scripts/export_openapi.py
 - `99063de` 首次推送后，Apifox 自动从 GitHub 读取并显示「沧烁工具箱 API」、`openapi.json` 与 `Paths (60)`。
 - `c57f083` 补全全局分组、操作/参数说明与项目联系方式，并将会员计划的 Java 内联忽略大小写标志替换为等价、可被 JSON Schema 解析的字符类。新增 Bean Validation 回归验证大小写与非法输入边界。
 - 服务端全量 **228/228**、Maven package、快照一致性检查通过；Node.js 对快照中 **573** 处 pattern 的 RegExp 编译全部成功。
-- Apifox 自动更新后，问题面板从「1 错误 / 146 提示」降为 **0 错误 / 3 可选提示**。剩余内容为未声明项目许可证/许可证 URL、未设置公开联系邮箱；未自行授予项目开源许可证或公布用户邮箱。
+- Apifox 自动更新后，问题面板为 **0 错误 / 4 可选提示**：未声明许可证对象与 URL、未设置公开联系邮箱，以及中文 tags 的字母序提示；未自行授予项目开源许可证或公布用户邮箱。2026-10-22 蓝奏合并后显示 `Paths ( 62 )` 和“同步成功”。
 - 预览显示生产/本地前置 URL、账号/目录/云同步/后台/网页工具等实际业务说明；原有 Git 绑定与 Webhook 保持有效。
 - 最终代码 `c57f083` 的 [CI 39546039313](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039313) 与 [Release artifacts 39546039346](https://github.com/zhz520/cangshuo-tool/actions/runs/39546039346) 均成功；CI 的服务端快照一致性门禁已通过。无用的本轮 `temp/openapi/` 测试临时目录已清理。
 
