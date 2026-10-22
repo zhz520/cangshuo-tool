@@ -2,6 +2,10 @@
 
 本文件给新的 AI 会话使用：新开窗口或切换模型时，把下面「开场消息」整段发给 AI，让它从仓库读取现状，不依赖人复述。
 
+## 最新增量（2026-10-22，官网与网页工具目录已上线）
+
+`/` 已从占位页改为后台视觉体系下的产品官网，`/tools/` 新增网页工具目录。共享 `deploy/site/site.css`、`site.js`、`theme-boot.js`，支持浅/深主题、移动导航、搜索、分类、排序、空/错误状态和五个工具的内置回退；公开目录接口只发布启用 WEB 工具。静态契约79/79、Node语法、后台typecheck/build、桌面与390px浏览器交互、API 503回退均通过，无控制台错误。提交`ff8fd2c`已部署，官网镜像`sha256:b8ece262…`，生产首页/目录/资产/五个工具/API health均200，五容器healthy。Docker回滚`before-site-home-v1`保留`sha256:79fc2965…`，Git标签指向`a08cbbd`。详情见`../docs/PUBLIC_SITE.md`。
+
 ## 最新增量（2026-10-22，永久蓝奏跳转已上线）
 
 在 `lanzou_direct` 上新增 AES-256-GCM 稳定下载令牌：`POST /permanent-links` 返回稳定 path，`GET /download/{token}` 实时解析并 302 到最新临时直链或官方页。分享密码只存在于加密令牌与生产 `LANZOU_LINK_SECRET`；宝塔外层和容器内 Nginx 对该路径关闭 access log。服务端254/254（蓝奏26）、静态51/51、网页6/6、隔离233/233、OpenAPI78/64/131、生产HTTPS118/118；普通和密码稳定地址均返回真实CDN 302，两层日志无令牌，Flyway92/92、五容器healthy。代码`0a6b20e`，API`sha256:6e3e7adf…`、官网`sha256:79fc2965…`，回滚`before-lanzou-permanent-v92`保留上一版2765bd0/API4d0a168a/官网ef23ebc7。Apifox Paths(64)同步成功、0错误/4可选样式提示。Android双变体903/903为既有结果；永久跳转UI已桌面/390px验收。真机WebView、外部浏览器与域名轮换仍待持续抽查。详情见`../docs/LANZOU_DIRECT.md`。

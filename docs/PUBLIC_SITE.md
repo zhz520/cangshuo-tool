@@ -48,3 +48,13 @@ node --check deploy/site/theme-boot.js
 浏览器验收覆盖桌面与 390px 移动视口、浅色/深色主题、移动导航、搜索、分类筛选、排序、空状态以及 API `503` 时的内置入口回退。页面控制台无错误。
 
 本次不修改服务端接口、数据库、Android 客户端或网页工具业务逻辑。
+
+## 生产发布（2026-10-22）
+
+- 代码提交：`ff8fd2c5e12667e83e7e8cfb374cf90e853dfea2`。
+- 官网镜像：`sha256:b8ece26294dbb0df294ed29e70a92cd86a1353271bb06bf3a6cab1a0775f4613`。
+- Docker 回滚标签：`cangshuo-toolbox-production-web:before-site-home-v1` → `sha256:79fc2965342fa92878e2a3085c73609bb61ef1a414168e3b718747a243d414fc`。
+- Git 回滚标签：`before-site-home-v1` → `a08cbbdf35226d86bcc29072731c7c63f3bfff0c`。
+- 静态契约检查 **79/79**，后台 TypeScript 类型检查与 Vite 构建通过。
+- 生产首页、`/tools/`、共享 CSS/JS 和五个现有网页工具均返回 HTTP `200`，内容类型正确；API 目录与健康接口均为 `200`。
+- 五个生产容器全部 healthy；仅重建 `admin/web`，服务端、MySQL、Redis 与媒体浏览器保持原状态。
