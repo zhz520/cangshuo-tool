@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f9fafb">
+  <meta name="description" content="浏览沧烁工具箱网页端工具：短视频解析、蓝奏直链、二维码、PDF 与微信运动步数。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/site.css?v=20261022">
+  <script src="/theme-boot.js?v=20261022"></script>
+  <title>网页工具 · 沧烁工具箱</title>
+</head>
+<body class="tools-page" data-page="tools">
+  <a class="skip-link" href="#tool-catalog">跳到工具目录</a>
+  <header class="site-header">
+    <div class="site-shell header-inner">
+      <a class="brand" href="/" aria-label="返回沧烁工具箱首页">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>沧烁工具箱</strong><small>WEB TOOLS</small></span>
+      </a>
+      <nav class="primary-nav" id="primary-navigation" aria-label="主导航">
+        <a href="/">首页</a>
+        <a href="/tools/" aria-current="page">网页工具</a>
+        <a href="/#capabilities">产品能力</a>
+        <a href="/#workflow">使用方式</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="/admin/" aria-label="进入管理后台">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          <span>管理后台</span>
+        </a>
+        <button class="icon-button" type="button" data-theme-toggle aria-label="切换主题"></button>
+        <button class="icon-button nav-toggle" type="button" data-nav-toggle aria-controls="primary-navigation" aria-expanded="false" aria-label="打开导航">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="tools-shell">
+    <aside class="tools-sidebar" aria-label="工具分类">
+      <div class="tools-sidebar-inner">
+        <section class="sidebar-group">
+          <h2>工具目录</h2>
+          <button class="sidebar-link active" type="button" data-tool-filter="ALL" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+            <span>全部工具</span><b class="sidebar-count" data-filter-count>5</b>
+          </button>
+        </section>
+        <section class="sidebar-group">
+          <h2>按分类</h2>
+          <button class="sidebar-link" type="button" data-tool-filter="NETWORK" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.2 2.3 3.3 5 3.3 8S14.2 17.7 12 20M12 4c-2.2 2.3-3.3 5-3.3 8S9.8 17.7 12 20"/></svg>
+            <span>网络工具</span><b class="sidebar-count" data-filter-count>2</b>
+          </button>
+          <button class="sidebar-link" type="button" data-tool-filter="QR" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2v2h-2zM19 14.5h1.5M14.5 19h6M18 17.5v3.5"/></svg>
+            <span>二维码</span><b class="sidebar-count" data-filter-count>1</b>
+          </button>
+          <button class="sidebar-link" type="button" data-tool-filter="PDF" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4M9 12h6M9 15.5h6M9 19h3"/></svg>
+            <span>PDF 文档</span><b class="sidebar-count" data-filter-count>1</b>
+          </button>
+          <button class="sidebar-link" type="button" data-tool-filter="LIFE" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19V9M9 19V5M13 19v-7M17 19V7M3 19h18"/><path d="m15.5 9.5 2-2 2 2"/></svg>
+            <span>生活工具</span><b class="sidebar-count" data-filter-count>1</b>
+          </button>
+        </section>
+        <section class="sidebar-group">
+          <h2>平台</h2>
+          <a class="sidebar-link" href="/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 9-8 9 8M5 9v11h14V9M9 20v-6h6v6"/></svg>
+            <span>返回官网</span>
+          </a>
+          <a class="sidebar-link" href="https://github.com/zhz520/cangshuo-tool" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>
+            <span>开源仓库</span>
+          </a>
+        </section>
+        <p class="sidebar-note">目录、排序与启用状态由统一工具目录控制。网页工具无需安装，核心入口不要求登录。</p>
+      </div>
+    </aside>
+
+    <main class="tools-main" id="tool-catalog">
+      <div class="tools-topbar">
+        <div class="breadcrumbs"><a href="/">沧烁工具箱</a><span>/</span><strong>网页工具</strong></div>
+        <span class="catalog-connection" data-catalog-connection data-state="loading" role="status">正在同步目录</span>
+      </div>
+      <div class="tools-content">
+        <div class="catalog-heading">
+          <div>
+            <p class="section-kicker">Web tools</p>
+            <h1>网页工具<span data-catalog-total>5</span></h1>
+            <p>打开链接即可使用。工具目录只展示已启用的网页端入口，数据变更后页面会从公开目录重新同步。</p>
+          </div>
+          <span class="catalog-heading-meta">LOCAL PREFERENCES<br>NO ACCOUNT REQUIRED</span>
+        </div>
+
+        <div class="catalog-metrics" aria-label="目录概览">
+          <div class="catalog-metric"><span>网页工具</span><strong data-catalog-total>5</strong></div>
+          <div class="catalog-metric"><span>工具分类</span><strong data-category-total>4</strong></div>
+          <div class="catalog-metric"><span>匿名使用</span><strong data-usage-total>58</strong></div>
+        </div>
+
+        <div class="catalog-mobile-categories" aria-label="移动端分类筛选">
+          <button class="mobile-category active" type="button" data-tool-filter="ALL" aria-pressed="true">全部</button>
+          <button class="mobile-category" type="button" data-tool-filter="NETWORK" aria-pressed="false">网络</button>
+          <button class="mobile-category" type="button" data-tool-filter="QR" aria-pressed="false">二维码</button>
+          <button class="mobile-category" type="button" data-tool-filter="PDF" aria-pressed="false">PDF</button>
+          <button class="mobile-category" type="button" data-tool-filter="LIFE" aria-pressed="false">生活</button>
+        </div>
+
+        <div class="catalog-toolbar">
+          <label class="catalog-search">
+            <span class="sr-only">搜索网页工具</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+            <input type="search" data-catalog-search placeholder="搜索名称、分类或关键词" autocomplete="off" spellcheck="false">
+          </label>
+          <label>
+            <span class="sr-only">排序方式</span>
+            <select class="catalog-sort" data-catalog-sort>
+              <option value="recommended">推荐排序</option>
+              <option value="usage">使用量优先</option>
+              <option value="name">名称排序</option>
+            </select>
+          </label>
+          <button class="catalog-refresh" type="button" data-catalog-refresh>重新同步</button>
+          <span class="catalog-center" data-visible-count>显示 5 / 5</span>
+        </div>
+        <p class="catalog-status" data-catalog-status role="status" aria-live="polite">正在读取公开工具目录…</p>
+
+        <div class="catalog-grid" data-catalog-grid aria-busy="true"></div>
+        <div class="catalog-empty" data-catalog-empty hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4M8.5 11h5"/></svg>
+          <h2>没有匹配的网页工具</h2>
+          <p>换一个关键词或分类后重试。</p>
+          <button class="button" type="button" data-catalog-retry>重新加载目录</button>
+        </div>
+
+        <div class="catalog-footnote">
+          <span>目录来自公开接口；使用量仅统计匿名打开次数，不记录输入内容。</span>
+          <a href="/#workflow">了解网页工具的使用方式</a>
+        </div>
+
+        <noscript>
+          <div class="catalog-grid" aria-label="网页工具静态列表">
+            <a class="catalog-card" href="/tools/short_video_parse/"><span class="catalog-card-icon">↗</span><div class="catalog-card-body"><div class="catalog-card-heading"><h2>短视频解析</h2><span class="catalog-card-category">网络</span></div><p>解析视频与图文分享链接，提取视频、图集、封面。</p><div class="catalog-card-meta"><span>无需安装</span></div></div></a>
+            <a class="catalog-card" href="/tools/lanzou_direct/"><span class="catalog-card-icon">↗</span><div class="catalog-card-body"><div class="catalog-card-heading"><h2>蓝奏直链解析</h2><span class="catalog-card-category">网络</span></div><p>解析蓝奏云公开分享与密码分享，生成稳定跳转。</p><div class="catalog-card-meta"><span>无需安装</span></div></div></a>
+            <a class="catalog-card" href="/tools/qr_studio/"><span class="catalog-card-icon">↗</span><div class="catalog-card-body"><div class="catalog-card-heading"><h2>二维码工作台</h2><span class="catalog-card-category">二维码</span></div><p>生成文本、Wi-Fi 与联系人二维码。</p><div class="catalog-card-meta"><span>无需安装</span></div></div></a>
+            <a class="catalog-card" href="/tools/pdf_studio/"><span class="catalog-card-icon">↗</span><div class="catalog-card-body"><div class="catalog-card-heading"><h2>PDF 工作台</h2><span class="catalog-card-category">PDF</span></div><p>合并、拆分、旋转 PDF，或把图片转换为 PDF。</p><div class="catalog-card-meta"><span>无需安装</span></div></div></a>
+            <a class="catalog-card" href="/tools/zepp_steps/"><span class="catalog-card-icon">↗</span><div class="catalog-card-body"><div class="catalog-card-heading"><h2>微信运动步数</h2><span class="catalog-card-category">生活</span></div><p>通过 Zepp Life 提交当天步数。</p><div class="catalog-card-meta"><span>无需安装</span></div></div></a>
+          </div>
+        </noscript>
+      </div>
+    </main>
+  </div>
+  <script src="/site.js?v=20261022" defer></script>
+</body>
+</html>

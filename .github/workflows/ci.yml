@@ -228,6 +228,8 @@ jobs:
         run: docker compose -p cangshuo-toolbox-ci-production --env-file ../.env.example -f docker-compose.yml -f docker-compose.production.yml config --quiet
       - name: Validate BaoTa overlay Compose
         run: docker compose -p cangshuo-toolbox-ci-baota --env-file ../.env.example -f docker-compose.yml -f docker-compose.baota.yml config --quiet
+      - name: Validate public site and web-tool directory contract
+        run: python3 ../scripts/check_site_pages.py
 
   ci:
     name: CI
